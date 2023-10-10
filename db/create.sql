@@ -322,7 +322,7 @@ DROP TRIGGER IF EXISTS check_task_membership ON TaskComment;
 CREATE TRIGGER check_task_membership
   BEFORE INSERT ON TaskComment
   FOR EACH ROW
-  EXECUTE PROCEDURE check_task_membership()  
+  EXECUTE PROCEDURE check_task_membership();  
 
 DROP FUNCTION IF EXISTS new_project_log();
 CREATE FUNCTION new_project_log() RETURNS TRIGGER AS
