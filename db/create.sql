@@ -1,10 +1,12 @@
+DROP TYPE IF EXISTS permissionLevels CASCADE;
 CREATE TYPE permissionLevels AS ENUM ('Member', 'Project Leader', 'World Administrator');
+DROP TYPE IF EXISTS notificationLevels CASCADE;
 CREATE TYPE notificationLevels AS ENUM ('Low', 'Medium', 'High');
 
 
 
 
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Users CASCADE;
 CREATE TABLE Users(
   id SERIAL PRIMARY KEY NOT NULL,
   username VARCHAR NOT NULL,
@@ -15,7 +17,7 @@ CREATE TABLE Users(
 );
 
 
-DROP TABLE IF EXISTS Member;
+DROP TABLE IF EXISTS Member CASCADE;
 CREATE TABLE  Member(
   id INT,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
@@ -28,7 +30,7 @@ CREATE TABLE  Member(
 );
 
 
-DROP TABLE IF EXISTS Friend;
+DROP TABLE IF EXISTS Friend CASCADE;
 CREATE TABLE Friend(
   memberID INT,
   friendID INT,
@@ -39,7 +41,7 @@ CREATE TABLE Friend(
 );
 
 
-DROP TABLE IF EXISTS Administrator;
+DROP TABLE IF EXISTS Administrator CASCADE;
 /* Needs a trigger to ensure no delete with 1 admin left*/
 CREATE TABLE Administrator(
   id INT,
@@ -48,7 +50,7 @@ PRIMARY KEY(id),
 );
 
 
-DROP TABLE IF EXISTS World;
+DROP TABLE IF EXISTS World CASCADE;
 CREATE TABLE World(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
@@ -59,7 +61,7 @@ CREATE TABLE World(
 );
 
 
-DROP TABLE IF EXISTS WorldMembership;
+DROP TABLE IF EXISTS WorldMembership CASCADE;
 CREATE TABLE WorldMembership(
   memberID INT,
   worldID INT,
@@ -84,7 +86,7 @@ FOREIGN KEY(worldID) REFERENCES World(id) ON UPDATE CASCADE ON DELETE CASCADE
 );*/
 
 
-DROP TABLE IF EXISTS WorldTimeline;
+DROP TABLE IF EXISTS WorldTimeline CASCADE;
 CREATE TABLE WorldTimeline(
   id INT, /*ID NOT AUTOMATICALLY GENERATED*/
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
@@ -95,7 +97,7 @@ CREATE TABLE WorldTimeline(
 );
 
 
-DROP TABLE IF EXISTS FavoriteWorld;
+DROP TABLE IF EXISTS FavoriteWorld CASCADE;
 CREATE TABLE FavoriteWorld(
   memberID INT,
   worldID INT,
@@ -105,7 +107,7 @@ CREATE TABLE FavoriteWorld(
 );
 
 
-DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS Project CASCADE;
 CREATE TABLE Project(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
@@ -117,7 +119,7 @@ CREATE TABLE Project(
 );
 
 
-DROP TABLE IF EXISTS ProjectMembership;
+DROP TABLE IF EXISTS ProjectMembership CASCADE;
 CREATE TABLE ProjectMembership(
   memberID INT,
   projectID INT,
@@ -129,7 +131,7 @@ CREATE TABLE ProjectMembership(
 );
 
 
-DROP TABLE IF EXISTS FavoriteProject;
+DROP TABLE IF EXISTS FavoriteProject CASCADE;
 CREATE TABLE FavoriteProject(
   memberID INT,
   projectID INT,
@@ -139,7 +141,7 @@ CREATE TABLE FavoriteProject(
 );
 
 
-DROP TABLE IF EXISTS Task;
+DROP TABLE IF EXISTS Task CASCADE;
 CREATE TABLE Task(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
@@ -154,7 +156,7 @@ CREATE TABLE Task(
 );
 
 
-DROP TABLE IF EXISTS Assignee;
+DROP TABLE IF EXISTS Assignee CASCADE;
 CREATE TABLE Assignee(
   memberID INT,
   taskID INT,
@@ -164,7 +166,7 @@ CREATE TABLE Assignee(
 );
 
 
-DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Tag CASCADE;
 /* Needs a trigger to ensure by deleting or updating the child ___Tag tables the parent TAG is deleted or updated*/
 CREATE TABLE Tag(
   id SERIAL PRIMARY KEY,
@@ -172,7 +174,7 @@ CREATE TABLE Tag(
 );
 
 
-DROP TABLE IF EXISTS WorldTag;
+DROP TABLE IF EXISTS WorldTag CASCADE;
 CREATE TABLE WorldTag(
   tagID INT,
   worldID INT,
@@ -182,7 +184,7 @@ CREATE TABLE WorldTag(
 );
 
 
-DROP TABLE IF EXISTS ProjectTag;
+DROP TABLE IF EXISTS ProjectTag CASCADE;
 CREATE TABLE ProjectTag(
   tagID INT,
   projectID INT,
@@ -192,7 +194,7 @@ CREATE TABLE ProjectTag(
 );
 
 
-DROP TABLE IF EXISTS MemberTag;
+DROP TABLE IF EXISTS MemberTag CASCADE;
 CREATE TABLE MemberTag(
   tagID INT,
   memberID INT,
@@ -202,7 +204,7 @@ CREATE TABLE MemberTag(
 );
 
 
-DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS Comment CASCADE;
 /*Needs a trigger to delete or update when child ___Comment is deleted or updated*/
 CREATE TABLE Comment(
   id SERIAL PRIMARY KEY,
@@ -211,7 +213,7 @@ CREATE TABLE Comment(
 );
 
 
-DROP TABLE IF EXISTS TaskComment;
+DROP TABLE IF EXISTS TaskComment CASCADE; 
 CREATE TABLE TaskComment(
   commentID INT,
   taskID INT NOT NULL,
@@ -223,7 +225,7 @@ CREATE TABLE TaskComment(
 );
 
 
-DROP TABLE IF EXISTS WorldComment;
+DROP TABLE IF EXISTS WorldComment CASCADE;
 CREATE TABLE WorldComment(
   commentID INT,
   worldID INT NOT NULL,
@@ -235,7 +237,7 @@ CREATE TABLE WorldComment(
 );
 
 
-DROP TABLE IF EXISTS FAQItem;
+DROP TABLE IF EXISTS FAQItem CASCADE;
 CREATE TABLE FAQItem(
   id SERIAL PRIMARY KEY,
   question VARCHAR NOT NULL UNIQUE,
@@ -243,7 +245,7 @@ CREATE TABLE FAQItem(
 );
 
 
-DROP TABLE IF EXISTS Notification;
+DROP TABLE IF EXISTS Notification CASCADE;
 CREATE TABLE Notification(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
@@ -251,7 +253,7 @@ CREATE TABLE Notification(
   date_ DATE DEFAULT CURRENT_DATE
 );
 
-
+DROP FUNCTION IF EXISTS new_log_id();
 CREATE FUNCTION new_log_id() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -262,12 +264,13 @@ $BODY$
 LANGUAGE plpgsql;
 
 
+DROP TRIGGER IF EXISTS new_log_id ON WorldTimeline;
 CREATE TRIGGER new_log_id
   BEFORE INSERT ON WorldTimeline
   FOR EACH ROW
   EXECUTE PROCEDURE new_log_id();
 
-
+DROP FUNCTION IF EXISTS check_world_membership();
 CREATE FUNCTION check_world_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -279,13 +282,13 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-
+DROP TRIGGER IF EXISTS check_world_membership ON ProjectMembership;
 CREATE TRIGGER check_world_membership
   BEFORE INSERT ON ProjectMembership
   FOR EACH ROW
   EXECUTE PROCEDURE check_world_membership();
 
-
+DROP FUNCTION IF EXISTS check_project_membership();
 CREATE FUNCTION check_project_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -297,13 +300,13 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-
+DROP TRIGGER IF EXISTS check_project_membership ON Assignee;
 CREATE TRIGGER check_project_membership
   BEFORE INSERT ON Assignee
   FOR EACH ROW
-  EXECUTE PROCEDURE check_project_membership()
+  EXECUTE PROCEDURE check_project_membership();
 
-
+DROP FUNCTION IF EXISTS check_task_membership();
 CREATE FUNCTION check_task_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -315,12 +318,13 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-
+DROP TRIGGER IF EXISTS check_task_membership ON TaskComment;
 CREATE TRIGGER check_task_membership
   BEFORE INSERT ON TaskComment
   FOR EACH ROW
   EXECUTE PROCEDURE check_task_membership()  
 
+DROP FUNCTION IF EXISTS new_project_log();
 CREATE FUNCTION new_project_log() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -330,7 +334,7 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-
+DROP TRIGGER IF EXISTS new_project_log ON Project;
 CREATE TRIGGER new_project_log
   AFTER INSERT ON Project
   FOR EACH ROW
