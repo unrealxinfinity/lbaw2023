@@ -4,7 +4,7 @@ CREATE TYPE notificationLevels AS ENUM ('Low', 'Medium', 'High');
 
 
 
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Users CASCADE;
 CREATE TABLE Users(
   id SERIAL PRIMARY KEY NOT NULL,
   username VARCHAR NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Users(
 );
 
 
-DROP TABLE IF EXISTS Member;
+DROP TABLE IF EXISTS Member CASCADE;
 CREATE TABLE  Member(
   id INT,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
@@ -28,7 +28,7 @@ CREATE TABLE  Member(
 );
 
 
-DROP TABLE IF EXISTS Friend;
+DROP TABLE IF EXISTS Friend CASCADE;
 CREATE TABLE Friend(
   memberID INT,
   friendID INT,
@@ -39,16 +39,16 @@ CREATE TABLE Friend(
 );
 
 
-DROP TABLE IF EXISTS Administrator;
+DROP TABLE IF EXISTS Administrator CASCADE;
 /* Needs a trigger to ensure no delete with 1 admin left*/
 CREATE TABLE Administrator(
   id INT,
-PRIMARY KEY(id),
-    FOREIGN KEY (id) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
+  PRIMARY KEY(id),
+  FOREIGN KEY (id) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-DROP TABLE IF EXISTS World;
+DROP TABLE IF EXISTS World CASCADE;
 CREATE TABLE World(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE World(
 );
 
 
-DROP TABLE IF EXISTS WorldMembership;
+DROP TABLE IF EXISTS WorldMembership CASCADE;
 CREATE TABLE WorldMembership(
   memberID INT,
   worldID INT,
@@ -84,7 +84,7 @@ FOREIGN KEY(worldID) REFERENCES World(id) ON UPDATE CASCADE ON DELETE CASCADE
 );*/
 
 
-DROP TABLE IF EXISTS WorldTimeline;
+DROP TABLE IF EXISTS WorldTimeline CASCADE;
 CREATE TABLE WorldTimeline(
   id INT, /*ID NOT AUTOMATICALLY GENERATED*/
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
@@ -105,7 +105,7 @@ CREATE TABLE FavoriteWorld(
 );
 
 
-DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS Project CASCADE;
 CREATE TABLE Project(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE Project(
 );
 
 
-DROP TABLE IF EXISTS ProjectMembership;
+DROP TABLE IF EXISTS ProjectMembership CASCADE;
 CREATE TABLE ProjectMembership(
   memberID INT,
   projectID INT,
@@ -129,7 +129,7 @@ CREATE TABLE ProjectMembership(
 );
 
 
-DROP TABLE IF EXISTS FavoriteProject;
+DROP TABLE IF EXISTS FavoriteProject CASCADE;
 CREATE TABLE FavoriteProject(
   memberID INT,
   projectID INT,
@@ -139,7 +139,7 @@ CREATE TABLE FavoriteProject(
 );
 
 
-DROP TABLE IF EXISTS Task;
+DROP TABLE IF EXISTS Task CASCADE;
 CREATE TABLE Task(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE Task(
 );
 
 
-DROP TABLE IF EXISTS Assignee;
+DROP TABLE IF EXISTS Assignee CASCADE;
 CREATE TABLE Assignee(
   memberID INT,
   taskID INT,
@@ -164,7 +164,7 @@ CREATE TABLE Assignee(
 );
 
 
-DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Tag CASCADE;
 /* Needs a trigger to ensure by deleting or updating the child ___Tag tables the parent TAG is deleted or updated*/
 CREATE TABLE Tag(
   id SERIAL PRIMARY KEY,
@@ -172,7 +172,7 @@ CREATE TABLE Tag(
 );
 
 
-DROP TABLE IF EXISTS WorldTag;
+DROP TABLE IF EXISTS WorldTag CASCADE;
 CREATE TABLE WorldTag(
   tagID INT,
   worldID INT,
@@ -182,7 +182,7 @@ CREATE TABLE WorldTag(
 );
 
 
-DROP TABLE IF EXISTS ProjectTag;
+DROP TABLE IF EXISTS ProjectTag CASCADE;
 CREATE TABLE ProjectTag(
   tagID INT,
   projectID INT,
@@ -192,7 +192,7 @@ CREATE TABLE ProjectTag(
 );
 
 
-DROP TABLE IF EXISTS MemberTag;
+DROP TABLE IF EXISTS MemberTag CASCADE;
 CREATE TABLE MemberTag(
   tagID INT,
   memberID INT,
@@ -202,48 +202,45 @@ CREATE TABLE MemberTag(
 );
 
 
-DROP TABLE IF EXISTS Comment;
-/*Needs a trigger to delete or update when child ___Comment is deleted or updated*/
-CREATE TABLE Comment(
-  id SERIAL PRIMARY KEY,
-  content VARCHAR NOT NULL,
-  date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE)
-);
 
 
-DROP TABLE IF EXISTS TaskComment;
+
+DROP TABLE IF EXISTS TaskComment CASCADE;
 CREATE TABLE TaskComment(
-  commentID INT,
+  commentID SERIAL PRIMARY KEY,
+  content VARCHAR NOT NULL,
   taskID INT NOT NULL,
+  date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   memberID INT,
   PRIMARY KEY(commentID),
-  FOREIGN KEY(commentID) REFERENCES Comment(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(taskID) REFERENCES Task(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(memberID) REFERENCES Member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-DROP TABLE IF EXISTS WorldComment;
+
+DROP TABLE IF EXISTS WorldComment CASCADE;
 CREATE TABLE WorldComment(
-  commentID INT,
+  commentID SERIAL PRIMARY KEY,
+  content VARCHAR NOT NULL,
   worldID INT NOT NULL,
+  date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   memberID INT NOT NULL,
   PRIMARY KEY(commentID),
-  FOREIGN KEY(commentID) REFERENCES Comment(id),
   FOREIGN KEY(worldID) REFERENCES World(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(memberID) REFERENCES Member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-DROP TABLE IF EXISTS FAQItem;
+DROP TABLE IF EXISTS FAQItem CASCADE;
 CREATE TABLE FAQItem(
   id SERIAL PRIMARY KEY,
   question VARCHAR NOT NULL UNIQUE,
   answer VARCHAR NOT NULL
 );
 
-
-DROP TABLE IF EXISTS Notification;
+ 
+DROP TABLE IF EXISTS Notification CASCADE;
 CREATE TABLE Notification(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
@@ -335,3 +332,24 @@ CREATE TRIGGER new_project_log
   AFTER INSERT ON Project
   FOR EACH ROW
   EXECUTE PROCEDURE new_project_log();
+  
+CREATE FUNCTION check_admin() RETURNS TRIGGER AS 
+$body$
+BEGIN
+  IF (SELECT count(*) FROM administrator) < 2 THEN 
+    RAISE EXCEPTION 'Cannot delete when there\'s only 1 admin';
+  END IF
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER do_nothing_admin
+  BEFORE DELETE ON Administrator
+  FOR EACH ROW
+  EXECUTE check_admin();
+
+  
+ 
+
+ 
+
