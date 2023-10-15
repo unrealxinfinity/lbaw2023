@@ -328,6 +328,7 @@
 	  IF (SELECT count(*) FROM administrator) < 2 THEN 
 	    RAISE EXCEPTION 'Cannot delete when there is only 1 admin';
 	  END IF;
+	  RETURN NEW;
 	END
 	$BODY$
 	LANGUAGE plpgsql;
