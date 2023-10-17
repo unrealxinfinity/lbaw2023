@@ -185,32 +185,24 @@ CREATE TABLE member_tag(
   FOREIGN KEY(member_id) REFERENCES member(id)ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS comment CASCADE;
-/*Needs a trigger to delete or update when child ___Comment is deleted or updated*/
-CREATE TABLE comment(
+DROP TABLE IF EXISTS task_comment CASCADE; 
+CREATE TABLE task_comment(
   id SERIAL PRIMARY KEY,
   content VARCHAR NOT NULL,
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE)
-);
-
-DROP TABLE IF EXISTS task_comment CASCADE; 
-CREATE TABLE task_comment(
-  comment_id INT,
   task_id INT NOT NULL,
   member_id INT,
-  PRIMARY KEY(comment_id),
-  FOREIGN KEY(comment_id) REFERENCES comment(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS world_comment CASCADE;
 CREATE TABLE world_comment(
-  comment_id INT,
+  id SERIAL PRIMARY KEY,
+  content VARCHAR NOT NULL,
+  date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE)
   world_id INT NOT NULL,
   member_id INT NOT NULL,
-  PRIMARY KEY(comment_id),
-  FOREIGN KEY(comment_id) REFERENCES comment(id),
   FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -296,7 +288,7 @@ DROP FUNCTION IF EXISTS check_task_membership() CASCADE;
 CREATE FUNCTION check_task_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM assignee WHERE member_id = NEW.member_id AND task_id = NEW.task_id) THEN
+  IF NOT EXISTS (SELECT * FROM (assignee a JOIN task t ON t.id = a.task_id) JOIN project_membership m USING (project_id) WHERE a.member_id = NEW.member_id AND a.task_id = NEW.task_id AND (m.member_id = NEW.member_id OR m.permission_level = 'Project Leader')) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO TASK', NEW.member_id;
   END IF;
   RETURN NEW;
