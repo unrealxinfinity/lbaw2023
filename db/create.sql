@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS project_membership CASCADE;
 CREATE TABLE project_membership(
   member_id INT,
   project_id INT,
-  joined_at DATE DEFAULT CURRENT_DATE CHECK(joined_at <= CURRENT_DATE),
+  joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
   permission_level permission_levels NOT NULL /*CHECK(permissionLevel IN permissionLevels) - isto nao da, n existe maneira de ver se um value pertence a um item de enum aqui a n ser durante a query*/,
   PRIMARY KEY(member_id,project_id),
   FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -135,8 +135,8 @@ CREATE TABLE task(
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   due_at DATE CHECK(due_at >= created_at),
   status VARCHAR NOT NULL,
-  effort INT,
-  priority INT,
+  effort INT CHECK(effort >= 0),
+  priority VARCHAR,
   project_id INT,
   FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
