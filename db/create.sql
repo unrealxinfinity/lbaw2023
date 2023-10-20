@@ -217,8 +217,14 @@ DROP TABLE IF EXISTS notifications CASCADE;
 CREATE TABLE notifications(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
-  level notification_levels /* CHECK IF level IN notificationLevels - ask teacher about how to make this approach */,
-  date_ DATE DEFAULT CURRENT_DATE
+  level notification_levels/* CHECK IF level IN notificationLevels - ask teacher about how to make this approach */,
+  date_ DATE DEFAULT CURRENT_DATE,
+  world_id INT DEFAULT NULL,
+  project_id INT DEFAULT NULL,
+  task_id INT DEFAULT NULL,
+  FOREIGN KEY(world_id) REFERENCES world(id),
+  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(task_id) REFERENCES task(id),
 );
 
 DROP TABLE IF EXISTS user_notification CASCADE;
