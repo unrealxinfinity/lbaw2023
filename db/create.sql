@@ -2,6 +2,8 @@ DROP TYPE IF EXISTS permission_levels CASCADE;
 CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader', 'World Administrator');
 DROP TYPE IF EXISTS notification_levels CASCADE;
 CREATE TYPE notification_levels AS ENUM ('Low', 'Medium', 'High');
+DROP TYPE IF EXISTS project_status CASCADE;
+CREATE TYPE project_status AS ENUM ('Active', 'Archived');
 
 DROP TABLE IF EXISTS member CASCADE;
 CREATE TABLE  member(
@@ -99,7 +101,7 @@ DROP TABLE IF EXISTS project CASCADE;
 CREATE TABLE project(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
-  status VARCHAR,
+  status project_status NOT NULL,
   description VARCHAR,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   world_id INT,
@@ -225,6 +227,7 @@ CREATE TABLE notifications(
   FOREIGN KEY(world_id) REFERENCES world(id),
   FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(task_id) REFERENCES task(id),
+
 );
 
 DROP TABLE IF EXISTS user_notification CASCADE;
@@ -306,7 +309,48 @@ CREATE TRIGGER new_project_log
   AFTER INSERT ON project
   FOR EACH ROW
   EXECUTE PROCEDURE new_project_log();
-  
+
+DROP FUNCTION IF EXISTS archived_project_log() CASCADE;
+CREATE FUNCTION archived_project_log() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  INSERT INTO world_timeline(description, world_id)
+  VALUES ('PROJECT ARCHIVED: ' || NEW.title, NEW.world_id);
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS archived_project_log ON project CASCADE;
+CREATE TRIGGER archived_project_log
+  AFTER UPDATE ON project
+  FOR EACH ROW
+  WHEN (NEW.status = 'Archived')
+  EXECUTE PROCEDURE archived_project_log();
+
+DROP FUNCTION IF EXISTS world_admin_log() CASCADE;
+CREATE FUNCTIOn world_admin_log() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF NEW.is_admin = true AND (TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND old.is_admin = false) THEN 
+  INSERT INTO world_timeline(description, world_id)
+  VALUES ('NEW ADMINISTRATOR: ' || (SELECT username FROM world_membership JOIN member ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
+  END IF;
+  IF TG_OP = 'UPDATE' AND OLD.is_admin = true AND NEW.is_admin = FALSE THEN
+  INSERT INTO world_timeline(description, world_id)
+  VALUES ('ADMINSITRATOR DEMOTED: ' || (SELECT username FROM world_membership JOIN member ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
+  END IF;
+  RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS world_admin_log ON project CASCADE;
+CREATE TRIGGER world_admin_log
+  AFTER UPDATE OR INSERT ON world_membership
+  FOR EACH ROW
+  EXECUTE PROCEDURE world_admin_log();
+
 DROP FUNCTION IF EXISTS check_admin();
 CREATE FUNCTION check_admin() RETURNS TRIGGER AS 
 $BODY$
