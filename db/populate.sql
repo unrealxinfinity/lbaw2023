@@ -27,8 +27,8 @@ VALUES
 -- Sample data for the 'project' table
 INSERT INTO project (title, status, description, world_id)
 VALUES
-  ('Project 1', 'In Progress', 'Sample project description 1', 1),
-  ('Project 2', 'Completed', 'Sample project description 2', 2);
+  ('Project 1', 'Active', 'Sample project description 1', 1),
+  ('Project 2', 'Active', 'Sample project description 2', 2);
 
 -- Sample data for the 'project_membership' table
 INSERT INTO project_membership (member_id, project_id, permission_level, joined_at)
