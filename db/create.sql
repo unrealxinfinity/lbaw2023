@@ -4,41 +4,53 @@ DROP TYPE IF EXISTS notification_levels CASCADE;
 CREATE TYPE notification_levels AS ENUM ('Low', 'Medium', 'High');
 DROP TYPE IF EXISTS project_status CASCADE;
 CREATE TYPE project_status AS ENUM ('Active', 'Archived');
+DROP TYPE IF EXISTS user_type CASCADE;
+CREATE TYPE user_type AS ENUM ('Member', 'Administrator', 'Blocked', 'Deleted');
+DROP TYPE IF EXISTS task_status CASCADE;
+CREATE TYPE task_status AS ENUM('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done');
 
-DROP TABLE IF EXISTS member CASCADE;
-CREATE TABLE  member(
+
+DROP TABLE IF EXISTS user CASCADE;
+/* Needs a trigger to ensure no delete with 1 admin left*/
+CREATE TABLE user(
+  id SERIAL PRIMARY KEY,
+  created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+  type_ user_type,
+  info_id INT,
+  CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE)
+);
+
+
+DROP TABLE IF EXISTS user_info CASCADE;
+CREATE TABLE user_info(
   id SERIAL PRIMARY KEY,
   username VARCHAR NOT NULL,
   password VARCHAR NOT NULL,
-  created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+  user_id INT,
+  UNIQUE(username),
+  FOREIGN KEY(user_id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE,
+);
+
+
+DROP TABLE IF EXISTS member CASCADE;
+CREATE TABLE  member(
+  user_id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
   description VARCHAR,
   picture VARCHAR NOT NULL,
   email VARCHAR NOT NULL,
-  UNIQUE(username),
-  UNIQUE(email),
-  CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE)
+  UNIQUE(email)
 );
+
 
 DROP TABLE IF EXISTS friend CASCADE;
 CREATE TABLE friend(
   member_id INT,
   friend_id INT,
   PRIMARY KEY(member_id,friend_id),
-  FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE ,
+  FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(friend_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE 
-);
-
-DROP TABLE IF EXISTS administrator CASCADE;
-/* Needs a trigger to ensure no delete with 1 admin left*/
-CREATE TABLE administrator(
-  id SERIAL PRIMARY KEY,
-  username VARCHAR NOT NULL,
-  password VARCHAR NOT NULL,
-  created_at DATE NOT NULL DEFAULT CURRENT_DATE,
-  email VARCHAR NOT NULL,
-  CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE),
-  UNIQUE(email)
 );
 
 
@@ -48,8 +60,9 @@ CREATE TABLE world(
   name VARCHAR NOT NULL,
   description VARCHAR,
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
+  picture VARCHAR NOT NULL,
   owner_id INT,
-  FOREIGN KEY (owner_id) REFERENCES member(id)
+  FOREIGN KEY(owner_id) REFERENCES member(id)
 );
 
 
@@ -60,23 +73,10 @@ CREATE TABLE world_membership(
   world_id INT,
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
   is_admin BOOLEAN NOT NULL,
-  /* I meant this place here:
-  pk acho q vai dar syntax error as 2 PKS,
-  Also forget the CONSTRAINTS para dar nome , temos que dar nomes unicos que é lixado de nomear*/
   PRIMARY KEY(member_id,world_id),
   FOREIGN KEY (member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-
-/*DROP TABLE IF EXISTS WorldOwner;
-CREATE TABLE WorldOwner(
-memberID INT,
-worldID INT,
-PRIMARY KEY(memberID,worldID),
-FOREIGN KEY (memberID) REFERENCES Member(id) ON UPDATE CASCADE ON DELETE CASCADE,
-FOREIGN KEY(worldID) REFERENCES World(id) ON UPDATE CASCADE ON DELETE CASCADE
-);*/
 
 
 DROP TABLE IF EXISTS world_timeline CASCADE;
@@ -100,12 +100,13 @@ CREATE TABLE favorite_world(
 DROP TABLE IF EXISTS project CASCADE;
 CREATE TABLE project(
   id SERIAL PRIMARY KEY,
-  title VARCHAR NOT NULL,
+  name VARCHAR NOT NULL,
   status project_status NOT NULL,
   description VARCHAR,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
+  picture VARCHAR NOT NULL,
   world_id INT,
-  FOREIGN KEY(world_id) REFERENCES world(id)ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS project_membership CASCADE;
@@ -113,7 +114,7 @@ CREATE TABLE project_membership(
   member_id INT,
   project_id INT,
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
-  permission_level permission_levels NOT NULL /*CHECK(permissionLevel IN permissionLevels) - isto nao da, n existe maneira de ver se um value pertence a um item de enum aqui a n ser durante a query*/,
+  permission_level permission_levels NOT NULL,
   PRIMARY KEY(member_id,project_id),
   FOREIGN KEY(member_id) REFERENCES member(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -135,7 +136,7 @@ CREATE TABLE task(
   description VARCHAR,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   due_at DATE CHECK(due_at >= created_at),
-  status VARCHAR NOT NULL,
+  status task_status NOT NULL,
   effort INT CHECK(effort >= 0),
   priority VARCHAR,
   project_id INT,
@@ -211,15 +212,16 @@ CREATE TABLE world_comment(
 DROP TABLE IF EXISTS faq_item CASCADE;
 CREATE TABLE faq_item(
   id SERIAL PRIMARY KEY,
-  question VARCHAR NOT NULL UNIQUE,
-  answer VARCHAR NOT NULL
+  question VARCHAR NOT NULL,
+  answer VARCHAR NOT NULL,
+  UNIQUE(question)
 );
 
 DROP TABLE IF EXISTS notifications CASCADE;
 CREATE TABLE notifications(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
-  level notification_levels/* CHECK IF level IN notificationLevels - ask teacher about how to make this approach */,
+  level notification_levels,
   date_ DATE DEFAULT CURRENT_DATE,
   world_id INT DEFAULT NULL,
   project_id INT DEFAULT NULL,
@@ -239,6 +241,8 @@ CREATE TABLE user_notification(
   FOREIGN KEY(member_id) REFERENCES member(id)
 );
 
+
+/**  TRIGGERS  **/
 DROP FUNCTION IF EXISTS check_world_membership() CASCADE;
 CREATE FUNCTION check_world_membership() RETURNS TRIGGER AS
 $BODY$
@@ -256,6 +260,7 @@ CREATE TRIGGER check_world_membership
   BEFORE INSERT ON project_membership
   FOR EACH ROW
   EXECUTE PROCEDURE check_world_membership();
+
 
 DROP FUNCTION IF EXISTS check_project_membership() CASCADE;
 CREATE FUNCTION check_project_membership() RETURNS TRIGGER AS
@@ -275,6 +280,7 @@ CREATE TRIGGER check_project_membership
   FOR EACH ROW
   EXECUTE PROCEDURE check_project_membership();
 
+
 DROP FUNCTION IF EXISTS check_task_membership() CASCADE;
 CREATE FUNCTION check_task_membership() RETURNS TRIGGER AS
 $BODY$
@@ -293,6 +299,7 @@ CREATE TRIGGER check_task_membership
   FOR EACH ROW
   EXECUTE PROCEDURE check_task_membership();  
 
+
 DROP FUNCTION IF EXISTS new_project_log() CASCADE;
 CREATE FUNCTION new_project_log() RETURNS TRIGGER AS
 $BODY$
@@ -309,6 +316,7 @@ CREATE TRIGGER new_project_log
   AFTER INSERT ON project
   FOR EACH ROW
   EXECUTE PROCEDURE new_project_log();
+
 
 DROP FUNCTION IF EXISTS archived_project_log() CASCADE;
 CREATE FUNCTION archived_project_log() RETURNS TRIGGER AS
@@ -327,6 +335,7 @@ CREATE TRIGGER archived_project_log
   FOR EACH ROW
   WHEN (NEW.status = 'Archived')
   EXECUTE PROCEDURE archived_project_log();
+
 
 DROP FUNCTION IF EXISTS world_admin_log() CASCADE;
 CREATE FUNCTIOn world_admin_log() RETURNS TRIGGER AS
@@ -351,11 +360,12 @@ CREATE TRIGGER world_admin_log
   FOR EACH ROW
   EXECUTE PROCEDURE world_admin_log();
 
+
 DROP FUNCTION IF EXISTS check_admin();
 CREATE FUNCTION check_admin() RETURNS TRIGGER AS 
 $BODY$
 BEGIN
-  IF (SELECT count(*) FROM administrator) < 2 THEN 
+  IF (SELECT count(*) FROM user WHERE type_='Administrator') < 2 THEN 
   RAISE EXCEPTION 'Cannot delete when there is only 1 admin';
   END IF;
   RETURN NEW;
@@ -363,11 +373,12 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS do_nothing_admin ON administrator;
+DROP TRIGGER IF EXISTS do_nothing_admin ON user;
 CREATE TRIGGER do_nothing_admin
-  BEFORE DELETE ON administrator
+  BEFORE DELETE ON user
   FOR EACH ROW
   EXECUTE PROCEDURE check_admin();
+
 
 DROP FUNCTION IF EXISTS delete_notification();
 CREATE FUNCTION delete_notification() RETURNS TRIGGER AS
@@ -386,6 +397,4 @@ CREATE TRIGGER delete_notification
   AFTER DELETE ON user_notification
   FOR EACH ROW
   EXECUTE PROCEDURE delete_notification();
-
-  
 
