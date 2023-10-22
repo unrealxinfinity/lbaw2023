@@ -15,8 +15,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE,
-  type_ user_type,
-  info_id INT,
+  type_ user_type NOT NULL,
   CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE)
 );
 
@@ -62,7 +61,7 @@ CREATE TABLE world(
   description VARCHAR,
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR NOT NULL,
-  owner_id INT,
+  owner_id INT NOT NULL,
   FOREIGN KEY(owner_id) REFERENCES member(user_id)
 );
 
@@ -86,7 +85,7 @@ CREATE TABLE world_timeline(
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   description VARCHAR NOT NULL,
   world_id INT,
-  FOREIGN KEY(world_id) REFERENCES World(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(world_id) REFERENCES World(id)
 );
 
 DROP TABLE IF EXISTS favorite_world CASCADE;
@@ -185,7 +184,7 @@ CREATE TABLE member_tag(
   member_id INT,
   PRIMARY KEY(tag_id, member_id),
   FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(member_id) REFERENCES member(user_id)ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS task_comment CASCADE; 
@@ -194,7 +193,7 @@ CREATE TABLE task_comment(
   content VARCHAR NOT NULL,
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   task_id INT NOT NULL,
-  member_id INT,
+  member_id INT NOT NULL,
   FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -338,16 +337,16 @@ CREATE TRIGGER archived_project_log
 
 
 DROP FUNCTION IF EXISTS world_admin_log() CASCADE;
-CREATE FUNCTIOn world_admin_log() RETURNS TRIGGER AS
+CREATE FUNCTION world_admin_log() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NEW.is_admin = true AND (TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND old.is_admin = false) THEN 
+  IF NEW.is_admin = TRUE AND (TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND old.is_admin = FALSE) THEN 
   INSERT INTO world_timeline(description, world_id)
   VALUES ('NEW ADMINISTRATOR: ' || (SELECT username FROM world_membership JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
   END IF;
-  IF TG_OP = 'UPDATE' AND OLD.is_admin = true AND NEW.is_admin = FALSE THEN
+  IF TG_OP = 'UPDATE' AND OLD.is_admin = TRUE AND NEW.is_admin = FALSE THEN
   INSERT INTO world_timeline(description, world_id)
-  VALUES ('ADMINSITRATOR DEMOTED: ' || (SELECT username FROM world_membership JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
+  VALUES ('ADMINISTRATOR DEMOTED: ' || (SELECT username FROM world_membership JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
   END IF;
   RETURN NEW;
 END
@@ -365,7 +364,7 @@ DROP FUNCTION IF EXISTS check_admin() CASCADE;
 CREATE FUNCTION check_admin() RETURNS TRIGGER AS 
 $BODY$
 BEGIN
-  IF (SELECT count(*) FROM users WHERE type_='Administrator') < 2 THEN 
+  IF (SELECT COUNT(*) FROM users WHERE type_='Administrator') < 2 THEN 
   RAISE EXCEPTION 'Cannot delete when there is only 1 admin';
   END IF;
   RETURN NEW;
