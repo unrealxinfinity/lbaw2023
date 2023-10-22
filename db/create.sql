@@ -11,7 +11,6 @@ CREATE TYPE task_status AS ENUM ('BackLog', 'Upcoming', 'In Progress', 'Finalizi
 
 
 DROP TABLE IF EXISTS users CASCADE;
-/* Needs a trigger to ensure no delete with 1 admin left*/
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -38,7 +37,7 @@ CREATE TABLE  member(
   birthday DATE CHECK(birthday <= CURRENT_DATE),
   description VARCHAR,
   picture VARCHAR NOT NULL,
-  email VARCHAR NOT NULL,
+  email VARCHAR,
   UNIQUE(email),
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -154,7 +153,6 @@ CREATE TABLE assignee(
 
 
 DROP TABLE IF EXISTS tag CASCADE;
-/* Needs a trigger to ensure by deleting or updating the child ___Tag tables the parent TAG is deleted or updated*/
 CREATE TABLE tag(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL
@@ -396,6 +394,39 @@ CREATE TRIGGER delete_notification
   AFTER DELETE ON user_notification
   FOR EACH ROW
   EXECUTE PROCEDURE delete_notification();
+
+
+DROP FUNCTION IF EXISTS delete_tag() CASCADE;
+CREATE FUNCTION delete_tag() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF (NOT EXISTS (SELECT * FROM world_tag WHERE tag_id = OLD.tag_id) AND
+  NOT EXISTS (SELECT * FROM member_tag WHERE tag_id = OLD.tag_id) AND
+  NOT EXISTS (SELECT * FROM project_tag WHERE tag_id = OLD.tag_id)) THEN
+  DELETE FROM tag WHERE id = OLD.tag_id;
+  END IF;
+  RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS delete_world_tag ON world_tag CASCADE;
+CREATE TRIGGER delete_world_tag
+  AFTER DELETE ON world_tag
+  FOR EACH ROW
+  EXECUTE PROCEDURE delete_tag();
+
+DROP TRIGGER IF EXISTS delete_project_tag ON project_tag CASCADE;
+CREATE TRIGGER delete_project_tag
+  AFTER DELETE ON project_tag
+  FOR EACH ROW
+  EXECUTE PROCEDURE delete_tag();
+
+DROP TRIGGER IF EXISTS delete_member_tag ON member_tag CASCADE;
+CREATE TRIGGER delete_member_tag
+  AFTER DELETE ON member_tag
+  FOR EACH ROW
+  EXECUTE PROCEDURE delete_tag();
 
 DROP INDEX IF EXISTS task_project CASCADE;
 CREATE INDEX task_project ON task USING hash (project_id);
