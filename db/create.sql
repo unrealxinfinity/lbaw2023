@@ -1,3 +1,7 @@
+DROP SCHEMA IF EXISTS lbaw2314;
+CREATE SCHEMA lbaw2314;
+SET search_path TO lbaw2314;
+
 DROP TYPE IF EXISTS permission_levels CASCADE;
 CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader', 'World Administrator');
 DROP TYPE IF EXISTS notification_levels CASCADE;
