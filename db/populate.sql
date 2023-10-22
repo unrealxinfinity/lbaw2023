@@ -104,7 +104,8 @@ INSERT INTO task_comment (content, date_, task_id, member_id) VALUES
 -- Sample data for the 'world_comment' table (comments on worlds)
 INSERT INTO world_comment (content, date_, world_id, member_id) VALUES
     ('Comment 1 on World 1', '2023-01-05', 1, 1),
-    ('Comment 2 on World 2', '2023-02-20', 2, 3);
+    ('Comment 2 on World 2', '2023-02-20', 2, 3),
+    ('Guest comment 1 on World 1', '2023-01-05', 1, NULL);
 
 -- Sample data for the 'faq_item' table
 INSERT INTO faq_item (question, answer) VALUES
