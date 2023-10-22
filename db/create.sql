@@ -396,3 +396,80 @@ CREATE TRIGGER delete_notification
   AFTER DELETE ON user_notification
   FOR EACH ROW
   EXECUTE PROCEDURE delete_notification();
+
+DROP INDEX IF EXISTS task_project CASCADE;
+CREATE INDEX task_project ON task USING hash (project_id);
+
+DROP INDEX IF EXISTS project_world CASCADE;
+CREATE INDEX project_world ON project USING hash (world_id);
+
+DROP INDEX IF EXISTS member_world CASCADE;
+CREATE INDEX member_world ON world_membership USING hash (member_id);
+
+ALTER TABLE world ADD COLUMN tsvectors TSVECTOR;
+
+DROP FUNCTION IF EXISTS world_search_update() CASCADE;
+CREATE FUNCTION world_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+            setweight(to_tsvector('english', NEW.name), 'A') ||
+            setweight(to_tsvector('english', NEW.description), 'B')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+            NEW.tsvectors = (
+                setweight(to_tsvector('english', NEW.name), 'A') ||
+                setweight(to_tsvector('english', NEW.description), 'B')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS world_search_update ON world CASCADE;
+CREATE TRIGGER world_search_update
+  BEFORE INSERT OR UPDATE ON world
+  FOR EACH ROW
+  EXECUTE PROCEDURE world_search_update();
+
+DROP INDEX IF EXISTS world_search_idx CASCADE;
+CREATE INDEX world_search_idx ON world USING GIN (tsvectors);
+
+ALTER TABLE task ADD COLUMN tsvectors TSVECTOR;
+
+DROP FUNCTION IF EXISTS task_search_update() CASCADE;
+CREATE FUNCTION task_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+            setweight(to_tsvector('english', NEW.title), 'A') ||
+            setweight(to_tsvector('english', NEW.description),'B')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+            NEW.tsvectors = (
+                setweight(to_tsvector('english', NEW.title), 'A') ||
+                setweight(to_tsvector('english', NEW.description), 'B')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS task_search_update ON task CASCADE;
+CREATE TRIGGER task_search_update
+  BEFORE INSERT OR UPDATE ON task
+  FOR EACH ROW
+  EXECUTE PROCEDURE task_search_update();
+
+DROP INDEX IF EXISTS task_search_idx CASCADE;
+CREATE INDEX task_search_idx ON task USING GIN (tsvectors);
