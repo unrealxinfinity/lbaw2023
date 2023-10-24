@@ -15,5 +15,12 @@ externalDocs:
 
 tags:
 - name: 'M01: Authentication and Individual Profile'
+- name: 'M02: Worlds'
+- name: 'M03: Projects'
+- name: 'M04: Tasks'
+- name: 'M05: Administration and Static Pages'
+- name: 'M06: Notifications'
+- name: 'M07: Tags'
+- name: 'M08: Comments'
 
 
