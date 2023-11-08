@@ -35,15 +35,16 @@ CREATE TABLE user_info(
 );
 
 
-DROP TABLE IF EXISTS member CASCADE;
-CREATE TABLE  member(
-  user_id SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS members CASCADE;
+CREATE TABLE  members(
+  id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
   description VARCHAR,
   picture VARCHAR NOT NULL,
   email VARCHAR,
   UNIQUE(email),
+  user_id INT NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -53,8 +54,8 @@ CREATE TABLE friend(
   member_id INT,
   friend_id INT,
   PRIMARY KEY(member_id,friend_id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(friend_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE 
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(friend_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE 
 );
 
 
@@ -66,7 +67,7 @@ CREATE TABLE world(
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR NOT NULL,
   owner_id INT NOT NULL,
-  FOREIGN KEY(owner_id) REFERENCES member(user_id)
+  FOREIGN KEY(owner_id) REFERENCES members(id)
 );
 
 
@@ -78,7 +79,7 @@ CREATE TABLE world_membership(
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
   is_admin BOOLEAN NOT NULL,
   PRIMARY KEY(member_id,world_id),
-  FOREIGN KEY (member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -97,7 +98,7 @@ CREATE TABLE favorite_world(
   member_id INT,
   world_id INT,
   PRIMARY KEY(member_id, world_id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -120,7 +121,7 @@ CREATE TABLE project_membership(
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
   permission_level permission_levels NOT NULL,
   PRIMARY KEY(member_id,project_id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -129,7 +130,7 @@ CREATE TABLE favorite_project(
   member_id INT,
   project_id INT,
   PRIMARY KEY(member_id, project_id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -152,7 +153,7 @@ CREATE TABLE assignee(
   member_id INT,
   task_id INT,
   PRIMARY KEY(member_id, task_id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -187,7 +188,7 @@ CREATE TABLE member_tag(
   member_id INT,
   PRIMARY KEY(tag_id, member_id),
   FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS task_comment CASCADE; 
@@ -198,7 +199,7 @@ CREATE TABLE task_comment(
   task_id INT NOT NULL,
   member_id INT NOT NULL,
   FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS world_comment CASCADE;
@@ -209,7 +210,7 @@ CREATE TABLE world_comment(
   world_id INT NOT NULL,
   member_id INT,
   FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(member_id) REFERENCES member(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS faq_item CASCADE;
@@ -240,7 +241,7 @@ CREATE TABLE user_notification(
   member_id INT,
   PRIMARY KEY(notification_id, member_id),
   FOREIGN KEY(notification_id) REFERENCES notifications(id),
-  FOREIGN KEY(member_id) REFERENCES member(user_id)
+  FOREIGN KEY(member_id) REFERENCES members(id)
 );
 
 
@@ -524,16 +525,16 @@ INSERT INTO user_info (username, password, user_id) VALUES
     ('user2', 'password2', 3),
     ('user3', 'password3', 4);
 
--- Sample data for the 'member' table
-INSERT INTO member (user_id, name, birthday, description, picture, email) VALUES
+-- Sample data for the 'members' table
+INSERT INTO members (user_id, name, birthday, description, picture, email) VALUES
     (1, 'John Doe', '1990-05-15', 'Member 1 Description', 'image1.jpg', 'user1@example.com'),
     (3, 'Alice Smith', '1985-12-30', 'Member 2 Description', 'image2.jpg', 'user2@example.com'),
     (4, 'Bob Johnson', '1992-08-20', 'Member 3 Description', 'image3.jpg', 'user3@example.com');
 
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
-    (1, 3),
-    (3, 4);
+    (1, 2),
+    (2, 3);
 
 -- Sample data for the 'world' table
 INSERT INTO world (name, description, picture, owner_id) VALUES
@@ -543,9 +544,9 @@ INSERT INTO world (name, description, picture, owner_id) VALUES
 -- Sample data for the 'world_membership' table (assuming members are part of worlds)
 INSERT INTO world_membership (member_id, world_id, is_admin) VALUES
     (1, 1, true),
-    (3, 1, false),
-    (3, 2, true),
-    (4, 2, false);
+    (2, 1, false),
+    (2, 2, true),
+    (3, 2, false);
 
 -- Sample data for the 'world_timeline' table
 INSERT INTO world_timeline (date_, description, world_id) VALUES
@@ -565,9 +566,9 @@ INSERT INTO project (name, status, description, picture, world_id) VALUES
 -- Sample data for the 'project_membership' table (assuming members are part of projects)
 INSERT INTO project_membership (member_id, project_id, permission_level) VALUES
     (1, 1, 'Project Leader'),
-    (3, 1, 'Member'),
-    (3, 2, 'Project Leader'),
-    (4, 2, 'Member');
+    (2, 1, 'Member'),
+    (2, 2, 'Project Leader'),
+    (3, 2, 'Member');
 
 -- Sample data for the 'favorite_project' table
 INSERT INTO favorite_project (member_id, project_id) VALUES
