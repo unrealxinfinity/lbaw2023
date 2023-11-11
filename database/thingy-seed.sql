@@ -202,8 +202,8 @@ CREATE TABLE task_comment(
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS world_comment CASCADE;
-CREATE TABLE world_comment(
+DROP TABLE IF EXISTS world_comments CASCADE;
+CREATE TABLE world_comments(
   id SERIAL PRIMARY KEY,
   content VARCHAR NOT NULL,
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
@@ -614,8 +614,8 @@ INSERT INTO task_comment (content, date_, task_id, member_id) VALUES
     ('Comment 1 on Task 1', '2023-03-01', 1, 1),
     ('Comment 2 on Task 2', '2023-04-02', 2, 3);
 
--- Sample data for the 'world_comment' table (comments on worlds)
-INSERT INTO world_comment (content, date_, world_id, member_id) VALUES
+-- Sample data for the 'world_comments' table (comments on worlds)
+INSERT INTO world_comments (content, date_, world_id, member_id) VALUES
     ('Comment 1 on World 1', '2023-01-05', 1, 1),
     ('Comment 2 on World 2', '2023-02-20', 2, 3),
     ('Guest comment 1 on World 1', '2023-01-05', 1, NULL);

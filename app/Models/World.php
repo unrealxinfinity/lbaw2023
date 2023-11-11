@@ -26,4 +26,9 @@ class World extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(WorldComment::class);
+    }
 }
