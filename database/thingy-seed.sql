@@ -102,8 +102,8 @@ CREATE TABLE favorite_world(
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS project CASCADE;
-CREATE TABLE project(
+DROP TABLE IF EXISTS projects CASCADE;
+CREATE TABLE projects(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
   status project_status NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE member_project(
   permission_level permission_levels NOT NULL,
   PRIMARY KEY(member_id,project_id),
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS favorite_project CASCADE;
@@ -131,7 +131,7 @@ CREATE TABLE favorite_project(
   project_id INT,
   PRIMARY KEY(member_id, project_id),
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS task CASCADE;
@@ -145,7 +145,7 @@ CREATE TABLE task(
   effort INT CHECK(effort >= 0),
   priority VARCHAR,
   project_id INT,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS assignee CASCADE;
@@ -179,7 +179,7 @@ CREATE TABLE project_tag(
   project_id INT,
   PRIMARY KEY(tag_id, project_id),
   FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(project_id) REFERENCES project(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS member_tag CASCADE;
@@ -231,7 +231,7 @@ CREATE TABLE notifications(
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id),
-  FOREIGN KEY(project_id) REFERENCES project(id),
+  FOREIGN KEY(project_id) REFERENCES projects(id),
   FOREIGN KEY(task_id) REFERENCES task(id)
 );
 
@@ -250,7 +250,7 @@ DROP FUNCTION IF EXISTS check_member_world() CASCADE;
 CREATE FUNCTION check_member_world() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM member_world JOIN project USING (world_id) WHERE member_id = NEW.member_id AND id = NEW.project_id) THEN
+  IF NOT EXISTS (SELECT * FROM member_world JOIN projects USING (world_id) WHERE member_id = NEW.member_id AND id = NEW.project_id) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO PROJECT PARENT', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -314,9 +314,9 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS new_project_log ON project CASCADE;
+DROP TRIGGER IF EXISTS new_project_log ON projects CASCADE;
 CREATE TRIGGER new_project_log
-  AFTER INSERT ON project
+  AFTER INSERT ON projects
   FOR EACH ROW
   EXECUTE PROCEDURE new_project_log();
 
@@ -332,9 +332,9 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS archived_project_log ON project CASCADE;
+DROP TRIGGER IF EXISTS archived_project_log ON projects CASCADE;
 CREATE TRIGGER archived_project_log
-  AFTER UPDATE ON project
+  AFTER UPDATE ON projects
   FOR EACH ROW
   WHEN (NEW.status = 'Archived')
   EXECUTE PROCEDURE archived_project_log();
@@ -357,7 +357,7 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS world_admin_log ON project CASCADE;
+DROP TRIGGER IF EXISTS world_admin_log ON member_world CASCADE;
 CREATE TRIGGER world_admin_log
   AFTER UPDATE OR INSERT ON member_world
   FOR EACH ROW
@@ -438,7 +438,7 @@ DROP INDEX IF EXISTS task_project CASCADE;
 CREATE INDEX task_project ON task USING hash (project_id);
 
 DROP INDEX IF EXISTS project_world CASCADE;
-CREATE INDEX project_world ON project USING hash (world_id);
+CREATE INDEX project_world ON projects USING hash (world_id);
 
 DROP INDEX IF EXISTS world_membership CASCADE;
 CREATE INDEX world_membership ON member_world USING hash (member_id);
@@ -559,7 +559,7 @@ INSERT INTO favorite_world (member_id, world_id) VALUES
     (3, 1);
 
 -- Sample data for the 'project' table
-INSERT INTO project (name, status, description, picture, world_id) VALUES
+INSERT INTO projects (name, status, description, picture, world_id) VALUES
     ('Project 1', 'Active', 'Description of Project 1', 'project_image1.jpg', 1),
     ('Project 2', 'Active', 'Description of Project 2', 'project_image2.jpg', 2);
 
