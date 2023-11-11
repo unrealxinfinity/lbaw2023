@@ -44,4 +44,9 @@ class Member extends Model
     {
         return $this->hasMany(WorldComment::class);
     }
+
+    public function taskComments(): HasMany
+    {
+        return $this->hasMany(TaskComment::class);
+    }
 }

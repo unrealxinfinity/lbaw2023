@@ -191,8 +191,8 @@ CREATE TABLE member_tag(
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS task_comment CASCADE; 
-CREATE TABLE task_comment(
+DROP TABLE IF EXISTS task_comments CASCADE; 
+CREATE TABLE task_comments(
   id SERIAL PRIMARY KEY,
   content VARCHAR NOT NULL,
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
@@ -296,9 +296,9 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS check_task_membership ON task_comment CASCADE;
+DROP TRIGGER IF EXISTS check_task_membership ON task_comments CASCADE;
 CREATE TRIGGER check_task_membership
-  BEFORE INSERT ON task_comment
+  BEFORE INSERT ON task_comments
   FOR EACH ROW
   EXECUTE PROCEDURE check_task_membership();  
 
@@ -609,8 +609,8 @@ INSERT INTO member_tag (tag_id, member_id) VALUES
     (2, 1),
     (2, 3);
 
--- Sample data for the 'task_comment' table (comments on tasks)
-INSERT INTO task_comment (content, date_, task_id, member_id) VALUES
+-- Sample data for the 'task_comments' table (comments on tasks)
+INSERT INTO task_comments (content, date_, task_id, member_id) VALUES
     ('Comment 1 on Task 1', '2023-03-01', 1, 1),
     ('Comment 2 on Task 2', '2023-04-02', 2, 3);
 
