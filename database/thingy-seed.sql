@@ -235,8 +235,8 @@ CREATE TABLE notifications(
   FOREIGN KEY(task_id) REFERENCES tasks(id)
 );
 
-DROP TABLE IF EXISTS user_notification CASCADE;
-CREATE TABLE user_notification(
+DROP TABLE IF EXISTS member_notification CASCADE;
+CREATE TABLE member_notification(
   notification_id INT,
   member_id INT,
   PRIMARY KEY(notification_id, member_id),
@@ -387,7 +387,7 @@ DROP FUNCTION IF EXISTS delete_notification() CASCADE;
 CREATE FUNCTION delete_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM user_notification WHERE notification_id = OLD.notification_id) THEN
+  IF NOT EXISTS (SELECT * FROM member_notification WHERE notification_id = OLD.notification_id) THEN
   DELETE FROM notifications WHERE id = OLD.notification_id;
   END IF;
   RETURN OLD;
@@ -395,9 +395,9 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS delete_notification ON user_notification CASCADE; 
+DROP TRIGGER IF EXISTS delete_notification ON member_notification CASCADE; 
 CREATE TRIGGER delete_notification
-  AFTER DELETE ON user_notification
+  AFTER DELETE ON member_notification
   FOR EACH ROW
   EXECUTE PROCEDURE delete_notification();
 
@@ -630,7 +630,7 @@ INSERT INTO notifications (text, level, world_id, project_id, task_id) VALUES
     ('Notification 1', 'Low', 1, NULL, NULL),
     ('Notification 2', 'Medium', NULL, 1, NULL);
 
--- Sample data for the 'user_notification' table (associating notifications with members)
-INSERT INTO user_notification (notification_id, member_id) VALUES
+-- Sample data for the 'member_notification' table (associating notifications with members)
+INSERT INTO member_notification (notification_id, member_id) VALUES
     (1, 1),
     (2, 3);

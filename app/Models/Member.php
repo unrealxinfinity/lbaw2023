@@ -49,4 +49,9 @@ class Member extends Model
     {
         return $this->hasMany(TaskComment::class);
     }
+
+    public function notifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Notification::class);
+    }
 }
