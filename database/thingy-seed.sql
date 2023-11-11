@@ -59,8 +59,8 @@ CREATE TABLE friend(
 );
 
 
-DROP TABLE IF EXISTS world CASCADE;
-CREATE TABLE world(
+DROP TABLE IF EXISTS worlds CASCADE;
+CREATE TABLE worlds(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
   description VARCHAR,
@@ -72,15 +72,15 @@ CREATE TABLE world(
 
 
 
-DROP TABLE IF EXISTS world_membership CASCADE;
-CREATE TABLE world_membership(
+DROP TABLE IF EXISTS member_world CASCADE;
+CREATE TABLE member_world(
   member_id INT,
   world_id INT,
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
   is_admin BOOLEAN NOT NULL,
   PRIMARY KEY(member_id,world_id),
   FOREIGN KEY (member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -90,7 +90,7 @@ CREATE TABLE world_timeline(
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   description VARCHAR NOT NULL,
   world_id INT,
-  FOREIGN KEY(world_id) REFERENCES World(id)
+  FOREIGN KEY(world_id) REFERENCES worlds(id)
 );
 
 DROP TABLE IF EXISTS favorite_world CASCADE;
@@ -99,7 +99,7 @@ CREATE TABLE favorite_world(
   world_id INT,
   PRIMARY KEY(member_id, world_id),
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS project CASCADE;
@@ -111,7 +111,7 @@ CREATE TABLE project(
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR NOT NULL,
   world_id INT,
-  FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS project_membership CASCADE;
@@ -170,7 +170,7 @@ CREATE TABLE world_tag(
   world_id INT,
   PRIMARY KEY(tag_id, world_id),
   FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS project_tag CASCADE;
@@ -209,7 +209,7 @@ CREATE TABLE world_comment(
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   world_id INT NOT NULL,
   member_id INT,
-  FOREIGN KEY(world_id) REFERENCES world(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -230,7 +230,7 @@ CREATE TABLE notifications(
   world_id INT DEFAULT NULL,
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
-  FOREIGN KEY(world_id) REFERENCES world(id),
+  FOREIGN KEY(world_id) REFERENCES worlds(id),
   FOREIGN KEY(project_id) REFERENCES project(id),
   FOREIGN KEY(task_id) REFERENCES task(id)
 );
@@ -246,11 +246,11 @@ CREATE TABLE user_notification(
 
 
 /**  TRIGGERS  **/
-DROP FUNCTION IF EXISTS check_world_membership() CASCADE;
-CREATE FUNCTION check_world_membership() RETURNS TRIGGER AS
+DROP FUNCTION IF EXISTS check_member_world() CASCADE;
+CREATE FUNCTION check_member_world() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM world_membership JOIN project USING (world_id) WHERE member_id = NEW.member_id AND id = NEW.project_id) THEN
+  IF NOT EXISTS (SELECT * FROM member_world JOIN project USING (world_id) WHERE member_id = NEW.member_id AND id = NEW.project_id) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO PROJECT PARENT', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -258,11 +258,11 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS check_world_membership ON project_membership CASCADE;
-CREATE TRIGGER check_world_membership
+DROP TRIGGER IF EXISTS check_member_world ON project_membership CASCADE;
+CREATE TRIGGER check_member_world
   BEFORE INSERT ON project_membership
   FOR EACH ROW
-  EXECUTE PROCEDURE check_world_membership();
+  EXECUTE PROCEDURE check_member_world();
 
 
 DROP FUNCTION IF EXISTS check_project_membership() CASCADE;
@@ -346,11 +346,11 @@ $BODY$
 BEGIN
   IF NEW.is_admin = TRUE AND (TG_OP = 'INSERT' OR TG_OP = 'UPDATE' AND old.is_admin = FALSE) THEN 
   INSERT INTO world_timeline(description, world_id)
-  VALUES ('NEW ADMINISTRATOR: ' || (SELECT username FROM world_membership JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
+  VALUES ('NEW ADMINISTRATOR: ' || (SELECT username FROM member_world JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
   END IF;
   IF TG_OP = 'UPDATE' AND OLD.is_admin = TRUE AND NEW.is_admin = FALSE THEN
   INSERT INTO world_timeline(description, world_id)
-  VALUES ('ADMINISTRATOR DEMOTED: ' || (SELECT username FROM world_membership JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
+  VALUES ('ADMINISTRATOR DEMOTED: ' || (SELECT username FROM member_world JOIN user_info ON id = member_id WHERE member_id = NEW.member_id AND world_id = NEW.world_id), NEW.world_id);
   END IF;
   RETURN NEW;
 END
@@ -359,7 +359,7 @@ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS world_admin_log ON project CASCADE;
 CREATE TRIGGER world_admin_log
-  AFTER UPDATE OR INSERT ON world_membership
+  AFTER UPDATE OR INSERT ON member_world
   FOR EACH ROW
   EXECUTE PROCEDURE world_admin_log();
 
@@ -440,10 +440,10 @@ CREATE INDEX task_project ON task USING hash (project_id);
 DROP INDEX IF EXISTS project_world CASCADE;
 CREATE INDEX project_world ON project USING hash (world_id);
 
-DROP INDEX IF EXISTS member_world CASCADE;
-CREATE INDEX member_world ON world_membership USING hash (member_id);
+DROP INDEX IF EXISTS world_membership CASCADE;
+CREATE INDEX world_membership ON member_world USING hash (member_id);
 
-ALTER TABLE world ADD COLUMN tsvectors TSVECTOR;
+ALTER TABLE worlds ADD COLUMN tsvectors TSVECTOR;
 
 DROP FUNCTION IF EXISTS world_search_update() CASCADE;
 CREATE FUNCTION world_search_update() RETURNS TRIGGER AS
@@ -468,14 +468,14 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS world_search_update ON world CASCADE;
+DROP TRIGGER IF EXISTS world_search_update ON worlds CASCADE;
 CREATE TRIGGER world_search_update
-  BEFORE INSERT OR UPDATE ON world
+  BEFORE INSERT OR UPDATE ON worlds
   FOR EACH ROW
   EXECUTE PROCEDURE world_search_update();
 
 DROP INDEX IF EXISTS world_search_idx CASCADE;
-CREATE INDEX world_search_idx ON world USING GIN (tsvectors);
+CREATE INDEX world_search_idx ON worlds USING GIN (tsvectors);
 
 ALTER TABLE task ADD COLUMN tsvectors TSVECTOR;
 
@@ -537,12 +537,12 @@ INSERT INTO friend (member_id, friend_id) VALUES
     (2, 3);
 
 -- Sample data for the 'world' table
-INSERT INTO world (name, description, picture, owner_id) VALUES
+INSERT INTO worlds (name, description, picture, owner_id) VALUES
     ('World 1', 'Description of World 1', 'world_image1.jpg', 1),
     ('World 2', 'Description of World 2', 'world_image2.jpg', 3);
 
--- Sample data for the 'world_membership' table (assuming members are part of worlds)
-INSERT INTO world_membership (member_id, world_id, is_admin) VALUES
+-- Sample data for the 'member_world' table (assuming members are part of worlds)
+INSERT INTO member_world (member_id, world_id, is_admin) VALUES
     (1, 1, true),
     (2, 1, false),
     (2, 2, true),
