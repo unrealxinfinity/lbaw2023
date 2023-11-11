@@ -114,8 +114,8 @@ CREATE TABLE project(
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS project_membership CASCADE;
-CREATE TABLE project_membership(
+DROP TABLE IF EXISTS member_project CASCADE;
+CREATE TABLE member_project(
   member_id INT,
   project_id INT,
   joined_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(joined_at <= CURRENT_DATE),
@@ -258,9 +258,9 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS check_member_world ON project_membership CASCADE;
+DROP TRIGGER IF EXISTS check_member_world ON member_project CASCADE;
 CREATE TRIGGER check_member_world
-  BEFORE INSERT ON project_membership
+  BEFORE INSERT ON member_project
   FOR EACH ROW
   EXECUTE PROCEDURE check_member_world();
 
@@ -269,7 +269,7 @@ DROP FUNCTION IF EXISTS check_project_membership() CASCADE;
 CREATE FUNCTION check_project_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM project_membership JOIN task USING (project_id) WHERE member_id = NEW.member_id AND id = NEW.task_id) THEN
+  IF NOT EXISTS (SELECT * FROM member_project JOIN task USING (project_id) WHERE member_id = NEW.member_id AND id = NEW.task_id) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO TASK PARENT', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -288,7 +288,7 @@ DROP FUNCTION IF EXISTS check_task_membership() CASCADE;
 CREATE FUNCTION check_task_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM (assignee a JOIN task t ON t.id = a.task_id) JOIN project_membership m USING (project_id) WHERE a.member_id = NEW.member_id AND a.task_id = NEW.task_id AND (m.member_id = NEW.member_id OR m.permission_level = 'Project Leader')) THEN
+  IF NOT EXISTS (SELECT * FROM (assignee a JOIN task t ON t.id = a.task_id) JOIN member_project m USING (project_id) WHERE a.member_id = NEW.member_id AND a.task_id = NEW.task_id AND (m.member_id = NEW.member_id OR m.permission_level = 'Project Leader')) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO TASK', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -563,8 +563,8 @@ INSERT INTO project (name, status, description, picture, world_id) VALUES
     ('Project 1', 'Active', 'Description of Project 1', 'project_image1.jpg', 1),
     ('Project 2', 'Active', 'Description of Project 2', 'project_image2.jpg', 2);
 
--- Sample data for the 'project_membership' table (assuming members are part of projects)
-INSERT INTO project_membership (member_id, project_id, permission_level) VALUES
+-- Sample data for the 'member_project' table (assuming members are part of projects)
+INSERT INTO member_project (member_id, project_id, permission_level) VALUES
     (1, 1, 'Project Leader'),
     (2, 1, 'Member'),
     (2, 2, 'Project Leader'),
