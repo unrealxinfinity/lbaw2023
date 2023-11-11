@@ -134,8 +134,8 @@ CREATE TABLE favorite_project(
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS task CASCADE;
-CREATE TABLE task(
+DROP TABLE IF EXISTS tasks CASCADE;
+CREATE TABLE tasks(
   id SERIAL PRIMARY KEY,
   title VARCHAR NOT NULL,
   description VARCHAR,
@@ -154,7 +154,7 @@ CREATE TABLE assignee(
   task_id INT,
   PRIMARY KEY(member_id, task_id),
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -198,7 +198,7 @@ CREATE TABLE task_comment(
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   task_id INT NOT NULL,
   member_id INT NOT NULL,
-  FOREIGN KEY(task_id) REFERENCES task(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -232,7 +232,7 @@ CREATE TABLE notifications(
   task_id INT DEFAULT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id),
   FOREIGN KEY(project_id) REFERENCES projects(id),
-  FOREIGN KEY(task_id) REFERENCES task(id)
+  FOREIGN KEY(task_id) REFERENCES tasks(id)
 );
 
 DROP TABLE IF EXISTS user_notification CASCADE;
@@ -269,7 +269,7 @@ DROP FUNCTION IF EXISTS check_project_membership() CASCADE;
 CREATE FUNCTION check_project_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM member_project JOIN task USING (project_id) WHERE member_id = NEW.member_id AND id = NEW.task_id) THEN
+  IF NOT EXISTS (SELECT * FROM member_project JOIN tasks USING (project_id) WHERE member_id = NEW.member_id AND id = NEW.task_id) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO TASK PARENT', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -288,7 +288,7 @@ DROP FUNCTION IF EXISTS check_task_membership() CASCADE;
 CREATE FUNCTION check_task_membership() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF NOT EXISTS (SELECT * FROM (assignee a JOIN task t ON t.id = a.task_id) JOIN member_project m USING (project_id) WHERE a.member_id = NEW.member_id AND a.task_id = NEW.task_id AND (m.member_id = NEW.member_id OR m.permission_level = 'Project Leader')) THEN
+  IF NOT EXISTS (SELECT * FROM (assignee a JOIN tasks t ON t.id = a.task_id) JOIN member_project m USING (project_id) WHERE a.member_id = NEW.member_id AND a.task_id = NEW.task_id AND (m.member_id = NEW.member_id OR m.permission_level = 'Project Leader')) THEN
   RAISE EXCEPTION '% DOES NOT BELONG TO TASK', NEW.member_id;
   END IF;
   RETURN NEW;
@@ -435,7 +435,7 @@ CREATE TRIGGER delete_member_tag
   EXECUTE PROCEDURE delete_tag();
 
 DROP INDEX IF EXISTS task_project CASCADE;
-CREATE INDEX task_project ON task USING hash (project_id);
+CREATE INDEX task_project ON tasks USING hash (project_id);
 
 DROP INDEX IF EXISTS project_world CASCADE;
 CREATE INDEX project_world ON projects USING hash (world_id);
@@ -477,7 +477,7 @@ CREATE TRIGGER world_search_update
 DROP INDEX IF EXISTS world_search_idx CASCADE;
 CREATE INDEX world_search_idx ON worlds USING GIN (tsvectors);
 
-ALTER TABLE task ADD COLUMN tsvectors TSVECTOR;
+ALTER TABLE tasks ADD COLUMN tsvectors TSVECTOR;
 
 DROP FUNCTION IF EXISTS task_search_update() CASCADE;
 CREATE FUNCTION task_search_update() RETURNS TRIGGER AS
@@ -502,14 +502,14 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS task_search_update ON task CASCADE;
+DROP TRIGGER IF EXISTS task_search_update ON tasks CASCADE;
 CREATE TRIGGER task_search_update
-  BEFORE INSERT OR UPDATE ON task
+  BEFORE INSERT OR UPDATE ON tasks
   FOR EACH ROW
   EXECUTE PROCEDURE task_search_update();
 
 DROP INDEX IF EXISTS task_search_idx CASCADE;
-CREATE INDEX task_search_idx ON task USING GIN (tsvectors);
+CREATE INDEX task_search_idx ON tasks USING GIN (tsvectors);
 
 -- Sample data for the 'users' table
 INSERT INTO users (type_) VALUES
@@ -576,7 +576,7 @@ INSERT INTO favorite_project (member_id, project_id) VALUES
     (3, 2);
 
 -- Sample data for the 'task' table
-INSERT INTO task (title, description, due_at, status, effort, priority, project_id) VALUES
+INSERT INTO tasks (title, description, due_at, status, effort, priority, project_id) VALUES
     ('Task 1', 'Description of Task 1', '2024-03-15', 'Upcoming', 5, 'High', 1),
     ('Task 2', 'Description of Task 2', '2024-04-01', 'In Progress', 8, 'Medium', 2);
 
