@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\WorldController;
+use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -21,8 +23,13 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
+
+
 // Home
-Route::redirect('/', '/login');
+//Route::redirect('/', '/login');
+Route::get('/', function () {
+    return view('pages.homepage');
+})->name('home');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -34,9 +41,19 @@ Route::controller(WorldController::class)->group(function () {
    Route::get('/worlds/{id}', 'show');
 });
 
+Route::controller(ProjectController::class)->group(function () {
+    Route::get('/projects/{id}', 'show');
+});
+
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
 });
+
+Route::controller(MemberController::class)->group(function () {
+    Route::get('/myworlds', 'showMemberWorlds');
+});
+
+
 
 // API
 Route::controller(CardController::class)->group(function () {

@@ -520,7 +520,7 @@ INSERT INTO users (type_) VALUES
 
 -- Sample data for the 'user_info' table
 INSERT INTO user_info (username, password, user_id) VALUES
-    ('user1', '$2a$12$EsBZl0gUYXnsLxgm6da8JeROPpk5UInMbZ2Ty0Z3aPolg9oZysTjS', 1),
+    ('user1', '$2y$10$GCLxqExbUbYmSyRhhZCJQ.qQdq50g32wfq6j.UGS1VROMVHnGtvSK', 1),
     ('admin1', 'adminpass1', 2),
     ('user2', 'password2', 3),
     ('user3', 'password3', 4);
