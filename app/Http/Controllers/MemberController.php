@@ -18,25 +18,10 @@ class MemberController extends Controller
         ]);
     }
 
-    public function getMemberWorlds($memberId) {
-        $member_world = DB::table('member_world')
-            ->where('member_id', $memberId)
-            ->get();
-        $worlds = [];
-        foreach ($member_world as $member_world_row) {
-            $world = DB::table('worlds')
-                ->where('id', $member_world_row->world_id)
-                ->get();
-            array_push($worlds, $world);
-        }
-
-        return $worlds;
-    }
-
     public function showMemberWorlds(): View
     {
         $id = Auth::id();
-        $worlds = $this->getMemberWorlds($id);
+        $worlds = Member::findOrFail($id)->worlds;
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
 
