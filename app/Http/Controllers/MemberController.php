@@ -26,17 +26,16 @@ class MemberController extends Controller
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
 
-    public function update(Request $request): void
+    public function update(Request $request, string $id): void
     {
         $fields = $request->validate([
-           'birthday' => ['required, date_format:YY-MM-DD'],
+           'birthday' => ['required'],
            'name' => ['required', 'alpha_num:ascii'],
             'description' => ['required', 'alpha_num:ascii'],
-            'email' => ['required', 'email'],
-            'id' => ['required', 'integer', 'numeric']
+            'email' => ['required', 'email']
         ]);
 
-        $member = Member::findOrFail($fields['id']);
+        $member = Member::findOrFail($id);
 
         $this->authorize('edit', $member);
 

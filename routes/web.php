@@ -47,6 +47,7 @@ Route::controller(ProjectController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
+    Route::put('api/members/{id}', 'update');
 });
 
 Route::controller(MemberController::class)->group(function () {

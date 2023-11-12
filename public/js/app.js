@@ -38,6 +38,7 @@ function addEventListeners() {
   
   function sendAjaxRequest(method, url, data, handler) {
     let request = new XMLHttpRequest();
+    console.log(url);
   
     request.open(method, url, true);
     request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -59,7 +60,7 @@ function addEventListeners() {
   }
 
   function editMemberHandler() {
-  
+
   }
 
   function sendItemUpdateRequest() {
