@@ -22,6 +22,11 @@ function addEventListeners() {
     let cardCreator = document.querySelector('article.card form.new_card');
     if (cardCreator != null)
       cardCreator.addEventListener('submit', sendCreateCardRequest);
+
+    let memberEditors =document.querySelectorAll('form.edit-member');
+    [].forEach.call(memberEditors, function(editor) {
+      editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
+    });
   }
   
   function encodeForAjax(data) {
@@ -40,7 +45,23 @@ function addEventListeners() {
     request.addEventListener('load', handler);
     request.send(encodeForAjax(data));
   }
+
+  function sendEditMemberRequest() {
+    let form = this.closest('form.edit-member');
+    let name = form.querySelector('input.name').value;
+    let email = form.querySelector('input.email').value;
+    let birthday = form.querySelector('input.birthday').value;
+    let description = form.querySelector('input.description').value;
+
+    let id = form.querySelector('input.member-id').value;
+
+    sendAjaxRequest('put', '/api/members/' + id, {name: name, email: email, birthday: birthday, description: description}, editMemberHandler);
+  }
+
+  function editMemberHandler() {
   
+  }
+
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
     let id = item.getAttribute('data-id');
