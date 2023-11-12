@@ -19,4 +19,9 @@ class MemberPolicy
     {
         return ($user->persistentUser->type_ === 'Administrator') || ($member->user->id === $user->id);
     }
+
+    public function create(User $user, Member $member): bool
+    {
+        return $user->persistentUser->type_ === 'Administrator';
+    }
 }

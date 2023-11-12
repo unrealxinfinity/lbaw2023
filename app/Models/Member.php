@@ -15,6 +15,13 @@ class Member extends Model
 
     public $timestamps  = false;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'user_id',
+        'picture'
+    ];
+
     public function persistentUser(): BelongsTo
     {
         return $this->belongsTo(PersistentUser::class, 'user_id');

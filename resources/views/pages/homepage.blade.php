@@ -10,7 +10,7 @@
         @unless (Auth::check()) <p>Log in to get started!</p> @endunless
     </section>
     @if (Auth::check())
-        <a class="button" href="{{ url('members/' . Auth::user()->id) }}"> {{ Auth::user()->username }} </a>
+        <a class="button" href="{{ url('members/' . Auth::user()->persistentUser->member->id) }}"> {{ Auth::user()->username }} </a>
     @endif
 @endsection
 

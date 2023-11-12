@@ -12,6 +12,10 @@ class PersistentUser extends Model
 
     public $timestamps  = false;
 
+    protected $fillable = [
+        'type_',
+    ];
+
     public function user(): HasOne
     {
         return $this->hasOne(User::class, 'user_id');
