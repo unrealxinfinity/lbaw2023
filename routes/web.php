@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\WorldController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,9 @@ Route::controller(WorldController::class)->group(function () {
    Route::get('/worlds/{id}', 'show');
 });
 
+Route::controller(MemberController::class)->group(function () {
+    Route::get('members/{id}', 'show');
+});
 
 // API
 Route::controller(CardController::class)->group(function () {
