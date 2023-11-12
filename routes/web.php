@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WorldController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -26,6 +27,10 @@ Route::redirect('/', '/login');
 Route::controller(CardController::class)->group(function () {
     Route::get('/cards', 'list')->name('cards');
     Route::get('/cards/{id}', 'show');
+});
+
+Route::controller(WorldController::class)->group(function () {
+   Route::get('/worlds/{id}', 'show');
 });
 
 
