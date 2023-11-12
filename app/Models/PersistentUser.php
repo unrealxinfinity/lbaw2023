@@ -17,5 +17,10 @@ class PersistentUser extends Model
         return $this->hasOne(User::class, 'user_id');
     }
 
+    public function member(): HasOne
+    {
+        return $this->hasOne(Member::class, 'user_id');
+    }
+
     protected $table = 'users';
 }
