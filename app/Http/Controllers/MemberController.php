@@ -21,7 +21,7 @@ class MemberController extends Controller
 
     public function showMemberWorlds(): View
     {
-        $id = Auth::id();
+        $id = Auth::user()->persistentUser->member->id;
         $worlds = Member::findOrFail($id)->worlds;
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
