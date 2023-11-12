@@ -11,6 +11,8 @@ class WorldController extends Controller
     {
         $world = World::findOrFail($id);
 
+        $this->authorize('show', $world);
+
         return view('pages.world', [
             'world' => $world
         ]);
