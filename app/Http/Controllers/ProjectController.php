@@ -24,16 +24,18 @@ class ProjectController extends Controller
     {
         $fields = $request->validate([
            'name' => 'alpha_num:ascii',
-            'description' => 'string'
+            'description' => 'string',
+            'world_id' => 'exists:App\Models\World,id'
         ]);
 
         $project = Project::create([
            'name' => $fields['name'],
            'description' => $fields['name'],
            'status' => 'Active',
-           'picture' => 'pic'
+           'picture' => 'pic',
+            'world_id' => $fields['world_id']
         ]);
-        
+
         return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
     }
 }
