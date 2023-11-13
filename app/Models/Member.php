@@ -34,7 +34,7 @@ class Member extends Model
 
     public function worlds(): BelongsToMany
     {
-        return $this->belongsToMany(World::class);
+        return $this->belongsToMany(World::class)->withPivot('is_admin');
     }
 
     public function projects(): BelongsToMany

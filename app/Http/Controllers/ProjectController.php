@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -23,9 +25,9 @@ class ProjectController extends Controller
     public function create(Request $request): RedirectResponse
     {
         $fields = $request->validate([
-           'name' => 'alpha_num:ascii',
-            'description' => 'string',
-            'world_id' => 'exists:App\Models\World,id'
+           'name' => ['alpha_num:ascii'],
+            'description' => ['string'],
+            'world_id' => ['exists:App\Models\World,id']
         ]);
 
         $project = Project::create([
@@ -37,5 +39,20 @@ class ProjectController extends Controller
         ]);
 
         return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
+    }
+
+    public function addMember(Request $request, string $project_id, string $member_id): void
+    {
+        $fields = $request->validate([
+           'type' => [Rule::in('Member', 'Project Leader')]
+        ]);
+
+        $project = Project::findOrFail($project_id);
+        $member = Member::findOrFail($member_id);
+
+        $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
+        $type = $is_admin ? 'World Administrator' : $fields['type'];
+
+        $member->projects->attach($project_id, ['type' => $type]);
     }
 }
