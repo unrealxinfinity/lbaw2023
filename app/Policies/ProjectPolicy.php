@@ -30,4 +30,9 @@ class ProjectPolicy
         }
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted' && $isMember;
     }
+
+    public function addMember(User $user, Project $project): bool
+    {
+        return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
+    }
 }

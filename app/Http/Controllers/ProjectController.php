@@ -50,6 +50,8 @@ class ProjectController extends Controller
         $project = Project::findOrFail($project_id);
         $member = Member::findOrFail($member_id);
 
+        $this->authorize('addMember', $project);
+
         $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
         $type = $is_admin ? 'World Administrator' : $fields['type'];
 
