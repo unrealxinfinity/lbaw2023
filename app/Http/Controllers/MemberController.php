@@ -47,5 +47,11 @@ class MemberController extends Controller
         $member->save();
     }
 
+    public function list(string $search = "")
+    {
+        return Member::where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%')->get();
+    }
+
     
 }
