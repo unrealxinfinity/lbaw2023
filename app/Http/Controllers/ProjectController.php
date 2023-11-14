@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
@@ -22,13 +23,9 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function create(Request $request): RedirectResponse
+    public function create(CreateProjectRequest $request): RedirectResponse
     {
-        $fields = $request->validate([
-           'name' => ['alpha_num:ascii'],
-            'description' => ['string'],
-            'world_id' => ['exists:App\Models\World,id']
-        ]);
+        $fields = $request->validated();
 
         $project = Project::create([
            'name' => $fields['name'],
