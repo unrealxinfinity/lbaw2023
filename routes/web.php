@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Project;
@@ -52,6 +53,10 @@ Route::controller(MemberController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
+});
+
+Route::controller(TaskController::class)->group(function () {
+    Route::put('/tasks/create', 'create');
 });
 
 

@@ -63,6 +63,22 @@ function addEventListeners() {
 
   }
 
+  function sendCreateTaskRequest() {
+    let form = this.closest('form.new-task');
+    let title = form.querySelector('input.title').value;
+    let description = form.querySelector('input.description').value;
+    let due_at = form.querySelector('input.due_at').value;
+    let effort = form.querySelector('input.effort').value;
+    let priority = form.querySelector('select.priority').value;
+    let project_id = form.querySelector('input.project_id').value;
+
+    sendAjaxRequest('put', '/api/tasks/', {title: title, description: description, due_at: due_at, effort: effort, priority: priority, project_id: project_id}, taskAddedHandler);
+  }
+
+  function taskAddedHandler() {
+
+  }
+
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
     let id = item.getAttribute('data-id');
