@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -24,8 +25,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
+        'user_id',
         'password',
     ];
 
@@ -52,8 +53,11 @@ class User extends Authenticatable
     /**
      * Get the cards for a user.
      */
-    public function cards(): HasMany
+
+    public function persistentUser(): BelongsTo
     {
-        return $this->hasMany(Card::class);
+        return $this->belongsTo(PersistentUser::class, 'user_id');
     }
+
+    protected $table = 'lbaw2314.user_info';
 }

@@ -1,20 +1,36 @@
 openapi: 3.0.0
 
+
+
+
 info:
   version: '1.0'
   title: 'LBAW MineMax Web API'
   description: 'Web Resources Specification (A7) for MineMax'
 
+
+
+
 servers:
 - url: http://lbaw.fe.up.pt
   description: Production server
+
+
+
 
 externalDocs:
   description: Find more info here.
   url: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2314
 
+
+
+
 tags:
-- name: 'M01: Authentication and Individual Profile'
+
+
+
+
+- name: 'M01: Authentication, Individual Profile and user management'
 - name: 'M02: Worlds'
 - name: 'M03: Projects'
 - name: 'M04: Tasks'
@@ -24,3 +40,849 @@ tags:
 - name: 'M08: Comments'
 
 
+
+
+
+
+
+
+paths:
+  /login:
+    post:
+      operationId: R101
+      summary: 'R101: Login Action'
+      description: 'Handles the login form submission information. Access: VIS'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              oneOf:
+                - required:
+                    - email
+                    - password
+                - required:
+                    - username
+                    - password
+      responses:
+        '302':
+          description: 'Redirect after handling login.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful login. Redirect to the home page.'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed login. Stay inside the login form.'
+                  value: '/login'
+
+
+
+
+
+
+
+
+
+
+  /logout:
+    post:
+      operationId: R102
+      summary: 'R102: Logout Action'
+      description: 'Logout the current authenticated user. Access: MBR, ADM, BLK'
+      tags:
+         - 'M01: Authentication, Individual Profile and User Management'
+      responses:
+        '302':
+          description: 'Redirect after handling logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to the home page.'
+                  value: '/home'
+  /sign-up:
+   post:
+     operationId: R103
+     summary: 'R103: Sign-up Action'
+     description: 'Sign-up the current user as a member. Access: VIS,ADM,BLK'
+     tags:
+      - 'M01: Authentication, Individual Profile and User Management'
+     requestBody:
+            required: true
+            content:
+              application/x-www-form-urlencoded:
+                schema:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                    - username
+                    - email
+                    - password
+
+
+
+
+
+
+
+
+     responses:
+        '302':
+          description: 'Redirect after signing-up'
+          headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful sign-up. Redirect to main page.'
+                 value: '/home'
+               302Failure:
+                 description: 'Failed. Redirect to sign-up form.'
+                 value: '/sign-up'
+
+
+
+
+  /users
+    get:
+      operationId: R104
+      summary: 'R104: search user'
+      description: 'Get searched user. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management '
+     
+      parameters:
+       - in: query
+         username: query
+         description: To search for a specific user
+         schema:
+           type: string
+         required: false
+       - in: query
+         email: 
+         description: To search for a specific user through email
+         schema:
+           type: string
+         required: false
+
+
+      responses:
+        '200':
+          description: 'Found a user'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    type: integer
+                  username:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  picture:
+                    type: url
+              example:
+                - id: 1
+                  username: steve1
+                  name: Steve
+                  email: steve1@minecraft.com
+                  picture: https://i.imgur.com/steve.jpg
+        '204':
+          description: 'No such user'
+    
+    get:
+      operationId: R105
+      summary: 'R105: Get users'
+      description: 'Get users related to a world. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management '
+     
+      parameters:
+       name: id
+       - in: path
+         description: Get the users of a world
+         schema:
+           type: string
+         required: false
+  
+      responses:
+        '200':
+          description: 'Found users'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    username:
+                      type: string
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    picture:
+                      type: url
+              example:
+                - id: 1
+                  username: steve1
+                  name: Steve
+                  email: steve1@minecraft.com
+                  picture: https://i.imgur.com/steve.jpg
+                - id: 2
+                  username: stephanie1
+                  name: Stephanie
+                  email: Stephanie1@minecraft.com
+                  picture: https://i.imgur.com/Sttphanie.jpg
+
+
+        '204':
+          description: 'No such users'
+
+
+
+
+
+
+    get:
+      operationId: R106
+      summary: 'R106: Get users'
+      description: 'Get users related to a project. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management '
+     
+      parameters:
+       name: id
+       - in: path
+         description: Id of a project
+         schema:
+           type: string
+         required: false
+  
+      responses:
+        '200':
+          description: 'Found users'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    username:
+                      type: string
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    picture:
+                      type: url
+              example:
+                - id: 1
+                  username: steve1
+                  name: Steve
+                  email: steve1@minecraft.com
+                  picture: https://i.imgur.com/steve.jpg
+                - id: 2
+                  username: stephanie1
+                  name: Stephanie
+                  email: Stephanie1@minecraft.com
+                  picture: https://i.imgur.com/Sttphanie.jpg
+
+
+        '204':
+          description: 'No such users'
+
+
+
+
+  /users/{uid}:
+    get:
+      operationId: R107
+      summary: 'R107: User Profile'
+      description: 'Shows the profile of the user with the given id. Access: MBR,ADM,BLK'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      parameters:
+        - name: uid
+          in: path
+          description: 'User id'
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: 'User profile page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'User not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+ 
+  /worlds:
+    get:
+      operationId: R201
+      summary: 'R201: List Worlds'
+      description: 'List all worlds. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M02: Worlds'
+     
+      parameters:
+       - in: query
+       - name: worldname
+         description: String to use for full-text search
+         schema:
+           type: string
+         required: false
+
+
+       - in: query
+         name: description
+         description: String to use for full-text search
+         schema:
+           type: string
+         required: false
+      responses:
+        '200':
+          description: 'List of worlds'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    creation_date:
+                      type: string
+                    picture:
+                      type: url
+                    owner:
+                      type: string
+                example:
+                  - id: 1
+                    name: A Era do Futuro
+                    description: Uma aventura no minecraft
+                    creation_date: 2013-10-20
+                    picture: https://i.imgur.com/1.jpg
+                    owner: Miguel Campos
+        '204':
+          description: 'Worlds not found'
+  
+         Para apagar? “content:
+            text/html:
+              schema:
+                type: string
+                format: html“
+    post:
+      operationId: R202
+      summary: 'R202: Create World'
+      description: 'Handles the creation of a world. Access: MBR'
+      tags:
+        - 'M02: Worlds'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                pictureURL:
+                  type: url
+                required:
+                  - name
+      responses:
+        '302':
+          description: 'Redirect after world creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful world creation. Redirect to world page.'
+                  value: '/worlds/{id}'
+                302Failure:
+                  description: 'Error in world creation. Stay inside the form.'
+                  value: '/worlds'
+
+
+  /worlds/{world_id}
+    get:
+      operationId: R203
+      summary: 'R203: World Page'
+      description: 'Shows the details of a world. Access: VIS,MBR,ADM,BLK'
+      tags:
+       - 'M02: Worlds'
+      parameters:
+       - name: world_id
+         in: path
+         description: 'World id'
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: 'World page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'World not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+  /api/worlds/{world_id}/comments
+    get:
+      operationId: R204
+      summary: 'R204: List world comments'
+      description: 'List all world comments. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M02: Worlds
+     
+      parameters:
+       - in: query
+         name: date
+         description: Date to filter by
+         schema:
+           type: string
+         required: false
+       - in: path
+         name: world_id
+         description: World that the comment belongs to
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+
+
+       - in: query
+         name: username
+         description: Username to filter the comments by user
+         schema:
+           type: string
+         required: false
+
+
+      responses:
+        '200':
+          description: 'List of comments'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    date:
+                      type: string
+                    username:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    content: O nosso mundo está mesmo fixe
+                    date: 15/11/2019
+                    username: someone123
+                  - id: 2
+                    content: Never gonna give you up, never gonna let you down
+                    date: 15/11/2019
+                    username: rickrolled1            
+        '204':
+          description: 'No comments'
+         
+  /worlds/add:
+    post:
+      operationId:
+      summary:
+      description: 'Add a user to a world as a member or as admin. Access: WADM'
+      tags:
+        - 'M02: Worlds'
+      requestBody:
+        required: true
+        content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              worldId:
+                type: integer
+              userId:
+                type: integer
+              role:
+                type: string
+                enum: [member, admin]
+      responses:
+        '302':
+          description: 'Redirect after adding member'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Member successfully added. Redirect to world page.'
+                  value: 'worlds/{id}'
+                302Failure:
+                  description: 'Member could not be added. Redirect to world page.'
+                  value: 'worlds/{id}'
+
+
+
+
+
+
+
+
+  /api/projects:
+    get:
+      operationId: R301
+      summary: 'R301: List Projects'
+      description: 'List all projects. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M03: Projects'
+     
+      parameters:
+       - in: query
+         name: query
+         description: String to use full text search
+         schema:
+           type: string
+         required: false
+       - in: query
+         name: status
+         description: Status to filter by
+         schema:
+           type: string
+         required: false
+
+
+       - in: query
+         name: tag
+         description: Tag to filter by
+         schema:
+           type: string
+         required: false
+       - in: query
+         name: description
+         description: Description to use full text search
+         schema:
+           type: string
+         required: false
+
+
+      responses:
+        '200':
+          description: 'List of projects'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    status:
+                      type: string
+                    description:
+                      type: string
+                    creation_date:
+                      type: string
+                    picture:
+                      type: string
+                    world:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    name: Encontrar 30 diamantes
+                    status: Terminado
+                    description: Minar e procurar pelos diamantes a beira da casa
+                    creation_date: 2015-10-12
+                    picture: https://i.imgur.com/1.jpg
+                    world: 1
+                  - id: 2
+                    name: Farmar porcos
+                    status: Em processo
+                    description: Criar porcos e aumentar a sua população
+                    creation_date: 2023-10-30
+                    picture: https://i.imgur.com/2.jpg
+                    world: 1        
+        '404':
+          description: 'Projects not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+    post:
+      operationId: R302
+      summary: 'R302: Create Project'
+      description: 'Handles the creation of a project. Access: WADM'
+      tags:
+        - 'M03: Projects'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                pictureURL:
+                  type: url
+                required:
+                  - name
+      responses:
+        '302':
+          description: 'Redirect after project creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful project creation. Redirect to project page.'
+                  value: '/projects/{id}'
+                302Failure:
+                  description: 'Error in project creation. Stay inside the form.'
+                  value: '/projects'
+
+
+
+
+  /api/projects/{project_id}:
+    get:
+      operationId: R303
+      summary: 'R303: Project Page'
+      description: 'Shows the details of a project. Access: VIS,MBR,ADM,BLK'
+      tags:
+       - 'M03: Projects'
+      parameters:
+        - name: project_id
+          in: path
+          description: 'Project id'
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: 'Project page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'Project not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+ 
+  /api/projects/add:
+    post:
+      operationId: R304
+      summary: 'R304: Add Member to Project'
+      description: 'Add a user to a project as a member or as project leader. Access: WADM'
+      tags:
+        - 'M03: Projects'
+      requestBody:
+        required: true
+        content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              projectId:
+                type: integer
+              userId:
+                type: integer
+              role:
+                type: string
+                enum: [member, leader]
+      responses:
+        '302':
+          description: 'Redirect after adding member'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Member successfully added. Redirect to project page.'
+                  value: 'projects/{id}'
+                302Failure:
+                  description: 'Member could not be added. Redirect to project page.'
+                  value: 'projects/{id}'
+     
+
+
+  /api/tasks/{task_id}:
+    get:
+      operationId: R401
+      summary: 'R401: Task Page'
+      description: 'Shows the details of a task. Access: PMBR'
+      tags:
+       - 'M04: Tasks'
+      parameters:
+       - name: task_id
+         in: path
+         description: 'Task id'
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: 'Task page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'Task not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+
+
+  
+  /api/tasks/{task_id}/comments
+    get:
+      operationId: R402
+      summary: 'R402: List task comments'
+      description: 'List all task comments. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M04: Tasks
+     
+      parameters:
+       - in: query
+         name: date
+         description: Date to filter by
+         schema:
+           type: string
+         required: false
+       - in: path
+         name: task_id
+         description: Task that the comments belong to
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+
+
+       - in: query
+         name: username
+         description: Username to filter the comments by user
+         schema:
+           type: string
+         required: false
+
+
+      responses:
+        '200':
+          description: 'List of comments'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    date:
+                      type: string
+                    username:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    content: Já fiz esta task
+                    date: 15/12/2019
+                    username: someone123
+                  - id: 2
+                    content: bruh
+                    date: 12/12/2019
+                    username: unnamed1           
+        '204':
+          description: ' No comments'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html

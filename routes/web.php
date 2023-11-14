@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\WorldController;
+use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -19,14 +24,41 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
+
+
 // Home
-Route::redirect('/', '/login');
+//Route::redirect('/', '/login');
+Route::get('/', function () {
+    return view('pages.homepage');
+})->name('home');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
     Route::get('/cards', 'list')->name('cards');
     Route::get('/cards/{id}', 'show');
 });
+
+Route::controller(WorldController::class)->group(function () {
+   Route::get('/worlds/{id}', 'show');
+});
+
+Route::controller(ProjectController::class)->group(function () {
+    Route::get('/projects/{id}', 'show');
+});
+
+Route::controller(MemberController::class)->group(function () {
+    Route::get('members/{id}', 'show');
+    Route::put('api/members/{id}', 'update');
+});
+
+Route::controller(MemberController::class)->group(function () {
+    Route::get('/myworlds', 'showMemberWorlds');
+});
+
+Route::controller(TaskController::class)->group(function () {
+    Route::put('/tasks/create', 'create');
+});
+
 
 
 // API
