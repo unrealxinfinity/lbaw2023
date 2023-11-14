@@ -82,4 +82,14 @@ class TaskController extends Controller
         
         $member->tasks->attach($task_id, 'assignee');
     }
+
+    public function complete(string $id): void
+    {
+        $task = Task::findOrFail($id);
+        $this->authorize('edit', $task);
+
+        $task->status = 'Done';
+        
+        $task->save();
+    }
 }
