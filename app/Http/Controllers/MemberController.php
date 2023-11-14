@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -26,21 +27,16 @@ class MemberController extends Controller
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
 
-    public function update(Request $request, string $id): void
+    public function update(EditMemberRequest $request, string $id): void
     {
-        $fields = $request->validate([
-           'birthday' => ['required'],
-           'name' => ['required', 'alpha_num:ascii'],
-            'description' => ['required', 'alpha_num:ascii'],
-            'email' => ['required', 'email']
-        ]);
+        $fields = $request->validated();
 
         $member = Member::findOrFail($id);
 
-        $this->authorize('edit', $member);
+        //$this->authorize('edit', $member);
 
         $member->birthday = $fields['birthday'];
-        $member->username = $fields['username'];
+        $member->name = $fields['name'];
         $member->description = $fields['description'];
         $member->email = $fields['email'];
 

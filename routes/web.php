@@ -48,17 +48,16 @@ Route::controller(ProjectController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
-    Route::put('api/members/{id}', 'update');
 });
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
+    Route::put('/api/members/{id}', 'update')->name('update-member');
 });
 
 Route::controller(TaskController::class)->group(function () {
     Route::put('/tasks/create', 'create');
 });
-
 
 
 // API
