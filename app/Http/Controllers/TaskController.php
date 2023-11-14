@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Project;
 use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -19,8 +20,11 @@ class TaskController extends Controller
             'due_at' => ['date'],
             'effort' => ['integer'],
             'priority' => ['string'],
-            'project_id' => ['exists:App\Models\Project,id', Rule::in(auth()->user()->projects->pluck('id'))]
+            'project_id' => ['exists:App\Models\Project,id']
         ]);
+
+        $project = Project::findOrFail($fields['project_id']);
+        $this->authorize('addTask', $project);
 
         $task = Task::create([
             'title' => $fields['title'],
