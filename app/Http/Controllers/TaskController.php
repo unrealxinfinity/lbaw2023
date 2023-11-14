@@ -26,6 +26,9 @@ class TaskController extends Controller
             'title' => $fields['title'],
             'description' => $fields['description'],
             'status' => $fields['status'],
+            'due_at' => $fields['due_at'],
+            'effort' => $fields['effort'],
+            'priority' => $fields['priority'],
             'project_id' => $fields['project_id']
         ]);
 
