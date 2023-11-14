@@ -77,8 +77,6 @@ class TaskController extends Controller
         $this->authorize('assignMember', $task);
 
         $is_admin = $member->worlds->where('id', $task->world_id)[0]->pivot->is_admin;
-        $type = $is_admin ? 'World Administrator' : $fields['type'];
-
         
         $member->tasks->attach($task_id, 'assignee');
     }
@@ -89,7 +87,7 @@ class TaskController extends Controller
         $this->authorize('edit', $task);
 
         $task->status = 'Done';
-        
+
         $task->save();
     }
 }
