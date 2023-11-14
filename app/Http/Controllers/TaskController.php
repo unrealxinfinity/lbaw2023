@@ -39,6 +39,31 @@ class TaskController extends Controller
         return redirect()->route('tasks/' . $task->id)->withSuccess('New Task created!');
     }
 
+    public function edit(Request $request, string $id): void
+    {
+
+        $fields = $request->validate([
+            'title' => ['alpha_num:ascii'],
+            'description' => ['string'],
+            'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
+            'due_at' => ['date'],
+            'effort' => ['integer'],
+            'priority' => ['string'],
+        ]);
+
+        $task = Task::findOrFail($id);
+        $this->authorize('edit', $task);
+
+        $task->title = $fields['title'];
+        $task->description = $fields['description'];
+        $task->status = $fields['status'];
+        $task->due_at = $fields['due_at'];
+        $task->effort = $fields['effort'];
+        $task->priority = $fields['priority'];
+
+        $task->save();
+    }
+
     public function assignMember(Request $request, string $task_id, string $member_id): void
     {
         // em cima eu faço project_id, bastava fazer isto?
