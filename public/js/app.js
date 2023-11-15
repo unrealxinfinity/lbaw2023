@@ -84,7 +84,12 @@ function addEventListeners() {
     });
 
     const json = await response.json();
-    console.log(json);
+    
+    addMemberHandler(json)
+  }
+
+  function addMemberHandler(json) {
+    
   }
 
   function editMemberHandler() {
