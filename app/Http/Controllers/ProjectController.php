@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
@@ -38,16 +39,13 @@ class ProjectController extends Controller
         return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
     }
 
-    public function addMember(Request $request, string $project_id, string $member_id): void
+    public function addMember(AddMemberRequest $request, string $project_id, string $member_id): void
     {
-        $fields = $request->validate([
-           'type' => [Rule::in('Member', 'Project Leader')]
-        ]);
+        $fields = $request->validated();
 
+        error_log("hello");
         $project = Project::findOrFail($project_id);
         $member = Member::findOrFail($member_id);
-
-        $this->authorize('addMember', $project);
 
         $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
         $type = $is_admin ? 'World Administrator' : $fields['type'];

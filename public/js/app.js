@@ -28,7 +28,7 @@ function addEventListeners() {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
 
-    let memberAdder = document.querySelector('form.add-member');
+    let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
   }
@@ -63,10 +63,13 @@ function addEventListeners() {
     sendAjaxRequest('put', '/api/members/' + id, {name: name, email: email, birthday: birthday, description: description}, editMemberHandler);
   }
 
-  async function sendAddMemberRequest() {
+  async function sendAddMemberRequest(event) {
+    event.preventDefault();
+
     let username = this.querySelector('input.username').value;
     let id = this.querySelector('input.id').value;
 
+    console.log('/api/projects/' + id + '/' + username);
     const response = await fetch('/api/projects/' + id + '/' + username, {
       method: 'POST'
     });
