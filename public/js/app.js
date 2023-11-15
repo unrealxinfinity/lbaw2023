@@ -27,6 +27,10 @@ function addEventListeners() {
     [].forEach.call(memberEditors, function(editor) {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
+
+    let memberAdder = document.querySelector('form.add-member');
+    if (memberAdder != null)
+      memberAdder.addEventListener('submit', sendAddMemberRequest);
   }
   
   function encodeForAjax(data) {
@@ -57,6 +61,18 @@ function addEventListeners() {
     let id = form.querySelector('input.member-id').value;
 
     sendAjaxRequest('put', '/api/members/' + id, {name: name, email: email, birthday: birthday, description: description}, editMemberHandler);
+  }
+
+  async function sendAddMemberRequest() {
+    let username = this.querySelector('input.username').value;
+    let id = this.querySelector('input.id').value;
+
+    const response = await fetch('/api/projects/' + id + '/' + username, {
+      method: 'POST'
+    });
+
+    const json = await response.json();
+    console.log(json)
   }
 
   function editMemberHandler() {
