@@ -82,6 +82,9 @@ function addEventListeners() {
       },
       body: JSON.stringify({type: type})
     });
+
+    const json = await response.json();
+    console.log(json);
   }
 
   function editMemberHandler() {

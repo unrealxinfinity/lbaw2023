@@ -7,6 +7,7 @@ use App\Http\Requests\CreateProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class ProjectController extends Controller
         return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
     }
 
-    public function addMember(AddMemberRequest $request, string $project_id, string $username): void
+    public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse
     {
         $fields = $request->validated();
 
@@ -51,5 +52,12 @@ class ProjectController extends Controller
         $type = $is_admin ? 'World Administrator' : $fields['type'];
 
         $member->projects()->attach($project_id, ['permission_level' => $type]);
+
+        return response()->json([
+            'id' => $member->id,
+            'username' => $username,
+            'email' => $member->email,
+            'description' => $member->description
+        ]);
     }
 }
