@@ -13,18 +13,8 @@ class TaskController extends Controller
 {
     //
     public function create(Request $request) : RedirectResponse{
-        $fields = $request->validate([
-            'title' => ['alpha_num:ascii'],
-            'description' => ['string'],
-            'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
-            'due_at' => ['date'],
-            'effort' => ['integer'],
-            'priority' => ['string'],
-            'project_id' => ['exists:App\Models\Project,id']
-        ]);
 
-        $project = Project::findOrFail($fields['project_id']);
-        $this->authorize('addTask', $project);
+        $fields = $request->validated();
 
         $task = Task::create([
             'title' => $fields['title'],
@@ -36,7 +26,7 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
 
-        return redirect()->route('tasks/' . $task->id)->withSuccess('New Task created!');
+        return redirect()->route('projects/' . $fields['project_id'])->withSuccess('New Task created!');
     }
 
     public function edit(Request $request, string $id): void
