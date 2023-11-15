@@ -6,6 +6,7 @@ use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -39,17 +40,16 @@ class ProjectController extends Controller
         return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
     }
 
-    public function addMember(AddMemberRequest $request, string $project_id, string $member_id): void
+    public function addMember(AddMemberRequest $request, string $project_id, string $username): void
     {
         $fields = $request->validated();
 
-        error_log("hello");
         $project = Project::findOrFail($project_id);
-        $member = Member::findOrFail($member_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
 
         $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
         $type = $is_admin ? 'World Administrator' : $fields['type'];
 
-        $member->projects->attach($project_id, ['type' => $type]);
+        $member->projects()->attach($project_id, ['permission_level' => $type]);
     }
 }

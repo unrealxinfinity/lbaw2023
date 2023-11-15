@@ -69,17 +69,19 @@ function addEventListeners() {
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
+    const type = this.querySelector('select.type').value;
 
     console.log('/api/projects/' + id + '/' + username);
     const response = await fetch('/api/projects/' + id + '/' + username, {
       method: 'POST',
       headers: {
-        'X-CSRF-TOKEN': csrf
-      }
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({type: type})
     });
-
-    const json = await response.json();
-    console.log(json)
   }
 
   function editMemberHandler() {
