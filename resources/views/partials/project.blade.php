@@ -12,4 +12,5 @@
     <ul>
         @each('partials.member', $project->members()->orderBy('id')->get(), 'member')
     </ul>
+    @include('form.addmember', ['project' => $project])
 </article>
