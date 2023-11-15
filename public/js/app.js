@@ -66,12 +66,16 @@ function addEventListeners() {
   async function sendAddMemberRequest(event) {
     event.preventDefault();
 
-    let username = this.querySelector('input.username').value;
-    let id = this.querySelector('input.id').value;
+    const username = this.querySelector('input.username').value;
+    const id = this.querySelector('input.id').value;
+    const csrf = this.querySelector('input:first-child').value;
 
     console.log('/api/projects/' + id + '/' + username);
     const response = await fetch('/api/projects/' + id + '/' + username, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf
+      }
     });
 
     const json = await response.json();
