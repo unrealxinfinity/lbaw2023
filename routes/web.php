@@ -45,6 +45,7 @@ Route::controller(WorldController::class)->group(function () {
 Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');
+    Route::delete('/projects/{id}', 'delete')->name('delete-project');
 });
 
 Route::controller(MemberController::class)->group(function () {
