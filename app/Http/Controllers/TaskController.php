@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTaskRequest;
 use App\Models\Task;
 use App\Models\Member;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -13,15 +12,7 @@ use Illuminate\Validation\Rule;
 class TaskController extends Controller
 {  
    
-    protected $fillable = [
-        'title',
-        'description',
-        'status',
-        'due_at',
-        'effort',
-        'priority',
-        'project_id'
-    ];
+    
     //
     public function create(CreateTaskRequest $request) : RedirectResponse{
 
@@ -37,9 +28,8 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
 
-        
-
-        return redirect()->route('projects/' . $fields['project_id'])->withSuccess('New Task created!');
+        error_log(redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!'));
+        return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
     public function edit(Request $request, string $id): void
