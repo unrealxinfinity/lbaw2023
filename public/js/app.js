@@ -27,6 +27,10 @@ function addEventListeners() {
     [].forEach.call(memberEditors, function(editor) {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
+
+    let memberAdder = document.querySelector('form#add-member');
+    if (memberAdder != null)
+      memberAdder.addEventListener('submit', sendAddMemberRequest);
   }
   
   function encodeForAjax(data) {
@@ -57,6 +61,57 @@ function addEventListeners() {
     let id = form.querySelector('input.member-id').value;
 
     sendAjaxRequest('put', '/api/members/' + id, {name: name, email: email, birthday: birthday, description: description}, editMemberHandler);
+  }
+
+  async function sendAddMemberRequest(event) {
+    event.preventDefault();
+
+    const username = this.querySelector('input.username').value;
+    const id = this.querySelector('input.id').value;
+    const csrf = this.querySelector('input:first-child').value;
+    const type = this.querySelector('select.type').value;
+
+    console.log('/api/projects/' + id + '/' + username);
+    const response = await fetch('/api/projects/' + id + '/' + username, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({type: type})
+    });
+
+    const json = await response.json();
+    
+    if (response.status !== 500) addMemberHandler(json)
+  }
+
+  function addMemberHandler(json) {
+    const ul = document.querySelector('ul.members');
+    const member = document.createElement('article');
+
+    member.classList.add('member');
+    member.setAttribute('data-id', json.id);
+
+    const header = document.createElement('header');
+    const h2 = document.createElement('h2');
+    const h3 = document.createElement('h3');
+    const a = document.createElement('a');
+    a.href = '/members' + json.id;
+    a.textContent = json.username;
+    h3.textContent = json.email;
+    
+    h2.appendChild(a);
+    header.appendChild(h2);
+    header.appendChild(h3);
+
+    member.appendChild(header);
+    const text = document.createTextNode(json.description);
+    member.appendChild(text);
+
+    ul.appendChild(member);
   }
 
   function editMemberHandler() {

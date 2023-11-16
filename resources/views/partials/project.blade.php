@@ -9,7 +9,10 @@
         @each('partials.task', $project->tasks()->orderBy('id')->get(), 'task')
     </ul>
     <h3>Project Members:</h3>
-    <ul>
+    <ul class="members">
         @each('partials.member', $project->members()->orderBy('id')->get(), 'member')
     </ul>
+    @if($main)
+        @include('form.addmember', ['project' => $project])
+    @endif
 </article>
