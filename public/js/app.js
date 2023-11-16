@@ -85,7 +85,7 @@ function addEventListeners() {
 
     const json = await response.json();
     
-    addMemberHandler(json)
+    if (response.status !== 500) addMemberHandler(json)
   }
 
   function addMemberHandler(json) {
