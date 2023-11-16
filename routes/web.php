@@ -46,7 +46,9 @@ Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');
 });
-
+Route::controller(ProjectTagController::class)->group(function () {
+    Route::get('/projects/{project_id}/tags', 'list')->name('projecttags');
+});
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
 });
