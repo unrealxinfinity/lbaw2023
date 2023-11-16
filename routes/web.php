@@ -60,6 +60,8 @@ Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
 });
 
+Route::view('/create-world', 'pages.world-create')->name('create-world');
+
 
 // API
 Route::controller(CardController::class)->group(function () {
