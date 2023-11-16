@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Task;
+use App\Models\Project;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,9 +28,9 @@ class CreateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['alpha_num:ascii'],
+            'title' => ['alpha_dash'],
             'description' => ['string'],
-            'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
+            'status' => [Rule::in(['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'])],
             'due_at' => ['date'],
             'effort' => ['integer'],
             'priority' => ['string'],

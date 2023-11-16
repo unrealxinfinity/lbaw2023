@@ -43,7 +43,7 @@ Route::controller(WorldController::class)->group(function () {
 });
 
 Route::controller(ProjectController::class)->group(function () {
-    Route::get('/projects/{id}', 'show');
+    Route::get('/projects/{id}', 'show')->name('projects.show');
 });
 
 Route::controller(MemberController::class)->group(function () {
@@ -56,7 +56,7 @@ Route::controller(MemberController::class)->group(function () {
 });
 
 Route::controller(TaskController::class)->group(function () {
-    Route::put('/tasks/create', 'create');
+    Route::post('/tasks/create', 'create')->name('create-task');
 });
 
 
