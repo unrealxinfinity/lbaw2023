@@ -28,7 +28,6 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
 
-        error_log(redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!'));
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
