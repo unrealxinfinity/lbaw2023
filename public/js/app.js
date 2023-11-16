@@ -89,7 +89,29 @@ function addEventListeners() {
   }
 
   function addMemberHandler(json) {
+    const ul = document.querySelector('ul.members');
+    const member = document.createElement('article');
+
+    member.classList.add('member');
+    member.setAttribute('data-id', json.id);
+
+    const header = document.createElement('header');
+    const h2 = document.createElement('h2');
+    const h3 = document.createElement('h3');
+    const a = document.createElement('a');
+    a.href = '/members' + json.id;
+    a.textContent = json.username;
+    h3.textContent = json.email;
     
+    h2.appendChild(a);
+    header.appendChild(h2);
+    header.appendChild(h3);
+
+    member.appendChild(header);
+    const text = document.createTextNode(json.description);
+    member.appendChild(text);
+
+    ul.appendChild(member);
   }
 
   function editMemberHandler() {
