@@ -20,9 +20,9 @@ class TaskPolicy
         return ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Project Leader';
     }
 
-    public function addTask(User $user, Task $task): bool
+    public function create(User $user): bool
     {
-        return ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Project Leader' || ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Member' ;
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
 
     public function assignMember(User $user, Task $task): bool
