@@ -5,7 +5,7 @@
 
 @section('content')
     <section id="projects">
-        @include('partials.project', ['project' => $project])
+        @include('partials.project', ['project' => $project, 'main' => true])
     </section>
     <section id="add_task_form">
         <form id = "new-task">

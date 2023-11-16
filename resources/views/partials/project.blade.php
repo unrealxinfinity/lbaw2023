@@ -12,5 +12,7 @@
     <ul class="members">
         @each('partials.member', $project->members()->orderBy('id')->get(), 'member')
     </ul>
-    @include('form.addmember', ['project' => $project])
+    @if($main)
+        @include('form.addmember', ['project' => $project])
+    @endif
 </article>
