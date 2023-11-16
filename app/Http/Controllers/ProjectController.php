@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
+use App\Http\Requests\DeleteProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\User;
@@ -58,6 +59,20 @@ class ProjectController extends Controller
             'username' => $username,
             'email' => $member->email,
             'description' => $member->description
+        ]);
+    }
+
+    public function delete(DeleteProjectRequest $request, string $id): View
+    {
+        $fields = $request->validated();
+
+        $project = Project::findOrFail($id);
+        $world_id = $project->world->id;
+
+        $project->delete();
+
+        return view('pages.world', [
+            'world' => $world_id
         ]);
     }
 }
