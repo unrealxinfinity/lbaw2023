@@ -114,6 +114,32 @@ function addEventListeners() {
     ul.appendChild(member);
   }
 
+  async function sendAddMemberToWorld(event){
+      event.preventDefault();
+
+      const username= this.querySelector('input.username').value;
+      const id = this.querySelector('input.id').value;
+      const csrf = this.querySelector('input:first-child').value;
+      const type = this.querySelector('select.type').value;
+
+      console.log('/api/worlds/' + id + '/' + username)
+
+      const response = await fetch('/api/worlds/' + id + '/' + username, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({type: type})
+      });
+
+      const json = await response.json();
+
+      if (response.status !== 500) addMemberHandler(json)
+  }
+
   function editMemberHandler() {
 
   }
