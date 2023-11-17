@@ -4,6 +4,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TagController;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
@@ -46,8 +47,8 @@ Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');
 });
-Route::controller(ProjectTagController::class)->group(function () {
-    Route::get('/projects/{project_id}/tags', 'list')->name('projecttags');
+Route::controller(TagController::class)->group(function () {
+    Route::get('/projects/{id}/tags', 'showProjectTags')->name('projecttags');
 });
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
