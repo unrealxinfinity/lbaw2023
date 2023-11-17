@@ -521,7 +521,7 @@ INSERT INTO users (type_) VALUES
 -- Sample data for the 'user_info' table
 INSERT INTO user_info (username, password, user_id) VALUES
     ('user1', '$2y$10$GCLxqExbUbYmSyRhhZCJQ.qQdq50g32wfq6j.UGS1VROMVHnGtvSK', 1),
-    ('admin1', 'adminpass1', 2),
+    ('admin1', '$2y$10$Atr0JZBkjLfs/3B6bB.6PuDTDl1Sm4KNjIAwYu3MJCSShSIFg0dUC', 2),
     ('user2', 'password2', 3),
     ('user3', 'password3', 4);
 
