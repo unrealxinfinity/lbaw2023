@@ -20,11 +20,6 @@ class MemberController extends Controller
         ]);
     }
 
-    public function list(): View
-    {
-        $this->authorize('list', Member::class);
-    }
-
     public function showMemberWorlds(): View
     {
         $id = Auth::user()->persistentUser->member->id;
@@ -48,10 +43,14 @@ class MemberController extends Controller
         $member->save();
     }
 
-    public function list(string $search = "")
+    public function list(string $search = ""): View
     {
-        return Member::where('name', 'like', '%' . $search . '%')
+        $this->authorize('list', Member::class);        
+
+        $members = Member::where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')->get();
+
+        return view('pages.admin-members', ['members' => $members]);
     }
 
     
