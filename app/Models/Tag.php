@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $fillable = ['name'];
+
     public function projects()
     {
         return $this->belongsToMany(Project::class);
