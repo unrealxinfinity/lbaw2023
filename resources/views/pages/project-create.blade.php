@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Create World')
+@section('title', 'Create Project')
 
 @section('content')
-<article class = "world">
-
-    <form action="{{ route('create-world') }}" id="new-world" method="POST">Create a New World!!
+<article class="project">
+    <form action="{{ route('create-project') }}" id="new-project" method="POST">Create a New Project!!
         @csrf
         @method('POST')
-        
-        <input type="text" name="name" placeholder="New World Name">
+
+        <input type="hidden" name="world_id" value="{{ $world->id }}">
+        <input type="text" name="name" placeholder="New Project Name">
         @if ($errors->has('name'))
         <span class="error">
           {{ $errors->first('name') }}
