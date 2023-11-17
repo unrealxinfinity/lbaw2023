@@ -49,17 +49,27 @@ class ProjectController extends Controller
         $project = Project::findOrFail($project_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
 
-        $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
-        $type = $is_admin ? 'World Administrator' : $fields['type'];
+        try
+        {
+            $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
+            $type = $is_admin ? 'World Administrator' : $fields['type'];
 
-        $member->projects()->attach($project_id, ['permission_level' => $type]);
+            $member->projects()->attach($project_id, ['permission_level' => $type]);
 
-        return response()->json([
-            'id' => $member->id,
-            'username' => $username,
-            'email' => $member->email,
-            'description' => $member->description
-        ]);
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $username,
+                'email' => $member->email,
+                'description' => $member->description
+            ]);
+        } catch (\Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'username' => $username
+            ]);
+        }
     }
 
     public function delete(DeleteProjectRequest $request, string $id): View
