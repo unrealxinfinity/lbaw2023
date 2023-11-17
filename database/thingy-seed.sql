@@ -231,7 +231,7 @@ CREATE TABLE notifications(
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id),
-  FOREIGN KEY(project_id) REFERENCES projects(id),
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(task_id) REFERENCES tasks(id)
 );
 
@@ -240,7 +240,7 @@ CREATE TABLE member_notification(
   notification_id INT,
   member_id INT,
   PRIMARY KEY(notification_id, member_id),
-  FOREIGN KEY(notification_id) REFERENCES notifications(id),
+  FOREIGN KEY(notification_id) REFERENCES notifications(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id)
 );
 
