@@ -2,31 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CreateTaskRequest;
 use App\Models\Task;
-use App\Models\Project;
 use App\Models\Member;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
-{
+{  
+   
+    
     //
-    public function create(Request $request) : RedirectResponse{
-        $fields = $request->validate([
-            'title' => ['alpha_num:ascii'],
-            'description' => ['string'],
-            'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
-            'due_at' => ['date'],
-            'effort' => ['integer'],
-            'priority' => ['string'],
-            'project_id' => ['exists:App\Models\Project,id']
-        ]);
+    public function create(CreateTaskRequest $request) : RedirectResponse{
 
-        $project = Project::findOrFail($fields['project_id']);
-        $this->authorize('addTask', $project);
+        $fields = $request->validated();
 
-        $task = Task::create([
+        Task::create([
             'title' => $fields['title'],
             'description' => $fields['description'],
             'status' => $fields['status'],
@@ -36,7 +28,7 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
 
-        return redirect()->route('tasks/' . $task->id)->withSuccess('New Task created!');
+        return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
     public function edit(Request $request, string $id): void

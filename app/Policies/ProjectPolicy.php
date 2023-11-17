@@ -35,4 +35,14 @@ class ProjectPolicy
     {
         return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
     }
+
+    public function delete(User $user, Project $project): bool
+    {
+        return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
+    }
+
+    public function create(User $user): bool
+    {
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+    }
 }

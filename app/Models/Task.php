@@ -10,6 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Task extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        'title',
+        'description',
+        'status',
+        'due_at',
+        'effort',
+        'priority',
+        'project_id'
+    ];
 
     public function project(): BelongsTo
     {

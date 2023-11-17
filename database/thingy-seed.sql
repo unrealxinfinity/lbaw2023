@@ -231,7 +231,7 @@ CREATE TABLE notifications(
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id),
-  FOREIGN KEY(project_id) REFERENCES projects(id),
+  FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(task_id) REFERENCES tasks(id)
 );
 
@@ -240,7 +240,7 @@ CREATE TABLE member_notification(
   notification_id INT,
   member_id INT,
   PRIMARY KEY(notification_id, member_id),
-  FOREIGN KEY(notification_id) REFERENCES notifications(id),
+  FOREIGN KEY(notification_id) REFERENCES notifications(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id)
 );
 
@@ -521,7 +521,7 @@ INSERT INTO users (type_) VALUES
 -- Sample data for the 'user_info' table
 INSERT INTO user_info (username, password, user_id) VALUES
     ('user1', '$2y$10$GCLxqExbUbYmSyRhhZCJQ.qQdq50g32wfq6j.UGS1VROMVHnGtvSK', 1),
-    ('admin1', 'adminpass1', 2),
+    ('admin1', '$2y$10$Atr0JZBkjLfs/3B6bB.6PuDTDl1Sm4KNjIAwYu3MJCSShSIFg0dUC', 2),
     ('user2', 'password2', 3),
     ('user3', 'password3', 4);
 
