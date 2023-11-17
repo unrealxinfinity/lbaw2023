@@ -4,7 +4,7 @@
 
 @section('content')
 <article class="project">
-    <form action="{{ route('create-project') }}" id="new-project" method="POST">Create a New Project!!
+    <form action="{{ route('create-project') }}" id="new-project" method="POST">Create a New Project in {{ $world->name }}!!
         @csrf
         @method('POST')
 

@@ -33,7 +33,7 @@ class ProjectController extends Controller
 
         $project = Project::create([
            'name' => $fields['name'],
-           'description' => $fields['name'],
+           'description' => $fields['description'],
            'status' => 'Active',
            'picture' => 'pic',
             'world_id' => $fields['world_id']
