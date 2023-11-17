@@ -60,6 +60,7 @@ Route::controller(MemberController::class)->group(function () {
 
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
+    
 });
 
 

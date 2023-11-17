@@ -10,4 +10,7 @@
     <section id="create-task">
         @include('partials.task-create', ['project' => $project])
     </section>
+    <section id="create-tag">
+        
+    </section>
 @endsection
