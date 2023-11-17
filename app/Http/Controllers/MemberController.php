@@ -20,6 +20,11 @@ class MemberController extends Controller
         ]);
     }
 
+    public function list(): View
+    {
+        $this->authorize('list', Member::class);
+    }
+
     public function showMemberWorlds(): View
     {
         $id = Auth::user()->persistentUser->member->id;
