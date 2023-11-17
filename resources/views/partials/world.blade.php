@@ -8,7 +8,7 @@
     <ul>
         Projects:
         @foreach ($world->projects()->orderBy('id')->get() as $project)
-            @include('partials.project', ['project' => $project, 'main' => false])
+            @include('partials.project', ['project' => $project, 'main' => false,'tags'=>$project->tags()->orderBy('id')->get()])
         @endforeach
     </ul>
 </article>

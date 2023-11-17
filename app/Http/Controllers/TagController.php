@@ -8,12 +8,7 @@ use App\Models\Project;
 use App\Http\Requests\CreateTagRequest;
 class TagController extends Controller
 {
-    public function showProjectTags($id){
-        
-        $tags = Project::findOrFail($id)->tags;
     
-        return view('pages.project', ['tags'=>$tags]);
-    }
     public function createProjectTag(CreateTagRequest $request, $id){
         error_log($request);
         $fields = $request->validated();

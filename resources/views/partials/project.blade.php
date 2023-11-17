@@ -12,13 +12,7 @@
     </header>
     <h3>This project belongs to: <a href="/worlds/{{ $project->world->id }}">{{ $project->world->name }}</a></h3>
     <h3>Tags:</h3>
-    
-    <ul>
-        @foreach ($tags as $tag)
-        <span class="badge badge-secondary">{{ $tag->name }}</span>
-        @endforeach
-    </ul>
-
+    @include('partials.tag', ['tags' => $tags])
     <h3>Tasks:</h3>
     <ul>
         @each('partials.task', $project->tasks()->orderBy('id')->get(), 'task')

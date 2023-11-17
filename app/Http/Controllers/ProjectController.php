@@ -21,7 +21,8 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $this->authorize('show', $project);
-
+        error_log($project);
+        error_log($project->tags);
         return view('pages.project', [
             'project' => $project,
             'tags'=> $project->tags
