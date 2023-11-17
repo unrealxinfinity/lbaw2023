@@ -10,7 +10,9 @@
         @unless (Auth::check()) <p>Log in to get started!</p> @endunless
     </section>
     @if (Auth::check())
-        <a class="button" href="{{ url('members/' . Auth::user()->persistentUser->member->id) }}"> {{ Auth::user()->username }} </a>
+        <section id="homepage">
+            @include('partials.homepage', ['member' => Auth::user()->persistentUser->member])
+        </section>
     @endif
 @endsection
 

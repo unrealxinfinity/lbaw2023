@@ -12,9 +12,11 @@
     </ul>
     <ul>
         <h2> Projects: </h2>
-        <div>
+        <div class="row">
         @foreach ($world->projects()->orderBy('id')->get() as $project)
+            <div class="box">
             @include('partials.project', ['project' => $project, 'main' => false])
+            </div>
         @endforeach
         </div>
     </ul>
