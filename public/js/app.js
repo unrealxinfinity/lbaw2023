@@ -124,7 +124,7 @@ function addEventListeners() {
       const username= this.querySelector('input.username').value;
       const id = this.querySelector('input.id').value;
       const csrf = this.querySelector('input:first-child').value;
-      const type = this.querySelector('select.type').value;
+      const type = this.querySelector('input.type').value;
 
       console.log('/api/worlds/' + id + '/' + username)
 

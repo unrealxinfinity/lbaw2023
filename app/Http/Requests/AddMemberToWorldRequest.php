@@ -25,7 +25,7 @@ class AddMemberToWorldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [Rule::in('Member', 'World Administrator')],
+            'type' => [Rule::in(['true', 'false'])],
             'id' => ['exists:App\Models\World,id'],
             'username' => ['exists:App\Models\User,username']
         ];

@@ -47,17 +47,17 @@ class WorldController extends Controller
 
         $world = World::findOrFail($world_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
+        error_log($fields['type']);
 
-        $is_admin = $member->worlds->where('id', $world->id)[0]->pivot->is_admin;
-        $type = $is_admin ? 'World Administrator' : $fields['type'];
-
-        $member->worlds()->attach($world_id, ['permission_level' => $type]);
+        $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
+        error_log('helllo');
 
         return response()->json([
             'id' => $member->id,
             'username' => $username,
             'email' => $member->email,
-            'permission_level' => $type
+            'is_admin' => $fields['type'],
+            'description' => $member->description
         ]);
     }
 }
