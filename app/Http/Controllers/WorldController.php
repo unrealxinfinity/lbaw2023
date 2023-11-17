@@ -32,6 +32,6 @@ class WorldController extends Controller
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
 
-        return redirect()->route('worlds/' . $world->id)->withSuccess('New World created!');
+        return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
 }

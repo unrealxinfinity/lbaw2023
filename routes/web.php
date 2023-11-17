@@ -39,8 +39,8 @@ Route::controller(CardController::class)->group(function () {
 });
 
 Route::controller(WorldController::class)->group(function () {
-   Route::get('/worlds/{id}', 'show');
-   Route::post('/api/worlds', 'create')->name('create-world');
+   Route::get('/worlds/{id}', 'show')->name('worlds.show');
+   Route::post('/worlds', 'create')->name('create-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -59,7 +59,7 @@ Route::controller(TaskController::class)->group(function () {
 });
 
 
-Route::view('/create-world', 'pages.world-create')->name('create-world');
+Route::view('/create-world', 'pages.world-create')->name('world-create');
 
 
 // API
