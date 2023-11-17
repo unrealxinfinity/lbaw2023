@@ -48,8 +48,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects/{id}', 'show')->name('projects.show');
 });
 Route::controller(TagController::class)->group(function () {
-    Route::get('/projects/{id}', 'showProjectTags')->name('project-tags');
-    Route::post('/projects/{id}', 'createProjectTag')->name('create-project-tag');
+   //Route::post('/projects/{id}', 'createProjectTag')->name('create-project-tag');
 });
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');

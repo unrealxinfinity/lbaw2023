@@ -22,7 +22,8 @@ class ProjectController extends Controller
         $this->authorize('show', $project);
 
         return view('pages.project', [
-            'project' => $project
+            'project' => $project,
+            'tags'=> $project->tags
         ]);
     }
 
