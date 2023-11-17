@@ -67,7 +67,7 @@ class ProjectController extends Controller
         $fields = $request->validated();
 
         $project = Project::findOrFail($id);
-        $world_id = $project->world->id;
+        $world_id = $project->world;
 
         $project->delete();
 
