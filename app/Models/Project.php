@@ -15,6 +15,8 @@ class Project extends Model
     protected $fillable = [
         'name',
         'description',
+        'status',
+        'picture',
         'world_id',
     ];
     public function world(): BelongsTo

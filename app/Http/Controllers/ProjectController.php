@@ -39,7 +39,7 @@ class ProjectController extends Controller
             'world_id' => $fields['world_id']
         ]);
 
-        return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
+        return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
     }
 
     public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse

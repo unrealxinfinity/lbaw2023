@@ -24,7 +24,7 @@ class CreateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['alpha_num:ascii'],
+            'name' => ['string'],
             'description' => ['string'],
             'world_id' => ['exists:App\Models\World,id']
         ];
