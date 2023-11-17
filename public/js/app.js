@@ -90,6 +90,24 @@ function addEventListeners() {
 
   function addMemberHandler(json) {
     const ul = document.querySelector('ul.members');
+    const error = ul.querySelector('span.error');
+    if (error !== null)
+    {
+      error.remove();
+    }
+
+    if (json.error)
+    {
+      const span = document.createElement('span');
+      span.classList.add('error');
+      const members =  [... ul.querySelectorAll('article.member h2 a')].map(x => x.textContent);
+      const index = members.find(x => x === json.username);
+      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this project\'s world.';
+      else span.textContent = json.username + ' is already a member of this project';
+      ul.appendChild(span);
+      return;
+    }
+
     const member = document.createElement('article');
 
     member.classList.add('member');
