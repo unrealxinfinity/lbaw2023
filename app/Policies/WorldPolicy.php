@@ -19,4 +19,9 @@ class WorldPolicy
     {
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted';
     }
+
+    public function create(User $user): bool
+    {
+        return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted';
+    }
 }

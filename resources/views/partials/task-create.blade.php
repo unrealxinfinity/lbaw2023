@@ -1,6 +1,6 @@
 <article class="task" data-id="{{ $project->id }}">
 
-   <form class = "new-task" method="POST" action="{{ route('create-task') }}">
+    <form class = "new-task" method="POST" action="{{ route('create-task') }}">
        @csrf
        @method('POST')
 
@@ -13,7 +13,7 @@
        <input type="hidden" name="project_id" value="{{ $project->id }}">
 
        <button type="submit">Create Task</button>
-   </form>
+    </form>
 
 
 

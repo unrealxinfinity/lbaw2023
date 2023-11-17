@@ -12,6 +12,15 @@ class World extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    protected $fillable = [
+        'name',
+        'description',
+        'picture',
+        'owner_id'
+    ];
+
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Member::class, 'owner_id');
