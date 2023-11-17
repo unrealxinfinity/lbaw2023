@@ -170,19 +170,13 @@ CREATE TABLE world_tag(
   world_id INT,
   PRIMARY KEY(tag_id, world_id),
   FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  PRIMARY KEY(tag_id, world_id),
-  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS tagss CASCADE;
 CREATE TABLE project_tag(
   tag_id INT,
-CREATE TABLE project_tag(
-  tag_id INT,
   project_id INT,
-  PRIMARY KEY(tag_id, project_id),
-  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   PRIMARY KEY(tag_id, project_id),
   FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -191,11 +185,7 @@ CREATE TABLE project_tag(
 DROP TABLE IF EXISTS member_tags CASCADE;
 CREATE TABLE member_tag(
   tag_id INT,
-CREATE TABLE member_tag(
-  tag_id INT,
   member_id INT,
-  PRIMARY KEY(tag_id, member_id),
-  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   PRIMARY KEY(tag_id, member_id),
   FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -419,9 +409,6 @@ BEGIN
   IF (NOT EXISTS (SELECT * FROM world_tag WHERE id = OLD.id) AND
   NOT EXISTS (SELECT * FROM member_tag WHERE id = OLD.id) AND
   NOT EXISTS (SELECT * FROM project_tag WHERE id = OLD.id)) THEN
-  IF (NOT EXISTS (SELECT * FROM world_tag WHERE id = OLD.id) AND
-  NOT EXISTS (SELECT * FROM member_tag WHERE id = OLD.id) AND
-  NOT EXISTS (SELECT * FROM project_tag WHERE id = OLD.id)) THEN
   DELETE FROM tags WHERE id = OLD.id;
   END IF;
   RETURN OLD;
@@ -432,24 +419,15 @@ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS delete_world_tag ON world_tag CASCADE;
 CREATE TRIGGER delete_world_tag
   AFTER DELETE ON world_tag
-DROP TRIGGER IF EXISTS delete_world_tag ON world_tag CASCADE;
-CREATE TRIGGER delete_world_tag
-  AFTER DELETE ON world_tag
   FOR EACH ROW
   EXECUTE PROCEDURE delete_tags();
 
 DROP TRIGGER IF EXISTS delete_project_tag ON project_tag CASCADE;
 CREATE TRIGGER delete_project_tag
   AFTER DELETE ON project_tag
-DROP TRIGGER IF EXISTS delete_project_tag ON project_tag CASCADE;
-CREATE TRIGGER delete_project_tag
-  AFTER DELETE ON project_tag
   FOR EACH ROW
   EXECUTE PROCEDURE delete_tags();
 
-DROP TRIGGER IF EXISTS delete_member_tag ON member_tag CASCADE;
-CREATE TRIGGER delete_member_tag
-  AFTER DELETE ON member_tag
 DROP TRIGGER IF EXISTS delete_member_tag ON member_tag CASCADE;
 CREATE TRIGGER delete_member_tag
   AFTER DELETE ON member_tag
@@ -621,13 +599,11 @@ INSERT INTO world_tag (tag_id, world_id) VALUES
 
 -- Sample data for the 'project_tags' table (associating tagss with projects)
 INSERT INTO project_tag (tag_id, project_id) VALUES
-INSERT INTO project_tag (tag_id, project_id) VALUES
     (2, 1),
     (1, 2),
     (3, 2);
 
 -- Sample data for the 'member_tags' table (associating tagss with members)
-INSERT INTO member_tag (tag_id, member_id) VALUES
 INSERT INTO member_tag (tag_id, member_id) VALUES
     (1, 1),
     (2, 1),
