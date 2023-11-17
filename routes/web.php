@@ -50,7 +50,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::delete('/projects/{id}', 'delete')->name('delete-project');
 });
 Route::controller(TagController::class)->group(function () {
-   //Route::post('/projects/{id}', 'createProjectTag')->name('create-project-tag');
+   Route::post('/tags/create', 'createProjectTag')->name('create-project-tag');
 });
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
