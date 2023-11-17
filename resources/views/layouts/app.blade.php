@@ -25,6 +25,7 @@
             <header>
                 <h1><a href="{{ url('') }}">MineMax!</a></h1>
                 @if (Auth::check())
+                    <a class="button" href="{{ url('members/' . Auth::user()->persistentUser->member->id) }}"> {{ Auth::user()->username }} </a>
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                 @else
                     <a class="button" href="{{ url('/login') }}"> Login </a>
@@ -32,6 +33,12 @@
             </header>
             <section id="content">
                 @yield('content')
+            </section>
+            <section class="footer">
+                <div> @ 2023 MineMax, Inc. </div>
+                <div> About </div>
+                <div> | </div>
+                <div> Contact Us </div>  
             </section>
         </main>
     </body>
