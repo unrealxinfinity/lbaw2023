@@ -11,4 +11,5 @@
             @include('partials.project', ['project' => $project, 'main' => false])
         @endforeach
     </ul>
+    @include('form.addmembertoworld', ['world' => $world])
 </article>

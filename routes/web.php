@@ -4,7 +4,6 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
-use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -39,8 +38,9 @@ Route::controller(CardController::class)->group(function () {
 });
 
 Route::controller(WorldController::class)->group(function () {
-   Route::get('/worlds/{id}', 'show')->name('worlds.show');
-   Route::post('/worlds', 'create')->name('create-world');
+    Route::post('/api/worlds/{id}/{username}', 'addMember');
+    Route::get('/worlds/{id}', 'show')->name('worlds.show');
+    Route::post('/worlds', 'create')->name('create-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {

@@ -6,7 +6,13 @@
 
        <input type="text" name="title" placeholder="Title">
        <input type="text" name="description" placeholder="Description">
-       <input type="text" name="status" placeholder="BackLog">
+       <select name="status">
+            <option value="BackLog">BackLog</option>
+            <option value="Upcoming">Upcoming</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Finalizing">Finalizing</option>
+            <option value="Done">Done</option>
+       </select>
        <input type="date" name="due_at" placeholder="Due Date">
        <input type="number" name="effort" placeholder="Effort">
        <input type="text" name="priority" placeholder="Priority">

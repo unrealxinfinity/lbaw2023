@@ -31,6 +31,10 @@ function addEventListeners() {
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
+
+    let worldMemberAdder = document.querySelector('form#add-member-to-world');
+    if (worldMemberAdder != null)
+      worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
   }
   
   function encodeForAjax(data) {
@@ -130,6 +134,30 @@ function addEventListeners() {
     member.appendChild(text);
 
     ul.appendChild(member);
+  }
+
+  async function sendAddMemberToWorld(event){
+      event.preventDefault();
+
+      const username= this.querySelector('input.username').value;
+      const id = this.querySelector('input.id').value;
+      const csrf = this.querySelector('input:first-child').value;
+      const type = this.querySelector('input.type').value;
+
+      const response = await fetch('/api/worlds/' + id + '/' + username, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({type: type})
+      });
+
+      const json = await response.json();
+
+      if (response.status !== 500) addMemberHandler(json)
   }
 
   function editMemberHandler() {
