@@ -12,7 +12,7 @@ class TagController extends Controller
         
         $tags = Project::findOrFail($id)->tags;
     
-        return view('partials.tag', ['tags'=>$tags]);
+        return view('pages.project', ['tags'=>$tags]);
     }
     public function createProjectTag(CreateTagRequest $request, $id){
         error_log($request);
