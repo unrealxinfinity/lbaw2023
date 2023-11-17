@@ -1,5 +1,6 @@
-<article class="projecttags">
+
+<ul>
     @foreach ($tags as $tag)
-    <h2>{{ $tag->name }}</h2>
+    <span class="badge badge-secondary">{{ $tag->name }}</span>
     @endforeach
-</article>
+</ul>

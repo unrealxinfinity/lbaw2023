@@ -9,10 +9,8 @@ class TagController extends Controller
 {
     public function showProjectTags($id){
         
-        $tags = Project::findOrFail('id',$id)->tags;
-        foreach($projecttags as $projecttag){
-            $tags->push($projecttag->tag);
-        }
+        $tags = Project::findOrFail($id)->tags;
+        
         error_log(count($tags));
         error_log($tags);
         return view('partials.project-tag', ['tags'=>$tags]);
