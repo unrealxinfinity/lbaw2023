@@ -2,18 +2,21 @@
     <header>
         <h2><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h2>
     </header>
-    <ul class="side-bar">
-        <h2> Description </h2>
-        <article>{{ $world->description }}</article>
-        <h2> Members </h2>
-        @foreach($world->members()->orderBy('id')->get() as $member)
-            @include('partials.member', ['member' => $member, 'main' => false])
+    @include('partials.sidebar', ['thing'=>$world])
+    <ul>
+        <h2> Ongoing Projects: </h2>
+        <div class="row">
+        @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
+            <div class="box">
+            @include('partials.project', ['project' => $project, 'main' => false])
+            </div>
         @endforeach
+        </div>
     </ul>
     <ul>
-        <h2> Projects: </h2>
+        <h2> Archived Projects: </h2>
         <div class="row">
-        @foreach ($world->projects()->orderBy('id')->get() as $project)
+        @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
             <div class="box">
             @include('partials.project', ['project' => $project, 'main' => false])
             </div>
