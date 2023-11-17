@@ -23,4 +23,5 @@
         @endforeach
         </div>
     </ul>
+    @include('form.addmembertoworld', ['world' => $world])
 </article>

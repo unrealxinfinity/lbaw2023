@@ -28,12 +28,17 @@ class ProjectPolicy
                 break;
             }
         }
-        return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted' && $isMember;
+        return $user->persistentUser->type_ === 'Administrator' || ($user->persistentUser->type_ === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id));
     }
 
     public function addMember(User $user, Project $project): bool
     {
         return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
+    }
+
+    public function delete(User $user, Project $project): bool
+    {
+        return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader');
     }
 
     public function create(User $user): bool

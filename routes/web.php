@@ -4,7 +4,6 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
-use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -39,26 +38,30 @@ Route::controller(CardController::class)->group(function () {
 });
 
 Route::controller(WorldController::class)->group(function () {
-   Route::get('/worlds/{id}', 'show');
+    Route::post('/api/worlds/{id}/{username}', 'addMember');
+    Route::get('/worlds/{id}', 'show')->name('worlds.show');
+    Route::post('/worlds', 'create')->name('create-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');
+    Route::delete('/projects/{id}', 'delete')->name('delete-project');
 });
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
-});
-
-Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::put('/api/members/{id}', 'update')->name('update-member');
+    Route::get('/admin', 'list')->name('list-members');
 });
 
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
 });
+
+
+Route::view('/create-world', 'pages.world-create')->name('world-create');
 
 
 // API

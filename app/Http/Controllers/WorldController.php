@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\World;
+use App\Models\User;
+use App\Http\Requests\AddMemberToWorldRequest;
+use App\Http\Requests\CreateWorldRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class WorldController extends Controller
 {
@@ -15,6 +21,40 @@ class WorldController extends Controller
 
         return view('pages.world', [
             'world' => $world
+        ]);
+    }
+
+    public function create(CreateWorldRequest $request): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::create([
+           'name' => $fields['name'],
+           'description' => $fields['name'],
+           'picture' => 'pic',
+           'owner_id' => Auth::user()->persistentUser->member->id
+        ]);
+
+        $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
+
+        return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
+    }
+
+    public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
+    {   
+        $fields = $request->validated();
+
+        $world = World::findOrFail($world_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
+
+        $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
+
+        return response()->json([
+            'id' => $member->id,
+            'username' => $username,
+            'email' => $member->email,
+            'is_admin' => $fields['type'],
+            'description' => $member->description
         ]);
     }
 }
