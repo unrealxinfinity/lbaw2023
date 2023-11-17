@@ -33,6 +33,12 @@
             <section id="content">
                 @yield('content')
             </section>
+            <section class="footer">
+                <div> @ 2023 MineMax, Inc. </div>
+                <div> About </div>
+                <div> | </div>
+                <div> Contact Us </div>  
+            </section>
         </main>
     </body>
 </html>

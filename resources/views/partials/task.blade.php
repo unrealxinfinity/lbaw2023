@@ -9,5 +9,7 @@
     </header>
     <h3>Assigned to:</h3>
     <ul>
-        @each('partials.member', $task->assigned()->orderBy('id')->get(), 'member')
+        @foreach($task->assigned()->orderBy('id')->get() as $member)
+            @include('partials.member', ['member' => $member, 'main' => false])
+        @endforeach
     </ul>
