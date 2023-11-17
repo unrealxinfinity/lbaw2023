@@ -24,4 +24,9 @@ class MemberPolicy
     {
         return $user->persistentUser->type_ === 'Administrator';
     }
+
+    public function list(User $user): bool
+    {
+        return $user->persistentUser->type_ === 'Administrator';
+    }
 }
