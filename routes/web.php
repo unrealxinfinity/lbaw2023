@@ -40,6 +40,7 @@ Route::controller(CardController::class)->group(function () {
 
 Route::controller(WorldController::class)->group(function () {
    Route::get('/worlds/{id}', 'show');
+   Route::post('/api/worlds', 'create')->name('create-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -49,9 +50,6 @@ Route::controller(ProjectController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
-});
-
-Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::put('/api/members/{id}', 'update')->name('update-member');
 });
@@ -59,6 +57,7 @@ Route::controller(MemberController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
 });
+
 
 Route::view('/create-world', 'pages.world-create')->name('create-world');
 

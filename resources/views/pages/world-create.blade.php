@@ -5,7 +5,7 @@
 @section('content')
 <article class = "world">
 
-    <form action="{{ route('create-task') }}" id="new-world" method="POST">Create a New World!!
+    <form action="{{ route('create-world') }}" id="new-world" method="POST">Create a New World!!
         @csrf
         @method('POST')
 
