@@ -126,8 +126,6 @@ function addEventListeners() {
       const csrf = this.querySelector('input:first-child').value;
       const type = this.querySelector('input.type').value;
 
-      console.log('/api/worlds/' + id + '/' + username)
-
       const response = await fetch('/api/worlds/' + id + '/' + username, {
         method: 'POST',
         headers: {
