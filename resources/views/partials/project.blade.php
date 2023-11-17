@@ -2,7 +2,7 @@
     <header>
         <h2><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2>
         <p>{{ $project->description }}</p>
-        @if ((Auth::user()->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader')
+        @if (Auth::user()->can('delete', $project))
             <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
                 @csrf
                 @method('DELETE')
