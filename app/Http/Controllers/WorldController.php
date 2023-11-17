@@ -39,8 +39,11 @@ class WorldController extends Controller
     }
 
     public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
-    {
+    {   
+        error_log('fodase');
         $fields = $request->validated();
+
+        
 
         $world = World::findOrFail($world_id);
         $member = User::where('username', $username)->first()->persistentUser->member;

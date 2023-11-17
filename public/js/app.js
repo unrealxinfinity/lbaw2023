@@ -31,6 +31,10 @@ function addEventListeners() {
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
+
+    let worldMemberAdder = document.querySelector('form#add-member-to-world');
+    if (worldMemberAdder != null)
+      worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
   }
   
   function encodeForAjax(data) {
