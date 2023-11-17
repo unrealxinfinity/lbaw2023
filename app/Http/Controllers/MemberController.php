@@ -43,9 +43,11 @@ class MemberController extends Controller
         $member->save();
     }
 
-    public function list(string $search = ""): View
+    public function list(Request $request): View
     {
-        $this->authorize('list', Member::class);        
+        $this->authorize('list', Member::class);   
+        
+        $search = $request['search'] ?? "";
 
         $members = Member::where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')->get();
