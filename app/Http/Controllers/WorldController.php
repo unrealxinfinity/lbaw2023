@@ -35,6 +35,8 @@ class WorldController extends Controller
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
 
+        $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
+
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
 
