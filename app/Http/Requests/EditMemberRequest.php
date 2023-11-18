@@ -27,8 +27,8 @@ class EditMemberRequest extends FormRequest
     {
         return [
             'username' => ['required', 'string','max:250', 'unique:user_info,username,' . Member::find($this->route()->id)->persistentUser->user->id],
-            'password' => ['nullable', 'string', 'min:8'],
-            'passwordconfirmation' => ['required', 'string'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'old_password' => ['required', 'string'],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],

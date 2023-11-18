@@ -24,15 +24,18 @@
         <label for="description-{{ $member->id }}">Description</label>
         <input id="description-{{ $member->id }}" type="text" class="description" name="description" value="{{ $member->description }}" required>
 
-        <label for="password-{{ $member->id }}">Password</label>
+        <label for="password-{{ $member->id }}">New Password</label>
         <input id="password-{{ $member->id }}" type="password" class="password" name="password">
+
+        <label for="password_confirmation-{{ $member->id }}">Confirm New Password</label>
+        <input id="password_confirmation-{{ $member->id }}" type="password" class="password_confirmation" name="password_confirmation">
         
         @if (Auth::user()->persistentUser->type_=='Administrator')
-            <label type ="hidden" for="passwordconfirmation-{{ $member->id }}"></label>
-            <input type ="hidden" id="passwordconfirmation-{{ $member->id }}" type="password" class="passwordconfirmation" name="passwordconfirmation" value="{{ $member->persistentUser->user->password }}" required>
+            <label type ="hidden" for="old_password-{{ $member->id }}"></label>
+            <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
         @else
-            <label for="passwordconfirmation-{{ $member->id }}">Password Confirmation</label>
-            <input id="passwordconfirmation-{{ $member->id }}" type="password" class="passwordconfirmation" name="passwordconfirmation" required>
+            <label for="old_password-{{ $member->id }}">Old Passowrd</label>
+            <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
         @endif
 
         <input type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
