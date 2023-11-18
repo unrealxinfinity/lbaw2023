@@ -32,6 +32,10 @@ function addEventListeners() {
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
 
+    let button = document.getElementById("createTagButton");
+    if(button != null)
+    button.addEventListener("click", addTagRequest);
+    
     let worldMemberAdder = document.querySelector('form#add-member-to-world');
     if (worldMemberAdder != null)
       worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
@@ -89,7 +93,7 @@ function addEventListeners() {
 
     const json = await response.json();
     
-    if (response.status !== 500) addMemberHandler(json)
+    if (response.status !== 500) addMemberHandler(json);
   }
 
   function addMemberHandler(json) {
@@ -179,6 +183,67 @@ function addEventListeners() {
   function taskAddedHandler() {
 
   }
+
+  async function addTagRequest() {
+
+    const tagForms = document.getElementsByClassName('new-tag');
+    const id = tagForms[0].getAttribute('data-id');
+    console.log(tagForms);
+    let tagElem = tagForms[0].children;
+    let tagElemName= tagElem[1].value;
+    let tagName = tagElemName.replace(/\s/g, '');
+    const csrf = tagElem[0].value;
+    console.log(tagName)
+    console.log('/api/projects/' + id + '/' +'tags/create');
+    const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrf,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ tagName: tagName})
+      })
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          addTagHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+      console.log(tagElemName)
+      tagElem[1].value = "";
+    
+
+}
+
+function addTagHandler(json){
+  if(json.error){
+    console.log('Already exists entry');
+  }
+  else{
+    let newTag = document.createElement('span');
+
+  // Set class attribute for the new span element
+  newTag.setAttribute('class', 'badge badge-secondary');
+
+  // Set text content for the new span element
+  newTag.textContent = json.tagName;
+
+  // Assuming you want to append to the first element with the 'tagList' class
+  let tagListElement = document.getElementsByClassName('tagList');
+
+  // Append the new span element to the tag list element
+  tagListElement[0].appendChild(newTag);
+  }
+  
+}
 
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
@@ -317,4 +382,10 @@ function addEventListeners() {
   }
   
   addEventListeners();
+
+
+  
+
+
+
   

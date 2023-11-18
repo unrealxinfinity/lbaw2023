@@ -1,19 +1,20 @@
 <?php
 
 namespace App\Http\Requests;
-
+use App\Models\Tag;
 use App\Models\Project;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProjectRequest extends FormRequest
+class CreateTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(Project $project): bool
     {
-        return Auth::user()->can('create', Project::class);
+        return Auth::user()->can('projectTagCreate', $project);
     }
 
     /**
@@ -24,9 +25,8 @@ class CreateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['alpha_dash'],
-            'description' => ['string'],
-            'world_id' => ['exists:App\Models\World,id']
+            'tagName' => ['string'],
+            'project_id' => ['exists:App\Models\Project,id'],
         ];
     }
 }

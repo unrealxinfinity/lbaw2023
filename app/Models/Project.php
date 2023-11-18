@@ -11,7 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Project extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
+        'picture',
+        'world_id',
+    ];
     public function world(): BelongsTo
     {
         return $this->belongsTo(World::class);
@@ -25,5 +32,9 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+    public function tags(): BelongsToMany
+    {
+       return $this->belongsToMany(Tag::class);
     }
 }

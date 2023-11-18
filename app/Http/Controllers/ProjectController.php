@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,9 +22,9 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $this->authorize('show', $project);
-
         return view('pages.project', [
-            'project' => $project
+            'project' => $project,
+            'tags'=> $project->tags
         ]);
     }
 
@@ -33,13 +34,15 @@ class ProjectController extends Controller
 
         $project = Project::create([
            'name' => $fields['name'],
-           'description' => $fields['name'],
+           'description' => $fields['description'],
            'status' => 'Active',
            'picture' => 'pic',
             'world_id' => $fields['world_id']
         ]);
 
-        return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
+        $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
+
+        return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
     }
 
     public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse
@@ -85,4 +88,5 @@ class ProjectController extends Controller
             'world' => $world_id
         ]);
     }
+    
 }

@@ -4,11 +4,12 @@
     </header>
     @include('partials.sidebar', ['thing'=>$world])
     <ul>
+
         <h2> Ongoing Projects: </h2>
         <div class="row">
         @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
             <div class="box">
-            @include('partials.project', ['project' => $project, 'main' => false])
+            @include('partials.project', ['project' => $project, 'main' => false, 'tags'=>$project->tags()->orderBy('id')->get()])
             </div>
         @endforeach
         </div>

@@ -17,7 +17,7 @@
         @endforeach
         </div>
 
-        <h3> My Current Worlds </h3>
+        <h3> My Current Worlds <a class="button" href="/create-world">+</a></h3> 
         <div class="row">
         @foreach($member->worlds()->orderBy('id')->get() as $world)
         <div class="box"> 
