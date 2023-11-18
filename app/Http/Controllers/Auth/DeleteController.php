@@ -21,15 +21,15 @@ class DeleteController extends Controller
 
         $persistentUser->type_ = 'Deleted';
 
-        $user->delete();
-
         $member->name = 'deleted';
         $member->birthday = null;
         $member->description = null;
         $member->email = null;
-        $member->picture = null;
+        $member->picture = 'deleted';
 
         $member->save();
+        $persistentUser->save();
+        $user->delete();
 
         return redirect()->route('home')->withSuccess('Account deleted.');
     }
