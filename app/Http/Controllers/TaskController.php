@@ -47,7 +47,7 @@ class TaskController extends Controller
     {
 
         $fields = $request->validate([
-            'title' => ['alpha_num:ascii'],
+            'title' => ['string'],
             'description' => ['string'],
             'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
             'due_at' => ['date'],
@@ -57,14 +57,13 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
-
         $task->title = $fields['title'];
         $task->description = $fields['description'];
         $task->status = $fields['status'];
         $task->due_at = $fields['due_at'];
         $task->effort = $fields['effort'];
         $task->priority = $fields['priority'];
-
+        
         $task->save();
     }
 

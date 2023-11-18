@@ -66,7 +66,8 @@ Route::controller(MemberController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
     Route::get('/tasks/{id}', 'show')->name('tasks.show');
-    Route::post('/tasks/{id}', 'complete')->name('complete-task');
+    Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');
+    Route::post('/tasks/{id}', 'edit')->name('edit-details');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
 });
 

@@ -78,10 +78,15 @@ body {
     border-right: 0;
   }
 
-  .task-details > div {
+  .task-details > form > div {
     display: grid;
-    grid-template-columns: 15em auto;
+    grid-template-columns: 10em auto;
   }
+
+  .complete-task > button {
+    margin-left: 1em;
+  }
+  
 
   img.big {
     margin: 1em;
