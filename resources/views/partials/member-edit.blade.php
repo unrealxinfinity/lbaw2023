@@ -1,6 +1,6 @@
 <article class="member" data-id="{{ $member->id }}">
     <header>
-        <h2><a href="/members/{{ $member->id }}">{{ $member->persistentUser->user->username }}</a></h2>
+        <h2><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h2>
     </header>
     {{ $member->description }}
     <form class="edit-member" method="POST" action="{{ route('update-member', ['id' => $member->id]) }}">

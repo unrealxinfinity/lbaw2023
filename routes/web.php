@@ -60,7 +60,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::put('/api/members/{id}', 'update')->name('update-member');
     Route::get('/admin', 'list')->name('list-members');
-    Route::get('/members/{id}/edit', 'showEditProfile')->name('edit-member');
+    Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
 });
 
 Route::controller(TaskController::class)->group(function () {

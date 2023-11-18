@@ -7,7 +7,6 @@ use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
@@ -25,9 +24,13 @@ class MemberController extends Controller
         ]);
     }
 
-    public function showEditProfile(string $id): View
+    public function showEditProfile(string $username): View
     {
-        $member = Member::findOrFail($id);
+        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        if($user->persistentUser->type_ == "Administrator"){
+            abort(404);
+        }
+        $member = $user->persistentUser->member;
 
         return view('pages.member-edit', [
             'member' => $member
