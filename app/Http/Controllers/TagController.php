@@ -9,11 +9,15 @@ use App\Http\Requests\CreateTagRequest;
 class TagController extends Controller
 {
     
-    public function createProjectTag(CreateTagRequest $request){
-        $fields = $request->validated();
+    public function createProjectTag(CreateTagRequest $request,string $project_id):JsonResponse{
+        error_log("here");
+        $fields = $request->validate();
         $tag = Tag::updateOrCreate([
             'name' => $fields['tagName'],
         ]);
+        $project = Project::find($project_id);
+        $request->authorize($project);
+        error_log("here");
         $project = Project::find($fields['project_id']);
         $project->tags()->attach($tag->id);
         return response()->json([

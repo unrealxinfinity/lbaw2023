@@ -14,8 +14,9 @@ class TagPolicy
     {
         
     }
-    public function create(User $user,Tag $tag): bool
-    {
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') &&($tag->name != '');
+
+    public function projectCreate(User $user,Project $project): bool
+    {   
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') && $project->members->contains($user);
     }
 }

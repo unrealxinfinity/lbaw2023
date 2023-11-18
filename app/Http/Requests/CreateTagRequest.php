@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 use App\Models\Tag;
-
+use App\Models\Project;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,9 +12,9 @@ class CreateTagRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(Project $project): bool
     {
-        return Auth::user()->can('create', Tag::class);
+        return Auth::user()->can('projectCreate', $project);
     }
 
     /**

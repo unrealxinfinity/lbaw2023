@@ -1,13 +1,10 @@
-<article class="tag" data-id="{{ $project->id }}">
+<article class="tag" >
 
-   <form class = "new-task" method="POST" action="{{ route('create-project-tag') }}">
+   <form class = "new-tag" data-id="{{ $project->id }}">
        @csrf
-       @method('POST')
-       
-       <input type="text" name="tagName" placeholder="Tag Name">
+       <input type="text" id="tagName"name="tagName" placeholder="Tag Name">
        <input type="hidden" name="project_id" value="{{ $project->id }}">
-       <button type="submit">Create Tag</button>
-    
+       <input type="button" id="createTagButton" value='Create Tag'></input>
    </form>
 
 </article>

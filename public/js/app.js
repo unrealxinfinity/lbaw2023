@@ -31,6 +31,14 @@ function addEventListeners() {
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
+
+    let button = document.getElementById("createTagButton");
+    if(button != null)
+    button.addEventListener("click", function(){
+      addTagRequest();   
+    });
+    
+    
   }
   
   function encodeForAjax(data) {
@@ -85,7 +93,7 @@ function addEventListeners() {
 
     const json = await response.json();
     
-    if (response.status !== 500) addMemberHandler(json)
+    if (response.status !== 500) addMemberHandler(json);
   }
 
   function addMemberHandler(json) {
@@ -151,6 +159,39 @@ function addEventListeners() {
   function taskAddedHandler() {
 
   }
+
+  async function addTagRequest() {
+
+    const tagForms = document.getElementsByClassName('new-tag');
+    const id = tagForms[0].getAttribute('data-id');
+    console.log(tagForms);
+    let tagElem = tagForms[0].children;
+    let tagElemName= tagElem[1].value;
+    let tagName = tagElemName.replace(/\s/g, '');
+    const csrf = tagElem[0].value;
+    console.log(tagName)
+    console.log('/api/projects/' + id + '/' +'tags/create');
+    const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrf,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ tagName: tagName})
+    });
+    const data = await response.json();
+    console.log(data);
+    if (response.status !== 500) addTagHandler(data);
+    tagName.value = '';
+}
+
+function addTagHandler(json){
+    newTag = document.createElement('span').setAttribute('class', 'badge badge-secondary');
+    newtag.textContent = json.tagName;
+    document.getElementsByClassName('tagList').appendChild(newTag);
+}
 
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
@@ -289,4 +330,10 @@ function addEventListeners() {
   }
   
   addEventListeners();
+
+
+  
+
+
+
   
