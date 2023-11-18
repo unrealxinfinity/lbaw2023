@@ -20,7 +20,9 @@
             <div class="column border">
                 <h4> {{$state}} </h4>
                 <ul class="big-box">
-                    @each('partials.task', $project->tasks()->where('status', '=', $state)->orderBy('id')->get(), 'task')
+                    @foreach ($project->tasks()->where('status', '=', $state)->orderBy('id')->get() as $task)
+                        @include('partials.task', ['task' => $task, 'main' => false])
+                    @endforeach
                 </ul>
             </div>
         @endforeach
