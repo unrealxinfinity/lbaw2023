@@ -6,8 +6,8 @@
 
     <section id="myworlds">
         <h1>My Worlds</h1>
-        <div class="row">
-            @each('partials.world', $worlds, 'world')
+        <div>
+            @each('partials.myworlds', $worlds, 'world')
         </div>
     </section>
 @endsection
