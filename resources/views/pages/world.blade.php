@@ -6,5 +6,5 @@
     <section id="worlds">
         @include('partials.world', ['world' => $world])
     </section>
-    <button type="button" href="{{ route('project-create', ['id', $world->id]) }}">Create Project</button>
+    <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
 @endsection
