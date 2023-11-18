@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\MemberController;
 use App\Models\World;
-use App\Models\Member;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;

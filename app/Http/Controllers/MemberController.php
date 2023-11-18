@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,7 @@ class MemberController extends Controller
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
 
-    public function update(EditMemberRequest $request, string $id): void
+    public function update(EditMemberRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
 
@@ -50,6 +51,7 @@ class MemberController extends Controller
         $member->email = $fields['email'];
 
         $member->save();
+        return back()->with('success','Member updated successfully!');
     }
 
     public function list(Request $request): View
