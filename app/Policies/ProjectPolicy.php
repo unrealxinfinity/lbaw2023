@@ -19,30 +19,39 @@ class ProjectPolicy
 
     public function show(User $user, Project $project): bool
     {
-        $userId = $user->persistentUser->id;
-        $isMember = false;
-        $world = World::find($project->world_id);
-        foreach ($world->members as $member) {
-            if ($member->id == $userId) {
-                $isMember = true;
-                break;
-            }
-        }
-        return $user->persistentUser->type_ === 'Administrator' || ($user->persistentUser->type_ === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id));
+        $type = $user->persistentUser->type;
+        $is_admin = $type === 'Administrator';
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_in_world = $type === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id);
+        return $is_admin || (!$is_disabled && $is_in_world);
+        //return $user->persistentUser->type_ === 'Administrator' || ($user->persistentUser->type_ === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id));
     }
 
     public function addMember(User $user, Project $project): bool
     {
-        return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
+        $type = $user->persistentUser->type;
+        $is_admin = $type === 'Administrator';
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        return $is_admin || (!$is_disabled && $is_leader);
+        //return ($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
     public function delete(User $user, Project $project): bool
     {
-        return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader');
+        $type = $user->persistentUser->type;
+        $is_admin = $type === 'Administrator';
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        return $is_admin || (!$is_disabled && $is_leader);
+        //return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader');
     }
 
     public function create(User $user): bool
     {
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+        $type = $user->persistentUser->type;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        return !$is_disabled;
+        //return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
 }
