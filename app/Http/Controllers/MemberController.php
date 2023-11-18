@@ -15,6 +15,9 @@ class MemberController extends Controller
     public function show(string $username): View
     {
         $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        if($user->persistentUser->type_ == "Administrator"){
+            abort(404);
+        }
         $member = $user->persistentUser->member;
 
         return view('pages.member', [
