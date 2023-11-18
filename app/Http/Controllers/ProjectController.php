@@ -39,6 +39,8 @@ class ProjectController extends Controller
             'world_id' => $fields['world_id']
         ]);
 
+        $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
+
         return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
     }
 
