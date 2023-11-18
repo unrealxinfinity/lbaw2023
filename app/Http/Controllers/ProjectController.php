@@ -94,11 +94,13 @@ class ProjectController extends Controller
     public function searchTask(Request $request , string $id): JsonResponse
     {   
        
-        $searchedTaskText = $request->query('search');
-        error_log($searchedTaskText);
+        $searchedTaskText = strval($request->query('search'));
+        error_log(gettype($searchedTaskText));
+        $searchedTaskText2 = $searchedTaskText;
         $project = Project::findOrFail($id);
-        $tasks = $project->tasks()->whereRaw('tasks.searchedtasks @@ to_tsquery(\'english\', :searchedTaskText)', [':searchedTaskText' => $searchedTaskText])
-        ->orderByRaw('ts_rank(tasks.searchedtasks, to_tsquery(\'english\', :searchedTaskText)) DESC', [':searchedTaskText' => $searchedTaskText])->get();
+        $tasks = $project->tasks()->whereRaw('tasks.searchedtasks @@ to_tsquery(\'english\', \'{$searchedTaskText}\')' )
+        ->orderByRaw('ts_rank(tasks.searchedtasks, to_tsquery(\'english\', \'{$searchedTaskText}\')) DESC')
+        ->get();
         error_log($tasks);
         $tasksJson = $tasks->toJson();
         error_log($tasksJson);
