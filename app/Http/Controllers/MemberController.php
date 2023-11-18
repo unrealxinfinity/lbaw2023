@@ -50,6 +50,11 @@ class MemberController extends Controller
         $fields = $request->validated();
 
         $member = Member::findOrFail($id);
+
+        if(!Hash::check($fields['passwordconfirmation'], $member->persistentUser->user->password)){
+            return back()->with('error','Password confirmation is incorrect!');
+        }
+
         $oldUsername = $member->persistentUser->user->username;
         $member->persistentUser->user->username = $fields['username'];
         if($fields['password'] != null) $member->persistentUser->user->password = Hash::make($fields['password']);

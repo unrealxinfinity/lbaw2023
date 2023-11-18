@@ -31,8 +31,8 @@
             <label type ="hidden" for="password-confirmation-{{ $member->id }}"></label>
             <input type ="hidden" id="password-confirmation-{{ $member->id }}" type="password" class="password-confirmation" name="password_confirmation" value="{{ $member->persistentUser->user->password }}" required>
         @else
-            <label for="password-confirmation-{{ $member->id }}">Password Confirmation</label>
-            <input id="password-confirmation-{{ $member->id }}" type="password" class="password-confirmation" name="password_confirmation" required>
+            <label for="passwordconfirmation-{{ $member->id }}">Password Confirmation</label>
+            <input id="passwordconfirmation-{{ $member->id }}" type="password" class="passwordconfirmation" name="passwordconfirmation" required>
         @endif
 
         <input type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
