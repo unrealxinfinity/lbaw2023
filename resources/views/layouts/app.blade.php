@@ -24,7 +24,7 @@
             <header>
                 <h1><a href="{{ url('') }}">MineMax!</a></h1>
                 @if (Auth::check())
-                    <a class="button" href="{{ url('members/' . Auth::user()->persistentUser->member->id) }}"> {{ Auth::user()->username }} </a>
+                    <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->persistentUser->member->id) }}" @endif> {{ Auth::user()->username }} </a>
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                 @else
                     <a class="button" href="{{ url('/login') }}"> Login </a>
