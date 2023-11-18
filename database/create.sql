@@ -406,10 +406,10 @@ DROP FUNCTION IF EXISTS delete_tags() CASCADE;
 CREATE FUNCTION delete_tags() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF (NOT EXISTS (SELECT * FROM world_tag WHERE id = OLD.id) AND
-  NOT EXISTS (SELECT * FROM member_tag WHERE id = OLD.id) AND
-  NOT EXISTS (SELECT * FROM project_tag WHERE id = OLD.id)) THEN
-  DELETE FROM tags WHERE id = OLD.id;
+  IF (NOT EXISTS (SELECT * FROM world_tag WHERE tag_id = OLD.tag_id) AND
+  NOT EXISTS (SELECT * FROM member_tag WHERE tag_id = OLD.tag_id) AND
+  NOT EXISTS (SELECT * FROM project_tag WHERE tag_id = OLD.tag_id)) THEN
+  DELETE FROM tags WHERE id = OLD.tag_id;
   END IF;
   RETURN OLD;
 END
@@ -456,7 +456,7 @@ BEGIN
         );
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+        IF (NEW.name <> OLD.name OR NEW.description <> OLD.description) THEN
             NEW.tsvectors = (
                 setweight(to_tsvector('english', NEW.name), 'A') ||
                 setweight(to_tsvector('english', NEW.description), 'B')
@@ -490,7 +490,7 @@ BEGIN
         );
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+        IF (NEW.title <> OLD.title OR NEW.description <> OLD.description) THEN
             NEW.tsvectors = (
                 setweight(to_tsvector('english', NEW.title), 'A') ||
                 setweight(to_tsvector('english', NEW.description), 'B')
