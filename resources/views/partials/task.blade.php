@@ -4,6 +4,7 @@
     </header>
     <p>{{ $task->description }}</p>
     @if($main)
+    <h3>This task belongs to: <a href="/projects/{{ $task->project->id }}">{{ $task->project->name }}</a></h3>
     <div class="task-details" >
     <div><p>Due At</p> <p class="right">{{ $task->due_date }}</p></div>
     <div><p>Priority</p> <p class="right">{{ $task->priority }}</p></div>
@@ -15,6 +16,13 @@
             @include('partials.member', ['member' => $member, 'main' => false])
         @endforeach
     </ul>
+    @if ($task->status != 'Done' && Auth::user()->can('edit', $task))
+        <form class = "complete-task" method="POST" action="{{ route('complete-task', ['id' => $task->id]) }}">
+            @csrf
+            @method('POST')
+            <button type="submit">Complete Task</button>
+        </form>
+    @endif
     </div>
     <h4> Comments: </h4>
     <ul>

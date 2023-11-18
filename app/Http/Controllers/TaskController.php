@@ -83,7 +83,7 @@ class TaskController extends Controller
         $member->tasks->attach($task_id, 'assignee');
     }
 
-    public function complete(string $id): void
+    public function complete(string $id): View
     {
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
@@ -91,5 +91,10 @@ class TaskController extends Controller
         $task->status = 'Done';
 
         $task->save();
+
+        return view('pages.task', [
+            'task' => $task,
+            'main' => true
+        ]);
     }
 }

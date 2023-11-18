@@ -66,6 +66,7 @@ Route::controller(MemberController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
     Route::get('/tasks/{id}', 'show')->name('tasks.show');
+    Route::post('/tasks/{id}', 'complete')->name('complete-task');
 });
 
 
