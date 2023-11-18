@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
@@ -49,8 +50,9 @@ class MemberController extends Controller
         $fields = $request->validated();
 
         $member = Member::findOrFail($id);
-
+        $oldUsername = $member->persistentUser->user->username;
         $member->persistentUser->user->username = $fields['username'];
+        if($fields['password'] != null) $member->persistentUser->user->password = Hash::make($fields['password']);
         $member->birthday = $fields['birthday'];
         $member->name = $fields['name'];
         $member->description = $fields['description'];
@@ -58,6 +60,11 @@ class MemberController extends Controller
 
         $member->persistentUser->user->save();
         $member->save();
+
+        if (url()->previous() == route('edit-member', $oldUsername)) {
+            return redirect()->route('edit-member', $fields['username'])->with('success','Member updated successfully!');
+        }
+
         return back()->with('success','Member updated successfully!');
     }
 

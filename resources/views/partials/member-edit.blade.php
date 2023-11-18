@@ -9,8 +9,8 @@
 
         <input type="hidden" class="member-id" name="id" value="{{ $member->id }}">
 
-        <label for="username-{{ $member->persistentUser->user->username }}">Username</label>
-        <input id="username-{{ $member->persistentUser->user->username }}" type="text" class="username" name="username" value="{{ $member->persistentUser->user->username }}" required>
+        <label for="username-{{ $member->id }}">Username</label>
+        <input id="username-{{ $member->id }}" type="text" class="username" name="username" value="{{ $member->persistentUser->user->username }}" required>
 
         <label for="name-{{ $member->id }}">Name</label>
         <input id="name-{{ $member->id }}" type="text" class="name" name="name" value="{{ $member->name }}" required>
@@ -23,6 +23,17 @@
 
         <label for="description-{{ $member->id }}">Description</label>
         <input id="description-{{ $member->id }}" type="text" class="description" name="description" value="{{ $member->description }}" required>
+
+        <label for="password-{{ $member->id }}">Password</label>
+        <input id="password-{{ $member->id }}" type="password" class="password" name="password">
+        
+        @if (Auth::user()->persistentUser->type_=='Administrator')
+            <label type ="hidden" for="password-confirmation-{{ $member->id }}"></label>
+            <input type ="hidden" id="password-confirmation-{{ $member->id }}" type="password" class="password-confirmation" name="password_confirmation" value="{{ $member->persistentUser->user->password }}" required>
+        @else
+            <label for="password-confirmation-{{ $member->id }}">Password Confirmation</label>
+            <input id="password-confirmation-{{ $member->id }}" type="password" class="password-confirmation" name="password_confirmation" required>
+        @endif
 
         <input type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
     </form>

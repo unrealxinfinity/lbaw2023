@@ -26,11 +26,13 @@ class EditMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string', 'unique:user_info,username,' . Member::find($this->route()->id)->persistentUser->user->id],
+            'username' => ['required', 'string','max:250', 'unique:user_info,username,' . Member::find($this->route()->id)->persistentUser->user->id],
+            'password' => ['nullable', 'string', 'min:8'],
+            //'password-confirmation' => ['required', 'string', 'same:password'],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:members,email,' . $this->route()->id],
+            'email' => ['required', 'email','max:250', 'unique:members,email,' . $this->route()->id],
         ];
     }
 }
