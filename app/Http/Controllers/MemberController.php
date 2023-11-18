@@ -51,7 +51,7 @@ class MemberController extends Controller
 
         $member = Member::findOrFail($id);
 
-        if(!Hash::check($fields['passwordconfirmation'], $member->persistentUser->user->password)){
+        if(!Hash::check($fields['passwordconfirmation'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != "Administrator"){
             return back()->with('error','Password confirmation is incorrect!');
         }
 
