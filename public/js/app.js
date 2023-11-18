@@ -39,6 +39,10 @@ function addEventListeners() {
     let worldMemberAdder = document.querySelector('form#add-member-to-world');
     if (worldMemberAdder != null)
       worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
+
+    let MemberAssigner = document.querySelector('form#assign-member');
+    if (MemberAssigner != null)
+      MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
   }
   
   function encodeForAjax(data) {
@@ -162,6 +166,29 @@ function addEventListeners() {
       const json = await response.json();
 
       if (response.status !== 500) addMemberHandler(json)
+  }
+
+  async function sendAssignMemberRequest(event) {
+    event.preventDefault();
+
+    const username = this.querySelector('input.username').value;
+    const id = this.querySelector('input.id').value;
+    const csrf = this.querySelector('input:first-child').value;
+
+    console.log('/api/tasks/' + id + '/' + username);
+    const response = await fetch('/api/tasks/' + id + '/' + username, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    });
+
+    const json = await response.json();
+    
+    if (response.status !== 500) addMemberHandler(json);
   }
 
   function editMemberHandler() {

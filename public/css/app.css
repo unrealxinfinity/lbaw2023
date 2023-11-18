@@ -4,6 +4,7 @@ body {
     margin-bottom: 3em;
   }
   main > header {
+    z-index: 1;
     position: sticky;
     width: 100%;
     max-height: 5.5em;
@@ -63,12 +64,14 @@ body {
   }
 
   .task-details {
-    position: fixed;
+    z-index: 0;
+    position: absolute;
     height: 100%;
-    margin-top: -8.3em;
+    margin-top: -11.8em;
     right: 0;
     padding: 1em;
     padding-right: 5em;
+    padding-top: 3em;
     border-style: solid;
     border-bottom: 0;
     border-top: 0;
