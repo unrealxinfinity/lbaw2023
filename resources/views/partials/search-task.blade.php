@@ -3,7 +3,7 @@
         @csrf
         <input type="text" id="taskName"name="taskName" placeholder="Task Name">
         <input type="hidden" name="project_id" value="{{ $project->id }}">
-        <input type="button" id="searchTaskButton" value='Search'></input>
+        <input type="button" id="searchTaskButton" value='Search'>
     </form>
 </div>
 
