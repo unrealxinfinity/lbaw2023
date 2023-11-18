@@ -9,5 +9,6 @@
     </form>
     <section id="members">
         @each('partials.member-edit', $members, 'member')
+        @include('form.createaccount')
     </section>
 @endsection

@@ -33,15 +33,16 @@ class RegisterController extends Controller
             'username' => 'required|string|max:250',
             'email' => 'required|email|max:250',
             'password' => 'required|min:8|confirmed',
-            'login' => 'boolean',
-            'member' => 'boolean',
-            'name' => 'string|max:250'
+            'login' => 'nullable|boolean',
+            'member' => 'nullable',
+            'name' => 'nullable|string|max:250'
         ]);
 
-        $login = $request->login ?? true;
-        $member = $request->login ?? true;
-        $name = $request->name ?? 'New Member';
+        error_log("hello");
 
+        $login = $request->login ?? true;
+        $member = $request->member === 'on' ?? true;
+        $name = $request->name ?? 'New Member';
         $persistentUser = PersistentUser::create([
             'type_' => $member ? 'Member' : 'Administrator'
         ]);
