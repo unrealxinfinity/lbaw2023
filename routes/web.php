@@ -5,6 +5,8 @@ use App\Models\World;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TagController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -51,6 +53,10 @@ Route::controller(ProjectController::class)->group(function () {
     Route::post('/projects', 'create')->name('create-project');
 });
 
+});
+Route::controller(TagController::class)->group(function () {
+    Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
+});
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{id}', 'show');
     Route::get('/myworlds', 'showMemberWorlds');
@@ -60,6 +66,7 @@ Route::controller(MemberController::class)->group(function () {
 
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
+    
 });
 
 
