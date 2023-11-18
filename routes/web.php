@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\DeleteController;
 use App\Http\Controllers\MemberController;
 use App\Models\World;
 use App\Http\Controllers\TaskController;
@@ -99,4 +100,8 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+});
+
+Route::controller(DeleteController::class)->group(function () {
+   Route::delete('/members/{id}', 'delete')->name('delete-member');
 });
