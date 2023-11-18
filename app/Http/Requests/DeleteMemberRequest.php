@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Member;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,7 @@ class DeleteMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->can('edit', $this->route()->id);
+        return Auth::user()->can('edit', Member::find($this->route()->id));
     }
 
     /**
