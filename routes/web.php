@@ -32,6 +32,7 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/', function () {
     return view('pages.homepage');
 })->name('home');
+Route::view('/create-world', 'pages.world-create')->name('world-create');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -43,6 +44,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/api/worlds/{id}/{username}', 'addMember');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');
     Route::post('/worlds', 'create')->name('create-world');
+    Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -65,15 +67,7 @@ Route::controller(MemberController::class)->group(function () {
 
 Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/create', 'create')->name('create-task');
-    
 });
-
-
-Route::view('/create-world', 'pages.world-create')->name('world-create');
-Route::get('worlds/{id}/create-project', function ($id) {
-    $world = World::findOrFail($id);
-    return view('pages.project-create', ['world' => $world]);
-})->name('project-create');
 
 // API
 Route::controller(CardController::class)->group(function () {
