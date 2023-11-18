@@ -9,6 +9,5 @@
 <div id="popupContainer" class="popup">
 <div class="popup-content">
     <span class="close" onclick="closeSearchedTaskPopup()">&times;</span>
-    <p>This is a pop-up!</p>
 </div>
 </div>

@@ -8,11 +8,13 @@ use App\Http\Requests\DeleteProjectRequest;
 use App\Http\Requests\SearchTaskRequest;
 use App\Models\Member;
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -98,10 +100,9 @@ class ProjectController extends Controller
         error_log(gettype($searchedTaskText));
         $searchedTaskText2 = $searchedTaskText;
         $project = Project::findOrFail($id);
-        $tasks = $project->tasks()->whereRaw('tasks.searchedtasks @@ to_tsquery(\'english\', \'{$searchedTaskText}\')' )
-        ->orderByRaw('ts_rank(tasks.searchedtasks, to_tsquery(\'english\', \'{$searchedTaskText}\')) DESC')
-        ->get();
-        error_log($tasks);
+        $tasks = Task::select('title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
+            ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])
+            ->get();
         $tasksJson = $tasks->toJson();
         error_log($tasksJson);
         return response()->json([

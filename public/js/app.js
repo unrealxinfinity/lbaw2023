@@ -199,8 +199,8 @@ function addEventListeners() {
   }
 
 
-  async function searchTaskRequest() {
-
+  async function searchTaskRequest(event) {
+    event.preventDefault
     const searchTaskForms = document.getElementsByClassName('search-task');
     const id = searchTaskForms[0].getAttribute('data-id');
     console.log(searchTaskForms);
@@ -218,13 +218,45 @@ function addEventListeners() {
             }
       })
       .then(data => {
-        console.log(data);
+          console.log(data);
+          searchTaskHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
       
 }
 
+  function searchTaskHandler(json){
+    let popup = document.getElementById('popupContainer');
+    let newUl= document.createElement('ul');
+    let newSpan = document.createElement('span');
+    let newTitle = document.createElement('p');
+    let newDescription = document.createElement('p');
+    let newDueAt = document.createElement('p');
+    let newEffort = document.createElement('p');
+    let newPriority = document.createElement('p'); 
+    let newStatus = document.createElement('p');
+    newSpan.setAttribute('class', 'TaskList');
 
+    let tasks = JSON.parse(json.tasks);
+    for (task of tasks) {
+      console.log(task);
+      newTitle.setAttribute('href', '/tasks/' + task.id);
+      newTitle.textContent = task.title;
+      newDescription.textContent = task.description;
+      newDueAt.textContent = task.due_at;
+      newEffort.textContent = task.effort; 
+      newPriority.textContent = task.priority;
+      newStatus.textContent = task.status; 
+      newSpan.appendChild(newTitle);
+      newSpan.appendChild(newDescription); 
+      newSpan.appendChild(newDueAt);
+      newSpan.appendChild(newStatus);  
+      newSpan.appendChild(newEffort);
+      newSpan.appendChild(newPriority);
+      newUl.appendChild(newSpan);
+    };
+    popup.appendChild(newUl);
+  }
 
   async function addTagRequest() {
 
