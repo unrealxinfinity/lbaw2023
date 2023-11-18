@@ -9,6 +9,9 @@
 
         <input type="hidden" class="member-id" name="id" value="{{ $member->id }}">
 
+        <label for="username-{{ $member->persistentUser->user->username }}">Username</label>
+        <input id="username-{{ $member->persistentUser->user->username }}" type="text" class="username" name="username" value="{{ $member->persistentUser->user->username }}" required>
+
         <label for="name-{{ $member->id }}">Name</label>
         <input id="name-{{ $member->id }}" type="text" class="name" name="name" value="{{ $member->name }}" required>
 

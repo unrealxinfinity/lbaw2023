@@ -26,7 +26,7 @@ class EditMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //'username' => ['required', 'string', 'unique:users,username,' . $this->route()->id],
+            'username' => ['required', 'string', 'unique:user_info,username,' . Member::find($this->route()->id)->persistentUser->user->id],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],

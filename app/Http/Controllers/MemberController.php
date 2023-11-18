@@ -50,13 +50,13 @@ class MemberController extends Controller
 
         $member = Member::findOrFail($id);
 
-        //$this->authorize('edit', $member);
-
+        $member->persistentUser->user->username = $fields['username'];
         $member->birthday = $fields['birthday'];
         $member->name = $fields['name'];
         $member->description = $fields['description'];
         $member->email = $fields['email'];
 
+        $member->persistentUser->user->save();
         $member->save();
         return back()->with('success','Member updated successfully!');
     }
@@ -73,5 +73,4 @@ class MemberController extends Controller
         return view('pages.admin-members', ['members' => $members]);
     }
 
-    
 }
