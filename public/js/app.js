@@ -58,6 +58,10 @@ function addEventListeners() {
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
       MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
+    
+    let closePopup = document.getElementById('closePopUp');
+    if(closePopup != null)
+      closePopup.addEventListener('click', closeSearchedTaskPopup);
   }
   
   function encodeForAjax(data) {
@@ -489,7 +493,7 @@ function addTagHandler(json){
   // Close the pop-up
   function closeSearchedTaskPopup() {
     document.getElementById('popupContainer').style.display = 'none';
-  }
+ }
 
 
   
