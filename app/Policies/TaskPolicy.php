@@ -17,7 +17,7 @@ class TaskPolicy
 
     public function edit(User $user, Task $task): bool
     {
-        return ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Project Leader';
+        return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
     public function create(User $user): bool
@@ -27,7 +27,7 @@ class TaskPolicy
 
     public function assignMember(User $user, Task $task): bool
     {
-        return ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Project Leader' || ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Member' ;
+        return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader' || ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Member' ;
     }
 }
 

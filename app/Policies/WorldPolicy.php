@@ -27,6 +27,6 @@ class WorldPolicy
 
     public function addMember(User $user, World $world): bool
     {
-        return ($user->persistentUser->member->worlds->where('id', $world->id)[0]->pivot->is_admin);
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
 }
