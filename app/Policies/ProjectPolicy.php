@@ -59,4 +59,8 @@ class ProjectPolicy
     {   
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') ;
     }
+    public function searchTask(User $user): bool
+    {   
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+    }
 }

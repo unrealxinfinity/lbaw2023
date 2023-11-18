@@ -10,6 +10,7 @@
         @endif
     </header>
     @if($main)
+    @include('partials.search-task', ['project' => $project])
     <h3>This project belongs to: <a href="/worlds/{{ $project->world->id }}">{{ $project->world->name }}</a></h3>
     <h3>Tags:</h3>
      @include('partials.tag', ['tags' => $tags])

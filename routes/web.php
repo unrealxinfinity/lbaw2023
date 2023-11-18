@@ -51,6 +51,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects/{id}', 'show')->name('projects.show');
     Route::delete('/projects/{id}', 'delete')->name('delete-project');
     Route::post('/projects', 'create')->name('create-project');
+    Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');
 });
 
 Route::controller(TagController::class)->group(function () {

@@ -477,21 +477,21 @@ CREATE TRIGGER world_search_update
 DROP INDEX IF EXISTS world_search_idx CASCADE;
 CREATE INDEX world_search_idx ON worlds USING GIN (tsvectors);
 
-ALTER TABLE tasks ADD COLUMN tsvectors TSVECTOR;
+ALTER TABLE tasks ADD COLUMN searchedTasks TSVECTOR;
 
 DROP FUNCTION IF EXISTS task_search_update() CASCADE;
 CREATE FUNCTION task_search_update() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        NEW.tsvectors = (
+        NEW.searchedTasks = (
             setweight(to_tsvector('english', NEW.title), 'A') ||
             setweight(to_tsvector('english', NEW.description),'B')
         );
     END IF;
     IF TG_OP = 'UPDATE' THEN
         IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
-            NEW.tsvectors = (
+            NEW.searchedTasks = (
                 setweight(to_tsvector('english', NEW.title), 'A') ||
                 setweight(to_tsvector('english', NEW.description), 'B')
             );
@@ -509,7 +509,7 @@ CREATE TRIGGER task_search_update
   EXECUTE PROCEDURE task_search_update();
 
 DROP INDEX IF EXISTS task_search_idx CASCADE;
-CREATE INDEX task_search_idx ON tasks USING GIN (tsvectors);
+CREATE INDEX task_search_idx ON tasks USING GIN (searchedTasks);
 
 -- Sample data for the 'users' table
 INSERT INTO users (type_) VALUES

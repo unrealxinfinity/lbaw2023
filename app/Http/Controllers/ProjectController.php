@@ -5,6 +5,7 @@ use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
+use App\Http\Requests\SearchTaskRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\User;
@@ -74,7 +75,7 @@ class ProjectController extends Controller
             ]);
         }
     }
-
+   
     public function delete(DeleteProjectRequest $request, string $id): View
     {
         $fields = $request->validated();
@@ -89,4 +90,21 @@ class ProjectController extends Controller
         ]);
     }
     
+
+    public function searchTask(Request $request , string $id): JsonResponse
+    {   
+       
+        $searchedTaskText = $request->query('search');
+        error_log($searchedTaskText);
+        $project = Project::findOrFail($id);
+        $tasks = $project->tasks()->whereRaw('tasks.searchedtasks @@ to_tsquery(\'english\', :searchedTaskText)', [':searchedTaskText' => $searchedTaskText])
+        ->orderByRaw('ts_rank(tasks.searchedtasks, to_tsquery(\'english\', :searchedTaskText)) DESC', [':searchedTaskText' => $searchedTaskText])->get();
+        error_log($tasks);
+        $tasksJson = $tasks->toJson();
+        error_log($tasksJson);
+        return response()->json([
+            'error' => false,
+            'tasks'=> $tasksJson
+        ]);
+    }
 }
