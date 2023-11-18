@@ -520,16 +520,16 @@ INSERT INTO users (type_) VALUES
 
 -- Sample data for the 'user_info' table
 INSERT INTO user_info (username, password, user_id) VALUES
-    ('user1', '$2y$10$GCLxqExbUbYmSyRhhZCJQ.qQdq50g32wfq6j.UGS1VROMVHnGtvSK', 1),
-    ('admin1', '$2y$10$Atr0JZBkjLfs/3B6bB.6PuDTDl1Sm4KNjIAwYu3MJCSShSIFg0dUC', 2),
-    ('user2', 'password2', 3),
-    ('user3', 'password3', 4);
+    ('mcfan_2004', '$2y$10$GCLxqExbUbYmSyRhhZCJQ.qQdq50g32wfq6j.UGS1VROMVHnGtvSK', 1),
+    ('MineMaxAdmin', '$2y$10$Atr0JZBkjLfs/3B6bB.6PuDTDl1Sm4KNjIAwYu3MJCSShSIFg0dUC', 2),
+    ('up202100000', '$2y$10$XKE.2Lg8FyrxQCHSTqQ4eeeQfP2HLxN.MvMAK5ne1NuU1Wf5vayae', 3),
+    ('john_doe', '$2y$10$tZQTo2UE5AhvU75HMsh4h.HbyOQZ3FRNSV3YzXVEykDBADoSRRxyu', 4);
 
 -- Sample data for the 'members' table
 INSERT INTO members (user_id, name, birthday, description, picture, email) VALUES
-    (1, 'John Doe', '1990-05-15', 'Member 1 Description', 'image1.jpg', 'user1@example.com'),
-    (3, 'Alice Smith', '1985-12-30', 'Member 2 Description', 'image2.jpg', 'user2@example.com'),
-    (4, 'Bob Johnson', '1992-08-20', 'Member 3 Description', 'image3.jpg', 'user3@example.com');
+    (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'image1.jpg', 'mcfan2004@example.com'),
+    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'image2.jpg', 'up202100000@example.com'),
+    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'image3.jpg', 'bobjohn@example.com');
 
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
@@ -538,8 +538,8 @@ INSERT INTO friend (member_id, friend_id) VALUES
 
 -- Sample data for the 'world' table
 INSERT INTO worlds (name, description, picture, owner_id) VALUES
-    ('World 1', 'Description of World 1', 'world_image1.jpg', 1),
-    ('World 2', 'Description of World 2', 'world_image2.jpg', 3);
+    ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 'world_image1.jpg', 1),
+    ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 'world_image2.jpg', 3);
 
 -- Sample data for the 'member_world' table (assuming members are part of worlds)
 INSERT INTO member_world (member_id, world_id, is_admin) VALUES
@@ -550,8 +550,8 @@ INSERT INTO member_world (member_id, world_id, is_admin) VALUES
 
 -- Sample data for the 'world_timeline' table
 INSERT INTO world_timeline (date_, description, world_id) VALUES
-    ('2023-01-01', 'Event in World 1', 1),
-    ('2023-02-15', 'Event in World 2', 2);
+    ('2023-01-01', 'New Admin', 1),
+    ('2023-02-15', 'New Admin', 2);
 
 -- Sample data for the 'favorite_world' table
 INSERT INTO favorite_world (member_id, world_id) VALUES
@@ -560,8 +560,8 @@ INSERT INTO favorite_world (member_id, world_id) VALUES
 
 -- Sample data for the 'project' table
 INSERT INTO projects (name, status, description, picture, world_id) VALUES
-    ('Project 1', 'Active', 'Description of Project 1', 'project_image1.jpg', 1),
-    ('Project 2', 'Active', 'Description of Project 2', 'project_image2.jpg', 2);
+    ('Wheat Farm', 'Active', 'Fully automatic wheat farm', 'project_image1.jpg', 1),
+    ('Castle Tower', 'Active', 'A new tower for our main castle', 'project_image2.jpg', 2);
 
 -- Sample data for the 'member_project' table (assuming members are part of projects)
 INSERT INTO member_project (member_id, project_id, permission_level) VALUES
@@ -577,8 +577,8 @@ INSERT INTO favorite_project (member_id, project_id) VALUES
 
 -- Sample data for the 'task' table
 INSERT INTO tasks (title, description, due_at, status, effort, priority, project_id) VALUES
-    ('Task 1', 'Description of Task 1', '2024-03-15', 'Upcoming', 5, 'High', 1),
-    ('Task 2', 'Description of Task 2', '2024-04-01', 'In Progress', 8, 'Medium', 2);
+    ('Gather pistons', 'We''ll need lots of pistons to make the farm work.', '2024-03-15', 'Upcoming', 5, 'High', 1),
+    ('Build foundations', 'Define the area that the tower will occupy.', '2024-04-01', 'In Progress', 8, 'Medium', 2);
 
 -- Sample data for the 'assignee' table (assigning tasks to members)
 INSERT INTO assignee (member_id, task_id) VALUES
@@ -587,9 +587,9 @@ INSERT INTO assignee (member_id, task_id) VALUES
 
 -- Sample data for the 'tags' table
 INSERT INTO tags (name) VALUES
-    ('tags 1'),
-    ('tags 2'),
-    ('tags 3');
+    ('Redstone'),
+    ('Build'),
+    ('Large');
 
 -- Sample data for the 'world_tags' table (associating tagss with worlds)
 INSERT INTO world_tag (tag_id, world_id) VALUES
@@ -611,24 +611,23 @@ INSERT INTO member_tag (tag_id, member_id) VALUES
 
 -- Sample data for the 'task_comments' table (comments on tasks)
 INSERT INTO task_comments (content, date_, task_id, member_id) VALUES
-    ('Comment 1 on Task 1', '2023-03-01', 1, 1),
-    ('Comment 2 on Task 2', '2023-04-02', 2, 3);
+    ('I have some saved up!', '2023-03-01', 1, 1),
+    ('I think the tower shouldn''t be too big.', '2023-04-02', 2, 3);
 
 -- Sample data for the 'world_comments' table (comments on worlds)
 INSERT INTO world_comments (content, date_, world_id, member_id) VALUES
-    ('Comment 1 on World 1', '2023-01-05', 1, 1),
-    ('Comment 2 on World 2', '2023-02-20', 2, 3),
-    ('Guest comment 1 on World 1', '2023-01-05', 1, NULL);
+    ('Are you going to use the upcoming redstone features from the next update?', '2023-01-05', 1, 1),
+    ('Can I build my own kingdom in this world?', '2023-02-20', 2, 3);
 
 -- Sample data for the 'faq_item' table
 INSERT INTO faq_item (question, answer) VALUES
-    ('FAQ 1 Question', 'FAQ 1 Answer'),
-    ('FAQ 2 Question', 'FAQ 2 Answer');
+    ('Do I need to use a specific Minecraft version?', 'We allow worlds from all versions. You can let others know what version you use in your worlds through tags.'),
+    ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and cannot be changed, while your display name can be changed.');
 
 -- Sample data for the 'notifications' table
 INSERT INTO notifications (text, level, world_id, project_id, task_id) VALUES
-    ('Notification 1', 'Low', 1, NULL, NULL),
-    ('Notification 2', 'Medium', NULL, 1, NULL);
+    ('You have been added to a world!', 'Low', 1, NULL, NULL),
+    ('A new task was created in this project!', 'Medium', NULL, 1, NULL);
 
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
