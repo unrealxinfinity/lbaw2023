@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemberController;
+use App\Models\World;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
@@ -49,7 +50,8 @@ Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');
     Route::delete('/projects/{id}', 'delete')->name('delete-project');
-    
+    Route::post('/projects', 'create')->name('create-project');
+});
 
 });
 Route::controller(TagController::class)->group(function () {
@@ -69,6 +71,10 @@ Route::controller(TaskController::class)->group(function () {
 
 
 Route::view('/create-world', 'pages.world-create')->name('world-create');
+Route::get('worlds/{id}/create-project', function ($id) {
+    $world = World::findOrFail($id);
+    return view('pages.project-create', ['world' => $world]);
+})->name('project-create');
 
 
 // API

@@ -34,13 +34,15 @@ class ProjectController extends Controller
 
         $project = Project::create([
            'name' => $fields['name'],
-           'description' => $fields['name'],
+           'description' => $fields['description'],
            'status' => 'Active',
            'picture' => 'pic',
             'world_id' => $fields['world_id']
         ]);
 
-        return redirect()->route('projects/' . $project->id)->withSuccess('New Project created!');
+        $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
+
+        return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
     }
 
     public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse
