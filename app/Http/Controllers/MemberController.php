@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
-    public function show(string $id): View
+    public function show(string $username): View
     {
-        $member = Member::findOrFail($id);
+        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $member = $user->persistentUser->member;
 
         return view('pages.member', [
             'member' => $member

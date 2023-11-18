@@ -56,7 +56,7 @@ Route::controller(TagController::class)->group(function () {
     Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
 });
 Route::controller(MemberController::class)->group(function () {
-    Route::get('members/{id}', 'show');
+    Route::get('members/{username}', 'show');
     Route::get('/myworlds', 'showMemberWorlds');
     Route::put('/api/members/{id}', 'update')->name('update-member');
     Route::get('/admin', 'list')->name('list-members');
