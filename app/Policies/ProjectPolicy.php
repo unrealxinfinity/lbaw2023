@@ -45,4 +45,9 @@ class ProjectPolicy
     {
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
+
+    public function projectTagCreate(User $user,Project $project): bool
+    {   
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') ;
+    }
 }

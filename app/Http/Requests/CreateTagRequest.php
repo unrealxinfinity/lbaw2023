@@ -14,7 +14,7 @@ class CreateTagRequest extends FormRequest
      */
     public function authorize(Project $project): bool
     {
-        return Auth::user()->can('projectCreate', $project);
+        return Auth::user()->can('projectTagCreate', $project);
     }
 
     /**

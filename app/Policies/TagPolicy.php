@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Policies;
-
+use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
 use App\Models\Tag;
 
 class TagPolicy
-{
+{   
     /**
      * Create a new policy instance.
      */
@@ -14,9 +14,9 @@ class TagPolicy
     {
         
     }
-
-    public function projectCreate(User $user,Project $project): bool
+    public function projectTagCreate(User $user,Project $project): bool
     {   
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') && $project->members->contains($user);
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') ;
     }
+    
 }

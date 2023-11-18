@@ -180,17 +180,45 @@ function addEventListeners() {
             'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify({ tagName: tagName})
-    });
-    const data = await response.json();
-    console.log(data);
-    if (response.status !== 500) addTagHandler(data);
+      })
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          addTagHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+    
     tagName.value = '';
+    
+
 }
 
 function addTagHandler(json){
-    newTag = document.createElement('span').setAttribute('class', 'badge badge-secondary');
-    newtag.textContent = json.tagName;
-    document.getElementsByClassName('tagList').appendChild(newTag);
+  if(json.error){
+    console.log('Already exists entry');
+  }
+  else{
+    let newTag = document.createElement('span');
+
+  // Set class attribute for the new span element
+  newTag.setAttribute('class', 'badge badge-secondary');
+
+  // Set text content for the new span element
+  newTag.textContent = json.tagName;
+
+  // Assuming you want to append to the first element with the 'tagList' class
+  let tagListElement = document.getElementsByClassName('tagList');
+
+  // Append the new span element to the tag list element
+  tagListElement[0].appendChild(newTag);
+  }
+  
 }
 
   function sendItemUpdateRequest() {
