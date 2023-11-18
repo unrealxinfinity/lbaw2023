@@ -1,7 +1,17 @@
 <article class="member" data-id="{{ $member->id }}">
-    <header>
-        <h2><a href="/members/{{ $member->id }}">{{ $member->persistentUser->user->username }}</a></h2>
-        <h3>{{ $member->email }}</h3>
+    @if($main)
+    <header class="row">
+        <img src= {{$member->picture}} class="big">
+        <div class="column">
+        <h2>{{ $member->name }}</h2>
+        <h3> @ {{ $member->persistentUser->user->username }}</h3>
+        </div>
     </header>
-    {{ $member->description }}
+    <h4>{{ $member->description }}</h4>
+    @else
+    <header class="row">
+        <img src= {{$member->picture}} class="small">
+        <h4><a href="/members/{{ $member->id }}">{{ $member->persistentUser->user->username }}</a></h4>
+    </header>
+    @endif
 </article>
