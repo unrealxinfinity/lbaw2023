@@ -34,11 +34,11 @@ function addEventListeners() {
 
     let button = document.getElementById("createTagButton");
     if(button != null)
-    button.addEventListener("click", function(){
-      addTagRequest();   
-    });
+    button.addEventListener("click", addTagRequest);
     
-    
+    let worldMemberAdder = document.querySelector('form#add-member-to-world');
+    if (worldMemberAdder != null)
+      worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
   }
   
   function encodeForAjax(data) {
@@ -140,6 +140,30 @@ function addEventListeners() {
     ul.appendChild(member);
   }
 
+  async function sendAddMemberToWorld(event){
+      event.preventDefault();
+
+      const username= this.querySelector('input.username').value;
+      const id = this.querySelector('input.id').value;
+      const csrf = this.querySelector('input:first-child').value;
+      const type = this.querySelector('input.type').value;
+
+      const response = await fetch('/api/worlds/' + id + '/' + username, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({type: type})
+      });
+
+      const json = await response.json();
+
+      if (response.status !== 500) addMemberHandler(json)
+  }
+
   function editMemberHandler() {
 
   }
@@ -193,8 +217,8 @@ function addEventListeners() {
           addTagHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-    
-    tagName.value = '';
+      console.log(tagElemName)
+      tagElem[1].value = "";
     
 
 }
