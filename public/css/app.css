@@ -62,6 +62,24 @@ body {
     padding-top: 10px;
   }
 
+  .task-details {
+    position: fixed;
+    height: 100%;
+    margin-top: -8.3em;
+    right: 0;
+    padding: 1em;
+    padding-right: 5em;
+    border-style: solid;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 0;
+  }
+
+  .task-details > div {
+    display: grid;
+    grid-template-columns: 15em auto;
+  }
+
   img.big {
     margin: 1em;
     margin-top: 0;

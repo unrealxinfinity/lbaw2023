@@ -8,10 +8,20 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {  
-   
+    public function show(string $id): View
+    {
+        $task = Task::findOrFail($id);
+
+        //$this->authorize('show', $task);
+        return view('pages.task', [
+            'task' => $task,
+            'main' => true
+        ]);
+    }
     
     //
     public function create(CreateTaskRequest $request) : RedirectResponse{
