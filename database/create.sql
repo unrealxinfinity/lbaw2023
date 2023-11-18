@@ -528,8 +528,8 @@ INSERT INTO user_info (username, password, user_id) VALUES
 -- Sample data for the 'members' table
 INSERT INTO members (user_id, name, birthday, description, picture, email) VALUES
     (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'image1.jpg', 'mcfan2004@example.com'),
-    (3, 'Alice Smith', '1985-12-30', "I'm new to Minecraft.", 'image2.jpg', 'up202100000@example.com'),
-    (4, 'Bob Johnson', '1992-08-20', "I am very good with redstone projects.", 'image3.jpg', 'bobjohn@example.com');
+    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'image2.jpg', 'up202100000@example.com'),
+    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'image3.jpg', 'bobjohn@example.com');
 
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
@@ -577,7 +577,7 @@ INSERT INTO favorite_project (member_id, project_id) VALUES
 
 -- Sample data for the 'task' table
 INSERT INTO tasks (title, description, due_at, status, effort, priority, project_id) VALUES
-    ('Gather pistons', "We'll need lots of pistons to make the farm work.", '2024-03-15', 'Upcoming', 5, 'High', 1),
+    ('Gather pistons', 'We''ll need lots of pistons to make the farm work.', '2024-03-15', 'Upcoming', 5, 'High', 1),
     ('Build foundations', 'Define the area that the tower will occupy.', '2024-04-01', 'In Progress', 8, 'Medium', 2);
 
 -- Sample data for the 'assignee' table (assigning tasks to members)
@@ -612,7 +612,7 @@ INSERT INTO member_tag (tag_id, member_id) VALUES
 -- Sample data for the 'task_comments' table (comments on tasks)
 INSERT INTO task_comments (content, date_, task_id, member_id) VALUES
     ('I have some saved up!', '2023-03-01', 1, 1),
-    ("I think the tower shouldn't be too big.", '2023-04-02', 2, 3);
+    ('I think the tower shouldn''t be too big.', '2023-04-02', 2, 3);
 
 -- Sample data for the 'world_comments' table (comments on worlds)
 INSERT INTO world_comments (content, date_, world_id, member_id) VALUES
