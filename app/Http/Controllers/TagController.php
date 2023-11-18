@@ -18,7 +18,6 @@ class TagController extends Controller
         $project = Project::find($project_id);
         $request->authorize($project);
         error_log("here");
-        $project = Project::find($fields['project_id']);
         $project->tags()->attach($tag->id);
         return response()->json([
             'error' => false,
