@@ -1,4 +1,5 @@
 <article class="project" data-id="{{ $project->id }}">
+    <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
     <header>
         <h2><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2>
         @if (Auth::user()->can('delete', $project))
