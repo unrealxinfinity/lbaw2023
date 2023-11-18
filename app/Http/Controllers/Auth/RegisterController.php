@@ -32,11 +32,18 @@ class RegisterController extends Controller
         $request->validate([
             'username' => 'required|string|max:250',
             'email' => 'required|email|max:250',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
+            'login' => 'boolean',
+            'member' => 'boolean',
+            'name' => 'string|max:250'
         ]);
 
+        $login = $request->login ?? true;
+        $member = $request->login ?? true;
+        $name = $request->name ?? 'New Member';
+
         $persistentUser = PersistentUser::create([
-            'type_' => 'Member'
+            'type_' => $member ? 'Member' : 'Administrator'
         ]);
 
         User::create([
@@ -45,17 +52,24 @@ class RegisterController extends Controller
             'user_id' => $persistentUser->id
         ]);
 
-        Member::create([
-            'name' => 'New Member',
-            'email' => $request->email,
-            'user_id' => $persistentUser->id,
-            'picture' => 'example.com'
-        ]);
+        if ($member) {
+            Member::create([
+                'name' => $name,
+                'email' => $request->email,
+                'user_id' => $persistentUser->id,
+                'picture' => 'example.com'
+            ]);
+        }
 
-        $credentials = $request->only('username', 'password');
-        Auth::attempt($credentials);
-        $request->session()->regenerate();
-        return redirect()->route('cards')
-            ->withSuccess('You have successfully registered & logged in!');
+        if ($login) {
+            $credentials = $request->only('username', 'password');
+            Auth::attempt($credentials);
+            $request->session()->regenerate();
+            return redirect()->route('cards')
+                ->withSuccess('You have successfully registered & logged in!');
+        }
+        else {
+            return redirect()->back()->withSuccess('You have created a new account!');
+        }
     }
 }
