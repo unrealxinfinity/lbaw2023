@@ -93,7 +93,6 @@ body {
     margin-top: 0.3em;
   }
 
-
   .project .border {
     background-color: #decaeb;
     border-style: solid;
@@ -108,6 +107,20 @@ body {
     margin-bottom: 2em;
   }
 
+  .comment {
+    background-color: #d5b8e6;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 1em;
+    width: 50em;
+    margin: 0.5em;
+  }
+
+  .comment > header {
+    padding-left: 1em;
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
 
   .big-box {
     background-color: white;

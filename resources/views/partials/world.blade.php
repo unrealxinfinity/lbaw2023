@@ -2,6 +2,7 @@
     <header>
         <h2><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h2>
     </header>
+    <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
     @include('partials.sidebar', ['thing'=>$world])
     <ul>
 
@@ -25,4 +26,8 @@
         </div>
     </ul>
     @include('form.addmembertoworld', ['world' => $world])
+    <h4> Comments: </h4>
+    <ul>
+        @each('partials.comment', $world->comments()->orderBy('id')->get(), 'comment')
+    </ul>
 </article>

@@ -16,4 +16,9 @@
         @endforeach
     </ul>
     </div>
+    <h4> Comments: </h4>
+    <ul>
+        @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
+    </ul>
     @endif
+</article>
