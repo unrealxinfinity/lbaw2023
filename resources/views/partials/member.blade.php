@@ -8,6 +8,7 @@
         </div>
     </header>
     <h4>{{ $member->description }}</h4>
+    <a href="/members/{{ $member->id }}/edit">Edit Profile</a>
     @else
     <header class="row">
         <img src= {{$member->picture}} class="small">

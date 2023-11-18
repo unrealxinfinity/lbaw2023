@@ -27,7 +27,7 @@ class EditMemberRequest extends FormRequest
     {
         return [
             'birthday' => ['required'],
-           'name' => ['required', 'string'],
+            'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'email' => ['required', 'email']
         ];

@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\MemberController;
 use App\Models\World;
+use App\Models\Member;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TagController;
-use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -61,6 +61,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::put('/api/members/{id}', 'update')->name('update-member');
     Route::get('/admin', 'list')->name('list-members');
+    Route::get('/members/{id}/edit', 'showEditProfile')->name('edit-member');
 });
 
 Route::controller(TaskController::class)->group(function () {
@@ -74,7 +75,6 @@ Route::get('worlds/{id}/create-project', function ($id) {
     $world = World::findOrFail($id);
     return view('pages.project-create', ['world' => $world]);
 })->name('project-create');
-
 
 // API
 Route::controller(CardController::class)->group(function () {

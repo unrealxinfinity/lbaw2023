@@ -20,6 +20,15 @@ class MemberController extends Controller
         ]);
     }
 
+    public function showEditProfile(string $id): View
+    {
+        $member = Member::findOrFail($id);
+
+        return view('pages.member-edit', [
+            'member' => $member
+        ]);
+    }
+
     public function showMemberWorlds(): View
     {
         $id = Auth::user()->persistentUser->member->id;
