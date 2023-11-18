@@ -4,6 +4,8 @@
 <form method="POST" action="{{ route('register') }}">
     {{ csrf_field() }}
 
+    <input type="hidden" name="member" value="on">
+
     <label for="username">Name</label>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
