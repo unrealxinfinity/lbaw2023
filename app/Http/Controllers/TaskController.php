@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssignMemberRequest;
 use App\Http\Requests\CreateTaskRequest;
 use App\Models\Task;
-use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {  
-   
+    public function show(string $id): View
+    {
+        $task = Task::findOrFail($id);
+
+        //$this->authorize('show', $task);
+        return view('pages.task', [
+            'task' => $task,
+            'main' => true
+        ]);
+    }
     
     //
     public function create(CreateTaskRequest $request) : RedirectResponse{
@@ -35,7 +47,7 @@ class TaskController extends Controller
     {
 
         $fields = $request->validate([
-            'title' => ['alpha_num:ascii'],
+            'title' => ['string'],
             'description' => ['string'],
             'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
             'due_at' => ['date'],
@@ -45,35 +57,37 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
-
         $task->title = $fields['title'];
         $task->description = $fields['description'];
         $task->status = $fields['status'];
         $task->due_at = $fields['due_at'];
         $task->effort = $fields['effort'];
         $task->priority = $fields['priority'];
-
+        
         $task->save();
     }
 
-    public function assignMember(Request $request, string $task_id, string $member_id): void
+    public function assignMember(AssignMemberRequest $request, string $task_id, string $username): JsonResponse
     {
-        // em cima eu faço project_id, bastava fazer isto?
-        $fields = $request->validate([
-            'type' => [Rule::in('Member', 'Project Leader')]
-        ]);
+        $request->validated();
 
         $task = Task::findOrFail($task_id);
-        $member = Member::findOrFail($member_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
+        
 
         $this->authorize('assignMember', $task);
 
-        $is_admin = $member->worlds->where('id', $task->world_id)[0]->pivot->is_admin;
+        $member->tasks()->attach($task_id);
         
-        $member->tasks->attach($task_id, 'assignee');
+        return response()->json([
+            'id' => $member->id,
+            'username' => $username,
+            'email' => $member->email,
+            'description' => $member->description
+        ]);
     }
 
-    public function complete(string $id): void
+    public function complete(string $id): View
     {
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
@@ -81,5 +95,10 @@ class TaskController extends Controller
         $task->status = 'Done';
 
         $task->save();
+
+        return view('pages.task', [
+            'task' => $task,
+            'main' => true
+        ]);
     }
 }

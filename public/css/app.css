@@ -4,6 +4,7 @@ body {
     margin-bottom: 3em;
   }
   main > header {
+    z-index: 1;
     position: sticky;
     width: 100%;
     max-height: 5.5em;
@@ -62,6 +63,31 @@ body {
     padding-top: 10px;
   }
 
+  .task-details {
+    z-index: 0;
+    position: absolute;
+    height: 100%;
+    margin-top: -11.8em;
+    right: 0;
+    padding: 1em;
+    padding-right: 5em;
+    padding-top: 3em;
+    border-style: solid;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 0;
+  }
+
+  .task-details > form > div {
+    display: grid;
+    grid-template-columns: 10em auto;
+  }
+
+  .complete-task > button {
+    margin-left: 1em;
+  }
+  
+
   img.big {
     margin: 1em;
     margin-top: 0;
@@ -74,7 +100,6 @@ body {
     height: 20px;
     margin-top: 0.3em;
   }
-
 
   .project .border {
     background-color: #decaeb;
@@ -90,6 +115,20 @@ body {
     margin-bottom: 2em;
   }
 
+  .comment {
+    background-color: #d5b8e6;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 1em;
+    width: 50em;
+    margin: 0.5em;
+  }
+
+  .comment > header {
+    padding-left: 1em;
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
 
   .big-box {
     background-color: white;
@@ -266,7 +305,19 @@ body {
     border-color: #9b4dca;
   }
   
-  .popup {
+
+
+.search-task{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1em;
+
+}
+#taskName {
+    width: 50%;
+}
+.popup {
     display: none;
     position: fixed;
     top: 50%;
@@ -275,16 +326,16 @@ body {
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .popup-content {
+    z-index: 1001; /* Ensure it appears above other elements, adjust as needed */
+}
+
+.popup-content {
     text-align: center;
-  }
-  
-  .close {
+}
+
+.close {
     position: absolute;
     top: 10px;
     right: 10px;
     cursor: pointer;
-  }
+}

@@ -41,7 +41,8 @@ class RegisterController extends Controller
         error_log("hello");
 
         $login = $request->login ?? true;
-        $member = $request->member === 'on' ?? true;
+        $member = $request->member === 'on';
+        error_log($member ? "true" : "false");
         $name = $request->name ?? 'New Member';
         $persistentUser = PersistentUser::create([
             'type_' => $member ? 'Member' : 'Administrator'

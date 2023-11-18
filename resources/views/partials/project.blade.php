@@ -8,9 +8,10 @@
                 <input type="submit" value="Delete Project">
             </form>
         @endif
+        @include('partials.search-task', ['project' => $project])
     </header>
     @if($main)
-    @include('partials.search-task', ['project' => $project])
+    
     <h3>This project belongs to: <a href="/worlds/{{ $project->world->id }}">{{ $project->world->name }}</a></h3>
     <h3>Tags:</h3>
      @include('partials.tag', ['tags' => $tags])
@@ -21,7 +22,9 @@
             <div class="column border">
                 <h4> {{$state}} </h4>
                 <ul class="big-box">
-                    @each('partials.task', $project->tasks()->where('status', '=', $state)->orderBy('id')->get(), 'task')
+                    @foreach ($project->tasks()->where('status', '=', $state)->orderBy('id')->get() as $task)
+                        @include('partials.task', ['task' => $task, 'main' => false])
+                    @endforeach
                 </ul>
             </div>
         @endforeach
