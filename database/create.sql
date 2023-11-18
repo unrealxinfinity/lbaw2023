@@ -158,36 +158,36 @@ CREATE TABLE assignee(
 );
 
 
-DROP TABLE IF EXISTS tag CASCADE;
-CREATE TABLE tag(
+DROP TABLE IF EXISTS tags CASCADE;
+CREATE TABLE tags(
   id SERIAL PRIMARY KEY,
   name VARCHAR NOT NULL
 );
 
-DROP TABLE IF EXISTS world_tag CASCADE;
+DROP TABLE IF EXISTS world_tags CASCADE;
 CREATE TABLE world_tag(
   tag_id INT,
   world_id INT,
   PRIMARY KEY(tag_id, world_id),
-  FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS project_tag CASCADE;
+DROP TABLE IF EXISTS tagss CASCADE;
 CREATE TABLE project_tag(
   tag_id INT,
   project_id INT,
   PRIMARY KEY(tag_id, project_id),
-  FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS member_tag CASCADE;
+DROP TABLE IF EXISTS member_tags CASCADE;
 CREATE TABLE member_tag(
   tag_id INT,
   member_id INT,
   PRIMARY KEY(tag_id, member_id),
-  FOREIGN KEY(tag_id) REFERENCES tag(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(tag_id) REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -402,14 +402,14 @@ CREATE TRIGGER delete_notification
   EXECUTE PROCEDURE delete_notification();
 
 
-DROP FUNCTION IF EXISTS delete_tag() CASCADE;
-CREATE FUNCTION delete_tag() RETURNS TRIGGER AS
+DROP FUNCTION IF EXISTS delete_tags() CASCADE;
+CREATE FUNCTION delete_tags() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-  IF (NOT EXISTS (SELECT * FROM world_tag WHERE tag_id = OLD.tag_id) AND
-  NOT EXISTS (SELECT * FROM member_tag WHERE tag_id = OLD.tag_id) AND
-  NOT EXISTS (SELECT * FROM project_tag WHERE tag_id = OLD.tag_id)) THEN
-  DELETE FROM tag WHERE id = OLD.tag_id;
+  IF (NOT EXISTS (SELECT * FROM world_tag WHERE id = OLD.id) AND
+  NOT EXISTS (SELECT * FROM member_tag WHERE id = OLD.id) AND
+  NOT EXISTS (SELECT * FROM project_tag WHERE id = OLD.id)) THEN
+  DELETE FROM tags WHERE id = OLD.id;
   END IF;
   RETURN OLD;
 END
@@ -420,19 +420,19 @@ DROP TRIGGER IF EXISTS delete_world_tag ON world_tag CASCADE;
 CREATE TRIGGER delete_world_tag
   AFTER DELETE ON world_tag
   FOR EACH ROW
-  EXECUTE PROCEDURE delete_tag();
+  EXECUTE PROCEDURE delete_tags();
 
 DROP TRIGGER IF EXISTS delete_project_tag ON project_tag CASCADE;
 CREATE TRIGGER delete_project_tag
   AFTER DELETE ON project_tag
   FOR EACH ROW
-  EXECUTE PROCEDURE delete_tag();
+  EXECUTE PROCEDURE delete_tags();
 
 DROP TRIGGER IF EXISTS delete_member_tag ON member_tag CASCADE;
 CREATE TRIGGER delete_member_tag
   AFTER DELETE ON member_tag
   FOR EACH ROW
-  EXECUTE PROCEDURE delete_tag();
+  EXECUTE PROCEDURE delete_tags();
 
 DROP INDEX IF EXISTS task_project CASCADE;
 CREATE INDEX task_project ON tasks USING hash (project_id);
@@ -585,25 +585,25 @@ INSERT INTO assignee (member_id, task_id) VALUES
     (1, 1),
     (3, 2);
 
--- Sample data for the 'tag' table
-INSERT INTO tag (name) VALUES
-    ('Tag 1'),
-    ('Tag 2'),
-    ('Tag 3');
+-- Sample data for the 'tags' table
+INSERT INTO tags (name) VALUES
+    ('tags 1'),
+    ('tags 2'),
+    ('tags 3');
 
--- Sample data for the 'world_tag' table (associating tags with worlds)
+-- Sample data for the 'world_tags' table (associating tagss with worlds)
 INSERT INTO world_tag (tag_id, world_id) VALUES
     (1, 1),
     (2, 1),
     (2, 2);
 
--- Sample data for the 'project_tag' table (associating tags with projects)
+-- Sample data for the 'project_tags' table (associating tagss with projects)
 INSERT INTO project_tag (tag_id, project_id) VALUES
     (2, 1),
     (1, 2),
     (3, 2);
 
--- Sample data for the 'member_tag' table (associating tags with members)
+-- Sample data for the 'member_tags' table (associating tagss with members)
 INSERT INTO member_tag (tag_id, member_id) VALUES
     (1, 1),
     (2, 1),

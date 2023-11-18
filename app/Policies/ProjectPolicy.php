@@ -54,4 +54,9 @@ class ProjectPolicy
         return !$is_disabled;
         //return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
+
+    public function projectTagCreate(User $user,Project $project): bool
+    {   
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') ;
+    }
 }

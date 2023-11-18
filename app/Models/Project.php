@@ -26,4 +26,8 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+    public function tags(): BelongsToMany
+    {
+       return $this->belongsToMany(Tag::class);
+    }
 }
