@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Gate;
+
 
 class ProjectController extends Controller
 {
@@ -93,11 +95,11 @@ class ProjectController extends Controller
     }
     
 
-    public function searchTask(Request $request , string $id): JsonResponse
+    public function searchTask(SearchTaskRequest $request , string $id): JsonResponse
     {   
-       
         $searchedTaskText = strval($request->query('search'));
-        error_log(gettype($searchedTaskText));
+        $searchedTaskText = str_replace(['&', '&lt;', '&gt;', '<', '>'], ['','','', '', ''], $searchedTaskText);
+        error_log($searchedTaskText);
         $searchedTaskText2 = $searchedTaskText;
         $project = Project::findOrFail($id);
         $tasks = Task::select('title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])

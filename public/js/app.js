@@ -227,6 +227,7 @@ function addEventListeners() {
 
   function searchTaskHandler(json){
     let popup = document.getElementById('popupContainer');
+    popup.innerHTML = "";
     let newUl= document.createElement('ul');
     let newSpan = document.createElement('span');
     let newTitle = document.createElement('p');
