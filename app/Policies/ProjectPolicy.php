@@ -33,12 +33,12 @@ class ProjectPolicy
 
     public function addMember(User $user, Project $project): bool
     {
-        return ($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader';
+        return ($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
     public function delete(User $user, Project $project): bool
     {
-        return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)[0]->pivot->permission_level) == 'Project Leader');
+        return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader');
     }
 
     public function create(User $user): bool
