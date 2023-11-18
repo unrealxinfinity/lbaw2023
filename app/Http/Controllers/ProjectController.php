@@ -99,7 +99,7 @@ class ProjectController extends Controller
         $searchedTaskText = $request->query('search');
         error_log($searchedTaskText);
         $project = Project::findOrFail($id);
-        $tasks = Task::whereRaw("searchedTasks @@ plainto_tsquery('english', ?)", [$searchedTaskText])
+        $tasks = Task::whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
             ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])->get();
         error_log($tasks[0]);
         $tasksJson = $tasks->toJson();
