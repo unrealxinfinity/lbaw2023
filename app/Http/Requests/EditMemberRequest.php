@@ -26,10 +26,11 @@ class EditMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
+            //'username' => ['required', 'string', 'unique:users,username,' . $this->route()->id],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'email' => ['required', 'email']
+            'email' => ['required', 'email', 'unique:members,email,' . $this->route()->id],
         ];
     }
 }
