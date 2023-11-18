@@ -19,7 +19,7 @@ class ProjectPolicy
 
     public function show(User $user, Project $project): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_in_world = $type === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id);
@@ -29,7 +29,7 @@ class ProjectPolicy
 
     public function addMember(User $user, Project $project): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
@@ -39,7 +39,7 @@ class ProjectPolicy
 
     public function delete(User $user, Project $project): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
@@ -49,7 +49,7 @@ class ProjectPolicy
 
     public function create(User $user): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         return !$is_disabled;
         //return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');

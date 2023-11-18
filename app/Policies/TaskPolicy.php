@@ -17,7 +17,7 @@ class TaskPolicy
 
     public function edit(User $user, Task $task): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level === 'Project Leader';
@@ -32,7 +32,7 @@ class TaskPolicy
 
     public function assignMember(User $user, Task $task): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $project_permission = ($type === 'Member') ? $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level : 'None';

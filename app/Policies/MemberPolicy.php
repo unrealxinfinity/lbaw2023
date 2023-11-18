@@ -17,7 +17,7 @@ class MemberPolicy
 
     public function edit(User $user, Member $member): bool
     {
-        $type = $user->persistentUser->type;
+        $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_member = $member->user->id == $user->id;
