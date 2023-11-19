@@ -4,8 +4,9 @@
     </header>
     <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
     @include('partials.sidebar', ['thing'=>$world])
+    @include('partials.search-project', ['world' => $world])
     <ul>
-
+    
         <h2> Ongoing Projects: </h2>
         <div class="row">
         @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)

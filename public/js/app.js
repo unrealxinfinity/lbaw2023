@@ -54,14 +54,26 @@ function addEventListeners() {
     if(searchTaskButton != null)
       searchTaskButton.addEventListener('click', searchTaskRequest);  
 
-
+    let searchTaskForms = document.getElementsByClassName('search-task');
+    
+    if(searchTaskForms.length != 0)
+      searchTaskForms[0].addEventListener('submit', function (event) {
+        searchTaskRequest(event); 
+      });
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
       MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
     
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
-      closePopup.addEventListener('click', closeSearchedTaskPopup);
+      closePopup.addEventListener('click', closeSearchedPopup);
+
+    let searchProjectButton = document.getElementById('searchProjectButton');
+    if(searchProjectButton != null)
+      searchProjectButton.addEventListener('click', searchProjectRequest);
+    let searchProjectForms = document.getElementsByClassName('search-project');
+    if(searchProjectForms.length != 0)
+      searchProjectForms[0].addEventListener('submit', searchProjectRequest);
   }
   
   function encodeForAjax(data) {
@@ -232,14 +244,14 @@ function addEventListeners() {
 
 
   async function searchTaskRequest(event) {
-    event.preventDefault
+    event.preventDefault();
     const searchTaskForms = document.getElementsByClassName('search-task');
     const id = searchTaskForms[0].getAttribute('data-id');
     console.log(searchTaskForms);
     let searchTaskElems = searchTaskForms[0].children;
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    console.log(searchedTask)
+    console.log(searchedTask);
     const response = await fetch('/api/projects/'+ id +'/tasks?search=' + searchedTask)
       .then(response =>{
             if(response.ok){
@@ -290,6 +302,63 @@ function addEventListeners() {
     };
     popup.appendChild(newUl);
   }
+
+
+  async function searchProjectRequest(event) {
+    event.preventDefault();
+    const searchProjectForms = document.getElementsByClassName('search-project');
+    const id = searchProjectForms[0].getAttribute('data-id');
+    console.log(searchProjectForms);
+    let searchProjectElems = searchProjectForms[0].children;
+    let searchedProject = searchProjectElems[1].value;
+    const csrf = searchProjectElems[0].value;
+    console.log(searchedProject)
+    const response = await fetch('/api/worlds/'+ id +'/projects?search=' + searchedProject)
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          console.log(data);
+          searchProjectHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+      
+}
+
+function searchProjectHandler(json){
+  let popup = document.getElementsByClassName('popup-content')[0];
+  popup.innerHTML = "";
+  let newUl= document.createElement('ul');
+  let newSpan = document.createElement('span');
+  let newTitle = document.createElement('p');
+  let newDescription = document.createElement('p');
+  let newPicture = document.createElement('img'); 
+  let newStatus = document.createElement('p');
+  newSpan.setAttribute('class', 'ProjectList');
+  console.log(json);
+  let projects = JSON.parse(json.projects);
+  for (project of projects) {
+    console.log(project);
+    newTitle.setAttribute('href', '/projects/' + project.id);
+    newPicture.setAttribute('src', project.picture);
+    newTitle.textContent = project.title;
+    newDescription.textContent = project.description;
+    newStatus.textContent = project.status;
+    newSpan.appendChild(newPicture); 
+    newSpan.appendChild(newTitle);
+    newSpan.appendChild(newDescription); 
+    newSpan.appendChild(newStatus);  
+    
+    newUl.appendChild(newSpan);
+  };
+  popup.appendChild(newUl);
+}
+
 
   async function addTagRequest() {
 
@@ -491,7 +560,7 @@ function addTagHandler(json){
   addEventListeners();
   
   // Close the pop-up
-  function closeSearchedTaskPopup() {
+  function closeSearchedPopup() {
     document.getElementById('popupContainer').style.display = 'none';
  }
 

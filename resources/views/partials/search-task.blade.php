@@ -1,5 +1,5 @@
 <div class='row'>
-    <form class = "search-task" data-id="{{ $project->id }}">
+    <form class="search-task" data-id="{{ $project->id }}">
         @csrf
         <input type="text" id="taskName"name="taskName" placeholder="Task Name">
         <input type="hidden" name="project_id" value="{{ $project->id }}">
