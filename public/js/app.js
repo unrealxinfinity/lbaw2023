@@ -40,9 +40,28 @@ function addEventListeners() {
     if (worldMemberAdder != null)
       worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
 
+    let taskResults = document.getElementById('openPopupButton');
+    if(taskResults != null)
+      taskResults.addEventListener('click', function() {
+        if(document.getElementById('popupContainer').style.display == 'block'){
+          document.getElementById('popupContainer').style.display = 'none'
+        }
+        else{
+          document.getElementById('popupContainer').style.display = 'block';
+        }
+      });
+    let searchTaskButton = document.getElementById('searchTaskButton');
+    if(searchTaskButton != null)
+      searchTaskButton.addEventListener('click', searchTaskRequest);  
+
+
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
       MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
+    
+    let closePopup = document.getElementById('closePopUp');
+    if(closePopup != null)
+      closePopup.addEventListener('click', closeSearchedTaskPopup);
   }
   
   function encodeForAjax(data) {
@@ -209,6 +228,67 @@ function addEventListeners() {
 
   function taskAddedHandler() {
 
+  }
+
+
+  async function searchTaskRequest(event) {
+    event.preventDefault
+    const searchTaskForms = document.getElementsByClassName('search-task');
+    const id = searchTaskForms[0].getAttribute('data-id');
+    console.log(searchTaskForms);
+    let searchTaskElems = searchTaskForms[0].children;
+    let searchedTask = searchTaskElems[1].value;
+    const csrf = searchTaskElems[0].value;
+    console.log(searchedTask)
+    const response = await fetch('/api/projects/'+ id +'/tasks?search=' + searchedTask)
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          console.log(data);
+          searchTaskHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+      
+}
+
+  function searchTaskHandler(json){
+    let popup = document.getElementsByClassName('popup-content')[0];
+    popup.innerHTML = "";
+    let newUl= document.createElement('ul');
+    let newSpan = document.createElement('span');
+    let newTitle = document.createElement('p');
+    let newDescription = document.createElement('p');
+    let newDueAt = document.createElement('p');
+    let newEffort = document.createElement('p');
+    let newPriority = document.createElement('p'); 
+    let newStatus = document.createElement('p');
+    newSpan.setAttribute('class', 'TaskList');
+
+    let tasks = JSON.parse(json.tasks);
+    for (task of tasks) {
+      console.log(task);
+      newTitle.setAttribute('href', '/tasks/' + task.id);
+      newTitle.textContent = task.title;
+      newDescription.textContent = task.description;
+      newDueAt.textContent = task.due_at;
+      newEffort.textContent = task.effort; 
+      newPriority.textContent = task.priority;
+      newStatus.textContent = task.status; 
+      newSpan.appendChild(newTitle);
+      newSpan.appendChild(newDescription); 
+      newSpan.appendChild(newDueAt);
+      newSpan.appendChild(newStatus);  
+      newSpan.appendChild(newEffort);
+      newSpan.appendChild(newPriority);
+      newUl.appendChild(newSpan);
+    };
+    popup.appendChild(newUl);
   }
 
   async function addTagRequest() {
@@ -409,10 +489,11 @@ function addTagHandler(json){
   }
   
   addEventListeners();
-
-
   
-
+  // Close the pop-up
+  function closeSearchedTaskPopup() {
+    document.getElementById('popupContainer').style.display = 'none';
+ }
 
 
   
