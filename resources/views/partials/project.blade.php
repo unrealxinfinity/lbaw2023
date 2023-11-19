@@ -4,12 +4,12 @@
         <h1><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
     </header>
     @if (Auth::user()->can('delete', $project))
-        <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
-            @csrf
-            @method('DELETE')
-            <input type="submit" value="Delete Project">
-        </form>
-    @endif
+            <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
+                @csrf
+                @method('DELETE')
+                <input type="submit" value="Delete Project">
+            </form>
+        @endif
     @include('partials.search-task', ['project' => $project])
     <h3>This project belongs to: <a href="/worlds/{{ $project->world->id }}">{{ $project->world->name }}</a></h3>
     <h3>Tags:</h3>

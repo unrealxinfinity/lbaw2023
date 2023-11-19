@@ -56,6 +56,11 @@ body {
     padding-right: 10px;
   }
 
+  .row {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   .side-bar {
     display: inline-block;
     border-style: solid;
@@ -256,9 +261,6 @@ body {
     background-color: white;
   }
   @media (max-width: 70em) {
-    #cards {
-      grid-template-columns: repeat(2, 1fr);
-    }
     main > header {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -315,7 +317,6 @@ body {
   input[type=password]:focus {
     border-color: #9b4dca;
   }
-  
 
 .search-tasks {
   width: 30%;

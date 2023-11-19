@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
-
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
@@ -36,6 +36,11 @@ Route::get('/', function () {
 Route::view('/create-world', 'pages.world-create')->name('world-create');
 
 // Cards
+
+Route::controller(SearchController::class)->group(function() {
+    Route::get('/search', 'show')->name('search');
+});
+
 Route::controller(CardController::class)->group(function () {
     Route::get('/cards', 'list')->name('cards');
     Route::get('/cards/{id}', 'show');
@@ -47,6 +52,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/worlds', 'create')->name('create-world');
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');
+    Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');
 });
 
 Route::controller(ProjectController::class)->group(function () {
