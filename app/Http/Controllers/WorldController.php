@@ -68,7 +68,9 @@ class WorldController extends Controller
         ]);
     }
     public function searchProjects(SearchProjectRequest $request, string $id): JsonResponse
-    {
+    {   
+
+
         $world = World::findOrFail($id);
         
         $searchProject = $request->query('search');

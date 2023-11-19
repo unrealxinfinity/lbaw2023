@@ -14,7 +14,10 @@ class SearchProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {   
-        $world = World::find($this->route('id'));
+        
+        $worldid=  urldecode($this->route('id'));
+        error_log($worldid);
+        $world = World::find($worldid);
         return Auth::user()->can('searchProject',[$world]);
     }
 
