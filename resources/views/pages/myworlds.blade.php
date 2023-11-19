@@ -7,9 +7,7 @@
     <section id="myworlds">
         <p><a href="/">Home</a> > <a href="/members/{{Auth::User()->username}}">{{Auth::User()->username}}</a> > <a href="/myworlds">Worlds</a></p>
         <h1>My Worlds</h1>
-        <div>
-            @each('partials.myworlds', $worlds, 'world')
-        </div>
+        @each('partials.myworlds', $worlds, 'world')
     </section>
 @endsection
 
