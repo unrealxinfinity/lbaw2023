@@ -35,7 +35,7 @@
             <label type ="hidden" for="old_password-{{ $member->id }}"></label>
             <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
         @else
-            <label for="old_password-{{ $member->id }}">Old Passowrd</label>
+            <label for="old_password-{{ $member->id }}">Old Password</label>
             <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
         @endif
 

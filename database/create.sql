@@ -511,6 +511,77 @@ CREATE TRIGGER task_search_update
 DROP INDEX IF EXISTS task_search_idx CASCADE;
 CREATE INDEX task_search_idx ON tasks USING GIN (searchedTasks);
 
+ALTER TABLE members ADD COLUMN searchMembers TSVECTOR;
+
+DROP FUNCTION IF EXISTS member_search_update() CASCADE;
+CREATE FUNCTION member_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.searchMembers = (
+            setweight(to_tsvector('english', NEW.name), 'A') ||
+            setweight(to_tsvector('english', NEW.email), 'B') ||
+            setweight(to_tsvector('english', NEW.description), 'C')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.name <> OLD.name OR NEW.email <> OLD.email OR NEW.description <> OLD.description) THEN
+            NEW.searchMembers = (
+                setweight(to_tsvector('english', NEW.name), 'A') ||
+                setweight(to_tsvector('english', NEW.email), 'B') ||
+                setweight(to_tsvector('english', NEW.description), 'C')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS member_search_update ON members CASCADE;
+CREATE TRIGGER member_search_update
+  BEFORE INSERT OR UPDATE ON members
+  FOR EACH ROW
+  EXECUTE PROCEDURE member_search_update();
+
+DROP INDEX IF EXISTS member_search_idx CASCADE;
+CREATE INDEX member_search_idx ON members USING GIN (searchMembers);
+
+
+
+ALTER TABLE user_info ADD COLUMN searchUsername TSVECTOR;
+
+DROP FUNCTION IF EXISTS user_search_update() CASCADE;
+CREATE FUNCTION user_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.searchUsername = (
+            setweight(to_tsvector('english', NEW.username), 'A')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.username <> OLD.username) THEN
+            NEW.searchUsername = (
+                setweight(to_tsvector('english', NEW.username), 'A')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS user_search_update ON user_info CASCADE;
+CREATE TRIGGER user_search_update
+  BEFORE INSERT OR UPDATE ON user_info
+  FOR EACH ROW
+  EXECUTE PROCEDURE user_search_update();
+
+DROP INDEX IF EXISTS user_search_idx CASCADE;
+CREATE INDEX user_search_idx ON user_info USING GIN (searchUsername);
+
+
 -- Sample data for the 'users' table
 INSERT INTO users (type_) VALUES
     ('Member'),
