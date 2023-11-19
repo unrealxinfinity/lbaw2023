@@ -14,6 +14,7 @@
     @endif
     <h3> <a href = "/myworlds" >My Worlds</a></h3>
     <h3> <a href="/myprojects">My Projects</a></h3>
+    <h3> <a href="/mytasks">My Tasks</a></h3>
     @else
     <header class="row">
         <img src= {{$member->picture}} class="small">
