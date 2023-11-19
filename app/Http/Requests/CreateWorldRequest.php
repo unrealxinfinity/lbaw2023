@@ -24,8 +24,8 @@ class CreateWorldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['alpha_num:ascii'],
-            'description' => ['string'],
+            'name' => ['string', 'required', 'max:30'],
+            'description' => ['string', 'max:255'],
         ];
     }
 }

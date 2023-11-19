@@ -24,8 +24,8 @@ class CreateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['alpha_dash'],
-            'description' => ['string'],
+            'name' => ['string', 'required', 'max:30'],
+            'description' => ['string', 'max:255'],
             'world_id' => ['exists:App\Models\World,id']
         ];
     }
