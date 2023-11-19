@@ -5,7 +5,7 @@
     </header>
     <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
     @include('partials.sidebar', ['thing'=>$world])
-    @include('partials.search-project', ['world' => $world])
+    @include('form.search-project', ['world' => $world])
     <ul>
     
         <h2> Ongoing Projects: </h2>

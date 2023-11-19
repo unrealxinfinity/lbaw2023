@@ -11,6 +11,6 @@
         @include('partials.task-create', ['project' => $project])
     </section>
     <section id="create-tag">
-        @include('partials.tag-create',['project'=> $project])
+        @include('form.tag-create',['project'=> $project])
     </section>
 @endsection

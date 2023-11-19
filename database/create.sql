@@ -525,7 +525,7 @@ BEGIN
         );
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+        IF (NEW.name <> OLD.name OR NEW.description <> OLD.description) THEN
             NEW.searchedProjects = (
                 setweight(to_tsvector('english', NEW.name), 'A') ||
                 setweight(to_tsvector('english', NEW.description), 'B')
@@ -544,6 +544,49 @@ CREATE TRIGGER project_search_update
 
 DROP INDEX IF EXISTS project_search_idx CASCADE;
 CREATE INDEX project_search_idx ON projects USING GIN (searchedProjects);
+
+
+
+
+
+ALTER TABLE members ADD COLUMN searchMembers TSVECTOR;
+
+DROP FUNCTION IF EXISTS member_search_update() CASCADE;
+CREATE FUNCTION member_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.searchMembers = (
+            setweight(to_tsvector('english', NEW.name), 'A') ||
+            setweight(to_tsvector('english', NEW.email), 'B') ||
+            setweight(to_tsvector('english', NEW.description), 'C')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.name <> OLD.name OR NEW.email <> OLD.email OR NEW.description <> OLD.description) THEN
+            NEW.searchMembers = (
+                setweight(to_tsvector('english', NEW.name), 'A') ||
+                setweight(to_tsvector('english', NEW.email), 'B') ||
+                setweight(to_tsvector('english', NEW.description), 'C')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS member_search_update ON members CASCADE;
+CREATE TRIGGER member_search_update
+  BEFORE INSERT OR UPDATE ON members
+  FOR EACH ROW
+  EXECUTE PROCEDURE member_search_update();
+
+DROP INDEX IF EXISTS member_search_idx CASCADE;
+CREATE INDEX member_search_idx ON members USING GIN (searchMembers);
+
+
+
 
 
 -- Sample data for the 'users' table
