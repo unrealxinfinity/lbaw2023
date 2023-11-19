@@ -1,4 +1,7 @@
 <article class="project" data-id="{{ $project->id }}">
+    @if($main)
+        <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
+    @endif
     <header>
         <h2><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2>
     </header>

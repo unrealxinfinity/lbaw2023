@@ -1,4 +1,7 @@
 <article class="task" data-id = "{{ $task->id }}">
+    @if($main)
+        <p><a href="/">Home</a> > <a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a> > <a href="/projects/{{ $task->project->id }}"> {{ $task->project->name }}</a> > <a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></p>
+    @endif
     <header>
         <h2><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
     </header>
@@ -48,6 +51,7 @@
         </form>
         @endif
     </div>
+    <div>
         <h3>Assigned to</h3>
         <ul>
             @foreach($task->assigned()->orderBy('id')->get() as $member)
@@ -58,9 +62,12 @@
             @include('form.assignmember', ['task' => $task])
         @endif
     </div>
-    <h4> Comments: </h4>
-    <ul>
-        @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
-    </ul>
+    <section id="comments">
+        <h4> Comments: </h4>
+        <ul>
+            @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
+        </ul>
+        @include('form.comment', ['route' => 'task-comment', 'id' => $task->id])
+    </section>
     @endif
 </article>

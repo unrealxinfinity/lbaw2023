@@ -47,6 +47,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/worlds', 'create')->name('create-world');
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');
+    Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -75,6 +76,7 @@ Route::controller(TaskController::class)->group(function () {
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');
     Route::post('/tasks/{id}', 'edit')->name('edit-details');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
+    Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
 
 // API

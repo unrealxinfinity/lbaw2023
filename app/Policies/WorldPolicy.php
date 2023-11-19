@@ -33,4 +33,8 @@ class WorldPolicy
     {
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted' && World::where('id',$world->id)->first()->members->contains($user->persistentUser->member->id);
     }
+    public function comment(User $user, World $world): bool
+    {
+        return ($user->persistentUser->type_ === 'Member') && ($user->persistentUser->member->worlds->contains($world->id));
+    }
 }

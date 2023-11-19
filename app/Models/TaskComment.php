@@ -10,6 +10,14 @@ class TaskComment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'content',
+        'task_id',
+        'member_id'
+    ];
+
+    public $timestamps = false;
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);
