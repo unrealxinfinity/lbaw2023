@@ -9,5 +9,6 @@
           {{ $errors->first('text') }}
         </span>
     @endif
-    <input type="text" id="comment-text" name="text" placeholder="Comment">
+    <input type="text" id="comment-text" name="text" placeholder="Comment" required>
+    <input type="submit" value="Comment">
 </form>

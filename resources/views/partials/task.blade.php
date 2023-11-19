@@ -64,7 +64,7 @@
         <ul>
             @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
         </ul>
-        @include('form.comment', ['route' => 'task_comment', 'id' => $task->id])
+        @include('form.comment', ['route' => 'task-comment', 'id' => $task->id])
     </section>
     @endif
 </article>
