@@ -3,6 +3,8 @@
 @section('title', 'Administer members')
 
 @section('content')
+    <p><a href="/">Home</a> > <a href="/admin">Admin</a></p>
+    <h1>Manage members</h1>
     <form method="GET" action="/admin">
         <input type="text" name="search" placeholder="Search by email/username">
         <input type="submit" value="Search">

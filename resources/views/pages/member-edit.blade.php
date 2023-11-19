@@ -2,7 +2,6 @@
 @section('title', $member->persistentUser->user->username)
 
 @if (Auth::user()->id == $member->persistentUser->user->id || Auth::user()->persistentUser->type_=='Administrator')
-    
     @section('content')
         <section id="members">
             @include('partials.member-edit', ['member' => $member])

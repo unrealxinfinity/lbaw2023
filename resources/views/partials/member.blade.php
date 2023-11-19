@@ -1,5 +1,6 @@
 <article class="member" data-id="{{ $member->id }}">
     @if($main)
+    <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a></p>
     <header class="row">
         <img src= {{$member->picture}} class="big">
         <div class="column">
