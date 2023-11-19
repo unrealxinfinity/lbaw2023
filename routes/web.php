@@ -47,19 +47,19 @@ Route::controller(CardController::class)->group(function () {
 });
 
 Route::controller(WorldController::class)->group(function () {
-    Route::post('/api/worlds/{id}/{username}', 'addMember');
-    Route::get('/worlds/{id}', 'show')->name('worlds.show');
-    Route::post('/worlds', 'create')->name('create-world');
+    Route::post('/api/worlds/{id}/{username}', 'addMember');//
+    Route::get('/worlds/{id}', 'show')->name('worlds.show');//
+    Route::post('/worlds', 'create')->name('create-world');//
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');
-    Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');
+    Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
 });
 
 Route::controller(ProjectController::class)->group(function () {
-    Route::post('/api/projects/{id}/{username}', 'addMember');
-    Route::get('/projects/{id}', 'show')->name('projects.show');
-    Route::delete('/projects/{id}', 'delete')->name('delete-project');
-    Route::post('/projects', 'create')->name('create-project');
+    Route::post('/api/projects/{id}/{username}', 'addMember');//
+    Route::get('/projects/{id}', 'show')->name('projects.show');//
+    Route::delete('/projects/{id}', 'delete')->name('delete-project');//
+    Route::post('/projects', 'create')->name('create-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');
 });
 
@@ -68,18 +68,18 @@ Route::controller(TagController::class)->group(function () {
 });
 
 Route::controller(MemberController::class)->group(function () {
-    Route::get('members/{username}', 'show');
+    Route::get('members/{username}', 'show'); //
     Route::get('/myworlds', 'showMemberWorlds');
-    Route::put('/api/members/{id}', 'update')->name('update-member');
+    Route::put('/api/members/{id}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
 });
 
 Route::controller(TaskController::class)->group(function () {
-    Route::post('/tasks/create', 'create')->name('create-task');
-    Route::get('/tasks/{id}', 'show')->name('tasks.show');
+    Route::post('/tasks/create', 'create')->name('create-task');//
+    Route::get('/tasks/{id}', 'show')->name('tasks.show');//
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');
-    Route::post('/tasks/{id}', 'edit')->name('edit-details');
+    Route::post('/tasks/{id}', 'edit')->name('edit-details');//
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
@@ -99,16 +99,16 @@ Route::controller(ItemController::class)->group(function () {
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
-    Route::get('/login', 'showLoginForm')->name('login');
-    Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout');
+    Route::get('/login', 'showLoginForm')->name('login'); //
+    Route::post('/login', 'authenticate'); //
+    Route::get('/logout', 'logout')->name('logout');//
 });
 
 Route::controller(RegisterController::class)->group(function () {
-    Route::get('/register', 'showRegistrationForm')->name('register');
-    Route::post('/register', 'register');
+    Route::get('/register', 'showRegistrationForm')->name('register');//
+    Route::post('/register', 'register');//
 });
 
 Route::controller(DeleteController::class)->group(function () {
-   Route::delete('/members/{id}', 'delete')->name('delete-member');
+   Route::delete('/members/{id}', 'delete')->name('delete-member');//
 });
