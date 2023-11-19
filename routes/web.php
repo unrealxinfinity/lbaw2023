@@ -46,6 +46,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::get('/worlds/{id}', 'show')->name('worlds.show');
     Route::post('/worlds', 'create')->name('create-world');
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');
+    Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');
 });
 
 Route::controller(ProjectController::class)->group(function () {
