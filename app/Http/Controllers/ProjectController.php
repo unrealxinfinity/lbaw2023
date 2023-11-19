@@ -59,7 +59,7 @@ class ProjectController extends Controller
 
         try
         {
-            $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
+            $is_admin = $member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
             $type = $is_admin ? 'World Administrator' : $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);

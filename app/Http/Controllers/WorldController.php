@@ -38,7 +38,7 @@ class WorldController extends Controller
 
         $world = World::create([
            'name' => $fields['name'],
-           'description' => $fields['name'],
+           'description' => $fields['description'],
            'picture' => 'pic',
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
