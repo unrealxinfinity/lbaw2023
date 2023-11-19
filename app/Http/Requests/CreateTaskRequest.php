@@ -28,8 +28,8 @@ class CreateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['alpha_dash'],
-            'description' => ['string'],
+            'title' => ['string', 'required', 'max:30'],
+            'description' => ['string', 'max:255'],
             'status' => [Rule::in(['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'])],
             'due_at' => ['date'],
             'effort' => ['integer'],
