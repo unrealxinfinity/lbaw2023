@@ -10,7 +10,7 @@ body {
     width: 100%;
     max-height: 5.5em;
     display: grid;
-    grid-template-columns: 1em 1fr auto auto;
+    grid-template-columns: 1fr auto auto;
     align-items: center;
     background-color: #d2afe7;
     padding: 1em;
@@ -18,10 +18,14 @@ body {
     margin-bottom: 1em;
   }
 
+  main > header > h1 {
+    padding-left: 1em;
+  }
+
   main > header a.button, .search-tasks .button {
     margin: 1em;
     margin-top: 0;
-    justify-self: center;
+    justify-self: right;
   }
 
   footer {
