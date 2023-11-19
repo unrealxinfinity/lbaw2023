@@ -10,6 +10,14 @@ class WorldComment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'content',
+        'world_id',
+        'member_id'
+    ];
+
+    public $timestamps = false;
+
     public function world(): BelongsTo
     {
         return $this->belongsTo(World::class);

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorldCommentRequest;
 use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
+use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -62,5 +64,18 @@ class WorldController extends Controller
             'is_admin' => $fields['type'],
             'description' => $member->description
         ]);
+    }
+
+    public function comment(WorldCommentRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        WorldComment::create([
+            'content' => $fields['text'],
+            'world_id' => $id,
+            'member_id' => $fields['member']
+        ]);
+
+        return redirect()->route('worlds.show', ['id' => $id, '#comments'])->withSuccess('Comment added.');
     }
 }
