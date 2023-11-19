@@ -25,7 +25,7 @@ class CreateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tagName' => ['string'],
+            'tagName' => ['string', 'required', 'max:30'],
             'project_id' => ['exists:App\Models\Project,id'],
         ];
     }
