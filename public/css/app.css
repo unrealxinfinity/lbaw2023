@@ -356,10 +356,12 @@ body {
   height: 30px;
   background-color: #d2afe7;
   position: fixed;
-  top: 20px;
+  top: 30px;
   left: 20px;
   cursor: pointer;
   z-index: 2;
+  border-top: 3px solid #fff;
+  border-bottom: 3px solid #fff;
 }
 
 .label-toggle:before {
