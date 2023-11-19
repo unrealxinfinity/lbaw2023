@@ -133,7 +133,8 @@ function addEventListeners() {
 
   function addMemberHandler(json) {
     const ul = document.querySelector('ul.members');
-    const error = ul.querySelector('span.error');
+    const form = document.querySelector('form.add-member');
+    const error = form.querySelector('span.error');
     if (error !== null)
     {
       error.remove();
@@ -143,11 +144,11 @@ function addEventListeners() {
     {
       const span = document.createElement('span');
       span.classList.add('error');
-      const members =  [... ul.querySelectorAll('article.member h2 a')].map(x => x.textContent);
+      const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
       const index = members.find(x => x === json.username);
       if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this project\'s world.';
       else span.textContent = json.username + ' is already a member of this project';
-      ul.appendChild(span);
+      form.appendChild(span);
       return;
     }
 
@@ -157,20 +158,20 @@ function addEventListeners() {
     member.setAttribute('data-id', json.id);
 
     const header = document.createElement('header');
-    const h2 = document.createElement('h2');
-    const h3 = document.createElement('h3');
+    header.classList.add('row');
+    const img = document.createElement('img');
+    img.classList.add('small');
+    const h4 = document.createElement('h4');
     const a = document.createElement('a');
-    a.href = '/members' + json.id;
+    a.href = '/members/' + json.username;
     a.textContent = json.username;
-    h3.textContent = json.email;
+    img.src = json.picture;
     
-    h2.appendChild(a);
-    header.appendChild(h2);
-    header.appendChild(h3);
+    h4.appendChild(a);
+    header.appendChild(img);
+    header.appendChild(h4);
 
     member.appendChild(header);
-    const text = document.createTextNode(json.description);
-    member.appendChild(text);
 
     ul.appendChild(member);
   }

@@ -40,7 +40,7 @@ class WorldController extends Controller
 
         $world = World::create([
            'name' => $fields['name'],
-           'description' => $fields['name'],
+           'description' => $fields['description'],
            'picture' => 'pic',
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
@@ -60,11 +60,10 @@ class WorldController extends Controller
         $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
 
         return response()->json([
+            'error' => false,
             'id' => $member->id,
             'username' => $username,
-            'email' => $member->email,
-            'is_admin' => $fields['type'],
-            'description' => $member->description
+            'picture' => $member->picture
         ]);
     }
     public function searchProjects(SearchProjectRequest $request, string $id): JsonResponse

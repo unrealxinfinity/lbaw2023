@@ -22,6 +22,19 @@
     <body>
         <main>
             <header>
+                <input type="checkbox" id="menu-toggle">
+                <label for="menu-toggle" class="label-toggle"></label>
+                <ul class="menu">
+                    <li><a href="/">Home Page</a></li>
+                    <li><a href="#">All Worlds</a></li>
+                    @if (Auth::check())
+                        <li><a href="/myworlds">My Worlds</a></li>
+                        <li><a href="/myprojects">My Projects</a></li>
+                        <li><a href="/mytasks">My Tasks</a></li>
+                        <li><a href="/members/{{Auth::User()->username}}">Profile</a></li>
+                        <li><a href="/create-world">Create World</a></li>
+                    @endif
+                </ul>
                 <h1><a href="{{ url('') }}">MineMax!</a></h1>
                 @if (Auth::check())
                     <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
@@ -34,12 +47,12 @@
                 @yield('content')
                 
             </section>
-            <section class="footer">
+            <footer>
                 <div> @ 2023 MineMax, Inc. </div>
                 <div> About </div>
                 <div> | </div>
                 <div> Contact Us </div>  
-            </section>
+            </footer>
         </main>
     </body>
 </html>

@@ -59,7 +59,7 @@ class ProjectController extends Controller
 
         try
         {
-            $is_admin = $member->worlds->where('id', $project->world_id)[0]->pivot->is_admin;
+            $is_admin = $member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
             $type = $is_admin ? 'World Administrator' : $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
@@ -68,8 +68,7 @@ class ProjectController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
-                'email' => $member->email,
-                'description' => $member->description
+                'picture' => $member->picture
             ]);
         } catch (\Exception $e)
         {
@@ -82,7 +81,7 @@ class ProjectController extends Controller
    
     public function delete(DeleteProjectRequest $request, string $id): View
     {
-        $fields = $request->validated();
+        $request->validated();
 
         $project = Project::findOrFail($id);
         $world_id = $project->world;

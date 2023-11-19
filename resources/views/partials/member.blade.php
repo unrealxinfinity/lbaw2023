@@ -10,8 +10,11 @@
     </header>
     <h4>{{ $member->description }}</h4>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
-        <a href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
+        <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
     @endif
+    <h3> <a href = "/myworlds" >My Worlds</a></h3>
+    <h3> <a href="/myprojects">My Projects</a></h3>
+    <h3> <a href="/mytasks">My Tasks</a></h3>
     @else
     <header class="row">
         <img src= {{$member->picture}} class="small">
