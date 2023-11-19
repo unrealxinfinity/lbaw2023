@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignMemberRequest;
 use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\TaskCommentRequest;
 use App\Models\Task;
+use App\Models\TaskComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -100,5 +102,18 @@ class TaskController extends Controller
             'task' => $task,
             'main' => true
         ]);
+    }
+
+    public function comment(TaskCommentRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        TaskComment::create([
+            'content' => $fields['text'],
+            'task_id' => $id,
+            'member_id' => $fields['member']
+        ]);
+
+        return redirect()->route('tasks.show', ['id' => $id, '#comments'])->withSuccess('Comment added.');
     }
 }
