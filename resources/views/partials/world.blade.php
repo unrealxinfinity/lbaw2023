@@ -4,7 +4,6 @@
         <h1><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
     </header>
     <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
-    @include('partials.search-project', ['world' => $world])
     <section id="projects">
         <h2> Ongoing Projects: </h2>
         <ul class="row">

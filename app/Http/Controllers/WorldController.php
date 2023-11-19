@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WorldCommentRequest;
 use App\Models\World;
 use App\Models\User;
-use App\Models\Project;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
-use App\Http\Requests\SearchProjectRequest;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -66,22 +64,7 @@ class WorldController extends Controller
             'picture' => $member->picture
         ]);
     }
-    public function searchProjects(SearchProjectRequest $request, string $id): JsonResponse
-    {
-        $world = World::findOrFail($id);
-        
-        $searchProject = $request->query('search');
-        $searchProject = str_replace(['&', '&lt;', '&gt;', '<', '>'], ['','','', '', ''], $searchProject);
-        
-        $projects = Project::select('id', 'name', 'description', 'status', 'picture')
-            ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND id = ?", [$searchProject, $id])
-            ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchProject])
-            ->get();
-        $projectsJson = $projects->toJson();
-        return response()->json([
-            'projects' => $projectsJson,
-        ]);
-    }
+
     public function comment(WorldCommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
