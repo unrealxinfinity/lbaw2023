@@ -96,9 +96,10 @@ class ProjectController extends Controller
 
     public function searchTask(SearchTaskRequest $request , string $id): JsonResponse
     {   
+        $request->validated();
         $searchedTaskText = strval($request->query('search'));
         $searchedTaskText = str_replace(['&', '&lt;', '&gt;', '<', '>'], ['','','', '', ''], $searchedTaskText);        
-        $tasks = Task::select('title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
+        $tasks = Task::select('id','title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
             ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])
             ->get();
         $tasksJson = $tasks->toJson();

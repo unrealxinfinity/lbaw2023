@@ -491,7 +491,7 @@ BEGIN
     END IF;
     IF TG_OP = 'UPDATE' THEN
         IF (NEW.title <> OLD.title OR NEW.description <> OLD.description) THEN
-            NEW.tsvectors = (
+            NEW.searchedTasks = (
                 setweight(to_tsvector('english', NEW.title), 'A') ||
                 setweight(to_tsvector('english', NEW.description), 'B')
             );
@@ -510,6 +510,41 @@ CREATE TRIGGER task_search_update
 
 DROP INDEX IF EXISTS task_search_idx CASCADE;
 CREATE INDEX task_search_idx ON tasks USING GIN (searchedTasks);
+
+
+ALTER TABLE projects ADD COLUMN searchedProjects TSVECTOR;
+
+DROP FUNCTION IF EXISTS project_search_update() CASCADE;
+CREATE FUNCTION project_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.searchedProjects = (
+            setweight(to_tsvector('english', NEW.name), 'A') ||
+            setweight(to_tsvector('english', NEW.description),'B')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+            NEW.searchedProjects = (
+                setweight(to_tsvector('english', NEW.name), 'A') ||
+                setweight(to_tsvector('english', NEW.description), 'B')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+DROP TRIGGER IF EXISTS project_search_update ON projects CASCADE;
+CREATE TRIGGER project_search_update
+  BEFORE INSERT OR UPDATE ON projects
+  FOR EACH ROW
+  EXECUTE PROCEDURE project_search_update();
+
+DROP INDEX IF EXISTS project_search_idx CASCADE;
+CREATE INDEX project_search_idx ON projects USING GIN (searchedProjects);
+
 
 -- Sample data for the 'users' table
 INSERT INTO users (type_) VALUES
