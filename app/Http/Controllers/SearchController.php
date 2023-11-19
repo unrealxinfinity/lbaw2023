@@ -31,13 +31,11 @@ class SearchController extends Controller
             ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        $members = Member::select('members.id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
-        ->join('user_info', 'members.id', '=', 'user_info.id')
-        ->where(function ($memberQuery) use ($searchedText){
-            $admins = PersistentUser::select('id')->where('type_', '=','Administrator')->get();
-            $memberQuery->whereNotIn('members.id',$admins)->whereRaw('searchMembers @@ plainto_tsquery(\'english\', ?) OR searchUsername @@ plainto_tsquery(\'english\', ?)', [$searchedText,$searchedText]);
-        })
-        ->orderByRaw('ts_rank(searchMembers, plainto_tsquery(\'english\', ?)), ts_rank(searchUsername, plainto_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])->get();
+        $members = Member::select('members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
+        ->join('user_info', 'members.user_id', '=', 'user_info.id')
+        ->whereRaw('searchMembers @@ plainto_tsquery(\'english\', ?) OR searchUsername @@ plainto_tsquery(\'english\', ?)', [$searchedText,$searchedText])
+        ->orderByRaw('ts_rank(searchMembers, plainto_tsquery(\'english\', ?)), ts_rank(searchUsername, plainto_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
+        ->get();
         $worlds = $member->worlds()->select('picture','name', 'description')
             ->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$searchedText])
