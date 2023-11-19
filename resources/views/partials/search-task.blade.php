@@ -1,12 +1,13 @@
 <article class="search-tasks">
-    <div class='row'>
         <form class = "search-task" data-id="{{ $project->id }}">
+            <div class='row'>
             @csrf
             <input type="text" id="taskName"name="taskName" placeholder="Task Name">
             <input type="hidden" name="project_id" value="{{ $project->id }}">
             <input class="button" type="button" id="searchTaskButton" value='Search'>
-        </form>
-    </div>
+        </div>
+    </form>
+    
 
     <button id="openPopupButton">Open Results</button>
     <div id="popupContainer" class="popup">
