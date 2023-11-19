@@ -52,6 +52,13 @@ class MemberController extends Controller
         return view('pages.myprojects', ['projects' => $projects]);
     }
 
+    public function showMemberTasks(): View
+    {
+        $id = Auth::user()->persistentUser->member->id;
+        $tasks = Member::findOrFail($id)->tasks;
+        return view('pages.mytasks', ['tasks' => $tasks]);
+    }
+
     public function update(EditMemberRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
