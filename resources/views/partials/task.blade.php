@@ -48,6 +48,7 @@
         </form>
         @endif
     </div>
+    <div>
         <h3>Assigned to</h3>
         <ul>
             @foreach($task->assigned()->orderBy('id')->get() as $member)
@@ -58,9 +59,12 @@
             @include('form.assignmember', ['task' => $task])
         @endif
     </div>
-    <h4> Comments: </h4>
-    <ul>
-        @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
-    </ul>
+    <section id="comments">
+        <h4> Comments: </h4>
+        <ul>
+            @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
+        </ul>
+        @include('form.comment', ['route' => 'task_comment', 'id' => $task->id])
+    </section>
     @endif
 </article>
