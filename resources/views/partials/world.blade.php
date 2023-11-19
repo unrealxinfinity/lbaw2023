@@ -1,4 +1,5 @@
 <article class="world" data-id="{{ $world->id }}">
+    <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a></p>
     <header>
         <h2><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h2>
     </header>

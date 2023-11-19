@@ -4,7 +4,7 @@
 
 @section('content')
 <article class = "world">
-
+    <p><a href="/">Home</a> > <a href="/create-world">New World</a></p>
     <form action="{{ route('create-world') }}" id="new-world" method="POST">Create a New World!!
         @csrf
         @method('POST')
