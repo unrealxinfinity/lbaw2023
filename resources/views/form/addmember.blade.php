@@ -1,4 +1,4 @@
-<form id="add-member">
+<form id="add-member" class="add-member">
      @csrf
     <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     <input type="text" class="username" name="username" placeholder="Username">

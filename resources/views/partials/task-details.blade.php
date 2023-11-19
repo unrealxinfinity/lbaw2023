@@ -42,7 +42,7 @@
     @endif
         </div>
     <h3>Assigned to</h3>
-    <ul>
+    <ul class="members">
         @foreach($task->assigned()->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
         @endforeach

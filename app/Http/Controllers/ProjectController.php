@@ -68,8 +68,7 @@ class ProjectController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
-                'email' => $member->email,
-                'description' => $member->description
+                'picture' => $member->picture
             ]);
         } catch (\Exception $e)
         {
@@ -82,7 +81,7 @@ class ProjectController extends Controller
    
     public function delete(DeleteProjectRequest $request, string $id): View
     {
-        $fields = $request->validated();
+        $request->validated();
 
         $project = Project::findOrFail($id);
         $world_id = $project->world;

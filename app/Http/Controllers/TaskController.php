@@ -82,10 +82,10 @@ class TaskController extends Controller
         $member->tasks()->attach($task_id);
         
         return response()->json([
+            'error' => false,
             'id' => $member->id,
             'username' => $username,
-            'email' => $member->email,
-            'description' => $member->description
+            'picture' => $member->picture
         ]);
     }
 

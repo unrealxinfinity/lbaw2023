@@ -58,11 +58,10 @@ class WorldController extends Controller
         $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
 
         return response()->json([
+            'error' => false,
             'id' => $member->id,
             'username' => $username,
-            'email' => $member->email,
-            'is_admin' => $fields['type'],
-            'description' => $member->description
+            'picture' => $member->picture
         ]);
     }
 

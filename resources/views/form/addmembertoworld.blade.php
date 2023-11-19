@@ -1,4 +1,4 @@
-<form id="add-member-to-world">
+<form id="add-member-to-world" class="add-member">
     @csrf
     <input type="hidden" class="id" name="id" value="{{ $world->id }}">
     <input type="text" class="username" name="username" placeholder="Username">
