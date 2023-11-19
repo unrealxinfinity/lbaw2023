@@ -45,6 +45,13 @@ class MemberController extends Controller
         return view('pages.myworlds', ['worlds' => $worlds]);
     }
 
+    public function showMemberProjects(): View
+    {
+        $id = Auth::user()->persistentUser->member->id;
+        $projects = Member::findOrFail($id)->projects;
+        return view('pages.myprojects', ['projects' => $projects]);
+    }
+
     public function update(EditMemberRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
