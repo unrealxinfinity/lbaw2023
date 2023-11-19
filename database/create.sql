@@ -587,6 +587,37 @@ CREATE INDEX member_search_idx ON members USING GIN (searchMembers);
 
 
 
+ALTER TABLE user_info ADD COLUMN searchUsername TSVECTOR;
+
+DROP FUNCTION IF EXISTS user_search_update() CASCADE;
+CREATE FUNCTION user_search_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.searchUsername = (
+            setweight(to_tsvector('english', NEW.username), 'A')
+        );
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF (NEW.username <> OLD.username) THEN
+            NEW.searchUsername = (
+                setweight(to_tsvector('english', NEW.username), 'A')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS user_search_update ON user_info CASCADE;
+CREATE TRIGGER user_search_update
+  BEFORE INSERT OR UPDATE ON user_info
+  FOR EACH ROW
+  EXECUTE PROCEDURE user_search_update();
+
+DROP INDEX IF EXISTS user_search_idx CASCADE;
+CREATE INDEX user_search_idx ON user_info USING GIN (searchUsername);
 
 
 -- Sample data for the 'users' table

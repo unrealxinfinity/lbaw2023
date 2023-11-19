@@ -14,7 +14,7 @@ class SearchRequest extends FormRequest
     public function authorize(): bool
     {   
         
-        return Auth::user()->can('showSearchResults',Member::class);
+        return Auth::user()->can('showSearchResults',Member::find(Auth::user()->user_id));
     }
 
     /**

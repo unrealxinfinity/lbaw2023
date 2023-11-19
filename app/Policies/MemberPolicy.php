@@ -34,4 +34,11 @@ class MemberPolicy
     {
         return $user->persistentUser->type_ === 'Administrator';
     }
+    public function showSearchResults(User $user,Member $member): bool
+    {   
+        $type = $user->persistentUser->type_; 
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $member->user->id == $user->id;
+        return (!$is_disabled && $is_member ) ;
+    }
 }

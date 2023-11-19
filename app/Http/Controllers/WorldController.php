@@ -69,12 +69,10 @@ class WorldController extends Controller
     }
     public function searchProjects(SearchProjectRequest $request, string $id): JsonResponse
     {   
-
-
+        $request->validated();
         $world = World::findOrFail($id);
-        
         $searchProject = $request->query('search');
-        $searchProject = str_replace(['&', '&lt;', '&gt;', '<', '>'], ['','','', '', ''], $searchProject);
+        $searchProject = strip_tags($searchProject);
         
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND id = ?", [$searchProject, $id])

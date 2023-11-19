@@ -14,9 +14,5 @@ class SearchPolicy
     {
         //
     }
-
-    public function showSearchResults(User $user,Member $member): bool
-    {
-        return true;
-    }
+   
 }
