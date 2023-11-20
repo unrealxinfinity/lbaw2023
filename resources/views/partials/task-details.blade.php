@@ -1,7 +1,7 @@
 <article class="task-details">
     <form class = "edit-details" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
         @csrf
-        @method('POST')
+        @method('PUT')
         <input type="hidden" class="title" name="title" value="{{ $task->title }}">
         <input type="hidden" class="description" name="description" value="{{ $task->description }}">
         <div id="Due At">
