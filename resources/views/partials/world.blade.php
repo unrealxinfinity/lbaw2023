@@ -25,7 +25,7 @@
             @endforeach
         </ul>
     </section>
-    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
+    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id) && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
     @include('form.addmembertoworld', ['world' => $world])
     @endif
     <section id="comments">
