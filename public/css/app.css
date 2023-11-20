@@ -20,6 +20,11 @@ body {
     margin-left: 1em;
   }
 
+  main > header > .main-search {
+    margin-top: 0.7em;
+    width: 40%;
+  }
+
   section {
     margin-left: 0.5em;
   }
@@ -32,9 +37,13 @@ body {
     margin-bottom: 3em;
   }
 
-  main > header a.button, .search-tasks .button {
+  main > header a.button {
     margin: 1em;
-    justify-self: right;
+  }
+
+  .search-tasks .button, .main-search .button, .search-project .button {
+    margin: 1em;
+    margin-top: 0;
   }
 
   footer {
@@ -182,64 +191,6 @@ body {
     padding-bottom: 0;
   }
 
-  #cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  #cards article.card {
-    display: flex;
-    flex-direction: column;
-    background-color: #d3edc3;
-    padding: 1em;
-    margin: 1em;
-  }
-  #cards article.card header {
-    display: flex;
-    align-items: center;
-  }
-  #cards article.card header h2 {
-    flex-grow: 1;
-  }
-  #cards article.card header a.delete {
-    display: none;
-    font-size: 2.6rem;
-    margin-top: .5rem;
-    margin-bottom: 2.5rem;
-    line-height: 1.25;
-  }
-  #cards article.card header:hover a.delete {
-    display: inline;
-  }
-  #cards article.card li {
-    list-style-type: none;
-  }
-  #cards article.card li label {
-    display: flex;
-    align-items: baseline;
-  }
-  #cards article.card li label span {
-    margin-left: .5em;
-    flex-grow: 1;
-  }
-  #cards article.card li label a {
-    display: none;
-  }
-  #cards article.card li label:hover a {
-    display: inline;
-  }
-  #cards article.card input:checked + span {
-    text-decoration: var(--primary-color) solid line-through;
-  }
-  #cards article.card ul {
-    margin: 0;
-  }
-  #cards article.card form {
-    margin: 0;
-  }
-  #cards article.card input[type=text] {
-    background-color: white;
-    margin: 0;
-  }
   #content label {
     font-weight: normal;
   }
@@ -269,11 +220,6 @@ body {
       grid-row-end: span 2;
     }
   }
-  @media (max-width: 40em) {
-    #cards {
-      grid-template-columns: 1fr;
-    }
-  }
   @media (max-width: 25em) {
     body {
       margin: 0;
@@ -288,10 +234,6 @@ body {
     #content form {
       margin: 0;
       max-width: 25em;
-    }
-    article.card {
-      margin: 0;
-      border-bottom: 1px solid rgba(96, 108, 118, 0.4);
     }
   }
   /**
@@ -318,12 +260,20 @@ body {
     border-color: #9b4dca;
   }
 
+.search-project{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+
 .search-tasks {
   width: 30%;
 }
 
-.search-tasks .button {
-  margin-top: 0;
+.search-project {
+  width: 60%;
 }
 
 .popup {

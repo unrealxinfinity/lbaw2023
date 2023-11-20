@@ -14,7 +14,6 @@
     @endphp
     
     @if ($member)
-        @include('form.main-search',['member'=>$member])
         <section id="homepage">
             @include('partials.homepage', ['member' => $member, 'tasks' => $member->tasks()->orderBy('id')->get(), 'projects' => $member->projects()->where('status', '=', 'Active')->orderBy('id')->get(), 'worlds' => $member->worlds()->orderBy('id')->get()])
         </section>

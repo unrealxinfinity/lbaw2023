@@ -36,14 +36,15 @@
                     @endif
                 </ul>
                 <h1><a href="{{ url('') }}">MineMax!</a></h1>
-                <ul>
                 @if (Auth::check())
+                @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
+                <ul> 
                     <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                 @else
                     <a class="button" href="{{ url('/login') }}"> Login </a>
-                @endif
                 </ul>
+                @endif
             </header>
             <section id="content">
                 @yield('content')
