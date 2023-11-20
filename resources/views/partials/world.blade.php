@@ -3,7 +3,9 @@
     <header>
         <h1><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
     </header>
-    <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
+    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
+        <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
+    @endif  
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
     <section id="projects">
         <h2> Ongoing Projects: </h2>
