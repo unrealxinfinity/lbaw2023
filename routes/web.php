@@ -64,7 +64,7 @@ Route::controller(ProjectController::class)->group(function () {
 });
 
 Route::controller(TagController::class)->group(function () {
-    Route::post('/api/projects/{project_id}/tags', 'createProjectTag')->name('create-project-tag');
+    Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
 });
 
 Route::controller(MemberController::class)->group(function () {
