@@ -52,9 +52,12 @@ function addEventListeners() {
       });
     let searchTaskButton = document.getElementById('searchTaskButton');
     if(searchTaskButton != null)
-      searchTaskButton.addEventListener('click', searchTaskRequest);  
+      searchTaskButton.addEventListener('click', searchTaskRequest);
 
-
+    let searchProjectButton = document.getElementById('searchProjectButton');
+    if(searchProjectButton != null)
+      searchProjectButton.addEventListener('click', searchProjectRequest);
+    
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
       MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
@@ -62,6 +65,7 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
+    
   }
   
   function encodeForAjax(data) {
@@ -289,6 +293,61 @@ function addEventListeners() {
     };
     popup.appendChild(newUl);
   }
+
+  async function searchProjectRequest(event) {
+    event.preventDefault();
+    const searchProjectForms = document.getElementsByClassName('search-project');
+    const id = searchProjectForms[0].getAttribute('data-id');
+    console.log(searchProjectForms[0]);
+    let searchProjectElems = searchProjectForms[0];
+    let searchedProject = searchProjectElems[1].value;
+    const csrf = searchProjectElems[0].value;
+    console.log(searchedProject)
+    const response = await fetch('/api/worlds/'+ id +'/projects?search=' + searchedProject)
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          console.log(data);
+          searchProjectHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+      
+}
+
+function searchProjectHandler(json){
+  let popup = document.getElementsByClassName('popup-content')[0];
+  popup.innerHTML = "";
+  let newUl= document.createElement('ul');
+  let newSpan = document.createElement('span');
+  let newTitle = document.createElement('p');
+  let newDescription = document.createElement('p');
+  let newPicture = document.createElement('img'); 
+  let newStatus = document.createElement('p');
+  newSpan.setAttribute('class', 'ProjectList');
+  console.log(json);
+  let projects = JSON.parse(json.projects);
+  for (project of projects) {
+    console.log(project);
+    newTitle.setAttribute('href', '/projects/' + project.id);
+    newPicture.setAttribute('src', project.picture);
+    newTitle.textContent = project.title;
+    newDescription.textContent = project.description;
+    newStatus.textContent = project.status;
+    newSpan.appendChild(newPicture); 
+    newSpan.appendChild(newTitle);
+    newSpan.appendChild(newDescription); 
+    newSpan.appendChild(newStatus);  
+    
+    newUl.appendChild(newSpan);
+  };
+  popup.appendChild(newUl);
+}
 
   async function addTagRequest() {
 
