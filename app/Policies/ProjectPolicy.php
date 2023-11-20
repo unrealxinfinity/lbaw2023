@@ -50,7 +50,6 @@ class ProjectPolicy
     public function create(User $user): bool
     {
         $request = request()->input();
-        error_log($request['world_id']);
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $world = World::find($request['world_id']);
