@@ -6,8 +6,6 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Member;
-
 class EditMemberRequest extends FormRequest
 {
     /**

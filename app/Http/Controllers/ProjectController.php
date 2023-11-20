@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
@@ -10,14 +9,9 @@ use App\Models\Member;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Gate;
 
 
 class ProjectController extends Controller

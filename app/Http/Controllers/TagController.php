@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\Project;
 use App\Http\Requests\CreateTagRequest;
