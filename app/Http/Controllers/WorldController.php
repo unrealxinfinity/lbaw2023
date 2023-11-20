@@ -57,14 +57,22 @@ class WorldController extends Controller
         $world = World::findOrFail($world_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
 
-        $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
+        try {
+            $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
 
-        return response()->json([
-            'error' => false,
-            'id' => $member->id,
-            'username' => $username,
-            'picture' => $member->picture
-        ]);
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $username,
+                'picture' => $member->picture
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'username' => $username,
+                'child' => 'world'
+            ]);
+        }
     }
     public function comment(WorldCommentRequest $request, string $id): RedirectResponse
     {

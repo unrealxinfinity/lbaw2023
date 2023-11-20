@@ -52,7 +52,7 @@ class TaskController extends Controller
             'title' => ['string'],
             'description' => ['string'],
             'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
-            'due_at' => ['date'],
+            'due_at' => ['date', 'after:today'],
             'effort' => ['integer'],
             'priority' => ['string'],
         ]);
@@ -81,14 +81,23 @@ class TaskController extends Controller
 
         $this->authorize('assignMember', $task);
 
-        $member->tasks()->attach($task_id);
-        
-        return response()->json([
-            'error' => false,
-            'id' => $member->id,
-            'username' => $username,
-            'picture' => $member->picture
-        ]);
+        try {
+            $member->tasks()->attach($task_id);
+
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $username,
+                'picture' => $member->picture
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'username' => $username,
+                'parent' => 'project',
+                'child' => 'task'
+            ]);
+        }
     }
 
     public function complete(string $id): View

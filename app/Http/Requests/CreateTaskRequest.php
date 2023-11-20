@@ -31,7 +31,7 @@ class CreateTaskRequest extends FormRequest
             'title' => ['string', 'required', 'max:30'],
             'description' => ['string', 'max:255'],
             'status' => [Rule::in(['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'])],
-            'due_at' => ['date'],
+            'due_at' => ['date', 'after:today'],
             'effort' => ['integer'],
             'priority' => ['string'],
             'project_id' => ['exists:App\Models\Project,id']

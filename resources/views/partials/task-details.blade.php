@@ -2,17 +2,33 @@
     <form class = "edit-details" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
         @csrf
         @method('PUT')
+
         <input type="hidden" class="title" name="title" value="{{ $task->title }}">
         <input type="hidden" class="description" name="description" value="{{ $task->description }}">
         <div id="Due At">
+            @if ($errors->has('due_at'))
+                <span class="error">
+                    {{ $errors->first('due_at') }}
+                </span>
+            @endif
             <p>Due At</p>
             <input type="date" class="due_at" name="due_at" value={{$task->due_at}}>
         </div>
         <div id="Priority">
+            @if ($errors->has('priority'))
+                <span class="error">
+                    {{ $errors->first('priority') }}
+                </span>
+            @endif
             <p>Priority</p>
             <input type="text" class="priority" name="priority" value="{{$task->priority}}">
         </div>
         <div id="Effort">
+            @if ($errors->has('effort'))
+                <span class="error">
+                    {{ $errors->first('effort') }}
+                </span>
+            @endif
             <p>Effort</p>
             <input type="number" class="effort" name="effort" value="{{$task->effort}}">
         </div>
