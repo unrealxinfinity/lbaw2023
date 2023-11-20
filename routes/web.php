@@ -64,7 +64,7 @@ Route::controller(ProjectController::class)->group(function () {
 });
 
 Route::controller(TagController::class)->group(function () {
-    Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
+    Route::post('/api/projects/{project_id}/tags', 'createProjectTag')->name('create-project-tag');
 });
 
 Route::controller(MemberController::class)->group(function () {
@@ -78,7 +78,7 @@ Route::controller(MemberController::class)->group(function () {
 });
 
 Route::controller(TaskController::class)->group(function () {
-    Route::post('/tasks/create', 'create')->name('create-task');//
+    Route::post('/tasks', 'create')->name('create-task');//
     Route::get('/tasks/{id}', 'show')->name('tasks.show');//
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');//
     Route::post('/tasks/{id}', 'edit')->name('edit-details');//

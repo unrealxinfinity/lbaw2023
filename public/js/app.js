@@ -363,8 +363,8 @@ function searchProjectHandler(json){
     let tagName = tagElemName.replace(/\s/g, '');
     const csrf = tagElem[0].value;
     console.log(tagName)
-    console.log('/api/projects/' + id + '/' +'tags/create');
-    const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
+    console.log('/api/projects/' + id + '/' +'tags');
+    const response = await fetch('/api/projects/' + id + '/' +'tags', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': csrf,
