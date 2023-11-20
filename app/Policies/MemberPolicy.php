@@ -36,9 +36,10 @@ class MemberPolicy
     }
     public function showSearchResults(User $user,Member $member): bool
     {   
+        
         $type = $user->persistentUser->type_; 
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_member = $member->user->id == $user->id;
+        $is_member = $member->user_id == $user->id;
         return (!$is_disabled && $is_member ) ;
     }
 }
