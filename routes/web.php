@@ -72,16 +72,16 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::get('/myprojects', 'showMemberProjects');//
     Route::get('/mytasks', 'showMemberTasks');//
-    Route::put('/api/members/{id}', 'update')->name('update-member');//
+    Route::put('/api/members/{username}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
 });
 
 Route::controller(TaskController::class)->group(function () {
-    Route::post('/tasks/create', 'create')->name('create-task');//
+    Route::post('/tasks', 'create')->name('create-task');//
     Route::get('/tasks/{id}', 'show')->name('tasks.show');//
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');//
-    Route::post('/tasks/{id}', 'edit')->name('edit-details');//
+    Route::put('/tasks/{id}', 'edit')->name('edit-details');//
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
@@ -112,5 +112,5 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(DeleteController::class)->group(function () {
-   Route::delete('/members/{id}', 'delete')->name('delete-member');//
+   Route::delete('/members/{username}', 'delete')->name('delete-member');//
 });

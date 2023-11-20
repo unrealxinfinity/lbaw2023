@@ -45,7 +45,7 @@ class TaskController extends Controller
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
-    public function edit(Request $request, string $id): void
+    public function edit(Request $request, string $id): RedirectResponse
     {
 
         $fields = $request->validate([
@@ -67,6 +67,8 @@ class TaskController extends Controller
         $task->priority = $fields['priority'];
         
         $task->save();
+
+        return redirect()->back()->withSuccess('Task edited');
     }
 
     public function assignMember(AssignMemberRequest $request, string $task_id, string $username): JsonResponse

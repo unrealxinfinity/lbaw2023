@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class EditMemberRequest extends FormRequest
     public function authorize(): bool
     {
         
-        return Auth::user()->can('edit', Member::find($this->route()->id));
+        return Auth::user()->can('edit', User::where('username', $this->route()->username)->first()->persistentUser->member);
     }
 
     /**
@@ -25,14 +26,16 @@ class EditMemberRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = User::where('username', $this->route()->username)->first();
+        $member = $user->persistentUser->member;
         return [
-            'username' => ['required', 'string','max:250', 'unique:user_info,username,' . Member::find($this->route()->id)->persistentUser->user->id],
+            'username' => ['required', 'string','max:250', 'unique:user_info,username,' . $user->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'old_password' => ['required', 'string'],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'email' => ['required', 'email','max:250', 'unique:members,email,' . $this->route()->id],
+            'email' => ['required', 'email','max:250', 'unique:members,email,' . $member->id],
         ];
     }
 }

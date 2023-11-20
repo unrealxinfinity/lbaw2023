@@ -4,7 +4,7 @@
         <h2><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h2>
     </header>
     {{ $member->description }}
-    <form class="edit-member" method="POST" action="{{ route('update-member', ['id' => $member->id]) }}">
+    <form class="edit-member" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
         @csrf
         @method('PUT')
 
