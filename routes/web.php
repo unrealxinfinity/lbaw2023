@@ -72,8 +72,8 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::get('/myprojects', 'showMemberProjects');//
     Route::get('/mytasks', 'showMemberTasks');//
-    Route::put('/api/members/{id}', 'update')->name('update-member');
-    Route::get('/admin', 'list')->name('list-members');
+    Route::put('/api/members/{id}', 'update')->name('update-member');//
+    Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
 });
 

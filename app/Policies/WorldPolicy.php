@@ -37,7 +37,7 @@ class WorldPolicy
     }
     public function searchProject(User $user, World $world): bool
     {
-        return ($user->persistentUser->type_ === 'Member') && ($user->persistentUser->member->worlds->contains($world->id));
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
 
     }
 }
