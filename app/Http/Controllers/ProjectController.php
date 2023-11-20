@@ -97,6 +97,7 @@ class ProjectController extends Controller
     public function searchTask(SearchTaskRequest $request , string $id): JsonResponse
     {   
         $request->validated();
+        
         $searchedTaskText = strval($request->query('search'));
         $searchedTaskText = strip_tags($searchedTaskText);     
         $tasks = Task::select('id','title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])

@@ -4,10 +4,8 @@
         <h1><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
     </header>
     <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
-    @include('partials.sidebar', ['thing'=>$world])
-    @include('form.search-project', ['world' => $world])
-    <ul>
-    
+    <section id="search-project">@include('form.search-project', ['world' => $world])</section>
+    <section id="projects">
         <h2> Ongoing Projects: </h2>
         <ul class="row">
             @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)

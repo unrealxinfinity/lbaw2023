@@ -24,7 +24,7 @@ class SearchTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'search' => 'required|string'
         ];
     }
 }

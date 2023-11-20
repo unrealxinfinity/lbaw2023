@@ -29,10 +29,7 @@ class WorldPolicy
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
-    public function searchProject(User $user,World $world):bool
-    {
-        return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted' && World::where('id',$world->id)->first()->members->contains($user->persistentUser->member->id);
-    }
+
     public function comment(User $user, World $world): bool
     {
         return ($user->persistentUser->type_ === 'Member') && ($user->persistentUser->member->worlds->contains($world->id));

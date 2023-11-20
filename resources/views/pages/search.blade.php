@@ -9,8 +9,6 @@
     @endphp
     
     @if ($member)
-        <h2>Welcome to MineMax!<h2>
-            @include('form.main-search', ['member' => $member])
         <section id="homepage">
             @include('partials.homepage', ['member' => $member, 'tasks' =>$tasks , 'projects' => $projects, 'worlds' => $worlds])
         </section>
