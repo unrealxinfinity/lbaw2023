@@ -27,7 +27,7 @@ class MemberController extends Controller
     }
 
     public function showCreateWorld(): View
-    {;
+    {
         if(Auth::user()->persistentUser->type_ != 'Member'){
             abort(403);
         }
