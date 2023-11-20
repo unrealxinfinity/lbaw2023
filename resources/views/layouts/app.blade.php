@@ -27,7 +27,7 @@
                 <ul class="menu">
                     <li><a href="/">Home Page</a></li>
                     <li><a href="#">All Worlds</a></li>
-                    @if (Auth::check())
+                    @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
                         <li><a href="/myworlds">My Worlds</a></li>
                         <li><a href="/myprojects">My Projects</a></li>
                         <li><a href="/mytasks">My Tasks</a></li>

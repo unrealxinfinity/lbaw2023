@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SearchRequest;
-use App\Models\Task;
-use App\Models\Project;
 use App\Models\Member;
 use App\Models\World;
-use App\Models\UserInfo;
-use App\Models\PersistentUser;
 
 class SearchController extends Controller
 {

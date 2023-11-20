@@ -29,21 +29,13 @@ use App\Http\Controllers\Auth\RegisterController;
 
 
 // Home
-//Route::redirect('/', '/login');
 Route::get('/', function () {
     return view('pages.homepage');
 })->name('home');
-Route::view('/create-world', 'pages.world-create')->name('world-create');//
 
-// Cards
 
 Route::controller(SearchController::class)->group(function() {
     Route::get('/search', 'show')->name('search');//
-});
-
-Route::controller(CardController::class)->group(function () {
-    Route::get('/cards', 'list')->name('cards');
-    Route::get('/cards/{id}', 'show');
 });
 
 Route::controller(WorldController::class)->group(function () {
@@ -75,6 +67,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::put('/api/members/{username}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
+    Route::get('/create-world', 'showCreateWorld')->name('world-create');
 });
 
 Route::controller(TaskController::class)->group(function () {
@@ -85,19 +78,6 @@ Route::controller(TaskController::class)->group(function () {
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
-
-// API
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
-
-Route::controller(ItemController::class)->group(function () {
-    Route::put('/api/cards/{card_id}', 'create');
-    Route::post('/api/item/{id}', 'update');
-    Route::delete('/api/item/{id}', 'delete');
-});
-
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Models\Task;
-use App\Models\Project;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;

@@ -42,4 +42,22 @@ class MemberPolicy
         $is_member = $member->user_id == $user->id;
         return (!$is_disabled && $is_member ) ;
     }
+
+    public function showCreateWorld(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+
+    public function showMemberWorlds(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+    public function showMemberProjects(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+    public function showMemberTasks(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
 }
