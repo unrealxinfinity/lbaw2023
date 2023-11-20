@@ -236,11 +236,9 @@ function addEventListeners() {
     event.preventDefault
     const searchTaskForms = document.getElementsByClassName('search-task');
     const id = searchTaskForms[0].getAttribute('data-id');
-    console.log(searchTaskForms);
-    let searchTaskElems = searchTaskForms[0].children;
+    let searchTaskElems = searchTaskForms[0];
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    console.log(searchedTask)
     const response = await fetch('/api/projects/'+ id +'/tasks?search=' + searchedTask)
       .then(response =>{
             if(response.ok){
@@ -273,7 +271,7 @@ function addEventListeners() {
 
     let tasks = JSON.parse(json.tasks);
     for (task of tasks) {
-      console.log(task);
+      
       newTitle.setAttribute('href', '/tasks/' + task.id);
       newTitle.textContent = task.title;
       newDescription.textContent = task.description;
