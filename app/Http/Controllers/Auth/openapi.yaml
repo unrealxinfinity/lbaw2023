@@ -1,0 +1,1284 @@
+openapi: 3.0.0
+
+
+
+
+
+
+
+
+info:
+  version: '1.0'
+  title: 'LBAW MineMax Web API'
+  description: 'Web Resources Specification (A7) for MineMax'
+
+
+
+
+
+
+
+
+servers:
+- url: http://lbaw.fe.up.pt
+  description: Production server
+
+
+
+
+
+
+
+
+externalDocs:
+  description: Find more info here.
+  url: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2314
+
+
+
+
+
+
+
+
+tags:
+
+
+
+
+
+
+
+
+- name: 'M01: Authentication, Individual Profile and user management'
+- name: 'M02: Worlds'
+- name: 'M03: Projects'
+- name: 'M04: Tasks'
+- name: 'M05: Administration and Static Pages'
+- name: 'M06: Notifications'
+- name: 'M07: Tags'
+- name: 'M08: Comments'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+paths:
+  /login:
+    post:
+      operationId: R101
+      summary: 'R101: Login Action'
+      description: 'Handles the login form submission information. Access: VIS'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                required:
+                  username
+                  password
+      responses:
+        '302':
+          description: 'Redirect after handling login.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful login. Redirect to the home page.'
+                  value: '/'
+                302Failure:
+                  description: 'Failed login. Stay inside the login form.'
+                  value: '/login'
+
+
+
+
+     get:
+      operationId: 
+      summary: ': User login form‘
+      description: 'Shows the login form. Access : Everyone'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+       responses:
+        '200':
+          description: 'Authetication Form'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+
+
+  /logout:
+    post:
+      operationId: R102
+      summary: 'R102: Logout Action'
+      description: 'Logout the current authenticated user. Access: MBR, ADM, BLK'
+      tags:
+         - 'M01: Authentication, Individual Profile and User Management'
+      responses:
+        '302':
+          description: 'Redirect after handling logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to the home page.'
+                  value: '/home'
+  /resgister:
+	
+    get:
+      operationId: 
+      summary: ': Get Register Form'
+      description: 'Shows the registration form for everyone. Access: Everyone'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      responses:
+        '200':
+          description: 'Registration Form'
+          content:
+            text/html:
+              schema:
+                type: string
+	
+   post:
+     operationId: R103
+     summary: 'R103: Register Action'
+     description: 'Sign-up the current user as a member. Access: VIS,ADM,BLK'
+     tags:
+      - 'M01: Authentication, Individual Profile and User Management'
+     requestBody:
+            required: true
+            content:
+              application/x-www-form-urlencoded:
+                schema:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    login:
+                      type: bool
+                    member:
+                      type: bool
+                    name:
+                      type: string
+                  required:
+                    - username
+                    - email
+                    - password
+     responses:
+        '302':
+          description: 'Redirect after signing-up'
+          headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful sign-up. Redirect to main page.'
+                 value: '/home'
+               302Failure:
+                 description: 'Failed. Redirect to sign-up form.'
+                 value: '/sign-up'
+
+
+
+
+
+
+
+
+  /members/{username}:
+    get:
+      operationId: R107
+      summary: 'R107: User Profile'
+      description: 'Shows the profile of the user with the given id. Access: MBR,BLK'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      parameters:
+        - name: username
+          in: path
+          description: 'Username'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'User profile page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'User not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+ 
+  /api/members/{id}:
+    picture:
+      operationId:
+      summary:
+      description: 'Updates a member''s profile information. Access: MBR,ADM'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      parameters:
+        - name: id
+          in: path
+          description: 'User ID'
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+                birthday:
+                  type: date
+                name:
+                  type: string
+                description:
+                  type: string
+                email:
+                  type: email
+                required:
+                  - old_password
+                  - username
+                  - birthday
+                  - name
+                  - description
+                  - email
+      responses:
+        '302':
+          description: 'Redirect after editing profile.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Profile edited successfully.'
+                  value: '/members/{username}'
+                302Failure:
+                  description: 'Old password does not match records.'
+                  value: '/members/{username}'
+
+
+  /members/{id}:
+    delete:
+      operationId:
+      summary:
+      description: 'Delete a member profile. Access: MBR, ADM'
+      tags:
+        - 'M01: Authentication, Individual Profile and User Management'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 'User ID'
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '302':
+          description: 'Redirect after deletion attempt.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Profile deleted successfully.'
+                  value: '/'
+        '403':
+          description: 'Action not authorized.'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+  /myworlds:
+    get:
+      operationId:
+      summary:
+      description: 'List current member''s worlds. Access: MBR'
+      tags:
+        - 'M02: Worlds'
+
+
+      responses:
+        '200':
+          description: 'Page with member''s worlds.'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '403':
+          description: 'Action not authorized.'
+          content:
+            text/html:
+              type: string
+              format: html
+ 
+  /worlds/{id}:
+    get:
+      operationId:
+      summary:
+      description: 'View a world. Access: MBR, ADM'
+      tags:
+        - 'M02: Worlds'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'World ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: 'World page'
+          content:
+            text/html:
+              type: string
+              format: html
+        '404':
+          description: 'Page not found'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+  /worlds:
+    post:
+      operationId:
+      summary:
+      description: 'Create a world. Access: MBR'
+      tags:
+        - 'M02: Worlds'
+
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                picture:
+                  type: string
+                required:
+                  - name
+                  - description
+      responses:
+        '302':
+          description: 'Redirect after world creation'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'World created'
+                  value: '/worlds/{id}'
+                302Failure:
+                  description: 'World creation failed. Back to user''s worlds'
+                  value: '/myworlds'
+
+
+  /api/worlds/{id}/{username}:
+    post:
+      operationId:
+      summary:
+      description: 'Add member to world. Access: WOWN, WADM'
+      tags:
+        - 'M02: Worlds'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'World ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+
+
+        - name: username
+          in: path
+          description: 'Username of member to be added'
+          schema:
+            type: string
+          required: true
+
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: bool
+                required:
+                  - type
+     
+      responses:
+        '200':
+          description: 'Data of added member'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: 1
+                  username:
+                    type: string
+                  email:
+                    type: email
+                  is_admin:
+                    type: bool
+                  description:
+                    type: string
+                   
+  /worlds/{id}/comment:
+    post:
+      operationId:
+      summary:
+      description: 'Post a comment on a world. Access: WMBR'
+      tags:
+        - 'M02: Worlds'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'World ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                member_id:
+                  type: integer
+                  minimum: 1
+                required:
+                  - text
+                  - member_id
+     
+      responses:
+        '302':
+          description: 'Redirect after comment creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Comment posted.'
+                  value: 'worlds/{id}#comments'
+                302Failure:
+                  description: 'Error in comment creation.'
+                  value: 'worlds/{id}#comments'
+
+
+  /projects/{id}:
+    get:
+      operationId:
+      summary:
+      description: 'View a project. Access: WMBR, ADM'
+      tags:
+        - 'M03: Projects'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'Project ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: 'Project page'
+          content:
+            text/html:
+              type: string
+              format: html
+        '404':
+          description: 'Page not found'
+          content:
+            text/html:
+              type: string
+              format: html  
+
+
+    delete:
+      operationId:
+      summary:
+      description: 'Delete a project. Access: WOWN, WADM, PLDR'
+      tags:
+        - 'M03: Projects'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'Project ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after project deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Project deleted'
+                  value: '/worlds/{world_id}'
+                302Failure:
+                  description: 'Error in project deletion'
+                  value: '/projects/{id}'
+        '403':
+          description: 'Action not authorized'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+  /projects:
+    post:
+      operationId:
+      summary:
+      description: 'Create a project. Access: WMBR'
+      tags:
+        - 'M03: Projects'
+     
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                world_id:
+                  type: integer
+                  minimum: 1
+                picture:
+                  type: string
+                required:
+                  - name
+                  - description
+                  - world_id
+
+
+      responses:
+        '302':
+          description: 'Redirect after project creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Project created'
+                  value: '/projects/{id}'
+                302Failure:
+                  description: 'Failure in project creation. Back to form'
+                  value: '/worlds/{id}/create-project'
+        '403':
+          description: 'Action not authorized'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+  /api/projects/{id}/{username}:
+    post:
+      operationId:
+      summary:
+      description: 'Add member to project. Access: WOWN, WADM, PLDR'
+      tags:
+        - 'M03: Projects'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'Project ID'
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+
+
+        - name: username
+          in: path
+          description: 'Username of member to be added'
+          schema:
+            type: string
+            enum: ['Member', 'Project Leader']
+          required: true
+
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: bool
+                required:
+                  - type
+     
+      responses:
+        '200':
+          description: 'Data of added member'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: bool
+                  id:
+                    type: integer
+                    minimum: 1
+                  username:
+                    type: string
+                  email:
+                    type: email
+                  description:
+                    type: string
+
+
+  /tasks/{id}:
+    get:
+      operationId:
+      summary:
+      description: 'View a task page. Access: PLDR, ASS'
+      tags:
+        - 'M04: Tasks'
+     
+      parameters:
+        - name: id
+          in: path
+          description: 'Task ID'
+          schema:
+            type: string
+          required: true
+     
+      responses:
+        '200':
+          description: 'Task page'
+          content:
+            text/html:
+              type: string
+              format: html
+        '403':
+          description: 'Action not authorized'
+          content:
+            text/html:
+              type: string
+              format: html
+        '404':
+          description: 'Page not found'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+    post:
+      operationId:
+      summary:
+      description: 'Edit a task. Access: PLDR'
+      tags:
+        - 'M04: Tasks'
+
+
+      parameters:
+        - name: id
+          in: path
+          description: 'Task ID'
+          schema:
+            type: string
+          required: true
+
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: ['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done']
+                due_at:
+                  type: date
+                effort:
+                  type: integer
+                priority:
+                  type: string
+
+
+      responses:
+        '302':
+          description: 'Redirect after task creation'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Task edited'
+                  value: '/tasks/{id}'
+                302Failure:
+                  description: 'Failure in task editing'
+                  value: '/tasks/{id}'
+        '403':
+          description: 'Action not authorized'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+  /tasks/create:
+    post:
+      operationId:
+      summary:
+      description: 'Task creation. Access: PLDR, WOWN, WADM'
+      tags:
+        - 'M04: Tasks'
+     
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: ['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done']
+                due_at:
+                  type: date
+                effort:
+                  type: integer
+                priority:
+                  type: string
+                project_id:
+                  type: integer
+                  minimum: 1
+
+
+      responses:
+        '302':
+          description: 'Redirect after task creation'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Task created'
+                  value: '/tasks/{id}'
+                302Failure:
+                  description: 'Error in task creation'
+                  value: '/projects/{project-id}'
+        '403':
+          description: 'Action not authorized'
+          content:
+            text/html:
+              type: string
+              format: html
+
+
+  /myworlds:
+    get:
+      operationId: 
+      summary: ': List Worlds'
+      description: 'List all worlds of a member. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M02: Worlds'
+     parametros?
+      responses:
+        '200':
+          description: 'List of worlds'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    creation_date:
+                      type: string
+                    picture:
+                      type: url
+                    owner:
+                      type: string
+                example:
+                  - id: 1
+                    name: A Era do Futuro
+                    description: Uma aventura no minecraft
+                    creation_date: 2013-10-20
+                    picture: https://i.imgur.com/1.jpg
+                    owner: Miguel Campos
+        '204':
+          description: 'Worlds not found'
+ 
+         Para apagar? “content:
+            text/html:
+              schema:
+                type: string
+                format: html“
+
+
+
+
+
+
+  /api/worlds/{id}/comment
+    post:
+      operationId: 
+      summary: ': post a comment on the world'
+      description: 'Post a comment in a certain world with world_id. Access: VIS,MBR,ADM'
+      tags:
+        - 'M02: Worlds
+      parameters:
+       - in: path
+         name: id
+         description: World that the comment belongs to
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+       - in: query
+         name: text
+         description: Comment content
+         schema:
+           type: string
+         required: true
+        - in: query
+         name: member
+         Description: member ID
+         schema:
+           type: string
+         required: true
+
+
+      responses:
+        '302':
+          description: 'Comment Added'  
+        
+     
+  /myprojects:
+    get:
+      operationId: 
+      summary: ': List Projects'
+      description: 'List all projects of a member. Access: VIS,MBR,ADM'
+      tags:
+        - 'M03: Projects'
+     
+
+
+      responses:
+        '200':
+          description: 'List of member projects'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    status:
+                      type: string
+                    description:
+                      type: string
+                    creation_date:
+                      type: string
+                    picture:
+                      type: string
+                    world:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    name: Encontrar 30 diamantes
+                    status: Terminado
+                    description: Minar e procurar pelos diamantes a beira da casa
+                    creation_date: 2015-10-12
+                    picture: https://i.imgur.com/1.jpg
+                    world: 1
+                  - id: 2
+                    name: Farmar porcos
+                    status: Em processo
+                    description: Criar porcos e aumentar a sua população
+                    creation_date: 2023-10-30
+                    picture: https://i.imgur.com/2.jpg
+                    world: 1        
+        '404':
+          description: 'Projects not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+   
+
+
+
+
+  /api/tasks/{id}/{username}:
+    post:
+      operationId: 
+      summary: ': Complete Task'
+      description: 'Completes a Task . Access: PLDR,ASS,ADM'
+      tags:
+       - 'M04: Tasks'
+      parameters:
+       - name: id
+         in: path
+         description: 'Task id'
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: 'Task page'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        '404':
+          description: 'Task not found'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+ 
+  /api/tasks/{task_id}/comments
+    get:
+      operationId: R402
+      summary: 'R402: List task comments'
+      description: 'List all task comments. Access: VIS,MBR,ADM,BLK'
+      tags:
+        - 'M04: Tasks
+     
+      parameters:
+       - in: query
+         name: date
+         description: Date to filter by
+         schema:
+           type: string
+         required: false
+       - in: path
+         name: task_id
+         description: Task that the comments belong to
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+
+
+
+
+       - in: query
+         name: username
+         description: Username to filter the comments by user
+         schema:
+           type: string
+         required: false
+
+
+
+
+      responses:
+        '200':
+          description: 'List of comments'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    date:
+                      type: string
+                    username:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    content: Já fiz esta task
+                    date: 15/12/2019
+                    username: someone123
+                  - id: 2
+                    content: bruh
+                    date: 12/12/2019
+                    username: unnamed1          
+        '204':
+          description: ' No comments'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+
+
+
+
+  /api/projects/{id}/tasks
+    get:
+      operationId: 
+      summary: ': Search project tasks'
+      description: 'Search tasks related to a project. Access: PMBR,ADM,PLDR'
+      tags:
+        - 'M03: Projects
+     
+      parameters:
+       - in: query
+         name: search
+         description: Text to search the tasks by fts
+         schema:
+           type: string
+         required: false
+       - in: path
+         name: id
+         description: Task ID
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+
+
+      responses:
+        '200':
+          description: 'List of Tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    due_at:
+                      type: string
+                    status:
+                      type: string
+                    effort:
+                      type: int
+                    priority:
+                      type: string
+                                     
+                example:
+                  - id: 1
+                    content: Já fiz esta task
+                    date: 15/12/2019
+                    username: someone123
+                  - id: 2
+                    content: bruh
+                    date: 12/12/2019
+                    username: unnamed1          
+        '204':
+          description: ' No comments'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+
+/api/project/{id}/tasks
+    get:
+      operationId: 
+      summary: ': Search World Projects '
+      description: 'Search tasks related to a project. Access: PMBR,ADM,PLDR'
+      tags:
+        - 'M03: Projects
+     
+      parameters:
+       - in: query
+         name: search
+         description: Text to search the tasks by fts
+         schema:
+           type: string
+         required: false
+       - in: path
+         name: id
+         description: Task ID
+         required: true
+         schema:
+          type: integer
+          minimum: 1
+
+
+      responses:
+        '200':
+          description: 'List of Tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    due_at:
+                      type: string
+                    status:
+                      type: string
+                    effort:
+                      type: int
+                    priority:
+                      type: string
+                                     
+                example:
+                  - id: 1
+		 	 title: Feed pigs
+                    description: Dar comida aos porcos
+                    due_at: 15/12/2019
+			 status: Done
+			 effort: 2
+                    priority: minimal
+                  - id: 2
+                    title: Xmas tree
+                    description:  Construir uma árvore de natal
+                    due_at: 22/12/2019
+			 status: Done
+			 effort: 5
+                    priority: maximal
+         
+        '204':
+          description: ' No content'
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
