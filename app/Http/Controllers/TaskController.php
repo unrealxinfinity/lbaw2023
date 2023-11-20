@@ -20,14 +20,14 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        //$this->authorize('show', $task);
+        $this->authorize('show', $task);
         return view('pages.task', [
             'task' => $task,
             'main' => true
         ]);
     }
     
-    //
+
     public function create(CreateTaskRequest $request) : RedirectResponse{
 
         $fields = $request->validated();

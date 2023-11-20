@@ -15,6 +15,17 @@ class TaskPolicy
         //
     }
 
+    public function show(User $user, Task $task): bool
+    {
+        $type = $user->persistentUser->type_;
+        $is_admin = $type === 'Administrator';
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level === 'Project Leader';
+        $is_assignee = $type === 'Member' && $user->persistentUser->member->tasks->contains($task->id);
+        return $is_admin || (!$is_disabled && ($is_leader || $is_assignee));
+        //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
+    }
+
     public function edit(User $user, Task $task): bool
     {
         $type = $user->persistentUser->type_;
