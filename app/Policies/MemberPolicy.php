@@ -43,12 +43,8 @@ class MemberPolicy
         return (!$is_disabled && $is_member ) ;
     }
 
-    public function showCreateWorld(User $user, Member $member): bool
+    public function showCreateWorld(User $user): bool
     {
-        $type = $user->persistentUser->type_;
-        $is_admin = $type === 'Administrator';
-        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_member = $member->user->id == $user->id;
-        return (!$is_admin && !$is_disabled && $is_member);
+        return $user->persistentUser->type_ == 'Member';
     }
 }

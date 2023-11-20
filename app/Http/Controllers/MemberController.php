@@ -28,9 +28,7 @@ class MemberController extends Controller
 
     public function showCreateWorld(): View
     {
-        if(Auth::user()->persistentUser->type_ != 'Member'){
-            abort(403);
-        }
+        $this->authorize('showCreateWorld', Member::class);
 
         return view('pages.world-create');
     }
