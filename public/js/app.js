@@ -148,8 +148,8 @@ function addEventListeners() {
       span.classList.add('error');
       const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
       const index = members.find(x => x === json.username);
-      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this project\'s world.';
-      else span.textContent = json.username + ' is already a member of this project';
+      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+      else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
       form.appendChild(span);
       return;
     }

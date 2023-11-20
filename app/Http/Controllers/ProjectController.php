@@ -74,7 +74,9 @@ class ProjectController extends Controller
         {
             return response()->json([
                 'error' => true,
-                'username' => $username
+                'username' => $username,
+                'parent' => 'world',
+                'child' =>'project'
             ]);
         }
     }
