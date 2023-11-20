@@ -633,7 +633,7 @@ paths:
   /tasks/{id}:
     get:
       operationId: R401
-      summary: 'R401: View Tasks'
+      summary: 'R401: Task Page'
       description: 'View a task page. Access: MBR, ADM'
       tags:
         - 'M04: Tasks'
@@ -799,7 +799,7 @@ paths:
   /api/tasks/{id}/{username}:
     post:
       operationId: R404
-      summary: 'R404: Assign Task'
+      summary: 'R404: Assign Task Action'
       description: 'Assigns a task to a member of a project. Access: PLDR,ASS,WADM'
       tags:
         - 'M04: Tasks'
@@ -970,7 +970,7 @@ paths:
   /mytasks:
     get:
       operationId: R405
-      summary: 'R405: Shows tasks'
+      summary: 'R405: Current User Tasks'
       description: 'Show tasks of a user. Access: MBR,WOWN,WADM,WMBR'
       tags:
         - 'M04: Tasks'
@@ -1127,7 +1127,7 @@ paths:
   /api/projects/{id}/tags/create:
     post:
       operationId: R307
-      summary: 'R307: Creates Project Tag Action'
+      summary: 'R307: Create Project Tag Action'
       description: 'Creates a new tag for a project. Access: PLDR, PMBR'
       tags:
         - 'M03: Projects'
@@ -1179,8 +1179,8 @@ paths:
   /tasks/{id}/comment:
     post:
       operationId: R406
-      summary: 'R406: Create comment inside task action'
-      description: 'Creates a comment inside a given task. Access: PLDR, ASS, ADMIN'
+      summary: 'R406: Create Task Comment Action'
+      description: 'Creates a comment inside a given task. Access: PLDR, ASS, ADM'
       tags:
         - 'M04: Tasks'
       parameters:
