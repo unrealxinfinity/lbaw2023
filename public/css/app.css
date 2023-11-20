@@ -60,6 +60,7 @@ body {
     padding-top: 5px;
     padding-right: 10px;
     color: white;
+    z-index: 1;
   }
 
   footer > div {
@@ -364,9 +365,10 @@ body {
   top: 5.5em;
   left: -15%;
   width: 15%;
-  height: 85.7%;
+  height: 100%;
   text-align: center;
   transition: left 0.3s ease;
+  z-index: 0;
 }
 
 .menu li:first-child {
