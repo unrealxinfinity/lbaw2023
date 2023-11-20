@@ -10,7 +10,7 @@
 
         <input type="hidden" class="member-id" name="id" value="{{ $member->id }}">
 
-        @if ($errors->has('username'))
+        @if ($errors->has('username') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('username') }}
             </span>
@@ -18,7 +18,7 @@
         <label for="username-{{ $member->id }}">Username</label>
         <input id="username-{{ $member->id }}" type="text" class="username" name="username" value="{{ $member->persistentUser->user->username }}" required>
 
-        @if ($errors->has('name'))
+        @if ($errors->has('name') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('name') }}
             </span>
@@ -26,7 +26,7 @@
         <label for="name-{{ $member->id }}">Name</label>
         <input id="name-{{ $member->id }}" type="text" class="name" name="name" value="{{ $member->name }}" required>
 
-        @if ($errors->has('email'))
+        @if ($errors->has('email') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('email') }}
             </span>
@@ -34,7 +34,7 @@
         <label for="email-{{ $member->id }}">Email</label>
         <input id="email-{{ $member->id }}" type="email" class="email" name="email" value="{{ $member->email }}" required>
 
-        @if ($errors->has('birthday'))
+        @if ($errors->has('birthday') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('birthday') }}
             </span>
@@ -42,7 +42,7 @@
         <label for="birthday-{{ $member->id }}">Birthday</label>
         <input id="birthday-{{ $member->id }}" type="text" class="birthday" name="birthday" value="{{ $member->birthday }}" required>
 
-        @if ($errors->has('description'))
+        @if ($errors->has('description') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('description') }}
             </span>
@@ -50,7 +50,7 @@
         <label for="description-{{ $member->id }}">Description</label>
         <input id="description-{{ $member->id }}" type="text" class="description" name="description" value="{{ $member->description }}" required>
 
-        @if ($errors->has('password'))
+        @if ($errors->has('password') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('password') }}
             </span>
@@ -58,7 +58,7 @@
         <label for="password-{{ $member->id }}">New Password</label>
         <input id="password-{{ $member->id }}" type="password" class="password" name="password">
 
-        @if ($errors->has('password_confirmation'))
+        @if ($errors->has('password_confirmation') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('password_confirmation') }}
             </span>
@@ -66,7 +66,7 @@
         <label for="password_confirmation-{{ $member->id }}">Confirm New Password</label>
         <input id="password_confirmation-{{ $member->id }}" type="password" class="password_confirmation" name="password_confirmation">
 
-        @if ($errors->has('old_password'))
+        @if ($errors->has('old_password') && old('id') == $member->id)
             <span class="error">
                 {{ $errors->first('old_password') }}
             </span>
