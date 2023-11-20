@@ -67,7 +67,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::put('/api/members/{username}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
-    Route::get('/create-world', 'showCreateWorld')->name('create-world');
+    Route::get('/create-world', 'showCreateWorld')->name('world-create');
 });
 
 Route::controller(TaskController::class)->group(function () {
