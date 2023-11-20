@@ -581,7 +581,6 @@ DROP INDEX IF EXISTS member_search_idx CASCADE;
 CREATE INDEX member_search_idx ON members USING GIN (searchMembers);
 
 
-
 ALTER TABLE user_info ADD COLUMN searchUsername TSVECTOR;
 
 DROP FUNCTION IF EXISTS user_search_update() CASCADE;

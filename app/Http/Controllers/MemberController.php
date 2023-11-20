@@ -46,7 +46,7 @@ class MemberController extends Controller
     }
 
     public function showMemberProjects(): View
-    {
+    {   
         $id = Auth::user()->persistentUser->member->id;
         $projects = Member::findOrFail($id)->projects;
         return view('pages.myprojects', ['projects' => $projects]);

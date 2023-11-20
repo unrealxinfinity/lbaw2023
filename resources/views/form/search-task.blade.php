@@ -7,7 +7,6 @@
                 <input class="button" type="button" id="searchTaskButton" value='Search'>
         </div>
     </form>
-
     <button id="openPopupButton">Open Results</button>
     <div id="popupContainer" class="popup">
         <span id="closePopUp">&times;</span>

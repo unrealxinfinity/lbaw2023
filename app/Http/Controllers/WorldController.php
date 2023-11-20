@@ -66,7 +66,6 @@ class WorldController extends Controller
             'picture' => $member->picture
         ]);
     }
-
     public function comment(WorldCommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();

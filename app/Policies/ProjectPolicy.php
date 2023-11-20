@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Project;
-use App\Models\World;
 
 class ProjectPolicy
 {
@@ -47,11 +46,13 @@ class ProjectPolicy
         //return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader');
     }
 
-    public function create(User $user): bool
+    public function create(User $user, Project $project): bool
     {
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        return !$is_disabled;
+        $world = $project->world;
+        $is_world_admin = $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin;
+        return !$is_disabled && $is_world_admin;
         //return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
 
