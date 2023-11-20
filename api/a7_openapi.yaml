@@ -62,7 +62,7 @@ paths:
     get:
       operationId: R102
       summary: 'R102: User login form'
-      description: 'Shows the login form. Access: Everyone'
+      description: 'Shows the login form. Access: VIS'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
       responses:
@@ -97,7 +97,7 @@ paths:
     get:
       operationId: R104
       summary: 'R104: Get Register Form'
-      description: 'Shows the registration form for everyone. Access: Everyone'
+      description: 'Shows the registration form. Access: VIS,ADM'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
       responses:
@@ -111,7 +111,7 @@ paths:
     post:
       operationId: R105
       summary: 'R105: Register Action'
-      description: 'Sign-up the current user as a member. Access: VIS,ADM,BLK'
+      description: 'Sign-up the current user as a member. Access: VIS,ADM'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
       requestBody:
@@ -155,7 +155,7 @@ paths:
     get:
       operationId: R106
       summary: 'R106: Get User Profile'
-      description: 'Shows the profile of the user with the given id. Access: MBR,BLK'
+      description: 'Shows the profile of the user with the given id. Access: VIS'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
       parameters:
@@ -184,7 +184,7 @@ paths:
   /api/members/{id}:
     put:
       operationId: R107
-      summary: 'R107: Update Member Profile'
+      summary: 'R107: Update Member Profile Action'
       description: 'Updates a member''s profile information. Access: MBR,ADM'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
@@ -243,8 +243,8 @@ paths:
   /members/{id}:
     delete:
       operationId: R109
-      summary: 'R109: Delete Member Profile'
-      description: 'Delete a member profile. Access: MBR, ADM'
+      summary: 'R109: Delete Member Profile Action'
+      description: 'Deletes a member profile. Access: MBR, ADM'
       tags:
         - 'M01: Authentication, Individual Profile and User Management'
       parameters:
@@ -301,7 +301,7 @@ paths:
     get:
       operationId: R202
       summary: 'R202: View World'
-      description: 'View a world. Access: MBR, ADM'
+      description: 'View a world. Access: VIS'
       tags:
         - 'M02: Worlds'
       parameters:
@@ -330,7 +330,8 @@ paths:
   /worlds:
     post:
       operationId: R203
-      summary: 'R203: Create a world. Access: MBR'
+      summary: 'R203: Create World Action'
+      description: 'Creates a world. Access: MBR'
       tags:
         - 'M02: Worlds'
       requestBody:
@@ -367,7 +368,8 @@ paths:
   /api/worlds/{id}/{username}:
     post:
       operationId: R204
-      summary: 'R204: Add member to world. Access: WOWN, WADM'
+      summary: 'R204: Add member to world action'
+      description: 'Adds a member to a given world. Access: WADM'
       tags:
         - 'M02: Worlds'
       parameters:
@@ -418,7 +420,7 @@ paths:
   /worlds/{id}/comment:
     post:
       operationId: R205
-      summary: 'R205: Post a comment on a world. Access: WMBR'
+      summary: 'R205: Post a comment on a world action'
       description: 'Post a comment on a world. Access: WMBR'
       tags:
         - 'M02: Worlds'
@@ -463,8 +465,8 @@ paths:
   /projects/{id}:
     get:
       operationId: R301
-      summary: 'R301: View a project. Access: WMBR, ADM'
-      description: 'View a project. Access: WMBR, ADM'
+      summary: 'R301: View a project.'
+      description: 'View a project. Access: VIS'
       tags:
         - 'M03: Projects'
       parameters:
@@ -493,8 +495,8 @@ paths:
 
     delete:
       operationId: R302
-      summary: 'R302: Delete a project. Access: WOWN, WADM, PLDR'
-      description: 'Delete a project. Access: WOWN, WADM, PLDR'
+      summary: 'R302: Delete a project action'
+      description: 'Delete a project. Access: WADM'
       tags:
         - 'M03: Projects'
       parameters:
@@ -530,8 +532,8 @@ paths:
   /projects:
     post:
       operationId: R303
-      summary: 'R303: Create a project. Access: WADM'
-      description: 'Create a project. Access: WADM'
+      summary: 'R303: Create Project Action'
+      description: 'Creates a project. Access: WADM'
       tags:
         - 'M03: Projects'
       requestBody:
@@ -579,8 +581,8 @@ paths:
   /api/projects/{id}/{username}:
     post:
       operationId: R304
-      summary: 'R304: Add member to project. Access: WOWN, WADM, PLDR'
-      description: 'Add member to project. Access: WOWN, WADM, PLDR'
+      summary: 'R304: Add member to project action'
+      description: 'Adds a member to a given project. Access: WADM, PLDR'
       tags:
         - 'M03: Projects'
       parameters:
@@ -632,7 +634,7 @@ paths:
     get:
       operationId: R401
       summary: 'R401: View Tasks'
-      description: 'View a task page. Access: PLDR, ASS'
+      description: 'View a task page. Access: MBR, ADM'
       tags:
         - 'M04: Tasks'
       parameters:
@@ -667,8 +669,8 @@ paths:
 
     post:
       operationId: R402
-      summary: 'R402: Edit Task'
-      description: 'Edit a task. Access: PLDR'
+      summary: 'R402: Edit Task Action'
+      description: 'Edits a given task details. Access: PMBR'
       tags:
         - 'M04: Tasks'
       parameters:
@@ -723,8 +725,8 @@ paths:
   /tasks/create:
     post:
       operationId: R403
-      summary: 'R403 Create Task'
-      description: 'Task creation. Access: PLDR, WOWN, WADM'
+      summary: 'R403 Create Task Action'
+      description: 'Task creation. Access: PMBR'
       tags:
         - 'M04: Tasks'
       requestBody:
@@ -775,7 +777,7 @@ paths:
     get:
       operationId: R305
       summary: 'R305: List Projects'
-      description: 'List all projects of a member. Access: VIS,MBR,ADM'
+      description: 'List all projects of a member. Access: MBR'
       tags:
         - 'M03: Projects'
       responses:
@@ -798,7 +800,7 @@ paths:
     post:
       operationId: R404
       summary: 'R404: Assign Task'
-      description: 'Assigns a task. Access: PLDR,ASS,ADM'
+      description: 'Assigns a task to a member of a project. Access: PLDR,ASS,WADM'
       tags:
         - 'M04: Tasks'
       parameters:
@@ -834,7 +836,7 @@ paths:
     get:
       operationId: R306
       summary: 'R306: Search project tasks'
-      description: 'Search tasks related to a project. Access: MBR,PMBR,PLDR,VIS'
+      description: 'Search tasks that belong to a project. Access: MBR,VIS'
       tags:
         - 'M03: Projects'
       parameters:
@@ -902,7 +904,7 @@ paths:
     get:
       operationId: R206
       summary: 'R206: Search World Projects'
-      description: 'Search projects related to a world. Access: MBR,WOWN,WADM,WMBR,VIS'
+      description: 'Search projects that belong to a world. Access: MBR,VIS'
       tags:
         - 'M02: Worlds'
       parameters:
@@ -969,7 +971,7 @@ paths:
     get:
       operationId: R405
       summary: 'R405: Shows tasks'
-      description: 'Show tasks of a user. Access: MBR,WOWN,WADM,WMBR,VIS'
+      description: 'Show tasks of a user. Access: MBR,WOWN,WADM,WMBR'
       tags:
         - 'M04: Tasks'
       responses:
@@ -991,8 +993,8 @@ paths:
   /search:
     get:
       operationId: R601
-      summary: 'R601: Search Engine'
-      description: 'Search feature for the main page. Access: VIS,MBR'
+      summary: 'R601: Search Page'
+      description: 'Searches for all worlds and users and the user own projects and tasks. Access: MBR'
       tags:
         - 'M09: Search'
       parameters:
@@ -1055,7 +1057,7 @@ paths:
   /worlds/{id}/create-project:
     get:
       operationId: R210
-      summary: 'R210: Create Project Forms'
+      summary: 'R210: Create Project Form'
       description: 'Get the forms to create a new project inside a world. Access: WOWN,WADM'
       tags:
         - 'M02: Worlds'
@@ -1078,7 +1080,7 @@ paths:
   /admin:
     get:
       operationId: R501
-      summary: 'R501: List members'
+      summary: 'R501: List Members'
       description: 'Lists the members in a page for admin operations. Access: ADM'
       tags:
         - 'M05: Administration and Static Pages'
@@ -1125,8 +1127,8 @@ paths:
   /api/projects/{id}/tags/create:
     post:
       operationId: R307
-      summary: 'R307: Creates a tag for the project'
-      description: 'Tag creation. Access: PLDR, PMBR'
+      summary: 'R307: Creates Project Tag Action'
+      description: 'Creates a new tag for a project. Access: PLDR, PMBR'
       tags:
         - 'M03: Projects'
       parameters:
@@ -1177,8 +1179,8 @@ paths:
   /tasks/{id}/comment:
     post:
       operationId: R406
-      summary: 'R406: Creates comment for the user'
-      description: 'Comment creation on task. Access: PLDR, ASS, ADMIN'
+      summary: 'R406: Create comment inside task action'
+      description: 'Creates a comment inside a given task. Access: PLDR, ASS, ADMIN'
       tags:
         - 'M04: Tasks'
       parameters:
