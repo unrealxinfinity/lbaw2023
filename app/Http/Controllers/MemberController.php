@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -59,11 +60,11 @@ class MemberController extends Controller
         return view('pages.mytasks', ['tasks' => $tasks]);
     }
 
-    public function update(EditMemberRequest $request, string $id): RedirectResponse
+    public function update(EditMemberRequest $request, string $username): RedirectResponse
     {
         $fields = $request->validated();
 
-        $member = Member::findOrFail($id);
+        $member = User::where('username', $username)->firstOrFail()->persistentUser->member;
 
         if(!Hash::check($fields['old_password'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != "Administrator"){
             return back()->with('error','Password confirmation is incorrect!');
