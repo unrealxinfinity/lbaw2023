@@ -32,7 +32,7 @@ class ProjectPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return $is_admin || (!$is_disabled && $is_leader);
         //return ($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader';
     }
@@ -42,7 +42,7 @@ class ProjectPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $type === 'Member' || $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return $is_admin || (!$is_disabled && $is_leader);
         //return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader');
     }
