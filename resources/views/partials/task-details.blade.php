@@ -1,4 +1,5 @@
 <article class="task-details">
+    @if (Auth::user()->can('edit', $task))
     <form class = "edit-details" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
         @csrf
         @method('PUT')
@@ -49,7 +50,7 @@
         <div>
         <button type="submit">Save</button>
     </form>
-    @if ($task->status != 'Done' && Auth::user()->can('edit', $task))
+    @if ($task->status != 'Done')
         <form class = "complete-task" method="POST" action="{{ route('complete-task', ['id' => $task->id]) }}">
             @csrf
             @method('POST')
@@ -63,7 +64,35 @@
             @include('partials.member', ['member' => $member, 'main' => false])
         @endforeach
     </ul>
-    @if ($task->status != 'Done' && Auth::user()->can('edit', $task))
+    @if ($task->status != 'Done')
         @include('form.assignmember', ['task' => $task])
+    @endif
+    @else
+    <div id="Due At">
+        <p>Due At</p>
+        <p>{{$task->due_at}}</p>
+    </div>
+    <div id="Priority">
+        <p>Priority</p>
+        <p>{{$task->priority}}</p>
+    </div>
+    <div id="Effort">
+        <p>Effort</p>
+        <p>{{$task->effort}}</p>
+    </div>
+    <div id="Status">
+        <p>Status</p>
+        <p>{{$task->status}}</p>
+    </div>
+    <div id="Created At">
+        <p>Created At</p>
+        <p>{{$task->created_at}}</p>
+    </div>
+    <h3>Assigned to</h3>
+    <ul class="members">
+        @foreach($task->assigned()->orderBy('id')->get() as $member)
+            @include('partials.member', ['member' => $member, 'main' => false])
+        @endforeach
+    </ul>
     @endif
 </article>

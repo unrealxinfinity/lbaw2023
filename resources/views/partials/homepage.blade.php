@@ -1,6 +1,8 @@
 <article class="homepage" data-id="{{ $member->id }}">
         @if(count($tasks) > 0)
-            <h3> My Assigned Tasks </h3>
+            @if ($main) <h3> My Assigned Tasks </h3>
+            @else <h2> Assigned Tasks </h2>
+            @endif
             <div class="row">
             @foreach($tasks as $task)
             <div class="box"> 
@@ -10,7 +12,9 @@
             </div>
         @endif
         @if(count($projects) > 0)
-            <h3> My Current Projects </h3>
+            @if ($main) <h3> My Current Projects </h3>
+            @else <h2> My Projects </h2>
+            @endif
             <div class="row">
             @foreach($projects as $project)
             <div class="box"> 
@@ -20,7 +24,9 @@
             </div>
         @endif
         @if(count($worlds) > 0)
-            <h3> My Current Worlds <a class="button" href="/create-world">+</a></h3> 
+            @if ($main) <h3> My Current Worlds <a class="button" href="/create-world">+</a></h3> 
+            @else <h2> Worlds </h2>
+            @endif
             <div class="row">
             @foreach($worlds as $world)
             <div class="box"> 

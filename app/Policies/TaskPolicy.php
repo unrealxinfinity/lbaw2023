@@ -20,9 +20,7 @@ class TaskPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level === 'Project Leader';
-        $is_assignee = $type === 'Member' && $user->persistentUser->member->tasks->contains($task->id);
-        return $is_admin || (!$is_disabled && ($is_leader || $is_assignee));
+        return $is_admin || !$is_disabled;
         //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
@@ -31,9 +29,8 @@ class TaskPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level === 'Project Leader';
-        $is_assignee = $type === 'Member' && $user->persistentUser->member->tasks->contains($task->id);
-        return $is_admin || (!$is_disabled && ($is_leader || $is_assignee));
+        $is_project_member = $user->persistentUser->member->projects->contains('id', $task->project_id);
+        return $is_admin || (!$is_disabled && $is_project_member);
         //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
     }
 

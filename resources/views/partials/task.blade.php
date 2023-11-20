@@ -15,7 +15,9 @@
         <ul>
             @each('partials.comment', $task->comments()->orderBy('id')->get(), 'comment')
         </ul>
+        @if (Auth::user()->can('edit', $task))
         @include('form.comment', ['route' => 'task-comment', 'id' => $task->id])
+        @endif
     </section>
     @endif
 </article>
