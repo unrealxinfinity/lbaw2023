@@ -47,4 +47,17 @@ class MemberPolicy
     {
         return $user->persistentUser->type_ == 'Member';
     }
+
+    public function showMemberWorlds(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+    public function showMemberProjects(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+    public function showMemberTasks(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
 }

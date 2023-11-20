@@ -48,9 +48,7 @@ class MemberController extends Controller
 
     public function showMemberWorlds(): View
     {
-        if(Auth::user()->persistentUser->type_ != 'Member'){
-            abort(403);
-        }
+        $this->authorize('showMemberWorlds', Member::class);
         $id = Auth::user()->persistentUser->member->id;
         $worlds = Member::findOrFail($id)->worlds;
         return view('pages.myworlds', ['worlds' => $worlds]);
@@ -58,9 +56,7 @@ class MemberController extends Controller
 
     public function showMemberProjects(): View
     {   
-        if(Auth::user()->persistentUser->type_ != 'Member'){
-            abort(403);
-        }
+        $this->authorize('showMemberProjects', Member::class);
         $id = Auth::user()->persistentUser->member->id;
         $projects = Member::findOrFail($id)->projects;
         return view('pages.myprojects', ['projects' => $projects]);
@@ -68,9 +64,7 @@ class MemberController extends Controller
 
     public function showMemberTasks(): View
     {
-        if(Auth::user()->persistentUser->type_ != 'Member'){
-            abort(403);
-        }
+        $this->authorize('showMemberTasks', Member::class);
         $id = Auth::user()->persistentUser->member->id;
         $tasks = Member::findOrFail($id)->tasks;
         return view('pages.mytasks', ['tasks' => $tasks]);
