@@ -3,7 +3,7 @@
     <header>
         <h1><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
     </header>
-    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
+    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id) && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
         <a class="button" href="/worlds/{{ $world->id }}/create-project">Create Project</a>
     @endif  
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
@@ -25,12 +25,16 @@
             @endforeach
         </ul>
     </section>
+    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
     @include('form.addmembertoworld', ['world' => $world])
+    @endif
     <section id="comments">
         <h4> Comments: </h4>
         <ul>
             @each('partials.comment', $world->comments()->orderBy('id')->get(), 'comment')
         </ul>
+        @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
         @include('form.comment', ['route' => 'world-comment', 'id' => $world->id])
+        @endif
     </section>
 </article>
