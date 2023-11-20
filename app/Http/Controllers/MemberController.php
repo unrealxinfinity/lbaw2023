@@ -31,11 +31,8 @@ class MemberController extends Controller
         if(Auth::user()->persistentUser->type_ != 'Member'){
             abort(403);
         }
-        $member = Auth::user()->persistentUser->member;
 
-        return view('pages.world-create', [
-            'member' => $member
-        ]);
+        return view('pages.world-create');
     }
 
     public function showEditProfile(string $username): View
