@@ -52,7 +52,7 @@ class TaskController extends Controller
             'title' => ['string'],
             'description' => ['string'],
             'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
-            'due_at' => ['date'],
+            'due_at' => ['date', 'after:today'],
             'effort' => ['integer'],
             'priority' => ['string'],
         ]);
