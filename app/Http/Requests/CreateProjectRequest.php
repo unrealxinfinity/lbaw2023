@@ -13,7 +13,7 @@ class CreateProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->can('create', Project::find($this->route()->id));
+        return Auth::user()->can('create', Project::class);
     }
 
     /**
