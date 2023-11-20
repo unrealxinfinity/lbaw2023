@@ -22,8 +22,7 @@ class ProjectPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_in_world = $type === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id);
-        return $is_admin || (!$is_disabled && $is_in_world);
+        return $is_admin || !$is_disabled;
         //return $user->persistentUser->type_ === 'Administrator' || ($user->persistentUser->type_ === 'Member' && $user->persistentUser->member->worlds->contains($project->world_id));
     }
 
@@ -32,7 +31,7 @@ class ProjectPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
+        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $project->world_id) &&$user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
         $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return $is_admin || (!$is_disabled && ($is_leader || $is_world_admin));
         //return ($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader';
@@ -43,7 +42,7 @@ class ProjectPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
+        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $project->world_id) && $user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
         $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return $is_admin || (!$is_disabled && ($is_leader || $is_world_admin));
         //return ($user->persistentUser->type_ == 'Administrator') || (($user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level) == 'Project Leader');

@@ -10,9 +10,10 @@
     
     @if ($member)
         <section id="homepage">
-            @include('partials.homepage', ['member' => $member, 'tasks' =>$tasks , 'projects' => $projects, 'worlds' => $worlds])
+            @include('partials.homepage', ['member' => $member, 'tasks' =>$tasks , 'projects' => $projects, 'worlds' => $worlds, 'main' => false])
         </section>
         @if(count($members) > 0)
+        <h2> Members </h2>
             @foreach($members as $otherMember)
                 <article class="myworld" data-id="{{ $otherMember->id }}">
                     <header>

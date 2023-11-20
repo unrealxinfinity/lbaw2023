@@ -15,7 +15,7 @@
     
     @if ($member)
         <section id="homepage">
-            @include('partials.homepage', ['member' => $member, 'tasks' => $member->tasks()->orderBy('id')->get(), 'projects' => $member->projects()->where('status', '=', 'Active')->orderBy('id')->get(), 'worlds' => $member->worlds()->orderBy('id')->get()])
+            @include('partials.homepage', ['member' => $member, 'tasks' => $member->tasks()->orderBy('id')->get(), 'projects' => $member->projects()->where('status', '=', 'Active')->orderBy('id')->get(), 'worlds' => $member->worlds()->orderBy('id')->get(), 'main' => true])
         </section>
     @endif
     @if (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
