@@ -16,9 +16,9 @@ class SearchProjectRequest extends FormRequest
     {   
         
         $worldid=  urldecode($this->route('id'));
-        error_log($worldid);
-        $world = World::find($worldid);
-        return Auth::user()->can('searchProject',[$world]);
+        
+       
+        return Auth::user()->can('searchProject',World::find($worldid));
     }
 
     /**
