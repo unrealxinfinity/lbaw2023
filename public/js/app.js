@@ -50,13 +50,22 @@ function addEventListeners() {
           document.getElementById('popupContainer').style.display = 'block';
         }
       });
+
     let searchTaskButton = document.getElementById('searchTaskButton');
-    if(searchTaskButton != null)
+    let searchTaskForm = document.getElementsByClassName('search-task')[0];
+    if(searchTaskButton != null){
       searchTaskButton.addEventListener('click', searchTaskRequest);
+      searchTaskForm.addEventListener('submit', searchTaskRequest);
+    }
 
     let searchProjectButton = document.getElementById('searchProjectButton');
+    let searchProjectForm = document.getElementsByClassName('search-project')[0];
     if(searchProjectButton != null)
+    {
       searchProjectButton.addEventListener('click', searchProjectRequest);
+      searchProjectForm.addEventListener('submit', searchProjectRequest);
+
+    }
     
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
@@ -65,6 +74,7 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
+    
     
   }
   
@@ -237,7 +247,7 @@ function addEventListeners() {
 
 
   async function searchTaskRequest(event) {
-    event.preventDefault
+    event.preventDefault();
     const searchTaskForms = document.getElementsByClassName('search-task');
     const id = searchTaskForms[0].getAttribute('data-id');
     let searchTaskElems = searchTaskForms[0];
@@ -298,11 +308,8 @@ function addEventListeners() {
     event.preventDefault();
     const searchProjectForms = document.getElementsByClassName('search-project');
     const id = searchProjectForms[0].getAttribute('data-id');
-    console.log(searchProjectForms[0]);
     let searchProjectElems = searchProjectForms[0];
     let searchedProject = searchProjectElems[1].value;
-    const csrf = searchProjectElems[0].value;
-    console.log(searchedProject)
     const response = await fetch('/api/worlds/'+ id +'/projects?search=' + searchedProject)
       .then(response =>{
             if(response.ok){
@@ -313,7 +320,6 @@ function addEventListeners() {
             }
       })
       .then(data => {
-          console.log(data);
           searchProjectHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
@@ -330,13 +336,11 @@ function searchProjectHandler(json){
   let newPicture = document.createElement('img'); 
   let newStatus = document.createElement('p');
   newSpan.setAttribute('class', 'ProjectList');
-  console.log(json);
   let projects = JSON.parse(json.projects);
   for (project of projects) {
-    console.log(project);
     newTitle.setAttribute('href', '/projects/' + project.id);
     newPicture.setAttribute('src', project.picture);
-    newTitle.textContent = project.title;
+    newTitle.textContent = project.name;
     newDescription.textContent = project.description;
     newStatus.textContent = project.status;
     newSpan.appendChild(newPicture); 
