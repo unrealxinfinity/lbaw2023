@@ -112,5 +112,5 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(DeleteController::class)->group(function () {
-   Route::delete('/members/{id}', 'delete')->name('delete-member');//
+   Route::delete('/members/{username}', 'delete')->name('delete-member');//
 });

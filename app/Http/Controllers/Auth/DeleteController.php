@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 
 class DeleteController extends Controller
 {
-    public function delete(DeleteMemberRequest $request, string $id): RedirectResponse
+    public function delete(DeleteMemberRequest $request, string $username): RedirectResponse
     {
         $request->validated();
 
-        $member = Member::findOrFail($id);
+        $member = User::findOrFail($username)->persistentUser->member;
         $persistentUser = $member->persistentUser;
         $user = $member->persistentUser->user;
 
