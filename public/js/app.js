@@ -28,6 +28,11 @@ function addEventListeners() {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
 
+    let tasks = document.querySelectorAll('article.task');
+    [].forEach.call(tasks, function(task) {
+      task.addEventListener("dragstart", taskDragStartHandler);
+    });
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -76,6 +81,16 @@ function addEventListeners() {
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
     
+  }
+
+  function taskDragStartHandler(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.data-id);
+    ev.dataTransfer.setData("text/html", ev.target.outerHTML);
+    ev.dataTransfer.setData(
+      "text/uri-list",
+      ev.target.ownerDocument.location.href,
+    );
+    ev.dataTransfer.dropEffect = "move";
   }
   
   function encodeForAjax(data) {
