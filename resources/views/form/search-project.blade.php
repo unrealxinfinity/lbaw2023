@@ -2,7 +2,7 @@
     <form class = "search-project" data-id="{{ $world->id }}">
         <div class='row'>
             @csrf
-            <input type="text" id="projectName"name="projectName" placeholder="Project Name">
+            <input type="text" id="projectName"name="projectName" placeholder="Project Name" required>
             <input type="hidden" name="world_id" value="{{ $world->id }}">
             <input class="button" type="button" id="searchProjectButton" value='Search'>
         </div>

@@ -21,7 +21,6 @@ class TaskPolicy
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         return $is_admin || !$is_disabled;
-        //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
     public function edit(User $user, Task $task): bool
@@ -31,7 +30,6 @@ class TaskPolicy
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_project_member = $user->persistentUser->member->projects->contains('id', $task->project_id);
         return $is_admin || (!$is_disabled && $is_project_member);
-        //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader';
     }
 
     public function create(User $user): bool
@@ -46,7 +44,6 @@ class TaskPolicy
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $project_permission = ($type === 'Member') ? $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level : 'None';
         return $is_admin || (!$is_disabled && ($project_permission === 'Project Leader' || $project_permission === 'Member'));
-        //return ($user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level) == 'Project Leader' || ($user->persistentUser->member->projects->where('id', $task->project_id)[0]->pivot->permission_level) == 'Member' ;
     }
 }
 
