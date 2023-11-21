@@ -1022,8 +1022,8 @@ paths:
 
   /create-world:
     get:
-      operationId: R209
-      summary: 'R209: World Creation Form'
+      operationId: R207
+      summary: 'R207: World Creation Form'
       description: 'Get the forms for the creation of a new world. Access: MBR'
       tags:
         - 'M02: Worlds'
@@ -1056,8 +1056,8 @@ paths:
                   value: '/create-world'
   /worlds/{id}/create-project:
     get:
-      operationId: R210
-      summary: 'R210: Create Project Form'
+      operationId: R208
+      summary: 'R208: Create Project Form'
       description: 'Get the forms to create a new project inside a world. Access: WOWN,WADM'
       tags:
         - 'M02: Worlds'
