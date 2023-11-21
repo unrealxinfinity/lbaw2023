@@ -33,6 +33,12 @@ function addEventListeners() {
       task.addEventListener("dragstart", taskDragStartHandler);
     });
 
+    let bigboxes = document.querySelectorAll('ul.big-box');
+    [].forEach.call(bigboxes, function(bigbox) {
+      bigbox.addEventListener("drop", bigBoxDropHandler);
+      bigbox.addEventListener("dragover", bigBoxDragOverHandler);
+    })
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -83,8 +89,19 @@ function addEventListeners() {
     
   }
 
+  function bigBoxDragOverHandler(ev) {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move";
+  }
+
+  function bigBoxDropHandler(ev) {
+    ev.preventDefault();
+    const data = ev.dataTransfer.getData("text/plain");
+    ev.target.appendChild(document.getElementById(data));
+  }
+
   function taskDragStartHandler(ev) {
-    ev.dataTransfer.setData("text/plain", ev.target.data-id);
+    ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setData("text/html", ev.target.outerHTML);
     ev.dataTransfer.setData(
       "text/uri-list",
