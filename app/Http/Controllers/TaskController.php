@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignMemberRequest;
 use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\MoveTaskRequest;
 use App\Http\Requests\TaskCommentRequest;
 use App\Models\Task;
 use App\Models\TaskComment;
@@ -69,6 +70,20 @@ class TaskController extends Controller
         $task->save();
 
         return redirect()->back()->withSuccess('Task edited');
+    }
+
+    public function move(MoveTaskRequest $request, string $id): JsonResponse
+    {
+        $fields = $request->validated();
+
+        $task = Task::findOrFail($id);
+        $task->status = $fields['status'];
+
+        $task->save();
+
+        return response()->json([
+            'test' => 'test'
+        ]);
     }
 
     public function assignMember(AssignMemberRequest $request, string $task_id, string $username): JsonResponse
