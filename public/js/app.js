@@ -96,8 +96,10 @@ function addEventListeners() {
 
   function bigBoxDropHandler(ev) {
     ev.preventDefault();
+    console.log(ev.target);
+    console.log(ev.currentTarget);
     const data = ev.dataTransfer.getData("text/plain");
-    ev.target.appendChild(document.getElementById(data));
+    ev.currentTarget.appendChild(document.getElementById(data));
   }
 
   function taskDragStartHandler(ev) {
