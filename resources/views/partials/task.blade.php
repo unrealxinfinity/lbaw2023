@@ -1,4 +1,4 @@
-<article class="task" id= "task-{{ $task->id }}" data-id = "{{ $task->id }}" draggable="true">
+<article class="task" id= "task-{{ $task->id }}" data-id = "{{ $task->id }}" @if (Auth::user()->can('edit', $task)) draggable="true" @endif>
     @if($main)
         <p><a href="/">Home</a> > <a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a> > <a href="/projects/{{ $task->project->id }}"> {{ $task->project->name }}</a> > <a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></p>
     @endif
