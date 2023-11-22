@@ -94,12 +94,30 @@ function addEventListeners() {
     ev.dataTransfer.dropEffect = "move";
   }
 
-  function bigBoxDropHandler(ev) {
+  async function bigBoxDropHandler(ev) {
     ev.preventDefault();
     console.log(ev.target);
     console.log(ev.currentTarget);
     const data = ev.dataTransfer.getData("text/plain");
-    ev.currentTarget.appendChild(document.getElementById(data));
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+    const box = ev.currentTarget;
+    const status = box.parentElement.querySelector('h4').textContent;
+
+    const response = await fetch('/api/tasks/' + data.slice(5), {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({status: status})
+    });
+
+    if (response.status === 200) {
+      box.appendChild(document.getElementById(data));
+    }
   }
 
   function taskDragStartHandler(ev) {

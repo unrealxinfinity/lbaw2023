@@ -82,7 +82,7 @@ class TaskController extends Controller
         $task->save();
 
         return response()->json([
-            'test' => 'test'
+            'status' => $fields['status']
         ]);
     }
 
