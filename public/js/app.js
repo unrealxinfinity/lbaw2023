@@ -75,6 +75,23 @@ function addEventListeners() {
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', function() {
+      let currentScroll = document.documentElement.scrollTop;
+    
+      if (currentScroll > lastScrollTop) {
+        // Scroll down
+        document.querySelector('#navbar').classList.remove('translate-y-0');
+        document.querySelector('#navbar').classList.add('-translate-y-full');
+        document.querySelector('#show-menu').checked = false;
+      } else {
+        // Scroll up
+        document.querySelector('#navbar').classList.remove('-translate-y-full');
+        document.querySelector('#navbar').classList.add('translate-y-0');
+      }
+    
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, false);
     
   }
   

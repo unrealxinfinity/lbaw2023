@@ -14,6 +14,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+        <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
         @vite('node_modules/tailwindcss/tailwind.css')
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -22,7 +23,7 @@
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
     <body class="min-h-full min-w-full bg-mine text-white font-roboto">
-        <nav id="navbar" class="bg-opacity-0 text-white flex flex-wrap items-center justify-between mx-auto p-4">
+        <nav id="navbar" class="fixed top-0 w-full h-28 bg-opacity-60 bg-black text-white flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">
                 <div class="items-start flex">
                 <label for="show-menu" class="cursor-pointer sm:text-big text-bigPhone m-3">☰</label>
                 <h1 class="font-bold sm:text-superBig text-superBigPhone"><a href="{{ url('') }}">MineMax!</a></h1>
@@ -40,7 +41,7 @@
                 @endif
         </nav>
         <input type="checkbox" id="show-menu" class="hidden peer"/>
-        <div class="fixed bg-black text-white h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden">
+        <div class="fixed bg-opacity-60 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden">
             <ul id="menu-items" class="list-none text-center block">
                 <li><a href="/">Home Page</a></li>
                 <li><a href="#">All Worlds</a></li>
@@ -53,12 +54,12 @@
                 @endif
             </ul>
         </div>
-            <main>
+        <main class="mb-10 mt-32 ml-10">
             <section id="content">
                 @yield('content')
             </section>
             </main>
-            <nav class="absolute bottom-0 w-full bg-black flex justify-between px-3">
+            <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3">
                 <p> @ 2023 MineMax, Inc. </p>
                 <div class="flex space-x-3">
                 <p> About </p>
