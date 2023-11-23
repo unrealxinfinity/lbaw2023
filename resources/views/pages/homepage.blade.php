@@ -5,9 +5,11 @@
 
 @section('content')
     <section id="homepage">
+        @unless (Auth::check())
         <h1>Welcome to MineMax!</h1>
         <p>Here you can manage your Worlds and Projects.</p>
-        @unless (Auth::check()) <p>Log in to get started!</p> @endunless
+        <p>Log in to get started!</p>
+        @endunless
     </section>
     @php
         $member = Auth::user() ? Auth::user()->persistentUser->member : null;
