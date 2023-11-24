@@ -60,8 +60,16 @@ Route::get('/login/callback', function () {
            'type_' => 'Member'
        ]);
 
+       $username = $socialite->getNickname();
+       $counter = 1;
+
+       while (count(User::where('username', $username)->get()) == 1) {
+           $username = $socialite->getNickname() . $counter;
+           $counter++;
+       }
+
        $user = User::create([
-          'username' => $socialite->getNickname(),
+          'username' => $username,
           'password' => 'github',
           'user_id' => $persistentUser->id,
           'github_id' => $socialite->getId(),
