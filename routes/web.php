@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Auth\DeleteController;
 use App\Http\Controllers\MemberController;
+use App\Models\Member;
+use App\Models\PersistentUser;
+use App\Models\User;
 use App\Models\World;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TagController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -36,10 +40,46 @@ Route::get('/', function () {
 
 Route::get('/login/github', function () {
     return Socialite::driver('github')->redirect();
-});
+})->name('github-login');
 
 Route::get('/login/callback', function () {
-   $user = Socialite::driver('github')->user();
+   $socialite = Socialite::driver('github')->user();
+
+   $user = User::where('github_id', $socialite->id)->first();
+
+   if ($user) {
+       $user->github_token = $socialite->token;
+       $user->github_refresh_token = $socialite->refreshToken;
+
+       $user->save();
+
+       Auth::login($user);
+   }
+   else {
+       $persistentUser = PersistentUser::create([
+           'type_' => 'Member'
+       ]);
+
+       $user = User::create([
+          'username' => $socialite->name,
+          'password' => 'github',
+          'user_id' => $persistentUser->id,
+          'github_id' => $socialite->id,
+          'github_token' => $socialite->token,
+          'github_refresh_token' => $socialite->refreshToken
+       ]);
+
+       Member::create([
+           'name' => 'New Member',
+           'email' => $socialite->email,
+           'user_id' => $persistentUser->id,
+           'picture' => 'example.com'
+       ]);
+
+       Auth::login($user);
+   }
+
+   return redirect()->route('home');
 });
 
 Route::controller(SearchController::class)->group(function() {
