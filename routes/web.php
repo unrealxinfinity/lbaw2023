@@ -43,9 +43,9 @@ Route::get('/login/github', function () {
 })->name('github-login');
 
 Route::get('/login/callback', function () {
-   $socialite = Socialite::driver('github')->user();
+   $socialite = Socialite::driver('github')->stateless()->user();
 
-   $user = User::where('github_id', $socialite->id)->first();
+   $user = User::where('github_id', $socialite->getId())->first();
 
    if ($user) {
        $user->github_token = $socialite->token;
@@ -61,17 +61,17 @@ Route::get('/login/callback', function () {
        ]);
 
        $user = User::create([
-          'username' => $socialite->name,
+          'username' => $socialite->getNickname(),
           'password' => 'github',
           'user_id' => $persistentUser->id,
-          'github_id' => $socialite->id,
+          'github_id' => $socialite->getId(),
           'github_token' => $socialite->token,
           'github_refresh_token' => $socialite->refreshToken
        ]);
 
        Member::create([
            'name' => 'New Member',
-           'email' => $socialite->email,
+           'email' => $socialite->getEmail(),
            'user_id' => $persistentUser->id,
            'picture' => 'example.com'
        ]);

@@ -34,4 +34,7 @@
         </p>
     @endif
 </form>
+<form method="GET" action="{{ route('github-login') }}">
+    <input type="submit" value="Login via GitHub">
+</form>
 @endsection
