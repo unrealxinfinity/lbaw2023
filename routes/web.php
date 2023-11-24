@@ -14,6 +14,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,13 @@ Route::get('/', function () {
     return view('pages.homepage');
 })->name('home');
 
+Route::get('/login/github', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/login/callback', function () {
+   $user = Socialite::driver('github')->user();
+});
 
 Route::controller(SearchController::class)->group(function() {
     Route::get('/search', 'show')->name('search');//
