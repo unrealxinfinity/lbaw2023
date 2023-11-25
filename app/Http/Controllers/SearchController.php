@@ -36,6 +36,7 @@ class SearchController extends Controller
         ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
         ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
         ->get();
+        
         $worlds = World::select('id', 'picture','name', 'description')
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
