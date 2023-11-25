@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Http\Requests\WorldCommentRequest;
 use App\Models\World;
 use App\Models\User;
