@@ -6,6 +6,8 @@ use Illuminate\View\View;
 use App\Http\Requests\SearchRequest;
 use App\Models\Member;
 use App\Models\World;
+use App\Models\Project;
+use App\Models\Task;
 
 class SearchController extends Controller
 {
@@ -24,11 +26,11 @@ class SearchController extends Controller
         }
         $searchedText = implode(' | ', $arr);
         
-        $tasks = $member->tasks()->select('id','title','description','due_at','status','effort','priority')
+        $tasks = Task::select('id','title','description','due_at','status','effort','priority')
             ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
             ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        $projects = $member->projects()->select('id', 'name', 'description', 'status', 'picture')
+        $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();

@@ -1,7 +1,7 @@
 <article class="homepage" data-id="{{ $member->id }}">
         @if(count($tasks) > 0)
             @if ($main) <h3> My Assigned Tasks </h3>
-            @else <h2> Assigned Tasks </h2>
+            @else <h2> Tasks </h2>
             @endif
             <div class="row">
             @foreach($tasks as $task)
@@ -13,7 +13,7 @@
         @endif
         @if(count($projects) > 0)
             @if ($main) <h3> My Current Projects </h3>
-            @else <h2> My Projects </h2>
+            @else <h2> Projects </h2>
             @endif
             <div class="row">
             @foreach($projects as $project)
