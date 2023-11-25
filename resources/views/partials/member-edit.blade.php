@@ -40,7 +40,7 @@
             </span>
         @endif
         <label for="birthday-{{ $member->id }}">Birthday</label>
-        <input id="birthday-{{ $member->id }}" type="text" class="birthday" name="birthday" value="{{ $member->birthday }}" required>
+        <input id="birthday-{{ $member->id }}" type="date" class="birthday" name="birthday" value="{{ $member->birthday }}" required>
 
         @if ($errors->has('description') && old('id') == $member->id)
             <span class="error">
