@@ -27,12 +27,14 @@ DROP TABLE IF EXISTS user_info CASCADE;
 CREATE TABLE user_info(
   id SERIAL PRIMARY KEY,
   username VARCHAR NOT NULL,
-  password VARCHAR NOT NULL,
+  password VARCHAR,
   user_id INT,
   github_id INT UNIQUE,
   github_token VARCHAR,
   github_refresh_token VARCHAR,
+  has_password BOOLEAN NOT NULL DEFAULT TRUE,
   UNIQUE(username),
+  CONSTRAINT ck_password CHECK((has_password AND password IS NOT NULL) OR (NOT has_password and password IS NULL)),
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
   remember_token VARCHAR
 );
