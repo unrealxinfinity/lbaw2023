@@ -28,6 +28,17 @@ function addEventListeners() {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
 
+    let tasks = document.querySelectorAll('article.task');
+    [].forEach.call(tasks, function(task) {
+      task.addEventListener("dragstart", taskDragStartHandler);
+    });
+
+    let bigboxes = document.querySelectorAll('ul.big-box');
+    [].forEach.call(bigboxes, function(bigbox) {
+      bigbox.addEventListener("drop", bigBoxDropHandler);
+      bigbox.addEventListener("dragover", bigBoxDragOverHandler);
+    })
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -76,6 +87,47 @@ function addEventListeners() {
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
     
+  }
+
+  function bigBoxDragOverHandler(ev) {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move";
+  }
+
+  async function bigBoxDropHandler(ev) {
+    ev.preventDefault();
+    console.log(ev.target);
+    console.log(ev.currentTarget);
+    const data = ev.dataTransfer.getData("text/plain");
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+    const box = ev.currentTarget;
+    const status = box.parentElement.querySelector('h4').textContent;
+
+    const response = await fetch('/api/tasks/' + data.slice(5), {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({status: status})
+    });
+
+    if (response.status === 200) {
+      box.appendChild(document.getElementById(data));
+    }
+  }
+
+  function taskDragStartHandler(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.id);
+    ev.dataTransfer.setData("text/html", ev.target.outerHTML);
+    ev.dataTransfer.setData(
+      "text/uri-list",
+      ev.target.ownerDocument.location.href,
+    );
+    ev.dataTransfer.dropEffect = "move";
   }
   
   function encodeForAjax(data) {

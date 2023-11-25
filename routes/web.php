@@ -75,6 +75,7 @@ Route::controller(TaskController::class)->group(function () {
     Route::get('/tasks/{id}', 'show')->name('tasks.show');//
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');//
     Route::put('/tasks/{id}', 'edit')->name('edit-details');//
+    Route::put('/api/tasks/{id}', 'move');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
