@@ -72,7 +72,7 @@ Route::get('/login/callback', function () {
        error_log($socialite->getId());
        $user = User::create([
           'username' => $username,
-          'password' => 'github',
+          'has_password' => false,
           'user_id' => $persistentUser->id,
           'github_id' => $socialite->getId(),
           'github_token' => $socialite->token,
