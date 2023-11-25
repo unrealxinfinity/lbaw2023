@@ -64,7 +64,7 @@
                 @endif
             </ul>
         </div>
-        <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 z-0">
+        <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 px-2 z-0">
             <section id="content">
                 @yield('content')
             </section>

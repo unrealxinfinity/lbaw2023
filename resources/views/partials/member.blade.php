@@ -16,8 +16,8 @@
         <h3> <a href="/mytasks">My Tasks</a></h3>
     @endif
     @else
-    <header class="row">
-        <img src= {{$member->picture}} class="small">
+    <header class="flex justify-start">
+        <img src= {{$member->picture}} class="h-fit aspect-square mx-1">
         <h4><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
     </header>
     @endif

@@ -44,7 +44,7 @@ function addEventListeners() {
     if(taskResults != null)
       taskResults.addEventListener('click', function() {
         if(document.getElementById('popupContainer').style.display == 'block'){
-          document.getElementById('popupContainer').style.display = 'none'
+          document.getElementById('popupContainer').style.display = 'none';
         }
         else{
           document.getElementById('popupContainer').style.display = 'block';
@@ -58,14 +58,9 @@ function addEventListeners() {
       searchTaskForm.addEventListener('submit', searchTaskRequest);
     }
 
-    let searchProjectButton = document.getElementById('searchProjectButton');
-    let searchProjectForm = document.getElementsByClassName('search-project')[0];
-    if(searchProjectButton != null)
-    {
-      searchProjectButton.addEventListener('click', searchProjectRequest);
-      searchProjectForm.addEventListener('submit', searchProjectRequest);
-
-    }
+    let ProjectSearcher = document.querySelector('form.search-project');
+    if (ProjectSearcher != null)
+      ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
@@ -177,9 +172,9 @@ function addEventListeners() {
     member.setAttribute('data-id', json.id);
 
     const header = document.createElement('header');
-    header.classList.add('row');
+    header.classList.add('flex justify-start');
     const img = document.createElement('img');
-    img.classList.add('small');
+    img.classList.add('h-fit aspect-square mx-1');
     const h4 = document.createElement('h4');
     const a = document.createElement('a');
     a.href = '/members/' + json.username;
@@ -344,7 +339,7 @@ function addEventListeners() {
 }
 
 function searchProjectHandler(json){
-  let popup = document.getElementsByClassName('popup-content')[0];
+  let popup = document.querySelector('#popup-content');
   popup.innerHTML = "";
   let newUl= document.createElement('ul');
   let newSpan = document.createElement('span');
@@ -368,6 +363,7 @@ function searchProjectHandler(json){
     newUl.appendChild(newSpan);
   };
   popup.appendChild(newUl);
+  document.getElementById('popupContainer').classList.remove('hidden');
 }
 
   async function addTagRequest() {
@@ -571,7 +567,7 @@ function addTagHandler(json){
   
   // Close the pop-up
   function closeSearchedTaskPopup() {
-    document.getElementById('popupContainer').style.display = 'none';
+    document.getElementById('popupContainer').classList.add('hidden');
  }
 
 
