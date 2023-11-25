@@ -86,7 +86,9 @@ function addEventListeners() {
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
-    
+    let leaveWorld = document.querySelectorAll('form#leave-world');
+    if(leaveWorld != null)
+      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -488,6 +490,42 @@ function addTagHandler(json){
   tagListElement[0].appendChild(newTag);
   }
   
+}
+
+async function sendLeaveWorldRequest() {
+  let id = this.querySelector('input.world_id').value;
+  let csrf = this.querySelector('input:first-child').value;
+  let username = this.querySelector('input.username').value;
+
+  console.log('/api/worlds/' + id + '/' + username);
+  const response = await fetch('/api/worlds/' + id + '/' + username, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({type: type})
+  }).then(response =>{
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    leaveWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error));
+
+  const json = await response.json();
+
+  if (response.status !== 500) leaveWorldHandler(json)
+}
+
+function leaveWorldHandler() {
+  let element = document.querySelector('ul.members [data-id="' + id + '"]');
+  element.remove();
 }
 
   function sendItemUpdateRequest() {
