@@ -71,7 +71,7 @@
                 {{ $errors->first('old_password') }}
             </span>
         @endif
-        @if (Auth::user()->password == 'github')
+        @if (Auth::user()->has_password)
             @if (Auth::user()->persistentUser->type_=='Administrator')
                 <label type ="hidden" for="old_password-{{ $member->id }}"></label>
                 <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
