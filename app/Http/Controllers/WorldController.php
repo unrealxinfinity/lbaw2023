@@ -93,11 +93,24 @@ class WorldController extends Controller
         $world = World::findOrFail($id);
         $searchProject = $request->query('search');
         $searchProject = strip_tags($searchProject);
+        $order= $request->query('order');
+        $arr = explode(' ', $searchProject);
+        for ($i = 0; $i < count($arr); $i++) {
+            $arr[$i] = $arr[$i] . ':*';
+        }
+        $searchProject = implode(' | ', $arr);
         
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
-            ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND id = ?", [$searchProject, $id])
+            ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND world_id = ?", [$searchProject, $id])
             ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchProject])
             ->get();
+        if($order == 'A-Z'){
+            $projects = $projects->sortByDesc('name')->values();
+        }
+        else if($order == 'Z-A'){
+            $projects = $projects->sortBy('name')->values();
+        }
+        
         $projectsJson = $projects->toJson();
         return response()->json([
             'projects' => $projectsJson,

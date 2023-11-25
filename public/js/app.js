@@ -305,7 +305,17 @@ function addEventListeners() {
     let searchTaskElems = searchTaskForms[0];
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    const response = await fetch('/api/projects/'+ id +'/tasks?search=' + searchedTask)
+    let order = searchTaskElems[3].value;
+
+    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
+
+    const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf, 
+        },
+    })
       .then(response =>{
             if(response.ok){
               return response.json();
@@ -315,7 +325,6 @@ function addEventListeners() {
             }
       })
       .then(data => {
-          console.log(data);
           searchTaskHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
@@ -326,18 +335,20 @@ function addEventListeners() {
     let popup = document.getElementsByClassName('popup-content')[0];
     popup.innerHTML = "";
     let newUl= document.createElement('ul');
-    let newSpan = document.createElement('span');
-    let newTitle = document.createElement('p');
-    let newDescription = document.createElement('p');
-    let newDueAt = document.createElement('p');
-    let newEffort = document.createElement('p');
-    let newPriority = document.createElement('p'); 
-    let newStatus = document.createElement('p');
-    newSpan.setAttribute('class', 'TaskList');
+    newUl.setAttribute('class', 'TaskList');
 
     let tasks = JSON.parse(json.tasks);
-    for (task of tasks) {
-      
+    
+    for (let task of tasks) {
+      let newSpan = document.createElement('span');
+      let newTitle = document.createElement('p');
+      let newDescription = document.createElement('p');
+      let newDueAt = document.createElement('p');
+      let newEffort = document.createElement('p');
+      let newPriority = document.createElement('p'); 
+      let newStatus = document.createElement('p');
+    
+
       newTitle.setAttribute('href', '/tasks/' + task.id);
       newTitle.textContent = task.title;
       newDescription.textContent = task.description;
@@ -362,8 +373,17 @@ function addEventListeners() {
     const id = searchProjectForms[0].getAttribute('data-id');
     let searchProjectElems = searchProjectForms[0];
     let searchedProject = searchProjectElems[1].value;
-    const response = await fetch('/api/worlds/'+ id +'/projects?search=' + searchedProject)
-      .then(response =>{
+    const csrf = searchProjectElems[0].value;
+    let order = searchProjectElems[3].value;
+    let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order;
+    const response = await fetch(url, {
+      method: 'GET', 
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrf, 
+      },
+  })
+    .then(response =>{
             if(response.ok){
               return response.json();
             }
@@ -382,14 +402,18 @@ function searchProjectHandler(json){
   let popup = document.getElementsByClassName('popup-content')[0];
   popup.innerHTML = "";
   let newUl= document.createElement('ul');
-  let newSpan = document.createElement('span');
-  let newTitle = document.createElement('p');
-  let newDescription = document.createElement('p');
-  let newPicture = document.createElement('img'); 
-  let newStatus = document.createElement('p');
-  newSpan.setAttribute('class', 'ProjectList');
+  
+  newUl.setAttribute('class', 'ProjectList');
   let projects = JSON.parse(json.projects);
-  for (project of projects) {
+  
+  for (let project of projects) {
+    let newSpan = document.createElement('span');
+    let newTitle = document.createElement('p');
+    let newDescription = document.createElement('p');
+    let newPicture = document.createElement('img'); 
+    let newStatus = document.createElement('p');
+
+
     newTitle.setAttribute('href', '/projects/' + project.id);
     newPicture.setAttribute('src', project.picture);
     newTitle.textContent = project.name;
