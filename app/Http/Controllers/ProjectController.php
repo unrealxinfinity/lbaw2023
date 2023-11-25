@@ -112,7 +112,6 @@ class ProjectController extends Controller
         
         if($order == 'A-Z'){
             $tasks = $tasks->sortByDesc('title')->values();
-            error_log($tasks);
         }
         else if($order == 'Z-A'){
             $tasks = $tasks->sortBy('title')->values();
