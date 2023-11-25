@@ -74,6 +74,29 @@ class WorldController extends Controller
             ]);
         }
     }
+
+    public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
+    {
+        $fields = $request->validated();
+        
+        $member = User::where('username', $username)->first()->persistentUser->member;
+
+        
+        try {
+            $member->worlds()->detach($world_id);
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'username' => $username,
+                'child' => 'world'
+            ]);
+        }
+    }
+
     public function comment(WorldCommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();

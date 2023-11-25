@@ -103,6 +103,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
+    Route::delete('/worlds/{id}/{username}', 'removeMember');
 });
 
 Route::controller(ProjectController::class)->group(function () {
