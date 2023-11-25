@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 
 class ProjectController extends Controller
@@ -95,10 +96,41 @@ class ProjectController extends Controller
         $request->validated();
         
         $searchedTaskText = strval($request->query('search'));
-        $searchedTaskText = strip_tags($searchedTaskText);     
+        $searchedTaskText = strip_tags($searchedTaskText);  
+        $order= $request->query('order');
+        $order = strip_tags($order);
+        $arr = explode(' ', $searchedTaskText);
+        for ($i = 0; $i < count($arr); $i++) {
+            $arr[$i] = $arr[$i] . ':*';
+        }
+        $searchedTaskText = implode(' | ', $arr);
+
         $tasks = Task::select('id','title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
             ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])
             ->get();
+
+        
+        if($order == 'A-Z'){
+            $tasks = $tasks->sortByDesc('title')->values();
+        }
+        else if($order == 'Z-A'){
+            $tasks = $tasks->sortBy('title')->values();
+        }
+        else if($order == 'EffortAscendent'){
+            $tasks = $tasks->sortBy('effort')->values();
+        }
+        else if($order == 'EffortDescendent'){
+            $tasks = $tasks->sortByDesc('effort')->values();
+        }
+        
+        else if($order == 'DueDateAscendent'){
+            $tasks = $tasks->sortByDesc("due_at")->values();
+            
+        }
+        else if($order == 'DueDateDescendent'){
+            $tasks = $tasks->sortBy("due_at")->values();
+            
+        }
         $tasksJson = $tasks->toJson();
         return response()->json([
             'error' => false,

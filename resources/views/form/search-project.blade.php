@@ -4,6 +4,11 @@
             @csrf
             <input type="text" id="projectName"name="projectName" placeholder="Project Name" required>
             <input type="hidden" name="world_id" value="{{ $world->id }}">
+            <select id="order" name="order">
+                <option value= "Relevance" selected>Relevance</option>
+                <option value="A-Z">A-Z</option>
+                <option value="Z-A">Z-A</option>
+            </select>
             <input class="button" type="button" id="searchProjectButton" value='Search'>
         </div>
     </form>
