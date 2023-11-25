@@ -23,43 +23,53 @@
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
     <body class="min-h-full min-w-full bg-mine text-white font-roboto">
-        <nav id="navbar" class="fixed top-0 w-full h-28 bg-opacity-60 bg-black text-white flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">
+        <nav id="navbar" class="z-10 fixed top-0 w-full h-28 bg-opacity-90 bg-black flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">
                 <div class="items-start flex">
-                <label for="show-menu" class="cursor-pointer sm:text-big text-bigPhone m-3">☰</label>
-                <h1 class="font-bold sm:text-superBig text-superBigPhone"><a href="{{ url('') }}">MineMax!</a></h1>
+                <label for="show-menu" class="cursor-pointer sm:text-big text-bigPhone sm:m-3 m-2">☰</label>
+                <h1 class="font-bold sm:text-superBig text-superBigPhone sm:m-0 mt-1"><a href="{{ url('') }}">MineMax!</a></h1>
                 </div>
                 @if (Auth::check())
-                @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
-                <div class="items-end flex">
-                    <ul> 
+                    @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
+                    <ul class="items-center md:flex md:visible hidden m-0">
                         <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
                         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-                    @else
+                    </ul>
+                @else
+                    <ul class="items-center md:flex md:visible hidden m-0">
                         <a class="button" href="{{ url('/login') }}"> Login </a>
                     </ul>
-                </div>
                 @endif
         </nav>
         <input type="checkbox" id="show-menu" class="hidden peer"/>
-        <div class="fixed bg-opacity-60 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden">
-            <ul id="menu-items" class="list-none text-center block">
-                <li><a href="/">Home Page</a></li>
-                <li><a href="#">All Worlds</a></li>
+        <div class="fixed bg-opacity-90 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
+            <ul id="menu-items" class="list-none text-center flex flex-col h-full">
+                <li class="menu-item"><a href="/">Home Page</a></li>
+                <li class="menu-item"><a href="#">All Worlds</a></li>
                 @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
-                    <li><a href="/myworlds">My Worlds</a></li>
-                    <li><a href="/myprojects">My Projects</a></li>
-                    <li><a href="/mytasks">My Tasks</a></li>
-                    <li><a href="/members/{{Auth::User()->username}}">Profile</a></li>
-                    <li><a href="/create-world">Create World</a></li>
+                    <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
+                    <li class="menu-item"><a href="/myprojects">My Projects</a></li>
+                    <li class="menu-item"><a href="/mytasks">My Tasks</a></li>
+                    <li class="menu-item"><a href="/members/{{Auth::User()->username}}">Profile</a></li>
+                    <li class="menu-item"><a href="/create-world">Create World</a></li>
+                @endif
+                @if (Auth::check())
+                    <ul class="md:hidden visible my-5">
+                        <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
+                        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+                    </ul>
+                @else
+                    <ul class="md:hidden visible my-10"> 
+                        <a class="button" href="{{ url('/login') }}"> Login </a>
+                    </ul>
                 @endif
             </ul>
         </div>
-        <main class="mb-10 mt-32 ml-10">
+        <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 z-0">
             <section id="content">
                 @yield('content')
             </section>
             </main>
-            <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3">
+            <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3 py-1 md:text-medium text-mediumPhone">
                 <p> @ 2023 MineMax, Inc. </p>
                 <div class="flex space-x-3">
                 <p> About </p>
