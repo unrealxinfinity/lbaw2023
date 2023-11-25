@@ -50,33 +50,35 @@
         <label for="description-{{ $member->id }}">Description</label>
         <input id="description-{{ $member->id }}" type="text" class="description" name="description" value="{{ $member->description }}" required>
 
-        @if ($errors->has('password') && old('id') == $member->id)
-            <span class="error">
-                {{ $errors->first('password') }}
-            </span>
-        @endif
-        <label for="password-{{ $member->id }}">New Password</label>
-        <input id="password-{{ $member->id }}" type="password" class="password" name="password">
+        @if (!isset(Auth::user()->github_id))
+            @if ($errors->has('password') && old('id') == $member->id)
+                <span class="error">
+                    {{ $errors->first('password') }}
+                </span>
+            @endif
+            <label for="password-{{ $member->id }}">New Password</label>
+            <input id="password-{{ $member->id }}" type="password" class="password" name="password">
 
-        @if ($errors->has('password_confirmation') && old('id') == $member->id)
-            <span class="error">
-                {{ $errors->first('password_confirmation') }}
-            </span>
-        @endif
-        <label for="password_confirmation-{{ $member->id }}">Confirm New Password</label>
-        <input id="password_confirmation-{{ $member->id }}" type="password" class="password_confirmation" name="password_confirmation">
+            @if ($errors->has('password_confirmation') && old('id') == $member->id)
+                <span class="error">
+                    {{ $errors->first('password_confirmation') }}
+                </span>
+            @endif
+            <label for="password_confirmation-{{ $member->id }}">Confirm New Password</label>
+            <input id="password_confirmation-{{ $member->id }}" type="password" class="password_confirmation" name="password_confirmation">
 
-        @if ($errors->has('old_password') && old('id') == $member->id)
-            <span class="error">
-                {{ $errors->first('old_password') }}
-            </span>
-        @endif
-        @if (Auth::user()->persistentUser->type_=='Administrator')
-            <label type ="hidden" for="old_password-{{ $member->id }}"></label>
-            <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
-        @else
-            <label for="old_password-{{ $member->id }}">Old Password</label>
-            <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
+            @if ($errors->has('old_password') && old('id') == $member->id)
+                <span class="error">
+                    {{ $errors->first('old_password') }}
+                </span>
+            @endif
+            @if (Auth::user()->persistentUser->type_=='Administrator')
+                <label type ="hidden" for="old_password-{{ $member->id }}"></label>
+                <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
+            @else
+                <label for="old_password-{{ $member->id }}">Old Password</label>
+                <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
+            @endif
         @endif
 
         <input type="submit" id="submit-{{ $member->id }}" value="Edit Profile">

@@ -62,12 +62,14 @@ Route::get('/login/callback', function () {
 
        $username = $socialite->getNickname();
        $counter = 1;
+       error_log($socialite->getId());
 
        while (count(User::where('username', $username)->get()) == 1) {
            $username = $socialite->getNickname() . $counter;
            $counter++;
        }
 
+       error_log($socialite->getId());
        $user = User::create([
           'username' => $username,
           'password' => 'github',

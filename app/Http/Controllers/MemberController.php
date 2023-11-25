@@ -76,7 +76,7 @@ class MemberController extends Controller
 
         $member = User::where('username', $username)->firstOrFail()->persistentUser->member;
 
-        if(!Hash::check($fields['old_password'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != "Administrator"){
+        if(Auth::user()->github_id != null && !Hash::check($fields['old_password'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != "Administrator"){
             return back()->with('error','Password confirmation is incorrect!');
         }
 
