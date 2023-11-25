@@ -29,6 +29,9 @@ CREATE TABLE user_info(
   username VARCHAR NOT NULL,
   password VARCHAR NOT NULL,
   user_id INT,
+  github_id INT UNIQUE,
+  github_token VARCHAR,
+  github_refresh_token VARCHAR,
   UNIQUE(username),
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
   remember_token VARCHAR

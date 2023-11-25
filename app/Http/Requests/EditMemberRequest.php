@@ -29,7 +29,7 @@ class EditMemberRequest extends FormRequest
         return [
             'username' => ['required', 'string','max:250', 'unique:user_info,username,' . $user->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'old_password' => ['required', 'string'],
+            'old_password' => ['nullable', 'string'],
             'birthday' => ['required'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],

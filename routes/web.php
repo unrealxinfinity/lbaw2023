@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Auth\DeleteController;
 use App\Http\Controllers\MemberController;
+use App\Models\Member;
+use App\Models\PersistentUser;
+use App\Models\User;
 use App\Models\World;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorldController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TagController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -14,6 +18,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +38,59 @@ Route::get('/', function () {
     return view('pages.homepage');
 })->name('home');
 
+Route::get('/login/github', function () {
+    return Socialite::driver('github')->redirect();
+})->name('github-login');
+
+Route::get('/login/callback', function () {
+   $socialite = Socialite::driver('github')->stateless()->user();
+
+   $user = User::where('github_id', $socialite->getId())->first();
+
+   if ($user) {
+       $user->github_token = $socialite->token;
+       $user->github_refresh_token = $socialite->refreshToken;
+
+       $user->save();
+
+       Auth::login($user);
+   }
+   else {
+       $persistentUser = PersistentUser::create([
+           'type_' => 'Member'
+       ]);
+
+       $username = $socialite->getNickname();
+       $counter = 1;
+       error_log($socialite->getId());
+
+       while (count(User::where('username', $username)->get()) == 1) {
+           $username = $socialite->getNickname() . $counter;
+           $counter++;
+       }
+
+       error_log($socialite->getId());
+       $user = User::create([
+          'username' => $username,
+          'password' => 'github',
+          'user_id' => $persistentUser->id,
+          'github_id' => $socialite->getId(),
+          'github_token' => $socialite->token,
+          'github_refresh_token' => $socialite->refreshToken
+       ]);
+
+       Member::create([
+           'name' => 'New Member',
+           'email' => $socialite->getEmail(),
+           'user_id' => $persistentUser->id,
+           'picture' => 'example.com'
+       ]);
+
+       Auth::login($user);
+   }
+
+   return redirect()->route('home');
+});
 
 Route::controller(SearchController::class)->group(function() {
     Route::get('/search', 'show')->name('search');//
