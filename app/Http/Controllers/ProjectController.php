@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
+use App\Http\Requests\LeaveProjectRequest;
 use App\Http\Requests\SearchTaskRequest;
 use App\Models\Member;
 use App\Models\Project;
@@ -73,6 +74,18 @@ class ProjectController extends Controller
                 'parent' => 'world',
                 'child' =>'project'
             ]);
+        }
+    }
+
+    public function leave(LeaveProjectRequest $request, string $id): RedirectResponse
+    {
+        try{
+            $request->validated();
+            $project = Project::findOrFail($id);
+            $project->members()->detach(Member::where('user_id', auth()->user()->id)->first()->id);
+            return to_route('worlds.show', ['id' => $project->world_id])->withSuccess('You have left the project!');
+        } catch (\Exception $e){
+            return to_route('projects.show', ['id' => $id])->withSuccess('You can\'t leave this project!');
         }
     }
    

@@ -85,8 +85,12 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
-    
-    
+    /*
+    let removeMemberFromWorld = document.querySelector('');
+    if(leaveWorld != null){
+      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+    }
+    */ 
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -488,6 +492,42 @@ function addTagHandler(json){
   tagListElement[0].appendChild(newTag);
   }
   
+}
+
+async function sendRemoveMemberFromWorld(ev) {
+  ev.preventDefault();
+  console.log('Sending leave world request');
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.world_id').value;
+  let username = this.querySelector('input.username').value;
+  console.log(id);
+  console.log(username);
+
+  url = `/api/worlds/${id}/${username}`;
+  console.log(url);
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    removeMemberFromWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error));
+}
+
+function removeMemberFromWorldHandler(data) {
+  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
+  element.remove();
 }
 
   function sendItemUpdateRequest() {

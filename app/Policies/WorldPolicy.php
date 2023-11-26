@@ -30,6 +30,17 @@ class WorldPolicy
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
 
+    public function removeMember(User $user, World $world): bool
+    {
+        return $user->persistentUser->member->worlds->contains('id', $world->id);
+    }
+
+    public function leave(User $user, World $world): bool
+    {
+        $is_owner = $world->owner_id === $user->persistentUser->member->id;
+        return $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
+    }
+
     public function comment(User $user, World $world): bool
     {
         return ($user->persistentUser->type_ === 'Member') && ($user->persistentUser->member->worlds->contains($world->id));
