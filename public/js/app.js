@@ -86,9 +86,11 @@ function addEventListeners() {
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
-    let leaveWorld = document.querySelectorAll('form#leave-world');
-    if(leaveWorld != null)
+    let leaveWorld = document.querySelector('form#leave-world');
+    if(leaveWorld != null){
       leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+    }
+      
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -493,6 +495,7 @@ function addTagHandler(json){
 }
 
 async function sendLeaveWorldRequest() {
+  console.log('Sending leave world request');
   let id = this.querySelector('input.world_id').value;
   let csrf = this.querySelector('input:first-child').value;
   let username = this.querySelector('input.username').value;
@@ -505,8 +508,7 @@ async function sendLeaveWorldRequest() {
       'Content-Type': "application/json",
       'Accept': 'application/json',
       "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify({type: type})
+    }
   }).then(response =>{
     if(response.ok){
       return response.json();
