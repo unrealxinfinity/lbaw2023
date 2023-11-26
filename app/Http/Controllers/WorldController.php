@@ -98,7 +98,7 @@ class WorldController extends Controller
         }
     }
 
-    public function leaveWorld(LeaveWorldRequest $request, string $world_id): RedirectResponse
+    public function leave(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
         try {
             $request->validated();

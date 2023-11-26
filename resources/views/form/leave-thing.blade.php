@@ -1,5 +1,5 @@
 @if($thing instanceof App\Models\World)
-    <form method="POST" id="leave-world" action={{ route('leave-world', ['id' => $thing->id, 'username' => Auth::user()->username]) }}>
+    <form method="POST" action={{ route('leave-world', ['id' => $thing->id, 'username' => Auth::user()->username]) }}>
         @CSRF
         @method('DELETE')
         <input type="submit" value="Leave World">
