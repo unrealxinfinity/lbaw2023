@@ -502,7 +502,6 @@ async function sendRemoveMemberFromWorldRequest(ev) {
 
 
   url = `/api/worlds/${id}/${username}`;
-  console.log(url);
   const response = await fetch(url, {
     method: 'DELETE',
     headers: {
@@ -520,12 +519,14 @@ async function sendRemoveMemberFromWorldRequest(ev) {
     }
   }).then(data => {
     removeMemberFromWorldHandler(data);
-  }).catch(error => console.error('Error fetching data:', error));
+  }).catch(error => console.error('Error fetching data:', error.message));
 }
 
 function removeMemberFromWorldHandler(data) {
   let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
   element.remove();
+  let form = document.querySelector('form#remove-member-world');
+  form.remove()
 }
 
   function sendItemUpdateRequest() {
