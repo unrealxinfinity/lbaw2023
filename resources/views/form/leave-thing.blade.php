@@ -2,9 +2,9 @@
     <form method="POST" id="leave-world">
         @CSRF
         @method('DELETE')
-        <input type="hidden" name="world_id" value="{{ $thing->id }}">
-        <input type="hidden" name="username" value="{{ Auth::user()->username }}">
-        <button type="submit">Leave World</button>
+        <input type="hidden" name="world_id" class="world_id" value="{{ $thing->id }}">
+        <input type="hidden" name="username" class="username" value="{{ Auth::user()->username }}">
+        <input type="submit" value="Leave World">
     </form>
 @elseif($thing instanceof App\Models\Project)
     <form method="POST" action="">

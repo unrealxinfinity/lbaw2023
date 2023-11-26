@@ -495,14 +495,18 @@ function addTagHandler(json){
   
 }
 
-async function sendLeaveWorldRequest() {
+async function sendLeaveWorldRequest(ev) {
+  ev.preventDefault();
   console.log('Sending leave world request');
   let csrf = this.querySelector('input:first-child').value;
   let id = this.querySelector('input.world_id').value;
   let username = this.querySelector('input.username').value;
+  console.log(id);
+  console.log(username);
 
-  console.log('/api/worlds/' + id + '/' + username);
-  const response = await fetch('/api/worlds/' + id + '/' + username, {
+  url = `/api/worlds/${id}/${username}`;
+  console.log(url);
+  const response = await fetch(url, {
     method: 'DELETE',
     headers: {
       'X-CSRF-TOKEN': csrf,
@@ -510,7 +514,7 @@ async function sendLeaveWorldRequest() {
       'Accept': 'application/json',
       "X-Requested-With": "XMLHttpRequest"
     }
-  }).then(response =>{
+  }).then(response => {
     if(response.ok){
       return response.json();
     }
@@ -520,10 +524,6 @@ async function sendLeaveWorldRequest() {
   }).then(data => {
     leaveWorldHandler(data);
   }).catch(error => console.error('Error fetching data:', error));
-
-  const json = await response.json();
-
-  if (response.status !== 500) leaveWorldHandler(json)
 }
 
 function leaveWorldHandler() {
