@@ -268,6 +268,22 @@ CREATE TRIGGER delete_member_projects
     FOR EACH ROW
     EXECUTE PROCEDURE delete_member_projects();
 
+DROP FUNCTION IF EXISTS delete_assignee() CASCADE;
+CREATE FUNCTION delete_assignee() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM assignee ass WHERE (OLD.member_id = ass.member_id) AND (OLD.project_id = (SELECT project_id FROM tasks WHERE id = ass.task_id));
+    RETURN OLD;
+END;
+$BODY$
+    LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS delete_assignee on member_project CASCADE;
+CREATE TRIGGER delete_assignee
+    AFTER DELETE ON member_project
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_assignee();
+
 DROP FUNCTION IF EXISTS check_member_world() CASCADE;
 CREATE FUNCTION check_member_world() RETURNS TRIGGER AS
 $BODY$
