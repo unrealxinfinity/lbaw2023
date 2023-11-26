@@ -34,7 +34,7 @@ function addEventListeners() {
 
     let button = document.getElementById("createTagButton");
     if(button != null)
-    button.addEventListener("click", addTagRequest);
+    button.addEventListener("submit", addTagRequest);
     
     let worldMemberAdder = document.querySelector('form#add-member-to-world');
     if (worldMemberAdder != null)
@@ -51,12 +51,9 @@ function addEventListeners() {
         }
       });
 
-    let searchTaskButton = document.getElementById('searchTaskButton');
-    let searchTaskForm = document.getElementsByClassName('search-task')[0];
-    if(searchTaskButton != null){
-      searchTaskButton.addEventListener('click', searchTaskRequest);
-      searchTaskForm.addEventListener('submit', searchTaskRequest);
-    }
+    let TaskSearcher = document.querySelector('form.search-task');
+    if (TaskSearcher != null)
+      TaskSearcher.addEventListener('submit', searchTaskRequest);
 
     let ProjectSearcher = document.querySelector('form.search-project');
     if (ProjectSearcher != null)
@@ -172,9 +169,9 @@ function addEventListeners() {
     member.setAttribute('data-id', json.id);
 
     const header = document.createElement('header');
-    header.classList.add('flex justify-start');
+    header.classList.add('flex', 'justify-start');
     const img = document.createElement('img');
-    img.classList.add('h-fit aspect-square mx-1');
+    img.classList.add('h-fit', 'aspect-square', 'mx-1');
     const h4 = document.createElement('h4');
     const a = document.createElement('a');
     a.href = '/members/' + json.username;
@@ -216,7 +213,6 @@ function addEventListeners() {
 
   async function sendAssignMemberRequest(event) {
     event.preventDefault();
-
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
@@ -283,7 +279,7 @@ function addEventListeners() {
 }
 
   function searchTaskHandler(json){
-    let popup = document.getElementsByClassName('popup-content')[0];
+    let popup = document.querySelector('#popup-content');
     popup.innerHTML = "";
     let newUl= document.createElement('ul');
     let newSpan = document.createElement('span');
@@ -314,6 +310,7 @@ function addEventListeners() {
       newUl.appendChild(newSpan);
     };
     popup.appendChild(newUl);
+    document.getElementById('popupContainer').classList.remove('hidden');
   }
 
   async function searchProjectRequest(event) {
@@ -413,7 +410,7 @@ function addTagHandler(json){
     let newTag = document.createElement('span');
 
   // Set class attribute for the new span element
-  newTag.setAttribute('class', 'badge badge-secondary');
+  newTag.setAttribute('class', 'tag');
 
   // Set text content for the new span element
   newTag.textContent = json.tagName;

@@ -1,4 +1,4 @@
-<form id="add-member" class="add-member">
+<form id="add-member" class="add-member mt-5 flex flex-col child:my-1">
      @csrf
     <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>
@@ -7,5 +7,5 @@
         <option value="Project Leader">Project Leader</option>
     </select>
 
-    <input type="submit" value="Add a member">
+    <input class="button" type="submit" value="Add a member">
 </form>

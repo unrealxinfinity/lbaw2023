@@ -1,5 +1,5 @@
-<ul class="tagList">
+<div class="flex">
     @foreach ($tags as $tag)
-    <span class="badge badge-secondary">{{ $tag->name }}</span>
+    <p class="tag">{{ $tag->name }}</p>
     @endforeach
-</ul>
+</div>

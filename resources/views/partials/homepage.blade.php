@@ -5,14 +5,14 @@
             @endif
             <div class="panel">
             @foreach($tasks as $task)
-            <div class="container"> 
+            <div class="flex flex-col justify-end min-w-[11rem] w-44 h-32 sm:min-w-[13rem] sm:w-52 sm:h-44 mx-4 my-2 bg-opacity-60 bg-grey rounded"> 
                 <div class="h-1/2 md:text-medium text-mediumPhone overflow-hidden px-5 flex flex-col justify-center">
                     <h2><a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a>
                      > 
                     <a href="/projects/{{ $task->project->id }}">{{ $task->project->name }}</a></h2>
                 </div>
-                <div class="container-title"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></div>
-                <div class="container-desc"><h4>{{ $task->description }}</h4></div>
+                <div class="title"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></div>
+                <div class="desc"><h4>{{ $task->description }}</h4></div>
             </div>
             @endforeach
             </div>
@@ -25,8 +25,8 @@
             @foreach($projects as $project)
             <div class="container">
                 <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
-                <div class="container-title"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
-                <div class="container-desc"><h4>{{ $project->description }}</h4></div>
+                <div class="title"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
+                <div class="desc"><h4>{{ $project->description }}</h4></div>
             </div>
             @endforeach
             </div>
@@ -39,8 +39,8 @@
             @foreach($worlds as $world)
             <div class="container">
                 <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
-                <div class="container-title"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></div>
-                <div class="container-desc"><h4>{{ $world->description }}</h4></div>
+                <div class="title"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></div>
+                <div class="desc"><h4>{{ $world->description }}</h4></div>
             </div>
             @endforeach
         @endif
