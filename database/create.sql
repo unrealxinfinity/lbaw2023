@@ -251,6 +251,23 @@ CREATE TABLE member_notification(
 
 
 /**  TRIGGERS  **/
+
+DROP FUNCTION IF EXISTS delete_member_projects() CASCADE;
+CREATE FUNCTION delete_member_projects() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM member_project mp WHERE (OLD.member_id = mp.member_id) AND (OLD.world_id = (SELECT world_id FROM projects WHERE id = mp.project_id));
+    RETURN OLD;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS delete_member_projects on member_world CASCADE;
+CREATE TRIGGER delete_member_projects
+    AFTER DELETE ON member_world
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_member_projects();
+
 DROP FUNCTION IF EXISTS check_member_world() CASCADE;
 CREATE FUNCTION check_member_world() RETURNS TRIGGER AS
 $BODY$
