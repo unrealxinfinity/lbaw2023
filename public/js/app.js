@@ -88,6 +88,7 @@ function addEventListeners() {
     
     let leaveWorld = document.querySelector('form#leave-world');
     if(leaveWorld != null){
+      console.log('huh');
       leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
     }
       
@@ -496,8 +497,8 @@ function addTagHandler(json){
 
 async function sendLeaveWorldRequest() {
   console.log('Sending leave world request');
-  let id = this.querySelector('input.world_id').value;
   let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.world_id').value;
   let username = this.querySelector('input.username').value;
 
   console.log('/api/worlds/' + id + '/' + username);

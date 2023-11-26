@@ -25,7 +25,6 @@ class RemoveMemberFromWorldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [Rule::in(['true', 'false'])],
             'id' => ['exists:App\Models\World,id'],
             'username' => ['exists:App\Models\User,username']
         ];

@@ -78,6 +78,7 @@ class WorldController extends Controller
 
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
     {
+        error_log('Remove Member');
         $request->validated();
         
         $member = User::where('username', $username)->first()->persistentUser->member;
