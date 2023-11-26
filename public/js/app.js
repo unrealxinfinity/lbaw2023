@@ -85,12 +85,12 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
-    /*
-    let removeMemberFromWorld = document.querySelector('');
-    if(leaveWorld != null){
-      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+    
+    let removeMemberFromWorld = document.querySelector('form#remove-member-world');
+    if(removeMemberFromWorld != null){
+      removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
     }
-    */ 
+  
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -494,14 +494,12 @@ function addTagHandler(json){
   
 }
 
-async function sendRemoveMemberFromWorld(ev) {
+async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
-  console.log('Sending leave world request');
   let csrf = this.querySelector('input:first-child').value;
   let id = this.querySelector('input.world_id').value;
   let username = this.querySelector('input.username').value;
-  console.log(id);
-  console.log(username);
+
 
   url = `/api/worlds/${id}/${username}`;
   console.log(url);
