@@ -100,16 +100,15 @@ class WorldController extends Controller
 
     public function leaveWorld(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
-        $request->validated();
-
-        $world = World::findOrFail($world_id);
-        $member = Auth::user()->persistentUser->member;
-
         try {
+            $request->validated();
+
+            $world = World::findOrFail($world_id);
+            $member = Auth::user()->persistentUser->member;
             $member->worlds()->detach($world_id);
-            return redirect()->route('')->withSuccess('You left the world.');
+            return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
-            return redirect()->route('')->withError('You can\'t leave the world.');
+            return redirect()->route("worlds.show", ['id' => $world_id])->withError('You can\'t leave the world.');
         }
     }
 
