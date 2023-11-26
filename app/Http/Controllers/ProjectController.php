@@ -85,7 +85,7 @@ class ProjectController extends Controller
             $project->members()->detach(Member::where('user_id', auth()->user()->id)->first()->id);
             return to_route('worlds.show', ['id' => $project->world_id])->withSuccess('You have left the project!');
         } catch (\Exception $e){
-            return to_route('worlds.show', ['id' => $id])->withSuccess('You have left the project!');
+            return to_route('projects.show', ['id' => $id])->withSuccess('You can\'t leave this project!');
         }
     }
    
