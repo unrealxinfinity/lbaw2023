@@ -5,6 +5,7 @@
     <ul class="members">
         @foreach($thing->members()->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
+            @include('form.remove-member', ['thing' => $thing, 'member' => $member])
         @endforeach
     </ul>
     @if(Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $thing->id) && $thing->owner_id != Auth::user()->persistentUser->member->id)
