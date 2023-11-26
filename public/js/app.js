@@ -526,8 +526,8 @@ async function sendLeaveWorldRequest(ev) {
   }).catch(error => console.error('Error fetching data:', error));
 }
 
-function leaveWorldHandler() {
-  let element = document.querySelector('ul.members [data-id="' + id + '"]');
+function leaveWorldHandler(data) {
+  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
   element.remove();
 }
 
