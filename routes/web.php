@@ -99,6 +99,7 @@ Route::controller(SearchController::class)->group(function() {
 Route::controller(WorldController::class)->group(function () {
     Route::post('/api/worlds/{id}/{username}', 'addMember');//
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
+    Route::delete('/api/worlds/{id}/{username}', 'leaveWorld')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
     Route::post('/worlds', 'create')->name('create-world');//
     Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');//

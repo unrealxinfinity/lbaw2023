@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LeaveWorldRequest;
 use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Http\Requests\WorldCommentRequest;
 use App\Models\World;
@@ -78,7 +79,6 @@ class WorldController extends Controller
 
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
     {
-        error_log('Remove Member');
         $request->validated();
         
         $member = User::where('username', $username)->first()->persistentUser->member;
@@ -95,6 +95,21 @@ class WorldController extends Controller
                 'error' => true,
                 'id' => $member->id,
             ]);
+        }
+    }
+
+    public function leaveWorld(LeaveWorldRequest $request, string $world_id): RedirectResponse
+    {
+        $request->validated();
+
+        $world = World::findOrFail($world_id);
+        $member = Auth::user()->persistentUser->member;
+
+        try {
+            $member->worlds()->detach($world_id);
+            return redirect()->route('home')->withSuccess('You left the world.');
+        } catch (\Exception $e) {
+            return redirect()->route('home')->withError('You can\'t leave the world.');
         }
     }
 
