@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Project;
 
 class LeaveProjectRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class LeaveProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->persistentUser->member->projects->contains($this->route('project_id'));
+        return Auth::user()->can('leave', Project::find($this->route()->id));
     }
 
     /**
