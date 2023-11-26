@@ -86,9 +86,11 @@ function addEventListeners() {
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
     
-    let removeMemberFromWorld = document.querySelector('form#remove-member-world');
-    if(removeMemberFromWorld != null){
-      removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+    let removeMemberFromWorlds = document.querySelectorAll('form#remove-member-world');
+    if(removeMemberFromWorlds != null){
+      removeMemberFromWorlds.forEach(removeMemberFromWorld => {
+        removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+      });
     }
   
   }
@@ -231,7 +233,22 @@ function addEventListeners() {
 
     member.appendChild(header);
 
+    const removeForm = document.createElement('form');
+    removeForm.id= 'remove-member-world';
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    removeForm.innerHTML = `
+      <input type="hidden" name="_token" value="${csrfToken}">
+      <input type="hidden" class="id" name="id" value="${json.id}">
+      <input type="hidden" class="username" name="username" value="${json.username}">
+      <input type="submit" value="X">
+    `;
+
+    member.appendChild(removeForm);
+    removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+
     ul.appendChild(member);
+   
   }
 
   async function sendAddMemberToWorld(event){
@@ -497,7 +514,7 @@ function addTagHandler(json){
 async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
   let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.world_id').value;
+  let id = this.querySelector('input.id').value;
   let username = this.querySelector('input.username').value;
 
 
