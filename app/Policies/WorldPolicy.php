@@ -32,7 +32,7 @@ class WorldPolicy
 
     public function removeMember(User $user, World $world): bool
     {
-        return $user->persistentUser->member->worlds->contains('id', $world->id);
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
 
     public function leave(User $user, World $world): bool
