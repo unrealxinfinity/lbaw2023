@@ -75,6 +75,16 @@ class ProjectController extends Controller
             ]);
         }
     }
+
+    public function leave(LeaveWorldRequest $request, string $id): RedirectResponse
+    {
+
+        $project = Project::findOrFail($id);
+
+        $project->members()->detach(Member::where('user_id', auth()->user()->id)->first()->id);
+
+        return to_route('worlds.show', ['id' => $project->world_id])->withSuccess('You have left the project!');
+    }
    
     public function delete(DeleteProjectRequest $request, string $id): View
     {
