@@ -4,7 +4,7 @@
             @CSRF
             <input type="hidden" class="world_id" name="world_id" value={{ $thing->id}}>
             <input type="hidden" class="username" name="username" value={{ $member->persistentUser->user->username}}>
-            <input type="submit" value="remove {{ $member->persistentUser->user->username}}">
+            <input type="submit" value="X">
         </form>
     @endif
 @elseif($thing instanceof App\Models\Project)

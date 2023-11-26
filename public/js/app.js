@@ -526,7 +526,7 @@ function removeMemberFromWorldHandler(data) {
   let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
   element.remove();
   let form = document.querySelector('form#remove-member-world');
-  form.remove()
+  form.remove();
 }
 
   function sendItemUpdateRequest() {
