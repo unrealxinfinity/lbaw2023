@@ -107,9 +107,9 @@ class WorldController extends Controller
 
         try {
             $member->worlds()->detach($world_id);
-            return redirect()->route('home')->withSuccess('You left the world.');
+            return redirect()->route('')->withSuccess('You left the world.');
         } catch (\Exception $e) {
-            return redirect()->route('home')->withError('You can\'t leave the world.');
+            return redirect()->route('')->withError('You can\'t leave the world.');
         }
     }
 

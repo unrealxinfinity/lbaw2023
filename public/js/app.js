@@ -85,13 +85,12 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
-    
-    let leaveWorld = document.querySelector('form#leave-world');
+    /*
+    let removeMemberFromWorld = document.querySelector('');
     if(leaveWorld != null){
-      console.log('huh');
       leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
     }
-      
+    */ 
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -495,7 +494,7 @@ function addTagHandler(json){
   
 }
 
-async function sendLeaveWorldRequest(ev) {
+async function sendRemoveMemberFromWorld(ev) {
   ev.preventDefault();
   console.log('Sending leave world request');
   let csrf = this.querySelector('input:first-child').value;
@@ -522,11 +521,11 @@ async function sendLeaveWorldRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    leaveWorldHandler(data);
+    removeMemberFromWorldHandler(data);
   }).catch(error => console.error('Error fetching data:', error));
 }
 
-function leaveWorldHandler(data) {
+function removeMemberFromWorldHandler(data) {
   let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
   element.remove();
 }
