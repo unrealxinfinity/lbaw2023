@@ -14,9 +14,9 @@
         @csrf
         @method('POST')
 
-        <input name="file" type="file" required>
+        <input class="text-white" name="file" type="file" required>
         <input name="type" type="hidden" value="profile">
-        <input type="submit" value="Upload profile picture">
+        <input class="button w-min" type="submit" value="Upload profile picture">
     </form>
     <h2 class="mb-5">{{ $member->description }}</h2>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
@@ -27,7 +27,7 @@
     @endif
     @else
     <header class="flex justify-start">
-        <img src= {{$member->picture}} class="h-fit aspect-square mx-1">
+        <img src= {{$member->getProfileImage()}} class="h-fit aspect-square mx-1">
         <h4><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
     </header>
     @endif
