@@ -17,7 +17,10 @@
             @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
                 <nav class="container">
                     <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
-                    <div class="title"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
+                    @php
+                        $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                    @endphp
+                    <div class="title"><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
                     <div class="desc"><h4>{{ $project->name }}</h4></div>
                 </nav>
             @endforeach
@@ -27,9 +30,14 @@
         <h2 class="mt-10"> ARCHIVED PROJECTS </h2>
         <ul class="flex justify-start h-40 m-5">
             @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
-                <nav class="box">
-                    <h3><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h3>
-                </nav>
+            <nav class="container">
+                <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
+                @php
+                    $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                @endphp
+                <div class="title"><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
+                <div class="desc"><h4>{{ $project->name }}</h4></div>
+            </nav>
             @endforeach
         </ul>
         @endif

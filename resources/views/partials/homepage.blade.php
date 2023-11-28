@@ -11,7 +11,10 @@
                      > 
                     <a href="/projects/{{ $task->project->id }}">{{ $task->project->name }}</a></h2>
                 </div>
-                <div class="title"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></div>
+                @php
+                    $translateXValue = (strlen($task->title)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                @endphp
+                <div class="title"><a class="{{$translateXValue}}" href="/tasks/{{ $task->id }}">{{ $task->title }}</a></div>
                 <div class="desc"><h4>{{ $task->description }}</h4></div>
             </div>
             @endforeach
@@ -25,7 +28,10 @@
             @foreach($projects as $project)
             <div class="container">
                 <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
-                <div class="title"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
+                @php
+                    $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                @endphp
+                <div class="title"><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
                 <div class="desc"><h4>{{ $project->description }}</h4></div>
             </div>
             @endforeach
@@ -39,7 +45,10 @@
             @foreach($worlds as $world)
             <div class="container">
                 <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
-                <div class="title"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></div>
+                @php
+                    $translateXValue = (strlen($world->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                @endphp
+                <div class="title"><a class="{{$translateXValue}}" href="/worlds/{{ $world->id }}">{{ $world->name }}</a></div>
                 <div class="desc"><h4>{{ $world->description }}</h4></div>
             </div>
             @endforeach
