@@ -33,7 +33,7 @@ function addEventListeners() {
       task.addEventListener("dragstart", taskDragStartHandler);
     });
 
-    let bigboxes = document.querySelectorAll('ul.big-box');
+    let bigboxes = document.querySelectorAll('div.big-box');
     [].forEach.call(bigboxes, function(bigbox) {
       bigbox.addEventListener("drop", bigBoxDropHandler);
       bigbox.addEventListener("dragover", bigBoxDragOverHandler);
@@ -117,7 +117,7 @@ function addEventListeners() {
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
     const box = ev.currentTarget;
-    const status = box.parentElement.querySelector('h2').textContent;
+    const status = box.querySelector('h2').textContent;
 
     const response = await fetch('/api/tasks/' + data.slice(5), {
       method: 'PUT',
@@ -136,6 +136,7 @@ function addEventListeners() {
   }
 
   function taskDragStartHandler(ev) {
+    console.log(ev.target.id);
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setData("text/html", ev.target.outerHTML);
     ev.dataTransfer.setData(
