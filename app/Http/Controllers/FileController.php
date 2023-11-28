@@ -10,7 +10,7 @@ class FileController extends Controller
     static $default = 'default.jpg';
     static $diskName = 'pictures';
 
-    static $systemTypes = [
+    public static $systemTypes = [
         'profile' => ['png', 'jpg', 'jpeg', 'gif']
     ];
 
