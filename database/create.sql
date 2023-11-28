@@ -667,10 +667,10 @@ INSERT INTO user_info (username, password, user_id) VALUES
     ('john_doe', '$2y$10$tZQTo2UE5AhvU75HMsh4h.HbyOQZ3FRNSV3YzXVEykDBADoSRRxyu', 4);
 
 -- Sample data for the 'members' table
-INSERT INTO members (user_id, name, birthday, description, picture, email) VALUES
-    (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'image1.jpg', 'mcfan2004@example.com'),
-    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'image2.jpg', 'up202100000@example.com'),
-    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'image3.jpg', 'bobjohn@example.com');
+INSERT INTO members (user_id, name, birthday, description, email) VALUES
+    (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'mcfan2004@example.com'),
+    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'up202100000@example.com'),
+    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'bobjohn@example.com');
 
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES

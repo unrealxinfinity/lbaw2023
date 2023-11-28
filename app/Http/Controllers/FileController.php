@@ -25,7 +25,7 @@ class FileController extends Controller
         return asset($type . '/' . self::$default);
     }
 
-    private static function getFileName (String $type, int $id): string {
+    private static function getFileName (String $type, int $id): ?string {
 
         $fileName = null;
         switch($type) {
