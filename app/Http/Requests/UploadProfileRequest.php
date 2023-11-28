@@ -16,7 +16,7 @@ class UploadProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->can('update', Member::find($this->route()->id));
+        return Auth::user()->can('edit', Member::find($this->route()->id));
     }
 
     /**

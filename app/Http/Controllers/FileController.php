@@ -6,6 +6,7 @@ use App\Http\Requests\UploadProfileRequest;
 use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -54,6 +55,22 @@ class FileController extends Controller
 
         // Not found: returns default asset
         return self::defaultAsset($type);
+    }
+
+    private static function delete(String $type, int $id) {
+        $existingFileName = self::getFileName($type, $id);
+        if ($existingFileName) {
+            Storage::disk(self::$diskName)->delete($type . '/' . $existingFileName);
+
+            switch($type) {
+                case 'profile':
+                    Member::find($id)->profile_image = null;
+                    break;
+                case 'post':
+                    // other models
+                    break;
+            }
+        }
     }
 
     function upload(UploadProfileRequest $request, int $id): RedirectResponse {

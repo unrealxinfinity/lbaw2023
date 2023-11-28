@@ -46,7 +46,7 @@ CREATE TABLE  members(
   name VARCHAR NOT NULL,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
   description VARCHAR,
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   email VARCHAR,
   UNIQUE(email),
   user_id INT NOT NULL,
