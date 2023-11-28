@@ -19,16 +19,14 @@
     <h2 class="mt-10"> TASKS </h2>
     <div class="panel w-full">
         @foreach (['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'] as $state)
-            <div class="flex flex-col justify-start mx-1 px-1 py-2 h-128 bg-grey rounded">
+            <div class="flex flex-col justify-start mx-1 px-1 py-2 h-128 bg-grey rounded min-w-[12rem] w-48">
                 <h2 class="text-center inline-block"> {{$state}} </h2>
-                <ul class="min-w-[12rem] w-48">
-                    @foreach ($project->tasks()->where('status', '=', $state)->orderBy('id')->get() as $task)
-                    <div class="bg-white text-black p-2 m-1 rounded">
-                        <h2 class="text-green font-semibold"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
-                        <p>{{ $task->description }}</p>
-                    </div>
-                    @endforeach
-                </ul>
+                @foreach ($project->tasks()->where('status', '=', $state)->orderBy('id')->get() as $task)
+                <div class="bg-white text-black p-2 m-1 rounded" @if (Auth::user()->can('edit', $task)) draggable="true" @endif>
+                    <h2 class="text-green font-semibold"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
+                    <p>{{ $task->description }}</p>
+                </div>
+                @endforeach
             </div>
         @endforeach
     </div>

@@ -117,7 +117,7 @@ function addEventListeners() {
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
     const box = ev.currentTarget;
-    const status = box.parentElement.querySelector('h4').textContent;
+    const status = box.parentElement.querySelector('h2').textContent;
 
     const response = await fetch('/api/tasks/' + data.slice(5), {
       method: 'PUT',
