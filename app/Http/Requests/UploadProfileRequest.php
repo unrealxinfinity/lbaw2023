@@ -28,7 +28,7 @@ class UploadProfileRequest extends FormRequest
     {
         return [
             'file' => ['required', 'file', 'extensions:png,jpg,jpeg,gif'],
-            'type' => ['required', Rule::in(FileController::$systemTypes['profile'])]
+            'type' => ['required', Rule::in(['profile'])]
         ];
     }
 }

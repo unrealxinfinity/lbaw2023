@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadProfileRequest;
 use App\Models\Member;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
@@ -52,6 +54,25 @@ class FileController extends Controller
 
         // Not found: returns default asset
         return self::defaultAsset($type);
+    }
+
+    function upload(UploadProfileRequest $request, int $id): RedirectResponse {
+        $fields = $request->validated();
+
+        $this->delete($fields['type'], $id);
+
+        $file = $request->file('file');
+        $fileName = $file->hashName();
+
+        switch($request->type) {
+            case 'profile':
+                $member = Member::findOrFail($id);
+                $member->picture = $fileName;
+                $member->save();
+        }
+
+        $file->storeAs($fields['type'], $fileName, self::$diskName);
+        return redirect()->back()->withSuccess('File uploaded!');
     }
 
 }
