@@ -397,19 +397,10 @@ function addTagHandler(json){
     console.log('Already exists entry');
   }
   else{
-    let newTag = document.createElement('span');
-
-  // Set class attribute for the new span element
-  newTag.setAttribute('class', 'tag');
-
-  // Set text content for the new span element
-  newTag.textContent = json.tagName;
-
-  // Assuming you want to append to the first element with the 'tagList' class
-  let tagListElement = document.getElementsByClassName('tagList');
-
-  // Append the new span element to the tag list element
-  tagListElement[0].appendChild(newTag);
+    let newTag = document.createElement('p');
+    newTag.classList.add('tag');
+    newTag.textContent = json.tagName;
+    document.getElementsByClassName('tagList').appendChild(newTag);
   }
   
 }

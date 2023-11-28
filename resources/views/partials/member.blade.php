@@ -2,7 +2,7 @@
     @if($main)
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a></p>
     <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img src= {{$member->picture}} class="pfp">
+        <img src= {{$member->picture}} class="h-full aspect-square">
         <div class="flex flex-col ml-5 pt-1">
         <h1>{{ $member->name }}</h1>
         <h2 class="pl-3 mb-5"> @ {{ $member->persistentUser->user->username }}</h2>

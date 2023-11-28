@@ -15,6 +15,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
         <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+        <link href="{{ url('css/app.css') }}" rel="stylesheet">
         @vite('node_modules/tailwindcss/tailwind.css')
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug

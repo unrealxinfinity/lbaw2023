@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="tagList flex">
     @foreach ($tags as $tag)
     <p class="tag">{{ $tag->name }}</p>
     @endforeach
