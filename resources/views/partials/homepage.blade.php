@@ -1,4 +1,5 @@
 <article class="homepage" data-id="{{ $member->id }}">
+    @if(count($tasks) > 0)
     <h1> MY ASSIGNED TASKS </h1>
     <div class="panel">
     @foreach($tasks as $task)
@@ -16,6 +17,8 @@
     </div>
     @endforeach
     </div>
+    @endif
+    @if(count($projects) > 0)
     <h1> MY CURRENT PROJECTS </h1>
     <div class="panel">
     @foreach($projects as $project)
@@ -29,6 +32,8 @@
     </div>
     @endforeach
     </div>
+    @endif
+    @if(count($worlds) > 0)
     <h1> MY CURRENT WORLDS <a class="round-button" href="/create-world">+</a></h1> 
     <div class="panel">
     @foreach($worlds as $world)
@@ -42,4 +47,5 @@
     </div>
     @endforeach
     </div>
+    @endif
 </article>
