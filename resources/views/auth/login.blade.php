@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('login') }}">
+<form method="POST" class="form-post first-letter" action="{{ route('login') }}">
     {{ csrf_field() }}
 
     <label for="username">Username</label>
@@ -23,11 +23,10 @@
     <label>
         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
     </label>
-
-    <button type="submit">
-        Login
-    </button>
-    <a class="button button-outline" href="{{ route('register') }}">Register</a>
+    <div class="flex">
+    <button class="button w-1/4" type="submit"> Login </button>
+    <a class="button text-white bg-grey" href="{{ route('register') }}">Register</a>
+    </div>
     @if (session('success'))
         <p class="success">
             {{ session('success') }}
