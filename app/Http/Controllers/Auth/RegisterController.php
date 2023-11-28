@@ -51,7 +51,8 @@ class RegisterController extends Controller
         User::create([
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'user_id' => $persistentUser->id
+            'user_id' => $persistentUser->id,
+            'has_password' => true
         ]);
 
         if ($member) {

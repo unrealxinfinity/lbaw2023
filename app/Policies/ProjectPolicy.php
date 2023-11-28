@@ -35,6 +35,13 @@ class ProjectPolicy
         return $is_admin || (!$is_disabled && ($is_leader || $is_world_admin));
     }
 
+    public function leave(User $user, Project $project): bool
+    {
+        $type = $user->persistentUser->type_;
+        $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
+        return $is_member;
+    }
+
     public function delete(User $user, Project $project): bool
     {
         $type = $user->persistentUser->type_;

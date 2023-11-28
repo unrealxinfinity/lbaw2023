@@ -28,6 +28,17 @@ function addEventListeners() {
       editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
     });
 
+    let tasks = document.querySelectorAll('article.task');
+    [].forEach.call(tasks, function(task) {
+      task.addEventListener("dragstart", taskDragStartHandler);
+    });
+
+    let bigboxes = document.querySelectorAll('ul.big-box');
+    [].forEach.call(bigboxes, function(bigbox) {
+      bigbox.addEventListener("drop", bigBoxDropHandler);
+      bigbox.addEventListener("dragover", bigBoxDragOverHandler);
+    })
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -66,7 +77,7 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
-    
+
     let lastScrollTop = 0;
     window.addEventListener('scroll', function() {
       let currentScroll = document.documentElement.scrollTop;
@@ -85,6 +96,53 @@ function addEventListeners() {
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
     
+    /*
+    let removeMemberFromWorld = document.querySelector('');
+    if(leaveWorld != null){
+      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+    }
+    */ 
+  }
+
+  function bigBoxDragOverHandler(ev) {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move";
+  }
+
+  async function bigBoxDropHandler(ev) {
+    ev.preventDefault();
+    console.log(ev.target);
+    console.log(ev.currentTarget);
+    const data = ev.dataTransfer.getData("text/plain");
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+    const box = ev.currentTarget;
+    const status = box.parentElement.querySelector('h4').textContent;
+
+    const response = await fetch('/api/tasks/' + data.slice(5), {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({status: status})
+    });
+
+    if (response.status === 200) {
+      box.appendChild(document.getElementById(data));
+    }
+  }
+
+  function taskDragStartHandler(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.id);
+    ev.dataTransfer.setData("text/html", ev.target.outerHTML);
+    ev.dataTransfer.setData(
+      "text/uri-list",
+      ev.target.ownerDocument.location.href,
+    );
+    ev.dataTransfer.dropEffect = "move";
   }
   
   function encodeForAjax(data) {
@@ -261,7 +319,17 @@ function addEventListeners() {
     let searchTaskElems = searchTaskForms[0];
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    const response = await fetch('/api/projects/'+ id +'/tasks?search=' + searchedTask)
+    let order = searchTaskElems[3].value;
+
+    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
+
+    const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf, 
+        },
+    })
       .then(response =>{
             if(response.ok){
               return response.json();
@@ -271,7 +339,6 @@ function addEventListeners() {
             }
       })
       .then(data => {
-          console.log(data);
           searchTaskHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
@@ -306,8 +373,17 @@ function addEventListeners() {
     const id = searchProjectForms[0].getAttribute('data-id');
     let searchProjectElems = searchProjectForms[0];
     let searchedProject = searchProjectElems[1].value;
-    const response = await fetch('/api/worlds/'+ id +'/projects?search=' + searchedProject)
-      .then(response =>{
+    const csrf = searchProjectElems[0].value;
+    let order = searchProjectElems[3].value;
+    let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order;
+    const response = await fetch(url, {
+      method: 'GET', 
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrf, 
+      },
+  })
+    .then(response =>{
             if(response.ok){
               return response.json();
             }
@@ -403,6 +479,42 @@ function addTagHandler(json){
     document.getElementsByClassName('tagList').appendChild(newTag);
   }
   
+}
+
+async function sendRemoveMemberFromWorld(ev) {
+  ev.preventDefault();
+  console.log('Sending leave world request');
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.world_id').value;
+  let username = this.querySelector('input.username').value;
+  console.log(id);
+  console.log(username);
+
+  url = `/api/worlds/${id}/${username}`;
+  console.log(url);
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    removeMemberFromWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error));
+}
+
+function removeMemberFromWorldHandler(data) {
+  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
+  element.remove();
 }
 
   function sendItemUpdateRequest() {

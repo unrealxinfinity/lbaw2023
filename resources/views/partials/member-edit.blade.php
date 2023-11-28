@@ -46,7 +46,7 @@
             </span>
         @endif
         <label for="birthday-{{ $member->id }}">Birthday</label>
-        <input id="birthday-{{ $member->id }}" type="text" class="birthday" name="birthday" value="{{ $member->birthday }}" required>
+        <input id="birthday-{{ $member->id }}" type="date" class="birthday" name="birthday" value="{{ $member->birthday }}" required>
 
         @if ($errors->has('description') && old('id') == $member->id)
             <span class="error">
@@ -77,12 +77,14 @@
                 {{ $errors->first('old_password') }}
             </span>
         @endif
-        @if (Auth::user()->persistentUser->type_=='Administrator')
-            <label type ="hidden" for="old_password-{{ $member->id }}"></label>
-            <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
-        @else
-            <label for="old_password-{{ $member->id }}">Old Password</label>
-            <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
+        @if (Auth::user()->has_password)
+            @if (Auth::user()->persistentUser->type_=='Administrator')
+                <label type ="hidden" for="old_password-{{ $member->id }}"></label>
+                <input type ="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" value="{{ $member->persistentUser->user->password }}" required>
+            @else
+                <label for="old_password-{{ $member->id }}">Old Password</label>
+                <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
+            @endif
         @endif
 
         <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
