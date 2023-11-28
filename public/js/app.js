@@ -281,35 +281,22 @@ function addEventListeners() {
   function searchTaskHandler(json){
     let popup = document.querySelector('#popup-content');
     popup.innerHTML = "";
-    let newUl= document.createElement('ul');
-    let newSpan = document.createElement('span');
-    let newTitle = document.createElement('p');
-    let newDescription = document.createElement('p');
-    let newDueAt = document.createElement('p');
-    let newEffort = document.createElement('p');
-    let newPriority = document.createElement('p'); 
-    let newStatus = document.createElement('p');
-    newSpan.setAttribute('class', 'TaskList');
+    let div = document.createElement('div');
+    div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded');
+    let outer_title = document.createElement('h2');
+    let inner_title = document.createElement('a');
+    let desc = document.createElement('p');
 
     let tasks = JSON.parse(json.tasks);
     for (task of tasks) {
-      
-      newTitle.setAttribute('href', '/tasks/' + task.id);
-      newTitle.textContent = task.title;
-      newDescription.textContent = task.description;
-      newDueAt.textContent = task.due_at;
-      newEffort.textContent = task.effort; 
-      newPriority.textContent = task.priority;
-      newStatus.textContent = task.status; 
-      newSpan.appendChild(newTitle);
-      newSpan.appendChild(newDescription); 
-      newSpan.appendChild(newDueAt);
-      newSpan.appendChild(newStatus);  
-      newSpan.appendChild(newEffort);
-      newSpan.appendChild(newPriority);
-      newUl.appendChild(newSpan);
+      inner_title.setAttribute('href', '/tasks/' + task.id);
+      inner_title.textContent = task.title;
+      desc.textContent = task.description;
+      outer_title.appendChild(inner_title);
+      div.appendChild(outer_title);
+      div.appendChild(desc); 
+      popup.appendChild(div);
     };
-    popup.appendChild(newUl);
     document.getElementById('popupContainer').classList.remove('hidden');
   }
 
@@ -338,28 +325,31 @@ function addEventListeners() {
 function searchProjectHandler(json){
   let popup = document.querySelector('#popup-content');
   popup.innerHTML = "";
-  let newUl= document.createElement('ul');
-  let newSpan = document.createElement('span');
-  let newTitle = document.createElement('p');
-  let newDescription = document.createElement('p');
-  let newPicture = document.createElement('img'); 
-  let newStatus = document.createElement('p');
-  newSpan.setAttribute('class', 'ProjectList');
+  let outer_div = document.createElement('div');
+  outer_div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded', 'flex');
+  let img = document.createElement('img');
+  img.classList.add('h-16', 'aspect-square', 'mt-5', 'ml-5');
+  let inner_div = document.createElement('div');
+  inner_div.classList.add('flex', 'flex-col');
+  let outer_title = document.createElement('h1');
+  outer_title.classList.add('text-black');
+  let inner_title = document.createElement('a');
+  let desc = document.createElement('h2');
+  desc.classList.add('ml-3', 'mb-5');
+
   let projects = JSON.parse(json.projects);
   for (project of projects) {
-    newTitle.setAttribute('href', '/projects/' + project.id);
-    newPicture.setAttribute('src', project.picture);
-    newTitle.textContent = project.name;
-    newDescription.textContent = project.description;
-    newStatus.textContent = project.status;
-    newSpan.appendChild(newPicture); 
-    newSpan.appendChild(newTitle);
-    newSpan.appendChild(newDescription); 
-    newSpan.appendChild(newStatus);  
-    
-    newUl.appendChild(newSpan);
+    inner_title.setAttribute('href', '/projects/' + project.id);
+    img.setAttribute('src', project.picture);
+    inner_title.textContent = project.name;
+    desc.textContent = project.description;
+    outer_title.appendChild(inner_title);
+    inner_div.appendChild(outer_title);
+    inner_div.appendChild(desc);
+    outer_div.appendChild(img);
+    outer_div.appendChild(inner_div);
+    popup.appendChild(outer_div);
   };
-  popup.appendChild(newUl);
   document.getElementById('popupContainer').classList.remove('hidden');
 }
 

@@ -5,7 +5,7 @@
 @section('content')
 <article class = "world">
     <p><a href="/">Home</a> > <a href="/create-world">New World</a></p>
-    <form action="{{ route('create-world') }}" id="new-world" method="POST">Create a New World!!
+    <form action="{{ route('create-world') }}" id="new-world" method="POST" class="form-post">Create a New World!!
         @csrf
         @method('POST')
         
@@ -22,7 +22,7 @@
         </span>
         @endif
 
-        <button type="submit">Create</button>
+        <button class="button" type="submit">Create</button>
 
     </form>
 </article>

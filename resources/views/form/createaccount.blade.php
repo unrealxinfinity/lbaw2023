@@ -38,10 +38,12 @@
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
 
+    <div class="flex">
+    <input type="checkbox" id="member-box" name="member" class="w-min">
     <label for="member-box">Create as member?</label>
-    <input type="checkbox" id="member-box" name="member">
-
-    <button type="submit">
+    </div>
+    
+    <button class="button" type="submit">
         Register
     </button>
 </form>

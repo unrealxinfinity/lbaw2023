@@ -9,24 +9,36 @@
     @endphp
     
     @if ($member)
-        <section id="homepage">
-            @include('partials.homepage', ['member' => $member, 'tasks' =>$tasks , 'projects' => $projects, 'worlds' => $worlds, 'main' => false])
-        </section>
-        @if(count($members) > 0)
-        <h2> Members </h2>
-            @foreach($members as $otherMember)
-                <article class="myworld" data-id="{{ $otherMember->id }}">
-                    <header>
-                        <div class="row">
-                            <img src={{$otherMember->picture}} class="big">
-                            <div class="column">
-                                <h2><a href="/members/{{ $otherMember->username }}">{{ $otherMember->username }}</a></h2>
-                                <h4> {{ $otherMember->description }} </h4>
-                            </div>
-                        </div>
-                    </header>
-                </article>
+        @if(count($tasks) > 0)
+            <h1> Tasks </h1>
+            @foreach($tasks as $task)
+                @include('partials.mytasks', ['task' => $task])
             @endforeach
+        @endif
+        @if(count($projects) > 0)
+            <h1> My Projects </h1>
+            @foreach($projects as $project)
+                @include('partials.myprojects', ['project' => $project])
+            @endforeach
+        @endif
+        @if(count($worlds) > 0)
+            <h1> Worlds </h1>
+            @foreach($worlds as $world)
+                @include('partials.myworlds', ['world' => $world])
+            @endforeach
+        @endif
+            @if(count($members) > 0)
+            <h1> Members </h1>
+                @foreach($members as $otherMember)
+                <header class="flex justify-start sm:h-28 h-24 bg-grey rounded m-5">
+                    <img src= {{$member->picture}} class="h-16 aspect-square mt-5 ml-5">
+                    <div class="flex flex-col ml-5">
+                    <h1 class="text-white mb-0">{{ $member->name }}</h1>
+                    <h2 class="pl-3"> @ {{ $member->persistentUser->user->username }}</h2>
+                    <h2 class="pl-3">{{ $member->description }}</h2>
+                    </div>
+                </header>
+                @endforeach
         @endif
     @endif
 @endsection
