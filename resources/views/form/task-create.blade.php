@@ -1,4 +1,4 @@
-<form class = "new-task mt-10 child:my-1 flex flex-col" method="POST" action="{{ route('create-task') }}">
+<form class = "new-task form-post" method="POST" action="{{ route('create-task') }}">
     @csrf
     @method('POST')
     

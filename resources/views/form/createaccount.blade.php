@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('register') }}">
+<form method="POST" class="form-post" action="{{ route('register') }}">
     @csrf
 
     <input type="hidden" name="login" value="0">

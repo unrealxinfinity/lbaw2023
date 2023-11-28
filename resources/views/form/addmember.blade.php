@@ -1,4 +1,4 @@
-<form id="add-member" class="add-member mt-5 flex flex-col child:my-1">
+<form id="add-member" class="add-member form-post">
      @csrf
     <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>

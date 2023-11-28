@@ -1,10 +1,16 @@
 <article class="member" data-id="{{ $member->id }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
-    <header>
-        <h2><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h2>
+    <header class="flex justify-start sm:h-40 h-24 m-5">
+        <img src= {{$member->picture}} class="pfp">
+        <div class="flex flex-col ml-5 pt-1">
+        <h1>{{ $member->name }}</h1>
+        <h2 class="pl-3 mb-5"> @ {{ $member->persistentUser->user->username }}</h2>
+        <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
+        </div>
+        </div>
     </header>
-    {{ $member->description }}
-    <form class="edit-member" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
+    <h2 class="mb-5">{{ $member->description }}</h2>
+    <form class="edit-member form-post" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
         @csrf
         @method('PUT')
 
@@ -79,6 +85,6 @@
             <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password" required>
         @endif
 
-        <input type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
+        <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
     </form>
 </article>

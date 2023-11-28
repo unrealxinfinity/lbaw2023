@@ -39,7 +39,7 @@
     @endif
     @if (Auth::user()->persistentUser->member->projects->contains('id', $project->id))
     <section id="create-task">
-        @include('partials.task-create', ['project' => $project])
+        @include('form.task-create', ['project' => $project])
     </section>
     <section id="create-tag">
         @include('form.tag-create',['project'=> $project])

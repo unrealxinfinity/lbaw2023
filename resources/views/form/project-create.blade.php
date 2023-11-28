@@ -1,11 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Create Project')
-
-@section('content')
-<article class="project">
-  <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a> > <a href="/worlds/{{ $world->id }}/create-project">New Project</a></p>
-  <form action="{{ route('create-project') }}" id="new-project" method="POST">Create a New Project in {{ $world->name }}!!
+<form action="{{ route('create-project') }}" id="new-project" class="form-post" method="POST">Create a New Project:
       @csrf
       @method('POST')
 
@@ -23,8 +16,5 @@
       </span>
       @endif
 
-      <button type="submit">Create</button>
-
+      <button class="button" type="submit">Create</button>
   </form>
-</article>
-@endsection

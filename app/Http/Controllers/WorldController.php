@@ -28,12 +28,6 @@ class WorldController extends Controller
         ]);
     }
 
-    public function showProjectCreate(string $id): View
-    {
-        $world = World::findOrFail($id);
-        return view('pages.project-create', ['world' => $world]);
-    }
-
     public function create(CreateWorldRequest $request): RedirectResponse
     {
         $fields = $request->validated();

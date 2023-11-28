@@ -3,7 +3,7 @@
     <header class="flex justify-start sm:h-40 h-24 m-5">
         <img class="pfp" src="https://source.unsplash.com/random/300x200">
         <div class="flex flex-col ml-5 pt-1">
-            <h1><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
+            <h1>{{ $world->name }}</h1>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
             </div>
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
@@ -44,6 +44,7 @@
     </section>
     @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id) && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
     @include('form.addmembertoworld', ['world' => $world])
+    @include('form.project-create', ['world'=>$world])
     @endif
     <section id="comments">
         <h2 class="mt-10"> COMMENTS </h2>
