@@ -3,3 +3,69 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply rounded m-2 text-green text-bigPhone sm:text-big font-bold;
+    }
+  h3 {
+    @apply rounded m-2 text-green text-mediumPhone sm:text-medium;
+  }
+  input, select, option {
+    @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone sm:text-medium;
+  }
+  h4, p {
+    @apply text-mediumPhone sm:text-medium;
+  }
+}
+
+@layer components {
+    .menu-item {
+      @apply bg-black bg-opacity-50 py-2 h-16 flex justify-around items-center;
+    }    
+    .button {
+      @apply bg-green text-white rounded sm:py-2 sm:px-8 px-4 py-1 m-2 ml-0 md:text-medium text-mediumPhone cursor-pointer;
+    }
+    .round-button {
+      @apply bg-green text-white rounded-full px-4 py-3 md:text-medium text-mediumPhone cursor-pointer;
+    }
+    .panel {
+      @apply flex overflow-auto justify-start;
+    }
+    .container {
+      @apply flex flex-col justify-end min-w-[14rem] w-56 h-32 sm:min-w-[18rem] sm:w-72 sm:h-44 mx-4 my-2 bg-opacity-60 bg-grey rounded;
+    }
+    .title {
+      @apply h-1/4 w-full md:text-big text-bigPhone overflow-hidden whitespace-nowrap pt-1 px-4 pb-1;
+    }
+    .desc {
+      @apply h-1/4 md:text-medium text-mediumPhone overflow-hidden pt-0 pb-3 px-4;
+    }
+    .desc h4 {
+      transform: translateY(0);
+      transition: 2.5s;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .title a {
+      @apply w-fit block translate-x-0 transition duration-[2500ms];
+    }
+    .desc:hover h4 {
+      transform: translateY(calc(1.5em - 100%));
+    }
+    .tag {
+      @apply md:p-2 p-1 mx-1 bg-grey rounded-full md:text-medium text-mediumPhone;
+    }
+    .form-post {
+      @apply md:text-medium text-mediumPhone flex flex-col py-5 px-3 m-1 my-4 child:my-2 outline-green outline-dotted rounded;
+    }
+    .error {
+      @apply text-red md:text-medium text-mediumPhone;
+    }
+}
