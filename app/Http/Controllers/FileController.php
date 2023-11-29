@@ -14,7 +14,9 @@ class FileController extends Controller
     static $diskName = 'pictures';
 
     public static $systemTypes = [
-        'profile' => ['png', 'jpg', 'jpeg', 'gif']
+        'profile' => ['png', 'jpg', 'jpeg', 'gif'],
+        'world' => ['png', 'jpg', 'jpeg', 'gif'],
+        'project' => ['png', 'jpg', 'jpeg', 'gif']
     ];
 
     private static function isValidType(String $type): bool {

@@ -70,7 +70,7 @@ CREATE TABLE worlds(
   name VARCHAR NOT NULL,
   description VARCHAR,
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   owner_id INT NOT NULL,
   FOREIGN KEY(owner_id) REFERENCES members(id)
 );
@@ -114,7 +114,7 @@ CREATE TABLE projects(
   status project_status NOT NULL,
   description VARCHAR,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   world_id INT,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -679,8 +679,8 @@ INSERT INTO friend (member_id, friend_id) VALUES
 
 -- Sample data for the 'world' table
 INSERT INTO worlds (name, description, picture, owner_id) VALUES
-    ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 'world_image1.jpg', 1),
-    ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 'world_image2.jpg', 3);
+    ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 1),
+    ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 3);
 
 -- Sample data for the 'member_world' table (assuming members are part of worlds)
 INSERT INTO member_world (member_id, world_id, is_admin) VALUES
@@ -700,9 +700,9 @@ INSERT INTO favorite_world (member_id, world_id) VALUES
     (3, 1);
 
 -- Sample data for the 'project' table
-INSERT INTO projects (name, status, description, picture, world_id) VALUES
-    ('Wheat Farm', 'Active', 'Fully automatic wheat farm', 'project_image1.jpg', 1),
-    ('Castle Tower', 'Active', 'A new tower for our main castle', 'project_image2.jpg', 2);
+INSERT INTO projects (name, status, description, world_id) VALUES
+    ('Wheat Farm', 'Active', 'Fully automatic wheat farm', 1),
+    ('Castle Tower', 'Active', 'A new tower for our main castle', 2);
 
 -- Sample data for the 'member_project' table (assuming members are part of projects)
 INSERT INTO member_project (member_id, project_id, permission_level) VALUES
