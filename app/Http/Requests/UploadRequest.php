@@ -4,19 +4,31 @@ namespace App\Http\Requests;
 
 use App\Http\Controllers\FileController;
 use App\Models\Member;
+use App\Models\Project;
+use App\Models\World;
 use Faker\Core\File;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class UploadProfileRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::user()->can('edit', Member::find($this->route()->id));
+        switch ($this->request()->type) {
+            case 'profile':
+                return Auth::user()->can('edit', Member::find($this->route()->id));
+                break;
+            case 'world':
+                return Auth::user()->can('edit', World::find($this->route()->id));
+                break;
+            case 'project':
+                return Auth::user()->can('edit', Project::find($this->route()->id));
+        }
+        return false;
     }
 
     /**
@@ -28,7 +40,7 @@ class UploadProfileRequest extends FormRequest
     {
         return [
             'file' => ['required', 'file', 'extensions:png,jpg,jpeg,gif'],
-            'type' => ['required', Rule::in(['profile'])]
+            'type' => ['required', Rule::in(['profile', 'project', 'world'])]
         ];
     }
 }

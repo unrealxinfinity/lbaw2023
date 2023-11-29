@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UploadProfileRequest;
+use App\Http\Requests\UploadRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\World;
@@ -82,7 +82,7 @@ class FileController extends Controller
         }
     }
 
-    function upload(UploadProfileRequest $request, int $id): RedirectResponse {
+    function upload(UploadRequest $request, int $id): RedirectResponse {
         $fields = $request->validated();
 
         $this->delete($fields['type'], $id);
