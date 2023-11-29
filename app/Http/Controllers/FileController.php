@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadProfileRequest;
 use App\Models\Member;
+use App\Models\Project;
+use App\Models\World;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -34,9 +36,11 @@ class FileController extends Controller
             case 'profile':
                 $fileName = Member::find($id)->picture;
                 break;
-            case 'post':
-                // other models
+            case 'world':
+                $fileName = World::find($id)->picture;
                 break;
+            case 'project':
+                $fileName = Project::find($id)->picture;
         }
 
         return $fileName;
@@ -66,10 +70,13 @@ class FileController extends Controller
 
             switch($type) {
                 case 'profile':
-                    Member::find($id)->profile_image = null;
+                    Member::find($id)->picture = null;
                     break;
-                case 'post':
-                    // other models
+                case 'world':
+                    World::find($id)->picture = null;
+                    break;
+                case 'project':
+                    Project::find($id)->picture = null;
                     break;
             }
         }
@@ -88,6 +95,17 @@ class FileController extends Controller
                 $member = Member::findOrFail($id);
                 $member->picture = $fileName;
                 $member->save();
+                break;
+            case 'world':
+                $world = World::findOrFail($id);
+                $world->picture = $fileName;
+                $world->save();
+                break;
+            case 'project':
+                $project = Project::findOrFail($id);
+                $project->picture = $fileName;
+                $project->save();
+                break;
         }
 
         $file->storeAs($fields['type'], $fileName, self::$diskName);
