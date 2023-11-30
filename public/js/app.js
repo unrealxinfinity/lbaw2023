@@ -661,5 +661,14 @@ function removeMemberFromWorldHandler(data) {
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
+const pusher = new Pusher("11f57573d00ddf0021b9", {
+  cluster: pusherCluster,
+  encrypted: true
+});
 
-  
+const channel = pusher.subscribe('CreateTask');
+
+channel.bind('create-task-notification', function(data) {
+  console.log(`New notification: ${data.message}`);
+})
+

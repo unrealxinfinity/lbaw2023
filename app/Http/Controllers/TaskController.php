@@ -42,6 +42,7 @@ class TaskController extends Controller
             'priority' => $fields['priority'],
             'project_id' => $fields['project_id']
         ]);
+        event(new CreateTask($fields['title']));
 
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
