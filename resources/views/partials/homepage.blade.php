@@ -23,7 +23,7 @@
     <div class="panel">
     @foreach($projects as $project)
     <div class="container">
-        <img class="h-1/2 overflow-hidden rounded-t-md object-fill" src={{ $project->getImage() }}>
+        <img class="h-1/2 overflow-hidden rounded-t-md " src={{ $project->getImage() }}>
         @php
             $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
@@ -38,7 +38,7 @@
     <div class="panel">
     @foreach($worlds as $world)
     <div class="container">
-        <img class="h-1/2 overflow-hidden rounded-t-md object-fill" src={{ $world->getImage() }}>
+        <img class="h-1/2 overflow-hidden rounded-t-md " src={{ $world->getImage() }}>
         @php
             $translateXValue = (strlen($world->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
