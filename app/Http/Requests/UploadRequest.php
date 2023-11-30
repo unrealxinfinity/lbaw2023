@@ -18,7 +18,7 @@ class UploadRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        switch ($this->request()->type) {
+        switch (request()->type) {
             case 'profile':
                 return Auth::user()->can('edit', Member::find($this->route()->id));
                 break;

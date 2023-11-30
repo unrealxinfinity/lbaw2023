@@ -678,7 +678,7 @@ INSERT INTO friend (member_id, friend_id) VALUES
     (2, 3);
 
 -- Sample data for the 'world' table
-INSERT INTO worlds (name, description, picture, owner_id) VALUES
+INSERT INTO worlds (name, description, owner_id) VALUES
     ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 1),
     ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 3);
 

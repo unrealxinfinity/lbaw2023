@@ -1,7 +1,7 @@
 <article class="project md:w-3/4 peer-checked:fixed" data-id="{{ $project->id }}">
     <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
     <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img class="h-full aspect-square" src="https://source.unsplash.com/random/300x200">
+        <img class="h-full aspect-square object-fill" src={{ $project->getImage() }}>
         <div class="flex flex-col ml-5 pt-1">
             <h1><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
             @include('partials.tag', ['tags' => $tags])

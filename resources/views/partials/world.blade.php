@@ -1,7 +1,7 @@
 <article class="world md:w-2/3 peer-checked:fixed" data-id="{{ $world->id }}">
     <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a></p>
     <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img class="h-full aspect-square" src="https://source.unsplash.com/random/300x200">
+        <img class="h-full aspect-square object-fill" src={{ $world->getImage() }}>
         <div class="flex flex-col ml-5 pt-1">
             <h1>{{ $world->name }}</h1>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
@@ -16,7 +16,7 @@
         <ul class="panel">
             @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
                 <nav class="container">
-                    <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
+                    <img class="h-1/2 overflow-hidden rounded-t-md object-fill" src={{ $project->getImage() }}>
                     @php
                         $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
                     @endphp
@@ -31,7 +31,7 @@
         <ul class="flex justify-start h-40 m-5">
             @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
             <nav class="container">
-                <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
+                <img class="h-1/2 overflow-hidden rounded-t-md object-fill" src={{ $project->getImage() }}>
                 @php
                     $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
                 @endphp
