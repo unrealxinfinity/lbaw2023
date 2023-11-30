@@ -21,8 +21,8 @@
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
-        <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+        <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
     <body class="min-h-full min-w-full bg-mine text-white font-roboto">
         <nav id="navbar" class="z-10 fixed top-0 w-full h-28 bg-opacity-90 bg-black flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">

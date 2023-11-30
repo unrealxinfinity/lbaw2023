@@ -39,6 +39,8 @@
     <section id="create-task">
         @include('form.task-create', ['project' => $project])
     </section>
+    <div id="testNoti"><p></p></div>
+
     <section id="create-tag">
         @include('form.tag-create',['project'=> $project])
     </section>

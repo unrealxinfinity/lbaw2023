@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Tag;
 use App\Models\Project;
 use App\Http\Requests\CreateTagRequest;
+use App\Events\CreateTag;
 class TagController extends Controller
 {
     public function createProjectTag(CreateTagRequest $request,string $project_id):JsonResponse{
@@ -25,6 +26,9 @@ class TagController extends Controller
         $project = Project::find($project_id);
         $request->authorize($project);
         $project->tags()->attach($tag->id);
+        
+        event(new CreateTag($fields['tagName']));
+        
         return response()->json([
             'error' => false,
             'tagName'=> $tag->name

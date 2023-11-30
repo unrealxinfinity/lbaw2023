@@ -45,7 +45,7 @@ function addEventListeners() {
 
     let button = document.getElementById("createTagButton");
     if(button != null)
-    button.addEventListener("submit", addTagRequest);
+    button.addEventListener("click", addTagRequest);
     
     let worldMemberAdder = document.querySelector('form#add-member-to-world');
     if (worldMemberAdder != null)
@@ -77,6 +77,10 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
+
+    let createTask = document.getElementById("createTaskButton");
+    if(createTask != null)
+      createTask.addEventListener("click", sendCreateTaskRequest);
 
     let lastScrollTop = 0;
     window.addEventListener('scroll', function() {
@@ -295,7 +299,11 @@ function addEventListeners() {
   function editMemberHandler() {
 
   }
-
+  function sendCreateTaskRequest1(event) {
+    event.preventDefault();
+    console.log("hello")    
+    
+  }
   function sendCreateTaskRequest() {
     let form = this.closest('form.new-task');
     let title = form.querySelector('input.title').value;
@@ -305,7 +313,7 @@ function addEventListeners() {
     let priority = form.querySelector('select.priority').value;
     let project_id = form.querySelector('input.project_id').value;
 
-    sendAjaxRequest('put', '/api/tasks/', {title: title, description: description, due_at: due_at, effort: effort, priority: priority, project_id: project_id}, taskAddedHandler);
+    sendAjaxRequest('put', '/tasks', {title: title, description: description, due_at: due_at, effort: effort, priority: priority, project_id: project_id}, taskAddedHandler);
   }
 
   function taskAddedHandler() {
@@ -434,13 +442,10 @@ function searchProjectHandler(json){
 
     const tagForms = document.getElementsByClassName('new-tag');
     const id = tagForms[0].getAttribute('data-id');
-    console.log(tagForms);
     let tagElem = tagForms[0].children;
     let tagElemName= tagElem[1].value;
     let tagName = tagElemName.replace(/\s/g, '');
     const csrf = tagElem[0].value;
-    console.log(tagName)
-    console.log('/api/projects/' + id + '/' +'tags/create');
     const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
         method: 'POST',
         headers: {
@@ -463,7 +468,6 @@ function searchProjectHandler(json){
           addTagHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-      console.log(tagElemName)
       tagElem[1].value = "";
     
 
@@ -477,7 +481,7 @@ function addTagHandler(json){
     let newTag = document.createElement('p');
     newTag.classList.add('tag');
     newTag.textContent = json.tagName;
-    document.getElementsByClassName('tagList').appendChild(newTag);
+    document.getElementsByClassName('tagList flex')[0].appendChild(newTag);
   }
   
 }
@@ -661,14 +665,18 @@ function removeMemberFromWorldHandler(data) {
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
+Pusher.logToConsole = true;
+// Pusher notifications
 const pusher = new Pusher("11f57573d00ddf0021b9", {
-  cluster: pusherCluster,
+  cluster: "eu",
   encrypted: true
 });
 
-const channel = pusher.subscribe('CreateTask');
+//const channelCreateTask = pusher.subscribe('CreateTask');
+const channelCreateTag = pusher.subscribe('CreateTag');
 
-channel.bind('create-task-notification', function(data) {
-  console.log(`New notification: ${data.message}`);
+
+channelCreateTag.bind('tagCreated',function(data){
+  alert(JSON.stringify(data));
 })
 

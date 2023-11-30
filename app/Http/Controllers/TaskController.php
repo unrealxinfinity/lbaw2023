@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use App\Events\CreateTask;
 
 class TaskController extends Controller
 {  
@@ -29,7 +30,7 @@ class TaskController extends Controller
     }
     
 
-    public function create(CreateTaskRequest $request) : RedirectResponse{
+    public function create(CreateTaskRequest $request):RedirectResponse {
 
         $fields = $request->validated();
 
@@ -43,7 +44,7 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
         event(new CreateTask($fields['title']));
-
+        
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
