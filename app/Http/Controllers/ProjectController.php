@@ -5,6 +5,7 @@ use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
 use App\Http\Requests\LeaveProjectRequest;
+use App\Http\Requests\RemoveMemberRequest;
 use App\Http\Requests\SearchTaskRequest;
 use App\Models\Member;
 use App\Models\Project;
@@ -73,6 +74,32 @@ class ProjectController extends Controller
                 'username' => $username,
                 'parent' => 'world',
                 'child' =>'project'
+            ]);
+        }
+    }
+
+
+    public function removeMember(RemoveMemberRequest $request, string $project_id, string $username): JsonResponse
+    {
+        $fields = $request->validated();
+
+        $project = Project::findOrFail($project_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
+        error_log($username);
+
+        try
+        {
+            $member->projects()->detach($project_id);
+
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+            ]);
+        } catch (\Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'id' => $member->id,
             ]);
         }
     }

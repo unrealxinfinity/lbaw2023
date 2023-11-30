@@ -114,7 +114,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::delete('/projects/{id}', 'delete')->name('delete-project');//
     Route::post('/projects', 'create')->name('create-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');//
-    Route::delete('/api/projects/{id}/{username}', 'leave')->name('leave-project');//
+    Route::delete('projects/{id}/{username}', 'leave')->name('leave-project');//
 });
 
 Route::controller(TagController::class)->group(function () {

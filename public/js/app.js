@@ -246,13 +246,13 @@ function addEventListeners() {
 
     removeForm.innerHTML = `
       <input type="hidden" name="_token" value="${csrfToken}">
-      <input type="hidden" class="id" name="id" value="${json.id}">
-      <input type="hidden" class="username" name="username" value="${json.username}">
+      <input type="hidden" class="id" value="${json.id}">
+      <input type="hidden" class="username" value="${json.username}">
       <input type="submit" value="X">
     `;
 
     member.appendChild(removeForm);
-    removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+    removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
 
     ul.appendChild(member);
    
@@ -641,6 +641,7 @@ async function sendRemoveMemberFromProjectRequest(ev) {
 }
 
 function removeMemberFromProjectHandler(data) {
+  console.log(data);
   let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
   element.remove();
   let form = document.querySelector('form#remove-member-project');
