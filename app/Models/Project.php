@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,5 +37,10 @@ class Project extends Model
     public function tags(): BelongsToMany
     {
        return $this->belongsToMany(Tag::class);
+    }
+
+    public function getImage(): string
+    {
+        return FileController::get('project', $this->id);
     }
 }
