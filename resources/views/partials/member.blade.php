@@ -10,14 +10,16 @@
         </div>
         </div>
     </header>
-    <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
-        @csrf
-        @method('POST')
+    @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
+        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
 
-        <input class="text-white" name="file" type="file" required>
-        <input name="type" type="hidden" value="profile">
-        <input class="button w-min" type="submit" value="Upload profile picture">
-    </form>
+            <input class="text-white" name="file" type="file" required>
+            <input name="type" type="hidden" value="profile">
+            <input class="button w-min" type="submit" value="Upload profile picture">
+        </form>
+    @endif
     <h2 class="mb-5">{{ $member->description }}</h2>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
         <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>

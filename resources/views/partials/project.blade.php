@@ -2,6 +2,16 @@
     <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
     <header class="flex justify-start sm:h-40 h-24 m-5">
         <img class="h-full aspect-square " src={{ $project->getImage() }}>
+        @can('edit', $project)
+            <form method="POST" action="/projects/upload/{{ $project->id }}" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
+
+                <input class="text-white" name="file" type="file" required>
+                <input name="type" type="hidden" value="project">
+                <input class="button w-min" type="submit" value="Upload project picture">
+            </form>
+        @endcan
         <div class="flex flex-col ml-5 pt-1">
             <h1><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
             @include('partials.tag', ['tags' => $tags])

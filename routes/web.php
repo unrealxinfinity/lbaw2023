@@ -159,4 +159,6 @@ Route::controller(DeleteController::class)->group(function () {
 
 Route::controller(FileController::class)->group(function () {
    Route::post('/members/upload/{id}', 'upload');
+   Route::post('/projects/upload/{id}', 'upload');
+   Route::post('/worlds/upload/{id}', 'upload');
 });
