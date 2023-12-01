@@ -65,6 +65,7 @@ class ProjectController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
+                'project_id' => $project->id,
                 'picture' => $member->picture
             ]);
         } catch (\Exception $e)

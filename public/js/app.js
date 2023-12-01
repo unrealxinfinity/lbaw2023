@@ -246,7 +246,7 @@ function addEventListeners() {
 
     removeForm.innerHTML = `
       <input type="hidden" name="_token" value="${csrfToken}">
-      <input type="hidden" class="id" value="${json.id}">
+      <input type="hidden" class="id" value="${json.project_id}">
       <input type="hidden" class="username" value="${json.username}">
       <input type="submit" value="X">
     `;
@@ -306,7 +306,7 @@ function addEventListeners() {
 
     removeForm.innerHTML = `
       <input type="hidden" name="_token" value="${csrfToken}">
-      <input type="hidden" class="id" name="id" value="${json.id}">
+      <input type="hidden" class="id" name="id" value="${json.world_id}">
       <input type="hidden" class="username" name="username" value="${json.username}">
       <input type="submit" value="X">
     `;

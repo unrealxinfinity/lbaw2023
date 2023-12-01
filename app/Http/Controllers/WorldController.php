@@ -66,6 +66,7 @@ class WorldController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
+                'world_id' => $world->id,
                 'picture' => $member->picture
             ]);
         } catch (\Exception $e) {
