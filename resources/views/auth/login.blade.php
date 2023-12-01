@@ -14,6 +14,7 @@
 
     <label for="password" >Password</label>
     <input id="password" type="password" name="password" required>
+    <a href="/recover">Forgot your password?</a>
     @if ($errors->has('password'))
         <span class="error">
             {{ $errors->first('password') }}
