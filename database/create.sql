@@ -3,7 +3,7 @@ CREATE SCHEMA lbaw2314;
 SET search_path TO lbaw2314;
 
 DROP TYPE IF EXISTS permission_levels CASCADE;
-CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader', 'World Administrator');
+CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader');
 DROP TYPE IF EXISTS notification_levels CASCADE;
 CREATE TYPE notification_levels AS ENUM ('Low', 'Medium', 'High');
 DROP TYPE IF EXISTS project_status CASCADE;
@@ -170,7 +170,7 @@ CREATE TABLE tags(
   name VARCHAR NOT NULL
 );
 
-DROP TABLE IF EXISTS world_tags CASCADE;
+DROP TABLE IF EXISTS world_tag CASCADE;
 CREATE TABLE world_tag(
   tag_id INT,
   world_id INT,
@@ -179,7 +179,7 @@ CREATE TABLE world_tag(
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS tagss CASCADE;
+DROP TABLE IF EXISTS project_tag CASCADE;
 CREATE TABLE project_tag(
   tag_id INT,
   project_id INT,
@@ -188,7 +188,7 @@ CREATE TABLE project_tag(
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS member_tags CASCADE;
+DROP TABLE IF EXISTS member_tag CASCADE;
 CREATE TABLE member_tag(
   tag_id INT,
   member_id INT,
@@ -733,19 +733,19 @@ INSERT INTO tags (name) VALUES
     ('Build'),
     ('Large');
 
--- Sample data for the 'world_tags' table (associating tagss with worlds)
+-- Sample data for the 'world_tags' table (associating tags with worlds)
 INSERT INTO world_tag (tag_id, world_id) VALUES
     (1, 1),
     (2, 1),
     (2, 2);
 
--- Sample data for the 'project_tags' table (associating tagss with projects)
+-- Sample data for the 'project_tags' table (associating tags with projects)
 INSERT INTO project_tag (tag_id, project_id) VALUES
     (2, 1),
     (1, 2),
     (3, 2);
 
--- Sample data for the 'member_tags' table (associating tagss with members)
+-- Sample data for the 'member_tags' table (associating tags with members)
 INSERT INTO member_tag (tag_id, member_id) VALUES
     (1, 1),
     (2, 1),

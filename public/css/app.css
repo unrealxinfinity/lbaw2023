@@ -21,7 +21,7 @@
     @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone sm:text-medium;
   }
   h4, p {
-    @apply text-mediumPhone sm:text-medium;
+    @apply text-mediumPhone sm:text-medium break-words;
   }
 }
 
