@@ -36,7 +36,7 @@
         @endif
         <div class="flex child:mx-2 child:my-2" id="Status">
             <p class="pt-1">Status</p>
-            <select name="status" class="status" value="{{$task->status}}">
+            <select name="status" class="status">
                 <option value="{{$task->status}}" selected="selected" >{{$task->status}}</option>
                 @if($task->status!="BackLog")<option value="BackLog">BackLog</option>@endif
                 @if($task->status!="Upcoming")<option value="Upcoming">Upcoming</option>@endif
