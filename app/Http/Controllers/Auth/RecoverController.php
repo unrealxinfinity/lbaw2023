@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RecoverRequest;
 use App\Mail\MailModel;
 use App\Models\Member;
@@ -34,7 +35,7 @@ class RecoverController extends Controller
 
         $recoverToken = bin2hex(random_bytes(32));
 
-        $member = Member::where('email', $fields['email']);
+        $member = Member::where('email', $fields['email'])->first();
 
         $member->recoverToken = $recoverToken;
 
@@ -43,7 +44,7 @@ class RecoverController extends Controller
             'link' => env('APP_URL') . '/reset-password?id=' . $member->id . '&token=' . $recoverToken
         ];
 
-        Mail::to($fields['email'])->send(new MailModel($mailData));
+        Mail::to($member->email)->send(new MailModel($mailData));
         return redirect()->back()->withSuccess('Email sent to provided address. Please check your inbox');
     }
 }

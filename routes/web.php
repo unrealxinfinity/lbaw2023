@@ -18,7 +18,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\RecoverController;
+use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
