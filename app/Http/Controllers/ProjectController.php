@@ -25,7 +25,8 @@ class ProjectController extends Controller
         $this->authorize('show', $project);
         return view('pages.project', [
             'project' => $project,
-            'tags'=> $project->tags
+            'tags'=> $project->tags,
+            'edit' => false
         ]);
     }
 
@@ -148,6 +149,19 @@ class ProjectController extends Controller
         return response()->json([
             'error' => false,
             'tasks'=> $tasksJson
+        ]);
+    }
+
+    public function showEditProject(string $id): View
+    {
+        $project = Project::findOrFail($id);
+
+        $this->authorize('edit', $project);
+
+        return view('pages.project', [
+            'project' => $project,
+            'tags'=> $project->tags,
+            'edit' => true
         ]);
     }
 }

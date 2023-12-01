@@ -95,17 +95,11 @@ function addEventListeners() {
     
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
-    
-    let ProjectEditOpener = document.querySelector('#show-edit-project');
-    if (ProjectEditOpener != null)
-      ProjectEditOpener.addEventListener('click', function() {
-        document.querySelector('#edit-project').classList.remove('hidden');
-      });
 
-    let ProjectEditCloser = document.querySelector('#hide-edit-project');
+    let ProjectEditCloser = document.querySelector('#go-back');
     if (ProjectEditCloser != null)
     ProjectEditCloser.addEventListener('click', function() {
-        document.querySelector('#edit-project').classList.add('hidden');
+        window.history.back();
       });
     /*
     let removeMemberFromWorld = document.querySelector('');
