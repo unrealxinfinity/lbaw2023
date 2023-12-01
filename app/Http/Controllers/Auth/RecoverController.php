@@ -7,13 +7,15 @@ use App\Http\Requests\RecoverRequest;
 use App\Http\Requests\ResetRequest;
 use App\Mail\MailModel;
 use App\Models\Member;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class RecoverController extends Controller
 {
-    function showRecoverForm()
+    function showRecoverForm(): View
     {
         if (Auth::check()) {
             return redirect('');
@@ -22,7 +24,7 @@ class RecoverController extends Controller
         }
     }
 
-    function showResetForm(Request $request)
+    function showResetForm(Request $request): View
     {
         if (Auth::check()) {
             return redirect('');
@@ -31,7 +33,7 @@ class RecoverController extends Controller
         }
     }
 
-    function send(RecoverRequest $request) 
+    function send(RecoverRequest $request): RedirectResponse 
     {
         $fields = $request->validated();
 
@@ -51,9 +53,8 @@ class RecoverController extends Controller
         return redirect()->back()->withSuccess('Email sent to provided address. Please check your inbox');
     }
 
-    function reset(ResetRequest $request)
+    function reset(ResetRequest $request): RedirectResponse
     {
-        error_log("soup");
         $fields = $request->validated();
 
         $member = Member::findOrFail($fields['id']);
@@ -63,5 +64,9 @@ class RecoverController extends Controller
         $user = $member->persistentUser->user;
 
         error_log("sup");
+        $user->password = $fields['password'];
+        $user->save();
+
+        return redirect()->route('login');
     }
 }
