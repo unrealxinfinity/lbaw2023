@@ -19,6 +19,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -161,4 +162,11 @@ Route::controller(FileController::class)->group(function () {
    Route::post('/members/upload/{id}', 'upload');
    Route::post('/projects/upload/{id}', 'upload');
    Route::post('/worlds/upload/{id}', 'upload');
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/recover', 'showRecoverForm');
+    Route::post('/recover', 'send')->name('send-recover');
+    Route::get('/reset', 'showResetForm');
+    Route::post('/reset', 'reset')->name('reset-password');
 });
