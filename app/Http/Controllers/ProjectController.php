@@ -150,15 +150,4 @@ class ProjectController extends Controller
             'tasks'=> $tasksJson
         ]);
     }
-
-    public function showEditProject(string $id): View
-    {
-        $project = Project::findOrFail($id);
-
-        $this->authorize('edit', $project);
-
-        return view('pages.project-edit', [
-            'project' => $project
-        ]);
-    }
 }

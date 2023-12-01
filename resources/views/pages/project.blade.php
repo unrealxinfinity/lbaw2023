@@ -14,4 +14,9 @@
             @include('partials.sidebar', ['thing'=>$project, 'type' => 'project'])
         </div>
     </section>
+    <div id="edit-project" class="hidden fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full">
+        <div class="bg-grey w-3/4 h-3/4 fixed mx-36 my-20 rounded drop-shadow">
+            <a id="hide-edit-project" class="cursor-pointer sm:text-big text-bigPhone fixed right-3">&times;</a>
+        </div>
+    </div>
 @endsection

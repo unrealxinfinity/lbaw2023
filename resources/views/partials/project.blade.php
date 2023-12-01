@@ -16,7 +16,7 @@
         </form>
     @endif
     @if (Auth::user()->can('edit', $project))
-        <a class="button" href="/projects/{{ $project->id }}/edit">Edit Project</a>
+        <button id="show-edit-project" class="button"> Edit Project </button>
     @endif
     @include('form.search-task', ['project' => $project])
     <h2 class="mt-10"> TASKS </h2>
