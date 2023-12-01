@@ -15,16 +15,16 @@ class CreateTask implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $message;
-    public $task_name;
+    public $project_id;
 
 
 
     /**
      * Create a new event instance.
      */
-    public function __construct($task_name)
+    public function __construct($task_name,$project_id)
     {
-        $this->task_name = $task_name;
+        $this->project_id = $project_id;
         $this->message = "Task " . $task_name ." created";
     }
 
@@ -34,12 +34,13 @@ class CreateTask implements ShouldBroadcast
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     public function broadcastOn(): array
-    {
-        return "CreateTask";
+    {   
+        error_log("CreateTaskOn".$this->project_id);
+        return ["CreateTaskOn".$this->project_id];
     }
 
     public function broadcastAs() {
-        return "create-task-notification";
+        return "taskCreated";
     }
 
 }
