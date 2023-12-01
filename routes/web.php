@@ -19,6 +19,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -154,4 +155,9 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+});
+
+Route::controller(NotificationController::class)->group(function () {
+    Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
+    Route::post('/api/notifications', 'createNotification')->name('createNotification');
 });

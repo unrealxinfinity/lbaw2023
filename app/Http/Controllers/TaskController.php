@@ -34,7 +34,7 @@ class TaskController extends Controller
 
         $fields = $request->validated();
 
-        Task::create([
+        $task = Task::create([
             'title' => $fields['title'],
             'description' => $fields['description'],
             'status' => $fields['status'],
@@ -44,7 +44,7 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
         
-        event(new CreateTask($fields['title'],$fields['project_id']));
+        event(new CreateTask($task,$fields['project_id']));
         
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }

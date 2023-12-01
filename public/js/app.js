@@ -107,16 +107,9 @@ function addEventListeners() {
     }
     */ 
     
-    let notificationButton = document.getElementById('notificationButton');
+    let notificationButton = document.getElementById('notification-button');
     if(notificationButton != null){
-      notificationButton.addEventListener('click', function() {
-        if(document.getElementById('notificationContainer').style.display == 'block'){
-          document.getElementById('notificationContainer').style.display = 'none';
-        }
-        else{
-          document.getElementById('notificationContainer').style.display = 'block';
-        }
-      });
+      notificationButton.addEventListener('click', sendShowNotificationsRequest);
     }
 
   }
@@ -534,6 +527,52 @@ function removeMemberFromWorldHandler(data) {
   element.remove();
 }
 
+
+async function sendShowNotificationsRequest(ev) {
+  ev.preventDefault();
+    const url = '/api/notifications';
+    console.log(url);
+    const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+    })
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          ShowNotificationsHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+
+}
+
+function ShowNotificationsHandler(json){
+  let popup = document.getElementById("notificationList");
+  let notifications = json.notifications;
+  popup.innerHTML = "";
+  for(let notification of notifications){    
+    let notificationText = document.createElement('p');
+    let notificationPriority = document.createElement('p');
+    let notificationDate= document.createElement('p');
+    let notificationContainer = document.createElement('div');
+    notificationText.textContent = notification.text;
+    notificationPriority.textContent = notification.level;
+    notificationDate.textContent = notification.date_;
+    notificationContainer.appendChild(notificationText);
+    notificationContainer.appendChild(notificationPriority);
+    notificationContainer.appendChild(notificationDate);
+    popup.appendChild(notificationContainer);
+  }
+}
+
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
     let id = item.getAttribute('data-id');
@@ -677,37 +716,45 @@ function removeMemberFromWorldHandler(data) {
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
+window.pusherInitialized=false;
 
 function pusherNotifications(){
-  Pusher.logToConsole = false;
+  
+  Pusher.logToConsole = true;
   // Pusher notifications
-  const pusher = new Pusher("11f57573d00ddf0021b9", {
-    cluster: "eu",
-    encrypted: true
-  });
-
-    project = document.getElementsByClassName('project')[0];
-    project_id = project.getAttribute('data-id');
-    console.log(project_id);
-    const channelCreateTag = pusher.subscribe('CreateTagOn' + project_id);
-    console.log('CreateTagOn' + project_id);
-    channelCreateTag.bind('tagCreated',function(data){
-      alert(JSON.stringify(data.message));
+  if(!window.pusherInitialized){
+    const pusher = new Pusher("11f57573d00ddf0021b9", {
+      cluster: "eu",
+      encrypted: true
     });
-
-    const channelCreateTask = pusher.subscribe('CreateTaskOn' + project_id);
-    channelCreateTask.bind('taskCreated',function(data){
+  
+    function bindEvent(channel, eventName, callback) {
+      channel.bind(eventName, callback);
+    }
+  
       
-    });
+      const projectContainer = document.getElementsByClassName('projectContainer');
+      const worldContainer = document.getElementsByClassName('worldsContainer');
+      
+      for (let i = 0; i < worldContainer.length; i++) { 
+        const world = worldContainer[i];
+        const world_id = world.getAttribute('data-id');
+        const channelWorld = pusher.subscribe('World' + world_id);
+        bindEvent(channelWorld, 'CreateProject', function(data){
+          alert(JSON.stringify(data.message));
+        });
+      }
+      for(let i = 0; i < projectContainer.length; i++){
+        const project = projectContainer[i];
+        const project_id = project.getAttribute('data-id');
+        const channelProject = pusher.subscribe('Project' + project_id);
+        bindEvent(channelProject, 'CreateTask', function(data){
+          alert(JSON.stringify(data.message));
+        });
+      }
+  }
   
-  
-
-
-  
-
-  
-
-  
+  window.pusherInitialized=true;
 }
 
 addEventListeners();

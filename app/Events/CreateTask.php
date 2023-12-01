@@ -35,12 +35,11 @@ class CreateTask implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {   
-        error_log("CreateTaskOn".$this->project_id);
-        return ["CreateTaskOn".$this->project_id];
+        return ["Project".$this->project_id];
     }
 
     public function broadcastAs() {
-        return "taskCreated";
+        return "CreateTask";
     }
 
 }

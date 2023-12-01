@@ -39,7 +39,6 @@ CREATE TABLE user_info(
   remember_token VARCHAR
 );
 
-
 DROP TABLE IF EXISTS members CASCADE;
 CREATE TABLE  members(
   id SERIAL PRIMARY KEY,

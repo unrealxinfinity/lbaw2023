@@ -37,9 +37,7 @@
                         <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
                         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                     </ul>
-                    
-                    <ul id="notificationList"></ul>
-                    
+                                        
                 @else
                     <ul class="items-center md:flex md:visible hidden m-0">
                         <a class="button" href="{{ url('/login') }}"> Login </a>
@@ -68,6 +66,11 @@
                         <a class="button" href="{{ url('/login') }}"> Login </a>
                     </ul>
                 @endif
+            </ul>
+        </div>
+        <div class="notificationArea">
+            <ul id="notificationList">
+                
             </ul>
         </div>
         <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 px-2 z-0">

@@ -32,10 +32,10 @@ class CreateTag implements ShouldBroadcast
      */
     public function broadcastOn():array
     {   
-        return ['CreateTagOn'.$this->project_id];
+        return ['Project'.$this->project_id];
     }
 
     public function broadcastAs() {
-        return 'tagCreated';
+        return 'CreateTag';
     }
 }

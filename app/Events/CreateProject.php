@@ -10,16 +10,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CreateProject
+class CreateProject implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    public $message;
+    public $world_id;
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($project_text,$world_id)
     {
-        //
+        $this->message = $project_text;
+        $this->world_id = $world_id;
     }
 
     /**
@@ -30,7 +32,11 @@ class CreateProject
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            'World'. $this->world_id
         ];
+    }
+    public function broadcastAs()
+    {
+        return 'CreateProject';
     }
 }

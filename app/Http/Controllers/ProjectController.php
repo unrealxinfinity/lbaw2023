@@ -14,8 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-
-
+use App\Http\Controllers\NotificationController;
 class ProjectController extends Controller
 {
     public function show(string $id): View
@@ -40,10 +39,12 @@ class ProjectController extends Controller
            'picture' => 'pic',
             'world_id' => $fields['world_id']
         ]);
-
+        
         $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
 
-        return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
+        NotificationController::createProjectNotification($project,$fields['world_id']);
+
+        return to_route('projects.show', ['id' => $project->id])->withSuccess('New Project created!');
     }
 
     public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse

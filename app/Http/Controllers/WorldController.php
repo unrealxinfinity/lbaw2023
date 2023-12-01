@@ -40,7 +40,7 @@ class WorldController extends Controller
            'picture' => 'pic',
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
-
+        
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
 
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
@@ -55,7 +55,6 @@ class WorldController extends Controller
 
         try {
             $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-
             return response()->json([
                 'error' => false,
                 'id' => $member->id,

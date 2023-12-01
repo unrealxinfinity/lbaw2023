@@ -14,12 +14,15 @@ class CreateWorld
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $message;
+    public $world_id;
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($world_name,$world_id)
     {
-        //
+        $this->world_id = $world_id;
+        $this->message = "World " . $world_name ." created";
     }
 
     /**
@@ -30,7 +33,10 @@ class CreateWorld
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            'CreateWorldOn'.$this->world_id,
         ];
+    }
+    public function broadcastAs() {
+        return "worldCreated";
     }
 }
