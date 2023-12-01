@@ -5,11 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RecoverRequest;
 use App\Mail\MailModel;
 use App\Models\Member;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-class MailController extends Controller
+class RecoverController extends Controller
 {
+    function showRecoverForm()
+    {
+        if (Auth::check()) {
+            return redirect('');
+        } else {
+            return view('auth.recover');
+        }
+    }
+
+    function showResetForm()
+    {
+        if (Auth::check()) {
+            return redirect('');
+        } else {
+            return view('auth.reset');
+        }
+    }
+
     function send(RecoverRequest $request) 
     {
         $fields = $request->validated();

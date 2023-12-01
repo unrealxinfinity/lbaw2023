@@ -18,6 +18,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -154,4 +155,11 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/recover', 'showRecoverForm');
+    Route::post('/recover', 'send')->name('send-recover');
+    Route::get('/reset', 'showResetForm');
+    Route::post('/reset', 'reset')->name('reset-password');
 });
