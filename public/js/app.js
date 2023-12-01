@@ -661,5 +661,8 @@ function removeMemberFromWorldHandler(data) {
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
-
+function openSidebar() {
+  console.log('hello');
+  document.querySelector('#sidebar-text').click();
+}
   
