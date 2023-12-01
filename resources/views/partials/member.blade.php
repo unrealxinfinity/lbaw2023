@@ -28,7 +28,7 @@
         <h1> <a href="/mytasks">My Tasks</a></h1>
     @endif
     @else
-    <header class="h-20 flex justify-start">
+    <header class="h-10 flex justify-start">
         <img src= {{$member->getProfileImage()}} class="h-full aspect-square mx-1">
         <h4><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
     </header>
