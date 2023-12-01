@@ -89,13 +89,12 @@ class WorldController extends Controller
             return response()->json([
                 'error' => false,
                 'id' => $world_id,
-                'username' => $username,
+                'member_id' => $member->id,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
                 'id' => $world_id,
-                'username' => $username,
             ]);
         }
     }

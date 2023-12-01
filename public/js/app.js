@@ -251,10 +251,10 @@ function addEventListeners() {
       <input type="submit" value="X">
     `;
 
-    member.appendChild(removeForm);
     removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
 
     ul.appendChild(member);
+    ul.appendChild(removeForm);
    
   }
 
@@ -607,7 +607,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
 }
 
 function removeMemberFromWorldHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
+  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
   let form = document.querySelector('form#remove-member-world');
   form.remove();
@@ -641,8 +641,7 @@ async function sendRemoveMemberFromProjectRequest(ev) {
 }
 
 function removeMemberFromProjectHandler(data) {
-  console.log(data);
-  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
+  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
   let form = document.querySelector('form#remove-member-project');
   form.remove();
