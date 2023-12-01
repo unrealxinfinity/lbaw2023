@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\DeleteController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
 use App\Models\PersistentUser;
@@ -155,6 +156,12 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+});
+
+Route::controller(FileController::class)->group(function () {
+   Route::post('/members/upload/{id}', 'upload');
+   Route::post('/projects/upload/{id}', 'upload');
+   Route::post('/worlds/upload/{id}', 'upload');
 });
 
 Route::controller(RecoverController::class)->group(function () {

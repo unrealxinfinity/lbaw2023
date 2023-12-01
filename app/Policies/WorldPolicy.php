@@ -25,6 +25,11 @@ class WorldPolicy
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted';
     }
 
+    public function edit(User $user, World $world): bool
+    {
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+    }
+
     public function addMember(User $user, World $world): bool
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
