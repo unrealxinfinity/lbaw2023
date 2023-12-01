@@ -2,6 +2,16 @@
     <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a></p>
     <header class="flex justify-start sm:h-40 h-24 m-5">
         <img class="h-full aspect-square " src={{ $world->getImage() }}>
+        @can('edit', $world)
+            <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
+
+                <input class="text-white" name="file" type="file" required>
+                <input name="type" type="hidden" value="world">
+                <input class="button w-min" type="submit" value="Upload world picture">
+            </form>
+        @endcan
         <div class="flex flex-col ml-5 pt-1">
             <h1>{{ $world->name }}</h1>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
