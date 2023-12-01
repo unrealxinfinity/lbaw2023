@@ -15,6 +15,9 @@
             <input class="button" type="submit" value="Delete Project">
         </form>
     @endif
+    @if (Auth::user()->can('edit', $project))
+        <a class="button" href="/projects/{{ $project->id }}/edit">Edit Project</a>
+    @endif
     @include('form.search-task', ['project' => $project])
     <h2 class="mt-10"> TASKS </h2>
     <div class="panel w-full">
