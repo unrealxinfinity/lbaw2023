@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RecoverRequest;
 use App\Mail\MailModel;
 use App\Models\Member;
 use Illuminate\Http\Request;
