@@ -93,13 +93,15 @@ class ProjectController extends Controller
 
             return response()->json([
                 'error' => false,
-                'id' => $member->id,
+                'id' => $project->id,
+                'username' => $username,
             ]);
         } catch (\Exception $e)
         {
             return response()->json([
                 'error' => true,
-                'id' => $member->id,
+                'id' => $project->id,
+                'username' => $username,
             ]);
         }
     }
