@@ -88,12 +88,14 @@ class WorldController extends Controller
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
-                'id' => $member->id,
+                'id' => $world_id,
+                'username' => $username,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'id' => $member->id,
+                'id' => $world_id,
+                'username' => $username,
             ]);
         }
     }
