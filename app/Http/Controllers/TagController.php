@@ -10,7 +10,6 @@ use App\Events\CreateTag;
 class TagController extends Controller
 {
     public function createProjectTag(CreateTagRequest $request,string $project_id):JsonResponse{
-        dd($request);
         $fields = $request->validate(['tagName' => ['required', 'string', 'max:255']]);
         if(Tag::where('name',$fields['tagName'])->exists()){
             return response()->json([
@@ -28,8 +27,7 @@ class TagController extends Controller
         $request->authorize($project);
         $project->tags()->attach($tag->id);
 
-        event(new CreateTag($fields['tagName']));
-        
+        event(new CreateTag($fields['tagName'],$project_id));
         return response()->json([
             'error' => false,
             'tagName'=> $tag->name

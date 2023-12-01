@@ -112,5 +112,5 @@ class MemberController extends Controller
 
         return view('pages.admin-members', ['members' => $members]);
     }
-
+    
 }

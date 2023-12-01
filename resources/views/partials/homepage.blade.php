@@ -3,7 +3,7 @@
     <h1> MY ASSIGNED TASKS </h1>
     <div class="panel">
     @foreach($tasks as $task)
-    <div class="flex flex-col justify-end min-w-[11rem] w-44 h-32 sm:min-w-[13rem] sm:w-52 sm:h-44 mx-4 my-2 bg-opacity-60 bg-grey rounded"> 
+    <div class="flex flex-col justify-end min-w-[11rem] w-44 h-32 sm:min-w-[13rem] sm:w-52 sm:h-44 mx-4 my-2 bg-opacity-60 bg-grey rounded" > 
         <div class="h-1/2 md:text-medium text-mediumPhone overflow-hidden px-5 flex flex-col justify-center">
             <h2><a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a>
                 > 
@@ -22,7 +22,7 @@
     <h1> MY CURRENT PROJECTS </h1>
     <div class="panel">
     @foreach($projects as $project)
-    <div class="container">
+    <div class="container projectsContainer" data-id="{{$project->id}}">
         <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
         @php
             $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
@@ -37,7 +37,7 @@
     <h1> MY CURRENT WORLDS <a class="round-button" href="/create-world">+</a></h1> 
     <div class="panel">
     @foreach($worlds as $world)
-    <div class="container">
+    <div class="container worldsContainer" data-id="{{$world->id}}">
         <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
         @php
             $translateXValue = (strlen($world->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';

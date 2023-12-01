@@ -106,6 +106,19 @@ function addEventListeners() {
       leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
     }
     */ 
+    
+    let notificationButton = document.getElementById('notificationButton');
+    if(notificationButton != null){
+      notificationButton.addEventListener('click', function() {
+        if(document.getElementById('notificationContainer').style.display == 'block'){
+          document.getElementById('notificationContainer').style.display = 'none';
+        }
+        else{
+          document.getElementById('notificationContainer').style.display = 'block';
+        }
+      });
+    }
+
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -443,8 +456,7 @@ function searchProjectHandler(json){
     const tagForms = document.getElementsByClassName('new-tag');
     const id = tagForms[0].getAttribute('data-id');
     let tagElem = tagForms[0].children;
-    let tagElemName= tagElem[1].value;
-    let tagName = tagElemName.replace(/\s/g, '');
+    let tagName= tagElem[1].value;
     const csrf = tagElem[0].value;
     const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
         method: 'POST',
@@ -658,25 +670,47 @@ function removeMemberFromWorldHandler(data) {
     return new_item;
   }
   
-  addEventListeners();
+
   
   // Close the pop-up
   function closeSearchedTaskPopup() {
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
-Pusher.logToConsole = true;
-// Pusher notifications
-const pusher = new Pusher("11f57573d00ddf0021b9", {
-  cluster: "eu",
-  encrypted: true
-});
 
-//const channelCreateTask = pusher.subscribe('CreateTask');
-const channelCreateTag = pusher.subscribe('CreateTag');
+function pusherNotifications(){
+  Pusher.logToConsole = false;
+  // Pusher notifications
+  const pusher = new Pusher("11f57573d00ddf0021b9", {
+    cluster: "eu",
+    encrypted: true
+  });
+
+    project = document.getElementsByClassName('project')[0];
+    project_id = project.getAttribute('data-id');
+    console.log(project_id);
+    const channelCreateTag = pusher.subscribe('CreateTagOn' + project_id);
+    console.log('CreateTagOn' + project_id);
+    channelCreateTag.bind('tagCreated',function(data){
+      alert(JSON.stringify(data.message));
+    });
+
+    const channelCreateTask = pusher.subscribe('CreateTaskOn' + project_id);
+    channelCreateTask.bind('taskCreated',function(data){
+      
+    });
+  
+  
 
 
-channelCreateTag.bind('tagCreated',function(data){
-  alert(JSON.stringify(data));
-})
+  
+
+  
+
+  
+}
+
+addEventListeners();
+pusherNotifications();
+
 
