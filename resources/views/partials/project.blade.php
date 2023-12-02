@@ -19,6 +19,13 @@
             <input class="button" type="submit" value="Delete Project">
         </form>
     @endif
+    @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
+        <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
+            @csrf
+            @method('POST')
+            <button class="button" type="submit">Archive Project</button>
+        </form>
+    @endif
     @include('form.search-task', ['project' => $project])
     <h2 class="mt-10"> TASKS </h2>
     <div class="panel w-full">

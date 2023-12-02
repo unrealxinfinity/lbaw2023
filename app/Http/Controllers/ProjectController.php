@@ -94,6 +94,18 @@ class ProjectController extends Controller
         }
     }
 
+    public function archive(string $id): RedirectResponse
+    {
+        $project = Project::findOrFail($id);
+        $this->authorize('edit', $project);
+
+        $project->status = 'Archived';
+
+        $project->save();
+
+        return redirect()->route('projects.show', $id);
+    }
+
     public function leave(LeaveProjectRequest $request, string $id): RedirectResponse
     {
         try{
