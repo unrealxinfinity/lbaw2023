@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\DB;
 use App\Events\CreateWorld;
 use App\Models\Project;
 use App\Events\CreateProject;
+use App\Events\CreateTag;
 use App\Models\Task;
+use App\Models\Tag;
 
 class NotificationController extends Controller
 {
@@ -29,19 +31,31 @@ class NotificationController extends Controller
 
     }
 
-    static function createProjectNotification(Project $project,$world_id){
-        $member = Member::where('user_id', auth()->user()->id)->first();
+    static function ProjectNotification(Project $project,string $world_id, string $action){
+        
         DB::beginTransaction();
         try {
-            $message = 'Created Project '.$project->name.'!';
+            $level='';
+            if($action == 'Created'){
+                $level='Low';
+            }
+            elseif($action == 'Deleted'){
+                $level='High';
+            }
+            else{
+                $level='Medium';
+            }
+            $message = $action.' Project '.$project->name.'!';
             $notification = Notification::create([
                 'text' => $message,
-                'level' => 'Low',
+                'level' => $level,
                 'world_id' => $world_id,
                 'project_id' => null,
                 'task_id' => null,
             ]);
-             $member->notifications()->attach($notification->id);
+             foreach($project->members as $member){
+                $member->notifications()->attach($notification->id);
+             } 
                 event(new CreateProject($message,$world_id));
             DB::commit();
         } catch (\Exception $e) {
@@ -49,11 +63,44 @@ class NotificationController extends Controller
             throw $e;
         }
     }
-    static function createTaskNotification(Task $task,$project_id){
-        $member = Member::where('user_id', auth()->user()->id)->first();
+   
+    static function TaskNotification(Task $task,string $project_id, string $action){
+        $project = Project::find($project_id);
         DB::beginTransaction();
         try {
-            $message = 'Created Task '.$task->title.'!';
+            if($action == 'Created'){
+                $level='Low';
+            }
+            elseif($action == 'Completed'){
+                $level='High';
+            }
+            else{
+                $level='Medium';
+            }
+            $message = $action.' Task '.$task->title.'!';
+            $notification = Notification::create([
+                'text' => $message,
+                'level' => $level,
+                'world_id' => null,
+                'project_id' => $project_id,
+                'task_id' => null,
+            ]);
+            foreach($project->members as $member){
+                $member->notifications()->attach($notification->id);
+             } 
+            event(new CreateTask($task->title,$project_id));
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    static function TagNotification(Tag $tag,string $project_id, string $action){
+        $project = Project::find($project_id);
+        DB::beginTransaction();
+        try {
+            $message = $action.' Tag '.$tag->name.'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => 'Low',
@@ -61,12 +108,17 @@ class NotificationController extends Controller
                 'project_id' => $project_id,
                 'task_id' => null,
             ]);
-             $member->notifications()->attach($notification->id);
+            foreach($project->members as $member){
+                $member->notifications()->attach($notification->id);
+             }
+             event(new CreateTag($tag->name,$project_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
         }
     }
+
+    
     
 }

@@ -25,7 +25,7 @@ class CreateTask implements ShouldBroadcast
     public function __construct($task_name,$project_id)
     {
         $this->project_id = $project_id;
-        $this->message = "Task " . $task_name ." created";
+        $this->message = "Task " . $task_name ." created!";
     }
 
     /**

@@ -11,6 +11,8 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Http\JsonResponse;
+
 class MemberController extends Controller
 {
     public function show(string $username): View
@@ -112,5 +114,17 @@ class MemberController extends Controller
 
         return view('pages.admin-members', ['members' => $members]);
     }
-    
+    public function getAllBelongings():JsonResponse
+    {
+        
+        $member = Member::where('user_id', Auth::user()->persistentUser->member->id)->firstOrFail();
+        $worlds = $member->worlds->pluck('id');
+        $projects = $member->projects->pluck('id');
+
+        return response()->json([
+            'worlds_ids' => $worlds,
+            'projects_ids' => $projects
+        ]);
+
+    }
 }

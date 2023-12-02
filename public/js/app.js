@@ -100,6 +100,7 @@ function addEventListeners() {
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
     
+      window.addEventListener('load',getMemberBelingingsRequest);
     /*
     let removeMemberFromWorld = document.querySelector('');
     if(leaveWorld != null){
@@ -716,13 +717,44 @@ function ShowNotificationsHandler(json){
     document.getElementById('popupContainer').classList.add('hidden');
  }
 
-window.pusherInitialized=false;
+ // Get member belongings in ajax on every page load for pusher notifications
+async function getMemberBelingingsRequest(ev){
+  ev.preventDefault();
+  const url = '/api/allBelongings';
+    const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+    })
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          getIdsHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
 
-function pusherNotifications(){
+}
+function getIdsHandler(json){
+  let project_ids = json.projects_ids;
+  let world_ids = json.worlds_ids;
+  pusherNotifications(project_ids, world_ids);
+}
+
+
+// Pusher notifications
+function pusherNotifications(projectContainer, worldContainer){
   
-  Pusher.logToConsole = true;
-  // Pusher notifications
-  if(!window.pusherInitialized){
+  Pusher.logToConsole = false;
+  
+  
     const pusher = new Pusher("11f57573d00ddf0021b9", {
       cluster: "eu",
       encrypted: true
@@ -731,33 +763,31 @@ function pusherNotifications(){
     function bindEvent(channel, eventName, callback) {
       channel.bind(eventName, callback);
     }
-  
+    
+    for (let i = 0; i < worldContainer.length; i++) { 
+      const world_id = worldContainer[i];
       
-      const projectContainer = document.getElementsByClassName('projectContainer');
-      const worldContainer = document.getElementsByClassName('worldsContainer');
       
-      for (let i = 0; i < worldContainer.length; i++) { 
-        const world = worldContainer[i];
-        const world_id = world.getAttribute('data-id');
-        const channelWorld = pusher.subscribe('World' + world_id);
-        bindEvent(channelWorld, 'CreateProject', function(data){
-          alert(JSON.stringify(data.message));
-        });
-      }
-      for(let i = 0; i < projectContainer.length; i++){
-        const project = projectContainer[i];
-        const project_id = project.getAttribute('data-id');
-        const channelProject = pusher.subscribe('Project' + project_id);
-        bindEvent(channelProject, 'CreateTask', function(data){
-          alert(JSON.stringify(data.message));
-        });
-      }
-  }
+      const channelWorld = pusher.subscribe('World' + world_id);
+      bindEvent(channelWorld, 'CreateProject', function(data){
+        alert(JSON.stringify(data.message));
+      });
+    }
+    for(let i = 0; i < projectContainer.length; i++){
+      const project_id = projectContainer[i];
+      const channelProject = pusher.subscribe('Project' + project_id);
+      bindEvent(channelProject, 'CreateTask', function(data){
+        alert(JSON.stringify(data.message));
+      });
+
+      bindEvent(channelProject, 'CreateTag', function(data){
+        alert(JSON.stringify(data.message));
+      });
+    }
   
-  window.pusherInitialized=true;
+  
 }
 
+
+
 addEventListeners();
-pusherNotifications();
-
-

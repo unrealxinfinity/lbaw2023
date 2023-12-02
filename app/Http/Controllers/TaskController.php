@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use App\Events\CreateTask;
+use App\Http\Controllers\NotificationController;
 
 class TaskController extends Controller
 {  
@@ -44,7 +44,7 @@ class TaskController extends Controller
             'project_id' => $fields['project_id']
         ]);
         
-        event(new CreateTask($task,$fields['project_id']));
+        NotificationController::TaskNotification($task,$fields['project_id'],'Created');
         
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
@@ -96,12 +96,12 @@ class TaskController extends Controller
         $task = Task::findOrFail($task_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
         
-
+        
         $this->authorize('assignMember', $task);
 
         try {
             $member->tasks()->attach($task_id);
-
+            NotificationController::TaskNotification($task,$task->project_id,'Assigned to member '.$username);
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
@@ -126,7 +126,7 @@ class TaskController extends Controller
         $task->status = 'Done';
 
         $task->save();
-
+        NotificationController::TaskNotification($task,$task->project_id,'Completed');
         return view('pages.task', [
             'task' => $task,
             'main' => true

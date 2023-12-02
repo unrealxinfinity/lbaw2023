@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\Project;
 use App\Http\Requests\CreateTagRequest;
 use App\Events\CreateTag;
+use App\Http\Controllers\NotificationController;
 class TagController extends Controller
 {
     public function createProjectTag(CreateTagRequest $request,string $project_id):JsonResponse{
@@ -27,7 +28,8 @@ class TagController extends Controller
         $request->authorize($project);
         $project->tags()->attach($tag->id);
 
-        event(new CreateTag($fields['tagName'],$project_id));
+        NotificationController::TagNotification($tag,$project_id,'Created');
+        
         return response()->json([
             'error' => false,
             'tagName'=> $tag->name

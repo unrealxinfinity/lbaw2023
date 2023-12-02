@@ -129,6 +129,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
     Route::get('/create-world', 'showCreateWorld')->name('world-create');
+    Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
 });
 
 Route::controller(TaskController::class)->group(function () {

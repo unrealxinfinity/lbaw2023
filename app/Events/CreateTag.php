@@ -20,7 +20,7 @@ class CreateTag implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct($tag_name,$project_id)
-    {     
+    {    
         $this->project_id = $project_id;
         $this->message= "Tag " . $tag_name ." created";
     }

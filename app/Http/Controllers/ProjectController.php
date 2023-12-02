@@ -42,7 +42,7 @@ class ProjectController extends Controller
         
         $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
 
-        NotificationController::createProjectNotification($project,$fields['world_id']);
+        NotificationController::ProjectNotification($project,$fields['world_id'],'Created');
 
         return to_route('projects.show', ['id' => $project->id])->withSuccess('New Project created!');
     }
@@ -60,7 +60,7 @@ class ProjectController extends Controller
             $type = $is_admin ? 'World Administrator' : $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
-
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
@@ -84,6 +84,8 @@ class ProjectController extends Controller
             $request->validated();
             $project = Project::findOrFail($id);
             $project->members()->detach(Member::where('user_id', auth()->user()->id)->first()->id);
+            $member = Member::where('user_id', auth()->user()->id)->first();
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' left the');
             return to_route('worlds.show', ['id' => $project->world_id])->withSuccess('You have left the project!');
         } catch (\Exception $e){
             return to_route('projects.show', ['id' => $id])->withSuccess('You can\'t leave this project!');
@@ -96,9 +98,8 @@ class ProjectController extends Controller
 
         $project = Project::findOrFail($id);
         $world_id = $project->world;
-
+        NotificationController::ProjectNotification($project,$world_id->id,'Deleted');
         $project->delete();
-
         return view('pages.world', [
             'world' => $world_id
         ]);

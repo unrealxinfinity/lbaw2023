@@ -43,6 +43,7 @@
                         <a class="button" href="{{ url('/login') }}"> Login </a>
                     </ul>
                 @endif
+                
         </nav>
         <input type="checkbox" id="show-menu" class="hidden peer"/>
         <div class="fixed bg-opacity-90 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
@@ -70,7 +71,7 @@
         </div>
         <div class="notificationArea">
             <ul id="notificationList">
-                
+
             </ul>
         </div>
         <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 px-2 z-0">
