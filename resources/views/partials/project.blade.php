@@ -46,10 +46,12 @@
         @include('form.addmember', ['project' => $project])
     </section>
     @endif
-    @if (Auth::user()->persistentUser->member->projects->contains('id', $project->id))
+    @if (Auth::user()->can('createTask', $project))
     <section id="create-task">
         @include('form.task-create', ['project' => $project])
     </section>
+    @endif
+    @if (Auth::user()->can('projectTagCreate', $project))
     <section id="create-tag">
         @include('form.tag-create',['project'=> $project])
     </section>
