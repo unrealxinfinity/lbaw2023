@@ -29,8 +29,8 @@
     @endif
     @else
     <header class="h-10 flex justify-start">
-        <img src= {{$member->getProfileImage()}} class="h-full aspect-square mx-1">
-        <h4><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
+        <img src= {{$member->getProfileImage()}} class="h-5 aspect-square mx-1">
+        <h4 class="pt-0.5 md:pt-0"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
     </header>
     @endif
 </article>

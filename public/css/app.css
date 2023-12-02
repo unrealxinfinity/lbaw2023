@@ -17,6 +17,9 @@
   h3 {
     @apply m-2 text-green text-mediumPhone md:text-medium;
   }
+  h2 {
+    @apply text-medium;
+  }
   input, select, option, textarea {
     @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone md:text-medium;
   }

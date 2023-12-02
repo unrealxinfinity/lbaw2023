@@ -5,26 +5,26 @@
     <h1>Members</h1>
     <ul class="members">
         @if ($type == 'project')
-        <h2 class="text-grey"> Project Leaders </h2>
+        <h2 class="text-grey font-semibold"> Project Leaders </h2>
         @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
         @endforeach
-        <h2 class="mt-5 text-grey"> Members </h2>
+        <h2 class="mt-5 text-grey font-semibold"> Members </h2>
         @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
         @endforeach
         @endif
         @if ($type == 'world')
-        <h2 class="text-grey"> World Owner </h2>
+        <h2 class="text-grey font-semibold"> World Owner </h2>
             @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
-        <h2 class="mt-5 text-grey"> World Admins </h2>
+        <h2 class="mt-5 text-grey font-semibold"> World Admins </h2>
         @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
             @if ($member->id != $thing->owner()->get()->first()->id)
             @include('partials.member', ['member' => $member, 'main' => false])
             @endif
         @endforeach
-        <h2 class="mt-5 text-grey"> Members </h2>
+        <h2 class="mt-5 text-grey font-semibold"> Members </h2>
         @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
         @endforeach
