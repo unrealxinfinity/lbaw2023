@@ -103,6 +103,12 @@ function addEventListeners() {
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
 
+    let ProjectEditCloser = document.querySelector('#go-back');
+    if (ProjectEditCloser != null)
+    ProjectEditCloser.addEventListener('click', function() {
+        window.history.back();
+      });
+
     let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
     if(removeMemberFromProjects != null){
       removeMemberFromProjects.forEach(removeMemberFromProject => {

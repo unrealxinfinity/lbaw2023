@@ -7,6 +7,7 @@ use App\Http\Requests\DeleteProjectRequest;
 use App\Http\Requests\LeaveProjectRequest;
 use App\Http\Requests\RemoveMemberRequest;
 use App\Http\Requests\SearchTaskRequest;
+use App\Http\Requests\EditProjectRequest;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\Task;
@@ -26,7 +27,8 @@ class ProjectController extends Controller
         $this->authorize('show', $project);
         return view('pages.project', [
             'project' => $project,
-            'tags'=> $project->tags
+            'tags'=> $project->tags,
+            'edit' => false
         ]);
     }
 
@@ -45,6 +47,21 @@ class ProjectController extends Controller
         $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
 
         return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
+    }
+
+    public function update(EditProjectRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $project = Project::findOrFail($id);
+
+        $project->name = $fields['name'];
+        $project->status = $fields['status'];
+        $project->description = $fields['description'];
+        
+        $project->save();
+
+        return redirect()->route('projects.show', $id);
     }
 
     public function addMember(AddMemberRequest $request, string $project_id, string $username): JsonResponse
@@ -79,6 +96,17 @@ class ProjectController extends Controller
         }
     }
 
+    public function archive(string $id): RedirectResponse
+    {
+        $project = Project::findOrFail($id);
+        $this->authorize('edit', $project);
+
+        $project->status = 'Archived';
+
+        $project->save();
+
+        return redirect()->route('projects.show', $id);
+    }
 
     public function removeMember(RemoveMemberRequest $request, string $project_id, string $username): JsonResponse
     {
@@ -177,6 +205,19 @@ class ProjectController extends Controller
         return response()->json([
             'error' => false,
             'tasks'=> $tasksJson
+        ]);
+    }
+
+    public function showEditProject(string $id): View
+    {
+        $project = Project::findOrFail($id);
+
+        $this->authorize('edit', $project);
+
+        return view('pages.project', [
+            'project' => $project,
+            'tags'=> $project->tags,
+            'edit' => true
         ]);
     }
 }

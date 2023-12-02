@@ -52,7 +52,7 @@
         </ul>
         @endif
     </section>
-    @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id) && Auth::user()->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin)
+    @if (Auth::check() && Auth::user()->can('create'))
     @include('form.addmembertoworld', ['world' => $world])
     @include('form.project-create', ['world'=>$world])
     @endif

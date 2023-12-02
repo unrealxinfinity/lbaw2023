@@ -14,4 +14,15 @@
             @include('partials.sidebar', ['thing'=>$project, 'type' => 'project'])
         </div>
     </section>
+    @if ($edit)
+    <div id="edit-project" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
+        <div class="bg-black w-3/4 h-3/5 rounded drop-shadow m-auto">
+            <div class="flex"> 
+            <h1 class="mt-3 ml-5"> Edit Project </h1>
+            <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
+            </div>
+            @include('form.project-edit', ['project'=>$project])
+        </div>
+    </div>
+    @endif
 @endsection

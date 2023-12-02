@@ -114,6 +114,9 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects/{id}', 'show')->name('projects.show');//
     Route::delete('/projects/{id}', 'delete')->name('delete-project');//
     Route::post('/projects', 'create')->name('create-project');//
+    Route::get('/projects/{id}/edit', 'showEditProject')->name('edit-project');
+    Route::put('/api/projects/{id}', 'update')->name('update-project');//
+    Route::post('/projects/{id}/archive', 'archive')->name('archive-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');//
     Route::delete('projects/{id}/{username}', 'leave')->name('leave-project');//
 });

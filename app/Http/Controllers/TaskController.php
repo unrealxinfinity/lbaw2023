@@ -115,7 +115,7 @@ class TaskController extends Controller
         }
     }
 
-    public function complete(string $id): View
+    public function complete(string $id): RedirectResponse
     {
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
@@ -124,10 +124,7 @@ class TaskController extends Controller
 
         $task->save();
 
-        return view('pages.task', [
-            'task' => $task,
-            'main' => true
-        ]);
+        return redirect()->back()->withSuccess('Task completed');
     }
 
     public function comment(TaskCommentRequest $request, string $id): RedirectResponse
