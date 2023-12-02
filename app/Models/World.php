@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,5 +40,10 @@ class World extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(WorldComment::class);
+    }
+
+    public function getImage(): string
+    {
+        return FileController::get('world', $this->id);
     }
 }

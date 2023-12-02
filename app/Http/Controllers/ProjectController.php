@@ -5,6 +5,7 @@ use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
 use App\Http\Requests\LeaveProjectRequest;
+use App\Http\Requests\RemoveMemberRequest;
 use App\Http\Requests\SearchTaskRequest;
 use App\Http\Requests\EditProjectRequest;
 use App\Models\Member;
@@ -81,6 +82,7 @@ class ProjectController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
+                'project_id' => $project->id,
                 'picture' => $member->picture
             ]);
         } catch (\Exception $e)
@@ -104,6 +106,32 @@ class ProjectController extends Controller
         $project->save();
 
         return redirect()->route('projects.show', $id);
+    }
+
+    public function removeMember(RemoveMemberRequest $request, string $project_id, string $username): JsonResponse
+    {
+        $fields = $request->validated();
+
+        $project = Project::findOrFail($project_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
+        error_log($username);
+
+        try
+        {
+            $member->projects()->detach($project_id);
+
+            return response()->json([
+                'error' => false,
+                'id' => $project->id,
+                'member_id' => $member->id,
+            ]);
+        } catch (\Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'id' => $project->id,
+            ]);
+        }
     }
 
     public function leave(LeaveProjectRequest $request, string $id): RedirectResponse

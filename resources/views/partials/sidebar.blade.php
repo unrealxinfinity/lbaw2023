@@ -8,6 +8,7 @@
         <h2 class="text-grey"> Project Leaders </h2>
         @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
             @include('partials.member', ['member' => $member, 'main' => false])
+            @include('form.remove-member', ['thing' => $thing, 'member' => $member])
         @endforeach
         <h2 class="mt-5 text-grey"> Members </h2>
         @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)

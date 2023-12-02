@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -60,5 +61,10 @@ class Member extends Model
     public function notifications(): BelongsToMany
     {
         return $this->belongsToMany(Notification::class);
+    }
+
+    public function getProfileImage(): string
+    {
+        return FileController::get('profile', $this->id);
     }
 }

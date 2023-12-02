@@ -2,7 +2,17 @@
     <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
     <header class="flex justify-between sm:h-40 h-24 m-5">
         <div class="flex justify-start">
-        <img class="h-full aspect-square" src="https://source.unsplash.com/random/300x200">
+        <img class="h-full aspect-square " src={{ $project->getImage() }}>
+        @can('edit', $project)
+            <form method="POST" action="/projects/upload/{{ $project->id }}" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
+
+                <input class="text-white" name="file" type="file" required>
+                <input name="type" type="hidden" value="project">
+                <input class="button w-min" type="submit" value="Upload project picture">
+            </form>
+        @endcan
         <div class="flex flex-col ml-5 pt-1">
             <div class="flex"><h1 class="w-fit"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
             @if (Auth::user()->can('edit', $project))
