@@ -84,7 +84,7 @@ class ProjectPolicy
 
     public function projectTagCreate(User $user,Project $project): bool
     {   
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') && ($project->status != 'Archived');
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
     public function searchTask(User $user): bool
     {   

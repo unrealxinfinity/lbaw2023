@@ -12,16 +12,16 @@
 
 @layer base {
   h1 {
-    @apply rounded m-2 text-green text-bigPhone sm:text-big font-bold;
+    @apply m-2 text-green text-bigPhone md:text-big font-bold;
     }
   h3 {
-    @apply rounded m-2 text-green text-mediumPhone sm:text-medium;
+    @apply m-2 text-green text-mediumPhone md:text-medium;
   }
   input, select, option, textarea {
-    @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone sm:text-medium;
+    @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone md:text-medium;
   }
   h4, p {
-    @apply text-mediumPhone sm:text-medium break-words;
+    @apply text-mediumPhone md:text-medium break-words;
   }
 }
 
