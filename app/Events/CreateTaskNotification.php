@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use app\Models\Task;
 
-class CreateTask implements ShouldBroadcast
+class CreateTaskNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $message;
@@ -39,7 +39,7 @@ class CreateTask implements ShouldBroadcast
     }
 
     public function broadcastAs() {
-        return "CreateTask";
+        return "CreateTaskNotification";
     }
 
 }

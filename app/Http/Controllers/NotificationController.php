@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use App\Events\CreateWorld;
 use App\Models\Project;
-use App\Events\CreateProject;
-use App\Events\CreateTag;
+use App\Events\CreateProjectNotification;
+use App\Events\CreateTagNotification;
+use App\Events\CreateTaskNotification;
 use App\Models\Task;
 use App\Models\Tag;
 
@@ -62,7 +62,7 @@ class NotificationController extends Controller
              foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              } 
-                event(new CreateProject($message,$world_id));
+                event(new CreateProjectNotification($message,$world_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -94,7 +94,7 @@ class NotificationController extends Controller
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              } 
-            event(new CreateTask($task->title,$project_id));
+            event(new CreateTaskNotification($task->title,$project_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -117,7 +117,7 @@ class NotificationController extends Controller
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              }
-             event(new CreateTag($tag->name,$project_id));
+             event(new CreateTagNotification($tag->name,$project_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

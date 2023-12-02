@@ -789,7 +789,7 @@ function getIdsHandler(json){
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
   
-  Pusher.logToConsole = false;
+  Pusher.logToConsole = true;
   
   
     const pusher = new Pusher("11f57573d00ddf0021b9", {
@@ -806,18 +806,18 @@ function pusherNotifications(projectContainer, worldContainer){
       
       
       const channelWorld = pusher.subscribe('World' + world_id);
-      bindEvent(channelWorld, 'CreateProject', function(data){
+      bindEvent(channelWorld, 'CreateProjectNotification', function(data){
         alert(JSON.stringify(data.message));
       });
     }
     for(let i = 0; i < projectContainer.length; i++){
       const project_id = projectContainer[i];
       const channelProject = pusher.subscribe('Project' + project_id);
-      bindEvent(channelProject, 'CreateTask', function(data){
+      bindEvent(channelProject, 'CreateTaskNotification', function(data){
         alert(JSON.stringify(data.message));
       });
 
-      bindEvent(channelProject, 'CreateTag', function(data){
+      bindEvent(channelProject, 'CreateTagNotification', function(data){
         alert(JSON.stringify(data.message));
       });
     }
