@@ -60,6 +60,7 @@ class WorldController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
+                'world_id' => $world->id,
                 'picture' => $member->picture
             ]);
         } catch (\Exception $e) {
@@ -72,7 +73,7 @@ class WorldController extends Controller
     }
 
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
-    {
+    {   
         $request->validated();
         
         $member = User::where('username', $username)->first()->persistentUser->member;
@@ -82,12 +83,13 @@ class WorldController extends Controller
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
-                'id' => $member->id,
+                'id' => $world_id,
+                'member_id' => $member->id,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'id' => $member->id,
+                'id' => $world_id,
             ]);
         }
     }

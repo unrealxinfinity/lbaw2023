@@ -35,6 +35,14 @@ class ProjectPolicy
         return $is_admin || (!$is_disabled && ($is_leader || $is_world_admin));
     }
 
+    public function removeMember(User $user, Project $project): bool
+    {
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_leader = $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        return (!$is_disabled && $is_leader);
+    }
+
     public function edit(User $user, Project $project): bool
     {
         $type = $user->persistentUser->type_;
