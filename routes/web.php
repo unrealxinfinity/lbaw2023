@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\DeleteController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
 use App\Models\PersistentUser;
@@ -18,6 +19,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -102,7 +104,6 @@ Route::controller(WorldController::class)->group(function () {
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
     Route::post('/worlds', 'create')->name('create-world');//
-    Route::get('worlds/{id}/create-project', 'showProjectCreate')->name('project-create');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
 });
@@ -156,4 +157,17 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+});
+
+Route::controller(FileController::class)->group(function () {
+   Route::post('/members/upload/{id}', 'upload');
+   Route::post('/projects/upload/{id}', 'upload');
+   Route::post('/worlds/upload/{id}', 'upload');
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/recover', 'showRecoverForm');
+    Route::post('/recover', 'send')->name('send-recover');
+    Route::get('/reset', 'showResetForm');
+    Route::post('/reset', 'reset')->name('reset-password');
 });

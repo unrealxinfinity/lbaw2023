@@ -33,7 +33,7 @@ function addEventListeners() {
       task.addEventListener("dragstart", taskDragStartHandler);
     });
 
-    let bigboxes = document.querySelectorAll('ul.big-box');
+    let bigboxes = document.querySelectorAll('div.big-box');
     [].forEach.call(bigboxes, function(bigbox) {
       bigbox.addEventListener("drop", bigBoxDropHandler);
       bigbox.addEventListener("dragover", bigBoxDragOverHandler);
@@ -45,7 +45,7 @@ function addEventListeners() {
 
     let button = document.getElementById("createTagButton");
     if(button != null)
-    button.addEventListener("click", addTagRequest);
+    button.addEventListener("submit", addTagRequest);
     
     let worldMemberAdder = document.querySelector('form#add-member-to-world');
     if (worldMemberAdder != null)
@@ -55,28 +55,20 @@ function addEventListeners() {
     if(taskResults != null)
       taskResults.addEventListener('click', function() {
         if(document.getElementById('popupContainer').style.display == 'block'){
-          document.getElementById('popupContainer').style.display = 'none'
+          document.getElementById('popupContainer').style.display = 'none';
         }
         else{
           document.getElementById('popupContainer').style.display = 'block';
         }
       });
 
-    let searchTaskButton = document.getElementById('searchTaskButton');
-    let searchTaskForm = document.getElementsByClassName('search-task')[0];
-    if(searchTaskButton != null){
-      searchTaskButton.addEventListener('click', searchTaskRequest);
-      searchTaskForm.addEventListener('submit', searchTaskRequest);
-    }
+    let TaskSearcher = document.querySelector('form.search-task');
+    if (TaskSearcher != null)
+      TaskSearcher.addEventListener('submit', searchTaskRequest);
 
-    let searchProjectButton = document.getElementById('searchProjectButton');
-    let searchProjectForm = document.getElementsByClassName('search-project')[0];
-    if(searchProjectButton != null)
-    {
-      searchProjectButton.addEventListener('click', searchProjectRequest);
-      searchProjectForm.addEventListener('submit', searchProjectRequest);
-
-    }
+    let ProjectSearcher = document.querySelector('form.search-project');
+    if (ProjectSearcher != null)
+      ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
     let MemberAssigner = document.querySelector('form#assign-member');
     if (MemberAssigner != null)
@@ -92,6 +84,24 @@ function addEventListeners() {
         removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
       });
     }
+
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', function() {
+      let currentScroll = document.documentElement.scrollTop;
+    
+      if (currentScroll > lastScrollTop) {
+        // Scroll down
+        document.querySelector('#navbar').classList.remove('translate-y-0');
+        document.querySelector('#navbar').classList.add('-translate-y-full');
+        document.querySelector('#show-menu').checked = false;
+      } else {
+        // Scroll up
+        document.querySelector('#navbar').classList.remove('-translate-y-full');
+        document.querySelector('#navbar').classList.add('translate-y-0');
+      }
+    
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, false);
 
     let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
     if(removeMemberFromProjects != null){
@@ -115,7 +125,7 @@ function addEventListeners() {
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
     const box = ev.currentTarget;
-    const status = box.parentElement.querySelector('h4').textContent;
+    const status = box.querySelector('h2').textContent;
 
     const response = await fetch('/api/tasks/' + data.slice(5), {
       method: 'PUT',
@@ -134,6 +144,7 @@ function addEventListeners() {
   }
 
   function taskDragStartHandler(ev) {
+    console.log(ev.target.id);
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setData("text/html", ev.target.outerHTML);
     ev.dataTransfer.setData(
@@ -225,9 +236,9 @@ function addEventListeners() {
     member.setAttribute('data-id', json.id);
 
     const header = document.createElement('header');
-    header.classList.add('row');
+    header.classList.add('flex', 'justify-start');
     const img = document.createElement('img');
-    img.classList.add('small');
+    img.classList.add('h-fit', 'aspect-square', 'mx-1');
     const h4 = document.createElement('h4');
     const a = document.createElement('a');
     a.href = '/members/' + json.username;
@@ -344,7 +355,6 @@ function addEventListeners() {
 
   async function sendAssignMemberRequest(event) {
     event.preventDefault();
-
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
@@ -420,39 +430,25 @@ function addEventListeners() {
 }
 
   function searchTaskHandler(json){
-    let popup = document.getElementsByClassName('popup-content')[0];
+    let popup = document.querySelector('#popup-content');
     popup.innerHTML = "";
-    let newUl= document.createElement('ul');
-    newUl.setAttribute('class', 'TaskList');
+    let div = document.createElement('div');
+    div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded');
+    let outer_title = document.createElement('h2');
+    let inner_title = document.createElement('a');
+    let desc = document.createElement('p');
 
     let tasks = JSON.parse(json.tasks);
-    
-    for (let task of tasks) {
-      let newSpan = document.createElement('span');
-      let newTitle = document.createElement('p');
-      let newDescription = document.createElement('p');
-      let newDueAt = document.createElement('p');
-      let newEffort = document.createElement('p');
-      let newPriority = document.createElement('p'); 
-      let newStatus = document.createElement('p');
-    
-
-      newTitle.setAttribute('href', '/tasks/' + task.id);
-      newTitle.textContent = task.title;
-      newDescription.textContent = task.description;
-      newDueAt.textContent = task.due_at;
-      newEffort.textContent = task.effort; 
-      newPriority.textContent = task.priority;
-      newStatus.textContent = task.status; 
-      newSpan.appendChild(newTitle);
-      newSpan.appendChild(newDescription); 
-      newSpan.appendChild(newDueAt);
-      newSpan.appendChild(newStatus);  
-      newSpan.appendChild(newEffort);
-      newSpan.appendChild(newPriority);
-      newUl.appendChild(newSpan);
+    for (task of tasks) {
+      inner_title.setAttribute('href', '/tasks/' + task.id);
+      inner_title.textContent = task.title;
+      desc.textContent = task.description;
+      outer_title.appendChild(inner_title);
+      div.appendChild(outer_title);
+      div.appendChild(desc); 
+      popup.appendChild(div);
     };
-    popup.appendChild(newUl);
+    document.getElementById('popupContainer').classList.remove('hidden');
   }
 
   async function searchProjectRequest(event) {
@@ -487,34 +483,34 @@ function addEventListeners() {
 }
 
 function searchProjectHandler(json){
-  let popup = document.getElementsByClassName('popup-content')[0];
+  let popup = document.querySelector('#popup-content');
   popup.innerHTML = "";
-  let newUl= document.createElement('ul');
-  
-  newUl.setAttribute('class', 'ProjectList');
+  let outer_div = document.createElement('div');
+  outer_div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded', 'flex');
+  let img = document.createElement('img');
+  img.classList.add('h-16', 'aspect-square', 'mt-5', 'ml-5');
+  let inner_div = document.createElement('div');
+  inner_div.classList.add('flex', 'flex-col');
+  let outer_title = document.createElement('h1');
+  outer_title.classList.add('text-black');
+  let inner_title = document.createElement('a');
+  let desc = document.createElement('h2');
+  desc.classList.add('ml-3', 'mb-5');
+
   let projects = JSON.parse(json.projects);
-  
-  for (let project of projects) {
-    let newSpan = document.createElement('span');
-    let newTitle = document.createElement('p');
-    let newDescription = document.createElement('p');
-    let newPicture = document.createElement('img'); 
-    let newStatus = document.createElement('p');
-
-
-    newTitle.setAttribute('href', '/projects/' + project.id);
-    newPicture.setAttribute('src', project.picture);
-    newTitle.textContent = project.name;
-    newDescription.textContent = project.description;
-    newStatus.textContent = project.status;
-    newSpan.appendChild(newPicture); 
-    newSpan.appendChild(newTitle);
-    newSpan.appendChild(newDescription); 
-    newSpan.appendChild(newStatus);  
-    
-    newUl.appendChild(newSpan);
+  for (project of projects) {
+    inner_title.setAttribute('href', '/projects/' + project.id);
+    img.setAttribute('src', project.picture);
+    inner_title.textContent = project.name;
+    desc.textContent = project.description;
+    outer_title.appendChild(inner_title);
+    inner_div.appendChild(outer_title);
+    inner_div.appendChild(desc);
+    outer_div.appendChild(img);
+    outer_div.appendChild(inner_div);
+    popup.appendChild(outer_div);
   };
-  popup.appendChild(newUl);
+  document.getElementById('popupContainer').classList.remove('hidden');
 }
 
   async function addTagRequest() {
@@ -561,19 +557,10 @@ function addTagHandler(json){
     console.log('Already exists entry');
   }
   else{
-    let newTag = document.createElement('span');
-
-  // Set class attribute for the new span element
-  newTag.setAttribute('class', 'badge badge-secondary');
-
-  // Set text content for the new span element
-  newTag.textContent = json.tagName;
-
-  // Assuming you want to append to the first element with the 'tagList' class
-  let tagListElement = document.getElementsByClassName('tagList');
-
-  // Append the new span element to the tag list element
-  tagListElement[0].appendChild(newTag);
+    let newTag = document.createElement('p');
+    newTag.classList.add('tag');
+    newTag.textContent = json.tagName;
+    document.getElementsByClassName('tagList').appendChild(newTag);
   }
   
 }
@@ -787,8 +774,11 @@ function removeMemberFromProjectHandler(data) {
   
   // Close the pop-up
   function closeSearchedTaskPopup() {
-    document.getElementById('popupContainer').style.display = 'none';
+    document.getElementById('popupContainer').classList.add('hidden');
  }
 
-
+function openSidebar() {
+  console.log('hello');
+  document.querySelector('#sidebar-text').click();
+}
   

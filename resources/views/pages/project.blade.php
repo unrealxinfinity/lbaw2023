@@ -4,21 +4,14 @@
 
 
 @section('content')
-    <section id="projects">
+    <section id="projects" class="md:flex justify-start">
+        <input type="checkbox" id="show-details" class="hidden peer"/>
         @include('partials.project', ['project' => $project, 'tags' => $tags])
-        @include('partials.sidebar', ['thing'=>$project])
+        <div class="md:hidden fixed bg-opacity-95 bg-black text-white top-28 h-full w-0 right-0 peer-checked:w-full peer-checked:pl-5 transition-width duration-500 overflow-hidden z-10">
+            @include('partials.sidebar', ['thing'=>$project, 'type' => 'project'])
+        </div>
+        <div class="hidden md:contents">
+            @include('partials.sidebar', ['thing'=>$project, 'type' => 'project'])
+        </div>
     </section>
-    @if (Auth::user()->can('addMember', $project))
-    <section id="add-member">
-        @include('form.addmember', ['project' => $project])
-    </section>
-    @endif
-    @if (Auth::user()->persistentUser->member->projects->contains('id', $project->id))
-    <section id="create-task">
-        @include('partials.task-create', ['project' => $project])
-    </section>
-    <section id="create-tag">
-        @include('form.tag-create',['project'=> $project])
-    </section>
-    @endif
 @endsection

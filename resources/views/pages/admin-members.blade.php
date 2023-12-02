@@ -7,7 +7,7 @@
     <h1>Manage members</h1>
     <form method="GET" action="/admin">
         <input type="text" name="search" placeholder="Search by email/username" required>
-        <input type="submit" value="Search">
+        <input class="button" type="submit" value="Search">
     </form>
     <section id="members">
         @each('partials.member-edit', $members, 'member')
