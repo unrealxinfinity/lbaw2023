@@ -3,7 +3,11 @@
     <header class="flex justify-start sm:h-40 h-24 m-5">
         <img class="h-full aspect-square" src="https://source.unsplash.com/random/300x200">
         <div class="flex flex-col ml-5 pt-1">
-            <h1><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
+            <div class="flex"><h1><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
+            @if (Auth::user()->can('edit', $project))
+                <a class="mt-2 ml-1 text-bigPhone sm:text-big hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a>
+            @endif
+            </div>
             @include('partials.tag', ['tags' => $tags])
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
@@ -14,9 +18,6 @@
             @method('DELETE')
             <input class="button" type="submit" value="Delete Project">
         </form>
-    @endif
-    @if (Auth::user()->can('edit', $project))
-        <a class="button" href="/projects/{{ $project->id }}/edit">Edit Project</a>
     @endif
     @include('form.search-task', ['project' => $project])
     <h2 class="mt-10"> TASKS </h2>
