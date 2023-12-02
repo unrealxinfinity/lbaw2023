@@ -30,7 +30,13 @@ class NotificationController extends Controller
         ]);
 
     }
-
+    public function clearNotifications():JsonResponse{
+        $member = auth()->user()->persistentUser->member;
+        $member->notifications()->detach();
+        return response()->json([
+            'message'=>'Nothing Here'
+        ]);
+    }
     static function ProjectNotification(Project $project,string $world_id, string $action){
         
         DB::beginTransaction();

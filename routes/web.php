@@ -161,4 +161,5 @@ Route::controller(DeleteController::class)->group(function () {
 Route::controller(NotificationController::class)->group(function () {
     Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
     Route::post('/api/notifications', 'createNotification')->name('createNotification');
+    Route::delete('/api/notifications','clearNotifications')->name('clearNotification');
 });

@@ -33,6 +33,8 @@
                 @if (Auth::check())
                     @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
                     <ul class="items-center md:flex md:visible hidden m-0">
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <a class ="button" id="clearNotifications" class="bg-black bg-opacity-50 text-white text-center w-full py-2">Clear Notifications</a>
                         <a class="button" id="notification-button"> Notifications </a>
                         <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
                         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
@@ -70,8 +72,8 @@
             </ul>
         </div>
         <div class="notificationArea">
+           
             <ul id="notificationList">
-
             </ul>
         </div>
         <main class="bg-black bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 px-2 z-0">

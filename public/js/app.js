@@ -113,6 +113,11 @@ function addEventListeners() {
       notificationButton.addEventListener('click', sendShowNotificationsRequest);
     }
 
+    let clearNotificationsButton = document.getElementById('clearNotifications');
+    if(clearNotificationsButton != null){
+      clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+    }
+
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -532,7 +537,6 @@ function removeMemberFromWorldHandler(data) {
 async function sendShowNotificationsRequest(ev) {
   ev.preventDefault();
     const url = '/api/notifications';
-    console.log(url);
     const response = await fetch(url, {
         method: 'GET', 
         headers: {
@@ -716,7 +720,39 @@ function ShowNotificationsHandler(json){
   function closeSearchedTaskPopup() {
     document.getElementById('popupContainer').classList.add('hidden');
  }
+async function sendClearNotificationsRequest(ev){
+  ev.preventDefault();
+  const url = '/api/notifications';
+  const response = await fetch(url, {
+      method: 'DELETE', 
+      headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      },
+  })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
+    })
+    .then(data => {
+        clearNotificationsHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+  
+}
+function clearNotificationsHandler(json){
+  let popup = document.getElementById("notificationList");
+  popup.innerHTML = "";
+  let notificationText = document.createElement('p');
+  notificationText.textContent = json.message;
+  popup.appendChild(notificationText);
 
+}
  // Get member belongings in ajax on every page load for pusher notifications
 async function getMemberBelingingsRequest(ev){
   ev.preventDefault();
@@ -742,6 +778,7 @@ async function getMemberBelingingsRequest(ev){
       .catch(error => console.error('Error fetching data:', error));
 
 }
+
 function getIdsHandler(json){
   let project_ids = json.projects_ids;
   let world_ids = json.worlds_ids;
