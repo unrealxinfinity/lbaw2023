@@ -113,7 +113,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::delete('/projects/{id}', 'delete')->name('delete-project');//
     Route::post('/projects', 'create')->name('create-project');//
     Route::get('/projects/{id}/edit', 'showEditProject')->name('edit-project');
-    Route::post('/api/projects/{id}', 'update')->name('update-project');//
+    Route::put('/api/projects/{id}', 'update')->name('update-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');//
     Route::delete('/api/projects/{id}/{username}', 'leave')->name('leave-project');//
 });
