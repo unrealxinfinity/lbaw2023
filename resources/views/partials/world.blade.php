@@ -1,7 +1,8 @@
 <article class="world md:w-2/3 peer-checked:fixed" data-id="{{ $world->id }}">
     <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a></p>
-    <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img class="h-full aspect-square " src={{ $world->getImage() }}>
+    <header class="flex justify-between sm:h-40 h-24 m-5">
+        <div class="flex justify-start">
+        <img class="h-full aspect-square" src={{ $world->getImage() }}>
         @can('edit', $world)
             <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
                 @csrf
@@ -18,6 +19,20 @@
             </div>
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
+        </div>
+        @if(Auth::check() && Auth::user()->can('leave', $world))
+        <div class="relative inline-block text-left">
+            <input type="checkbox" id="more-options" class="hidden peer"/>
+            <label for="more-options" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
+            <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
+                    <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
+                        @CSRF
+                        @method('DELETE')
+                        <button class="px-3 py-1 w-full" type="submit">Leave World</button>
+                    </form>
+            </div>
+        </div>
+        @endif
     </header>
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
     <section id="projects">

@@ -30,7 +30,4 @@
         @endforeach
         @endif
     </ul>
-    @if(Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $thing->id) && $thing->owner_id != Auth::user()->persistentUser->member->id)
-        @include ('form.leave-thing', ['thing' => $thing])
-    @endif
 </article>
