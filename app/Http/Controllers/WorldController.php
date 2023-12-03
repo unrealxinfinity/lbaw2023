@@ -26,7 +26,8 @@ class WorldController extends Controller
         $this->authorize('show', $world);
         
         return view('pages.world', [
-            'world' => $world
+            'world' => $world,
+            'edit' => false
         ]);
     }
 
@@ -148,6 +149,18 @@ class WorldController extends Controller
         $projectsJson = $projects->toJson();
         return response()->json([
             'projects' => $projectsJson,
+        ]);
+    }
+
+    public function showEditWorld(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'edit' => true
         ]);
     }
 }
