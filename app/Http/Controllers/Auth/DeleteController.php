@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteMemberRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class DeleteController extends Controller
 {
@@ -31,4 +32,14 @@ class DeleteController extends Controller
 
         return redirect()->route('home')->withSuccess('Account deleted.');
     }
+
+    public function showConfirmation(Request $request, string $username): View
+    {
+        if (Auth::check()) {
+            return redirect('');
+        } else {
+            return view('pages.delete');
+        }        
+    }
+
 }

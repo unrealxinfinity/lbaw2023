@@ -126,6 +126,8 @@ function addEventListeners() {
     const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
 
     if (text != "delete") return;
+
+    window.location.href = window.location.href + '/delete'
   }
 
   function bigBoxDragOverHandler(ev) {
