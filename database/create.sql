@@ -73,7 +73,7 @@ CREATE TABLE worlds(
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR,
   owner_id INT NOT NULL,
-  FOREIGN KEY(owner_id) REFERENCES members(id)
+  FOREIGN KEY(owner_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
