@@ -29,7 +29,11 @@ class WorldPolicy
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
-
+    public function delete(User $user, World $world): bool
+    {
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+    }
+    
     public function addMember(User $user, World $world): bool
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);

@@ -88,14 +88,14 @@ CREATE TABLE member_world(
   FOREIGN KEY (world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-
+/*Has to implement model timeline and a trigger to maintain the world info after deleting it, alsoc change the structure of this table to correspond to eloquent*/
 DROP TABLE IF EXISTS world_timeline CASCADE;
 CREATE TABLE world_timeline(
   id SERIAL PRIMARY KEY, /*ID NOT AUTOMATICALLY GENERATED*/
   date_ DATE NOT NULL DEFAULT CURRENT_DATE CHECK(date_ <= CURRENT_DATE),
   description VARCHAR NOT NULL,
   world_id INT,
-  FOREIGN KEY(world_id) REFERENCES worlds(id)
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS favorite_world CASCADE;
