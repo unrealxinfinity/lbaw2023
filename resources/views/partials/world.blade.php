@@ -14,7 +14,12 @@
             </form>
         @endcan
         <div class="flex flex-col ml-5 pt-1">
+            <div class="flex justify-start">
             <h1>{{ $world->name }}</h1>
+            @can('edit', $world)
+                <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a>
+            @endcan
+            </div>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
             </div>
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
