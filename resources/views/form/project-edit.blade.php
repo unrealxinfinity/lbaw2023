@@ -3,7 +3,7 @@
     @method('PUT')
 
     <input type="hidden" class="project-id" name="id" value="{{ $project->id }}">
-    <input type="text" class="project-name" name="name" value="{{ $project->name }}">
+    <input type="text" class="project-name" name="name" value="{{ $project->name }}" placeholder="Name" required>
     <select name="status" class="status">
         <option value="{{$project->status}}" selected="selected" >{{$project->status}}</option>
         @if($project->status!="Active")<option value="Active">Active</option>@endif
