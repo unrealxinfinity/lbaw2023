@@ -169,13 +169,17 @@ function addEventListeners() {
       setTimeout(() => {
         confirmDeletion.submit();
       }, 5000);
-  
+      
+    let deleteWorld= document.querySelector("#delete-world");
+    if (deleteWorld != null)
+      deleteWorld.addEventListener('submit', deleteWorldButton);
+
     let previewImg = document.querySelector('input#edit-img');
     if (previewImg != null) {
       previewImg.addEventListener('change', PreviewImageHandler);
     }
   }
-
+  
   function deleteAccountButton() {
     const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
 
@@ -183,7 +187,15 @@ function addEventListeners() {
 
     window.location.href = window.location.href + '/delete'
   }
-
+  function deleteWorldButton(ev) {
+    ev.preventDefault();
+    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
+    if(text == "delete"){
+      this.submit();
+    };
+    
+    
+  }
   function showEditComment(ev) {
     ev.preventDefault();
     this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
