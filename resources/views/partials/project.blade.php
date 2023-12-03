@@ -33,21 +33,21 @@
                 <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
                     @csrf
                     @method('DELETE')
-                    <button class="px-3 py-1 w-full" type="submit">Delete Project</button>
+                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Delete Project</button>
                 </form>
                 @endif
                 @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
                 <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
                     @csrf
                     @method('POST')
-                    <button class="px-3 py-1 w-full" type="submit">Archive Project</button>
+                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Archive Project</button>
                 </form>
                 @endif
                 @if(Auth::check() && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
                     <form method="POST" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
                         @CSRF
                         @method('DELETE')
-                        <button class="px-3 py-1 w-full" type="submit">Leave Project</button>
+                        <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave Project</button>
                     </form>
                 @endif
             </div>

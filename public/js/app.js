@@ -116,6 +116,10 @@ function addEventListeners() {
       });
     }
   
+    let previewImg = document.querySelector('input#edit-img');
+    if (previewImg != null) {
+      previewImg.addEventListener('change', PreviewImageHandler);
+    }
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -158,6 +162,12 @@ function addEventListeners() {
       ev.target.ownerDocument.location.href,
     );
     ev.dataTransfer.dropEffect = "move";
+  }
+
+  function PreviewImageHandler(event) {
+    let selectedFile = event.target.files[0];
+    let img = document.querySelector('img#preview-img');
+    img.src = URL.createObjectURL(selectedFile);
   }
   
   function encodeForAjax(data) {

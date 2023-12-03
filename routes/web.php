@@ -128,7 +128,7 @@ Route::controller(TagController::class)->group(function () {
 });
 
 Route::controller(MemberController::class)->group(function () {
-    Route::get('members/{username}', 'show'); //
+    Route::get('members/{username}', 'show')->name('members.show');//
     Route::get('/myworlds', 'showMemberWorlds');
     Route::get('/myprojects', 'showMemberProjects');//
     Route::get('/mytasks', 'showMemberTasks');//

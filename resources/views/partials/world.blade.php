@@ -3,16 +3,6 @@
     <header class="flex justify-between sm:h-40 h-24 m-5">
         <div class="flex justify-start">
         <img class="h-full aspect-square" src={{ $world->getImage() }}>
-        @can('edit', $world)
-            <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-
-                <input class="text-white" name="file" type="file" required>
-                <input name="type" type="hidden" value="world">
-                <input class="button w-min" type="submit" value="Upload world picture">
-            </form>
-        @endcan
         <div class="flex flex-col ml-5 pt-1">
             <div class="flex justify-start">
             <h1>{{ $world->name }}</h1>
@@ -33,7 +23,7 @@
                     <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
                         @CSRF
                         @method('DELETE')
-                        <button class="px-3 py-1 w-full" type="submit">Leave World</button>
+                        <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
                     </form>
             </div>
         </div>
