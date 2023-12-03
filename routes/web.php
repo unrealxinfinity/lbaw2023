@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\DeleteController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
 use App\Models\PersistentUser;
@@ -18,6 +19,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\NotificationController;
 
@@ -100,7 +102,7 @@ Route::controller(SearchController::class)->group(function() {
 Route::controller(WorldController::class)->group(function () {
     Route::post('/api/worlds/{id}/{username}', 'addMember');//
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
-    Route::delete('/api/worlds/{id}/{username}', 'leave')->name('leave-world');
+    Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
     Route::post('/worlds', 'create')->name('create-world');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
@@ -109,11 +111,15 @@ Route::controller(WorldController::class)->group(function () {
 
 Route::controller(ProjectController::class)->group(function () {
     Route::post('/api/projects/{id}/{username}', 'addMember');//
+    Route::delete('/api/projects/{id}/{username}', 'removeMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');//
     Route::delete('/projects/{id}', 'delete')->name('delete-project');//
     Route::post('/projects', 'create')->name('create-project');//
+    Route::get('/projects/{id}/edit', 'showEditProject')->name('edit-project');
+    Route::put('/api/projects/{id}', 'update')->name('update-project');//
+    Route::post('/projects/{id}/archive', 'archive')->name('archive-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');//
-    Route::delete('/api/projects/{id}/{username}', 'leave')->name('leave-project');//
+    Route::delete('projects/{id}/{username}', 'leave')->name('leave-project');//
 });
 
 Route::controller(TagController::class)->group(function () {
@@ -162,4 +168,16 @@ Route::controller(NotificationController::class)->group(function () {
     Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
     Route::post('/api/notifications', 'createNotification')->name('createNotification');
     Route::delete('/api/notifications','clearNotifications')->name('clearNotification');
+});
+Route::controller(FileController::class)->group(function () {
+   Route::post('/members/upload/{id}', 'upload');
+   Route::post('/projects/upload/{id}', 'upload');
+   Route::post('/worlds/upload/{id}', 'upload');
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/recover', 'showRecoverForm');
+    Route::post('/recover', 'send')->name('send-recover');
+    Route::get('/reset', 'showResetForm');
+    Route::post('/reset', 'reset')->name('reset-password');
 });

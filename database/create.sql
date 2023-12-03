@@ -3,7 +3,7 @@ CREATE SCHEMA lbaw2314;
 SET search_path TO lbaw2314;
 
 DROP TYPE IF EXISTS permission_levels CASCADE;
-CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader', 'World Administrator');
+CREATE TYPE permission_levels AS ENUM ('Member', 'Project Leader');
 DROP TYPE IF EXISTS notification_levels CASCADE;
 CREATE TYPE notification_levels AS ENUM ('Low', 'Medium', 'High');
 DROP TYPE IF EXISTS project_status CASCADE;
@@ -45,8 +45,9 @@ CREATE TABLE  members(
   name VARCHAR NOT NULL,
   birthday DATE CHECK(birthday <= CURRENT_DATE),
   description VARCHAR,
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   email VARCHAR,
+  token VARCHAR,
   UNIQUE(email),
   user_id INT NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -69,7 +70,7 @@ CREATE TABLE worlds(
   name VARCHAR NOT NULL,
   description VARCHAR,
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   owner_id INT NOT NULL,
   FOREIGN KEY(owner_id) REFERENCES members(id)
 );
@@ -113,7 +114,7 @@ CREATE TABLE projects(
   status project_status NOT NULL,
   description VARCHAR,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
-  picture VARCHAR NOT NULL,
+  picture VARCHAR,
   world_id INT,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -168,7 +169,7 @@ CREATE TABLE tags(
   name VARCHAR NOT NULL
 );
 
-DROP TABLE IF EXISTS world_tags CASCADE;
+DROP TABLE IF EXISTS world_tag CASCADE;
 CREATE TABLE world_tag(
   tag_id INT,
   world_id INT,
@@ -177,7 +178,7 @@ CREATE TABLE world_tag(
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS tagss CASCADE;
+DROP TABLE IF EXISTS project_tag CASCADE;
 CREATE TABLE project_tag(
   tag_id INT,
   project_id INT,
@@ -186,7 +187,7 @@ CREATE TABLE project_tag(
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS member_tags CASCADE;
+DROP TABLE IF EXISTS member_tag CASCADE;
 CREATE TABLE member_tag(
   tag_id INT,
   member_id INT,
@@ -666,10 +667,10 @@ INSERT INTO user_info (username, password, user_id) VALUES
     ('john_doe', '$2y$10$tZQTo2UE5AhvU75HMsh4h.HbyOQZ3FRNSV3YzXVEykDBADoSRRxyu', 4);
 
 -- Sample data for the 'members' table
-INSERT INTO members (user_id, name, birthday, description, picture, email) VALUES
-    (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'image1.jpg', 'mcfan2004@example.com'),
-    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'image2.jpg', 'up202100000@example.com'),
-    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'image3.jpg', 'bobjohn@example.com');
+INSERT INTO members (user_id, name, birthday, description, email) VALUES
+    (1, 'John Doe', '1990-05-15', 'I like building big projects!', 'mcfan2004@example.com'),
+    (3, 'Alice Smith', '1985-12-30', 'I''m new to Minecraft.', 'up202100000@example.com'),
+    (4, 'Bob Johnson', '1992-08-20', 'I am very good with redstone projects.', 'bobjohn@example.com');
 
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
@@ -677,9 +678,9 @@ INSERT INTO friend (member_id, friend_id) VALUES
     (2, 3);
 
 -- Sample data for the 'world' table
-INSERT INTO worlds (name, description, picture, owner_id) VALUES
-    ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 'world_image1.jpg', 1),
-    ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 'world_image2.jpg', 3);
+INSERT INTO worlds (name, description, owner_id) VALUES
+    ('Redstone Paradise', 'Here, we plan to make all sorts of automated contraptions!', 1),
+    ('Medieval Earth', 'Here, we like to build detailed recreations of old buildings!', 3);
 
 -- Sample data for the 'member_world' table (assuming members are part of worlds)
 INSERT INTO member_world (member_id, world_id, is_admin) VALUES
@@ -699,9 +700,9 @@ INSERT INTO favorite_world (member_id, world_id) VALUES
     (3, 1);
 
 -- Sample data for the 'project' table
-INSERT INTO projects (name, status, description, picture, world_id) VALUES
-    ('Wheat Farm', 'Active', 'Fully automatic wheat farm', 'project_image1.jpg', 1),
-    ('Castle Tower', 'Active', 'A new tower for our main castle', 'project_image2.jpg', 2);
+INSERT INTO projects (name, status, description, world_id) VALUES
+    ('Wheat Farm', 'Active', 'Fully automatic wheat farm', 1),
+    ('Castle Tower', 'Active', 'A new tower for our main castle', 2);
 
 -- Sample data for the 'member_project' table (assuming members are part of projects)
 INSERT INTO member_project (member_id, project_id, permission_level) VALUES
@@ -731,19 +732,19 @@ INSERT INTO tags (name) VALUES
     ('Build'),
     ('Large');
 
--- Sample data for the 'world_tags' table (associating tagss with worlds)
+-- Sample data for the 'world_tags' table (associating tags with worlds)
 INSERT INTO world_tag (tag_id, world_id) VALUES
     (1, 1),
     (2, 1),
     (2, 2);
 
--- Sample data for the 'project_tags' table (associating tagss with projects)
+-- Sample data for the 'project_tags' table (associating tags with projects)
 INSERT INTO project_tag (tag_id, project_id) VALUES
     (2, 1),
     (1, 2),
     (3, 2);
 
--- Sample data for the 'member_tags' table (associating tagss with members)
+-- Sample data for the 'member_tags' table (associating tags with members)
 INSERT INTO member_tag (tag_id, member_id) VALUES
     (1, 1),
     (2, 1),

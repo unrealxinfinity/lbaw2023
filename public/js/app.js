@@ -88,6 +88,13 @@ function addEventListeners() {
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
       closePopup.addEventListener('click', closeSearchedTaskPopup);
+    
+    let removeMemberFromWorlds = document.querySelectorAll('form#remove-member-world');
+    if(removeMemberFromWorlds != null){
+      removeMemberFromWorlds.forEach(removeMemberFromWorld => {
+        removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+      });
+    }
 
     let createTask = document.getElementById("createTaskButton");
     if(createTask != null)
@@ -129,6 +136,20 @@ function addEventListeners() {
       clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
     }
 
+
+    let ProjectEditCloser = document.querySelector('#go-back');
+    if (ProjectEditCloser != null)
+    ProjectEditCloser.addEventListener('click', function() {
+        window.history.back();
+      });
+
+    let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
+    if(removeMemberFromProjects != null){
+      removeMemberFromProjects.forEach(removeMemberFromProject => {
+        removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+      });
+    }
+  
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -297,7 +318,7 @@ function addEventListeners() {
 
       const json = await response.json();
 
-      if (response.status !== 500) addMemberHandler(json)
+      if (response.status !== 500) addMemberWorldHandler(json)
   }
 
   async function sendAssignMemberRequest(event) {
@@ -511,17 +532,14 @@ function addTagHandler(json){
   
 }
 
-async function sendRemoveMemberFromWorld(ev) {
+async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
-  console.log('Sending leave world request');
   let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.world_id').value;
+  let id = this.querySelector('input.id').value;
   let username = this.querySelector('input.username').value;
-  console.log(id);
-  console.log(username);
+
 
   url = `/api/worlds/${id}/${username}`;
-  console.log(url);
   const response = await fetch(url, {
     method: 'DELETE',
     headers: {
@@ -539,12 +557,48 @@ async function sendRemoveMemberFromWorld(ev) {
     }
   }).then(data => {
     removeMemberFromWorldHandler(data);
-  }).catch(error => console.error('Error fetching data:', error));
+  }).catch(error => console.error('Error fetching data:', error.message));
 }
 
 function removeMemberFromWorldHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.id + '"]');
+  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
+  let form = document.querySelector('form#remove-member-world [data-id="' + data.member_id + '"]');
+  form.remove();
+}
+
+async function sendRemoveMemberFromProjectRequest(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+
+  url = `/api/projects/${id}/${username}`;
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    removeMemberFromProjectHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+}
+
+function removeMemberFromProjectHandler(data) {
+  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
+  element.remove();
+  let form = document.querySelector('form#remove-member-project [data-id="' + data.member_id + '"]');
+  form.remove();
 }
 
 
@@ -842,6 +896,10 @@ function pusherNotifications(projectContainer, worldContainer){
   
 }
 
-
-
 addEventListeners();
+
+function openSidebar() {
+  console.log('hello');
+  document.querySelector('#sidebar-text').click();
+}
+  

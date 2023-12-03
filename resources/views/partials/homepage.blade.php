@@ -22,8 +22,9 @@
     <h1> MY CURRENT PROJECTS </h1>
     <div class="panel">
     @foreach($projects as $project)
+   
     <div class="container projectsContainer" data-id="{{$project->id}}">
-        <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
+        <img class="h-1/2 overflow-hidden rounded-t-md " src={{ $project->getImage() }}>
         @php
             $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
@@ -38,7 +39,7 @@
     <div class="panel">
     @foreach($worlds as $world)
     <div class="container worldsContainer" data-id="{{$world->id}}">
-        <img class="h-1/2 overflow-hidden rounded-t-md" src="https://source.unsplash.com/random/300x200">
+        <img class="h-1/2 overflow-hidden rounded-t-md " src={{ $world->getImage() }}>
         @php
             $translateXValue = (strlen($world->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp

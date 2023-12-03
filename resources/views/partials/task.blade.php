@@ -4,7 +4,8 @@
         <h1><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h1>
     </header>
     <p>{{ $task->description }}</p>
-    <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
+    <label id="sidebar-text" for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
+    @if ($errors->any()) <script defer>document.querySelector('#sidebar-text').click();</script> @endif
     <section id="comments" class="mt-20">
         <h4> Comments: </h4>
         <ul>
