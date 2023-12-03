@@ -21,10 +21,8 @@ class UploadRequest extends FormRequest
         switch (request()->type) {
             case 'profile':
                 return Auth::user()->can('edit', Member::find($this->route()->id));
-                break;
             case 'world':
                 return Auth::user()->can('edit', World::find($this->route()->id));
-                break;
             case 'project':
                 return Auth::user()->can('edit', Project::find($this->route()->id));
         }

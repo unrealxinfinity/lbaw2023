@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignMemberRequest;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\MoveTaskRequest;
-use App\Http\Requests\TaskCommentRequest;
 use App\Models\Task;
 use App\Models\TaskComment;
 use App\Models\User;
@@ -127,7 +127,7 @@ class TaskController extends Controller
         return redirect()->back()->withSuccess('Task completed');
     }
 
-    public function comment(TaskCommentRequest $request, string $id): RedirectResponse
+    public function comment(CommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
 

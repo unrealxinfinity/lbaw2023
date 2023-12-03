@@ -62,7 +62,7 @@
             @each('partials.comment', $world->comments()->orderBy('id')->get(), 'comment')
         </ul>
         @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
-        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id])
+        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id, 'type' => 'world'])
         @endif
     </section>
 </article>
