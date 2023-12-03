@@ -25,7 +25,7 @@ function addEventListeners() {
 
     let memberEditors =document.querySelectorAll('form.edit-member');
     [].forEach.call(memberEditors, function(editor) {
-      editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
+      editor.querySelector('.button').addEventListener('submit', sendEditMemberRequest);
     });
 
     let tasks = document.querySelectorAll('article.task');

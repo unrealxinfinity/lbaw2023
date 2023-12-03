@@ -1,15 +1,20 @@
 <article class="member" data-id="{{ $member->id }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
-    <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img src= {{$member->getProfileImage()}} class="h-full aspect-square ">
-        <div class="flex flex-col ml-5 pt-1">
-        <h1>{{ $member->name }}</h1>
-        <h2 class="pl-3 mb-5"> @ {{ $member->persistentUser->user->username }}</h2>
-        <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
-        </div>
-        </div>
+    <header class="flex justify-start sm:h-48 h-24 m-5">
+        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+            <div class="sm:h-36 h-24 aspect-square sm:ml-5 ml-1">
+                <label for="edit-img">
+                    <label class="absolute sm:h-36 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none md:text-big text-bigPhone">&#9998;</label>
+                    <img id="preview-img" class="sm:h-36 h-24 aspect-square hover:opacity-50" src= {{$member->getProfileImage()}}>
+                </label>
+            </div>
+            <input id="edit-img" class="hidden" name="file" type="file" required>
+            <input name="type" type="hidden" value="profile">
+            <input  class="button w-min" type="submit" value="Upload profile picture">
+        </form>
     </header>
-    <h2 class="mb-5">{{ $member->description }}</h2>
     <form class="edit-member form-post" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
         @csrf
         @method('PUT')

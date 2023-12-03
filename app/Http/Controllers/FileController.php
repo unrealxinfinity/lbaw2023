@@ -96,7 +96,7 @@ class FileController extends Controller
                 $member = Member::findOrFail($id);
                 $member->picture = $fileName;
                 $member->save();
-                return redirect()->route('members.show', $id);
+                return redirect()->route('members.show', $member->persistentUser->user->username);
             case 'world':
                 $world = World::findOrFail($id);
                 $world->picture = $fileName;
