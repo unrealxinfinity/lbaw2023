@@ -45,11 +45,17 @@ function addEventListeners() {
 
     let button = document.getElementById("createTagButton");
     if(button != null)
-    button.addEventListener("submit", addTagRequest);
+    button.addEventListener("click", addTagRequest);
     
-    let worldMemberAdder = document.querySelector('form#add-member-to-world');
-    if (worldMemberAdder != null)
-      worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
+    let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
+    console.log(worldMemberAdder);
+    if (worldMemberAdder != null){
+      [].forEach.call(worldMemberAdder, function(form) {
+        form.addEventListener('submit', sendAddMemberToWorld);
+      });
+    }
+    
+    
 
     let taskResults = document.getElementById('openPopupButton');
     if(taskResults != null)
@@ -70,9 +76,14 @@ function addEventListeners() {
     if (ProjectSearcher != null)
       ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
-    let MemberAssigner = document.querySelector('form#assign-member');
-    if (MemberAssigner != null)
-      MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
+    let MemberAssigner = document.querySelectorAll('form#assign-member');
+    console.log(MemberAssigner);
+
+    if (MemberAssigner != null){
+      [].forEach.call(MemberAssigner, function(form) {
+        form.addEventListener('submit', sendAssignMemberRequest);
+      });
+    }
     
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
@@ -84,6 +95,10 @@ function addEventListeners() {
         removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
       });
     }
+
+    let createTask = document.getElementById("createTaskButton");
+    if(createTask != null)
+      createTask.addEventListener("click", sendCreateTaskRequest);
 
     let lastScrollTop = 0;
     window.addEventListener('scroll', function() {
@@ -102,6 +117,25 @@ function addEventListeners() {
     
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
+    
+      window.addEventListener('load',getMemberBelingingsRequest);
+    /*
+    let removeMemberFromWorld = document.querySelector('');
+    if(leaveWorld != null){
+      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+    }
+    */ 
+    
+    let notificationButton = document.getElementById('notification-button');
+    if(notificationButton != null){
+      notificationButton.addEventListener('click', sendShowNotificationsRequest);
+    }
+
+    let clearNotificationsButton = document.getElementById('clearNotifications');
+    if(clearNotificationsButton != null){
+      clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+    }
+
 
     let ProjectEditCloser = document.querySelector('#go-back');
     if (ProjectEditCloser != null)
@@ -244,122 +278,50 @@ function addEventListeners() {
   }
 
   function addMemberHandler(json) {
-    const ul = document.querySelector('ul.members');
-    const form = document.querySelector('form.add-member');
-    const error = form.querySelector('span.error');
-    if (error !== null)
-    {
-      error.remove();
-    }
-
-    if (json.error)
-    {
-      const span = document.createElement('span');
-      span.classList.add('error');
-      const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
-      const index = members.find(x => x === json.username);
-      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-      else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
-      form.appendChild(span);
-      return;
-    }
-
-    const member = document.createElement('article');
-
-    member.classList.add('member');
-    member.setAttribute('data-id', json.id);
-
-    const header = document.createElement('header');
-    header.classList.add('flex', 'justify-start');
-    const img = document.createElement('img');
-    img.classList.add('h-fit', 'aspect-square', 'mx-1');
-    const h4 = document.createElement('h4');
-    const a = document.createElement('a');
-    a.href = '/members/' + json.username;
-    a.textContent = json.username;
-    img.src = json.picture;
-    
-    h4.appendChild(a);
-    header.appendChild(img);
-    header.appendChild(h4);
-
-    member.appendChild(header);
-
-    const removeForm = document.createElement('form');
-    removeForm.id= 'remove-member-project';
-    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    removeForm.innerHTML = `
-      <input type="hidden" name="_token" value="${csrfToken}">
-      <input type="hidden" class="id" value="${json.project_id}">
-      <input type="hidden" class="username" value="${json.username}">
-      <input type="submit" value="X">
-    `;
-
-    removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
-
-    ul.appendChild(member);
-    ul.appendChild(removeForm);
-   
-  }
-
-  function addMemberWorldHandler(json) {
-    const ul = document.querySelector('ul.members');
-    const form = document.querySelector('form.add-member');
-    const error = form.querySelector('span.error');
-    if (error !== null)
-    {
-      error.remove();
-    }
-
-    if (json.error)
-    {
-      const span = document.createElement('span');
-      span.classList.add('error');
-      const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
-      const index = members.find(x => x === json.username);
-      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-      else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
-      form.appendChild(span);
-      return;
-    }
-
-    const member = document.createElement('article');
-
-    member.classList.add('member');
-    member.setAttribute('data-id', json.id);
-
-    const header = document.createElement('header');
-    header.classList.add('row');
-    const img = document.createElement('img');
-    img.classList.add('small');
-    const h4 = document.createElement('h4');
-    const a = document.createElement('a');
-    a.href = '/members/' + json.username;
-    a.textContent = json.username;
-    img.src = json.picture;
-    
-    h4.appendChild(a);
-    header.appendChild(img);
-    header.appendChild(h4);
-
-    member.appendChild(header);
-
-    const removeForm = document.createElement('form');
-    removeForm.id= 'remove-member-world';
-    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    removeForm.innerHTML = `
-      <input type="hidden" name="_token" value="${csrfToken}">
-      <input type="hidden" class="id" name="id" value="${json.world_id}">
-      <input type="hidden" class="username" name="username" value="${json.username}">
-      <input type="submit" value="X">
-    `;
-
-    member.appendChild(removeForm);
-    removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
-
-    ul.appendChild(member);
+    const list = document.querySelectorAll('ul.members');
+    [].forEach.call(list, function(ul) {
+      const form = document.querySelector('form.add-member');
+      const error = form.querySelector('span.error');
+      if (error !== null)
+      {
+        error.remove();
+      }
+  
+      if (json.error)
+      {
+        const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        form.appendChild(span);
+        return;
+      }
+  
+      const member = document.createElement('article');
+  
+      member.classList.add('member');
+      member.setAttribute('data-id', json.id);
+  
+      const header = document.createElement('header');
+      header.classList.add('flex', 'justify-start');
+      const img = document.createElement('img');
+      img.classList.add('h-fit', 'aspect-square', 'mx-1');
+      const h4 = document.createElement('h4');
+      const a = document.createElement('a');
+      a.href = '/members/' + json.username;
+      a.textContent = json.username;
+      img.src = json.picture;
+      
+      h4.appendChild(a);
+      header.appendChild(img);
+      header.appendChild(h4);
+  
+      member.appendChild(header);
+  
+      ul.appendChild(member);
+    });
    
   }
 
@@ -392,7 +354,7 @@ function addEventListeners() {
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
-
+    
     console.log('/api/tasks/' + id + '/' + username);
     const response = await fetch('/api/tasks/' + id + '/' + username, {
       method: 'POST',
@@ -412,7 +374,11 @@ function addEventListeners() {
   function editMemberHandler() {
 
   }
-
+  function sendCreateTaskRequest1(event) {
+    event.preventDefault();
+    console.log("hello")    
+    
+  }
   function sendCreateTaskRequest() {
     let form = this.closest('form.new-task');
     let title = form.querySelector('input.title').value;
@@ -422,7 +388,7 @@ function addEventListeners() {
     let priority = form.querySelector('select.priority').value;
     let project_id = form.querySelector('input.project_id').value;
 
-    sendAjaxRequest('put', '/api/tasks/', {title: title, description: description, due_at: due_at, effort: effort, priority: priority, project_id: project_id}, taskAddedHandler);
+    sendAjaxRequest('put', '/tasks', {title: title, description: description, due_at: due_at, effort: effort, priority: priority, project_id: project_id}, taskAddedHandler);
   }
 
   function taskAddedHandler() {
@@ -551,13 +517,9 @@ function searchProjectHandler(json){
 
     const tagForms = document.getElementsByClassName('new-tag');
     const id = tagForms[0].getAttribute('data-id');
-    console.log(tagForms);
     let tagElem = tagForms[0].children;
-    let tagElemName= tagElem[1].value;
-    let tagName = tagElemName.replace(/\s/g, '');
+    let tagName= tagElem[1].value;
     const csrf = tagElem[0].value;
-    console.log(tagName)
-    console.log('/api/projects/' + id + '/' +'tags/create');
     const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
         method: 'POST',
         headers: {
@@ -580,7 +542,6 @@ function searchProjectHandler(json){
           addTagHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-      console.log(tagElemName)
       tagElem[1].value = "";
     
 
@@ -594,7 +555,7 @@ function addTagHandler(json){
     let newTag = document.createElement('p');
     newTag.classList.add('tag');
     newTag.textContent = json.tagName;
-    document.getElementsByClassName('tagList').appendChild(newTag);
+    document.getElementsByClassName('tagList flex')[0].appendChild(newTag);
   }
   
 }
@@ -666,6 +627,63 @@ function removeMemberFromProjectHandler(data) {
   element.remove();
   let form = document.querySelector('form#remove-member-project [data-id="' + data.member_id + '"]');
   form.remove();
+}
+
+
+async function sendShowNotificationsRequest(ev) {
+  
+  if(ev != null){
+    ev.preventDefault();
+    }
+  const url = '/api/notifications';
+  const response = await fetch(url, {
+      method: 'GET', 
+      headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+  })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
+    })
+    .then(data => {
+        ShowNotificationsHandler(data,ev);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+}
+
+function ShowNotificationsHandler(json,ev){
+  let popup = document.getElementById("notificationList");
+  const notificationPopup = document.getElementById('notificationArea');
+
+  let notifications = json.notifications;
+  popup.innerHTML = "";
+  for(let notification of notifications){    
+    let notificationText = document.createElement('p');
+    notificationText.classList.add('text-black'); 
+    let notificationPriority = document.createElement('p');
+    notificationPriority.classList.add('text-black');
+    let notificationDate= document.createElement('p');
+    notificationDate.classList.add('text-black');
+    let notificationContainer = document.createElement('div');
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
+    notificationText.textContent = notification.text;
+    notificationPriority.textContent = notification.level;
+    notificationDate.textContent = notification.date_;
+    notificationContainer.appendChild(notificationText);
+    notificationContainer.appendChild(notificationPriority);
+    notificationContainer.appendChild(notificationDate);
+    popup.appendChild(notificationContainer);
+  }
+  if(ev != null){
+    notificationPopup.classList.toggle('hidden'); 
+  }
 }
 
   function sendItemUpdateRequest() {
@@ -804,12 +822,130 @@ function removeMemberFromProjectHandler(data) {
     return new_item;
   }
   
-  addEventListeners();
+
   
   // Close the pop-up
   function closeSearchedTaskPopup() {
     document.getElementById('popupContainer').classList.add('hidden');
  }
+async function sendClearNotificationsRequest(ev){
+  ev.preventDefault();
+  const url = '/api/notifications';
+  const response = await fetch(url, {
+      method: 'DELETE', 
+      headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      },
+  })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
+    })
+    .then(data => {
+        clearNotificationsHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+  
+}
+function clearNotificationsHandler(json){
+  let popup = document.getElementById("notificationList");
+  popup.innerHTML = "";
+  let notificationContainer = document.createElement('div');
+  notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-2', 'rounded-lg', 'bg-white');
+  let notificationText = document.createElement('p');
+  notificationText.classList.add('text-black');
+  notificationText.textContent = json.message;
+  notificationContainer.appendChild(notificationText);
+  popup.appendChild(notificationContainer);
+
+}
+ // Get member belongings in ajax on every page load for pusher notifications
+async function getMemberBelingingsRequest(ev){
+  ev.preventDefault();
+  const url = '/api/allBelongings';
+    const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+    })
+      .then(response =>{
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+      })
+      .then(data => {
+          getIdsHandler(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+
+}
+
+function getIdsHandler(json){
+  let project_ids = json.projects_ids;
+  let world_ids = json.worlds_ids;
+  pusherNotifications(project_ids, world_ids);
+}
+
+
+// Pusher notifications
+function pusherNotifications(projectContainer, worldContainer){
+  
+  Pusher.logToConsole = false;
+  
+  
+    const pusher = new Pusher("11f57573d00ddf0021b9", {
+      cluster: "eu",
+      encrypted: true
+    });
+  
+    function bindEvent(channel, eventName, callback) {
+      channel.bind(eventName, callback);
+    }
+    
+    for (let i = 0; i < worldContainer.length; i++) { 
+      const world_id = worldContainer[i];
+      
+      
+      const channelWorld = pusher.subscribe('World' + world_id);
+      bindEvent(channelWorld, 'ProjectNotification', function(data){
+        alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
+        
+      });
+      bindEvent(channelWorld, 'WorldNotification', function(data){
+        alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
+      });
+    }
+    for(let i = 0; i < projectContainer.length; i++){
+      const project_id = projectContainer[i];
+      const channelProject = pusher.subscribe('Project' + project_id);
+      bindEvent(channelProject, 'TaskNotification', function(data){
+        alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
+      });
+
+      bindEvent(channelProject, 'TagNotification', function(data){
+        alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
+      });
+    }
+  
+  
+}
+
+addEventListeners();
 
 function openSidebar() {
   console.log('hello');

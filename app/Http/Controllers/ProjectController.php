@@ -16,8 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-
-
+use App\Http\Controllers\NotificationController;
 class ProjectController extends Controller
 {
     public function show(string $id): View
@@ -43,10 +42,12 @@ class ProjectController extends Controller
            'picture' => 'pic',
             'world_id' => $fields['world_id']
         ]);
-
+        
         $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
 
-        return to_route('projects.show', ['id' => $project->id])->withSuccess('New World created!');
+        NotificationController::ProjectNotification($project,$fields['world_id'],'Created');
+
+        return to_route('projects.show', ['id' => $project->id])->withSuccess('New Project created!');
     }
 
     public function update(EditProjectRequest $request, string $id): RedirectResponse
@@ -77,7 +78,8 @@ class ProjectController extends Controller
             $type = $is_admin ? 'World Administrator' : $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
-
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
+            
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
@@ -140,6 +142,8 @@ class ProjectController extends Controller
             $request->validated();
             $project = Project::findOrFail($id);
             $project->members()->detach(Member::where('user_id', auth()->user()->id)->first()->id);
+            $member = Member::where('user_id', auth()->user()->id)->first();
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' left the');
             return to_route('worlds.show', ['id' => $project->world_id])->withSuccess('You have left the project!');
         } catch (\Exception $e){
             return to_route('projects.show', ['id' => $id])->withSuccess('You can\'t leave this project!');
@@ -152,9 +156,8 @@ class ProjectController extends Controller
 
         $project = Project::findOrFail($id);
         $world_id = $project->world;
-
+        NotificationController::ProjectNotification($project,$world_id->id,'Deleted');
         $project->delete();
-
         return view('pages.world', [
             'world' => $world_id
         ]);

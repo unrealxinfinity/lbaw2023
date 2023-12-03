@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\Project;
 use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\NotificationController;
 
 class WorldController extends Controller
 {
@@ -42,7 +43,7 @@ class WorldController extends Controller
            'picture' => 'pic',
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
-
+        
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
 
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
@@ -67,11 +68,11 @@ class WorldController extends Controller
         $fields = $request->validated();
 
         $world = World::findOrFail($world_id);
+        error_log($world);
         $member = User::where('username', $username)->first()->persistentUser->member;
-
         try {
             $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-
+            NotificationController::WorldNotification($world,$member->name . ' added to ');
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
@@ -96,6 +97,8 @@ class WorldController extends Controller
 
         
         try {
+            $world = World::findOrFail($world_id);
+            NotificationController::WorldNotification($world,$member->id . 'removed from ');
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
@@ -117,6 +120,7 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {

@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use App\Http\Controllers\NotificationController;
 
 class TaskController extends Controller
 {  
@@ -29,11 +30,11 @@ class TaskController extends Controller
     }
     
 
-    public function create(CreateTaskRequest $request) : RedirectResponse{
+    public function create(CreateTaskRequest $request):RedirectResponse {
 
         $fields = $request->validated();
 
-        Task::create([
+        $task = Task::create([
             'title' => $fields['title'],
             'description' => $fields['description'],
             'status' => $fields['status'],
@@ -42,7 +43,9 @@ class TaskController extends Controller
             'priority' => $fields['priority'],
             'project_id' => $fields['project_id']
         ]);
-
+        
+        NotificationController::TaskNotification($task,$fields['project_id'],'Created');
+        
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
@@ -68,7 +71,7 @@ class TaskController extends Controller
         $task->priority = $fields['priority'];
         
         $task->save();
-
+        NotificationController::TaskNotification($task,$task->project_id,'Edited');
         return redirect()->back()->withSuccess('Task edited');
     }
 
@@ -93,12 +96,13 @@ class TaskController extends Controller
         $task = Task::findOrFail($task_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
         
-
+        
         $this->authorize('assignMember', $task);
 
         try {
             $member->tasks()->attach($task_id);
-
+            dd("assigning");
+            NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
@@ -123,7 +127,7 @@ class TaskController extends Controller
         $task->status = 'Done';
 
         $task->save();
-
+        NotificationController::TaskNotification($task,$task->project_id,'Completed');
         return redirect()->back()->withSuccess('Task completed');
     }
 

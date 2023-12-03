@@ -11,6 +11,16 @@ class Notification extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $fillable = [
+        'text',  
+        'level',
+        'world_id',
+        'project_id',
+        'task_id',
+        
+    ];
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(Member::class);

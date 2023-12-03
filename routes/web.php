@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,10 +137,11 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
     Route::get('/create-world', 'showCreateWorld')->name('world-create');
+    Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
 });
 
 Route::controller(TaskController::class)->group(function () {
-    Route::post('/tasks', 'create')->name('create-task');//
+    Route::post('/api/tasks', 'create')->name('create-task');//
     Route::get('/tasks/{id}', 'show')->name('tasks.show');//
     Route::post('/tasks/{id}/complete', 'complete')->name('complete-task');//
     Route::put('/tasks/{id}', 'edit')->name('edit-details');//
@@ -165,6 +167,11 @@ Route::controller(DeleteController::class)->group(function () {
    Route::get('/members/{username}/delete', 'showConfirmation')->name('delete-confirmation');
 });
 
+Route::controller(NotificationController::class)->group(function () {
+    Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
+    Route::post('/api/notifications', 'createNotification')->name('createNotification');
+    Route::delete('/api/notifications','clearNotifications')->name('clearNotification');
+});
 Route::controller(FileController::class)->group(function () {
    Route::post('/members/upload/{id}', 'upload');
    Route::post('/projects/upload/{id}', 'upload');
