@@ -14,10 +14,12 @@
             </form>
         @endcan
         <div class="flex flex-col ml-5 pt-1">
+            <div class="flex">
             <h1>{{ $project->name }}</h1>
-            @if (Auth::user()->can('edit', $project))
+            @can('edit', $project)
                 <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a>
-            @endif
+            @endcan
+            </div>
             @include('partials.tag', ['tags' => $tags])
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
