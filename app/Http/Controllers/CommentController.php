@@ -23,7 +23,7 @@ class CommentController extends Controller
                 $this->comment = TaskComment::findOrFail($id);
         }
 
-        $this->comment->text = $fields['text'];
+        $this->comment->content = $fields['text'];
         $this->comment->save();
 
         return redirect()->back()->withFragment('#comments')->withSuccess('Comment edited!');
