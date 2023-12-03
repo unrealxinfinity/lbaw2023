@@ -72,7 +72,7 @@ CREATE TABLE worlds(
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR,
   owner_id INT NOT NULL,
-  FOREIGN KEY(owner_id) REFERENCES members(id)
+  FOREIGN KEY(owner_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -471,6 +471,24 @@ CREATE TRIGGER delete_member_tag
   AFTER DELETE ON member_tag
   FOR EACH ROW
   EXECUTE PROCEDURE delete_tags();
+
+DROP FUNCTION IF EXISTS delete_owned_worlds() CASCADE;
+CREATE FUNCTION delete_owned_worlds() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.type_ = 'Deleted' THEN
+        DELETE FROM worlds w WHERE w.owner_id = (SELECT m.id FROM members m WHERE m.user_id = NEW.id);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS delete_owned_worlds ON users CASCADE;
+CREATE TRIGGER delete_owned_worlds
+    AFTER UPDATE ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_owned_worlds();
 
 DROP INDEX IF EXISTS task_project CASCADE;
 CREATE INDEX task_project ON tasks USING hash (project_id);

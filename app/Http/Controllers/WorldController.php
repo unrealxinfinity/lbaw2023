@@ -9,6 +9,7 @@ use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
+use App\Http\Requests\EditWorldRequest;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -27,7 +28,8 @@ class WorldController extends Controller
         $this->authorize('show', $world);
         
         return view('pages.world', [
-            'world' => $world
+            'world' => $world,
+            'edit' => false
         ]);
     }
 
@@ -53,6 +55,20 @@ class WorldController extends Controller
         $world = World::findOrFail($id);
         $world->delete();
         return redirect()->route('home')->withSuccess('World deleted!');
+    }
+
+    public function update(EditWorldRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::findOrFail($id);
+
+        $world->name = $fields['name'];
+        $world->description = $fields['description'];
+        
+        $world->save();
+
+        return redirect()->route('worlds.show', $id);
     }
 
     public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
@@ -89,7 +105,8 @@ class WorldController extends Controller
 
         
         try {
-            NotificationController::WorldNotification($world_id,$member->id . 'removed from ');
+            $world = World::findOrFail($world_id);
+            NotificationController::WorldNotification($world,$member->id . 'removed from ');
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
@@ -111,7 +128,7 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world_id,$member->id . ' left the ');
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
@@ -159,6 +176,18 @@ class WorldController extends Controller
         $projectsJson = $projects->toJson();
         return response()->json([
             'projects' => $projectsJson,
+        ]);
+    }
+
+    public function showEditWorld(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'edit' => true
         ]);
     }
 }

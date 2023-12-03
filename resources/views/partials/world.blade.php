@@ -14,11 +14,30 @@
             @include('form.delete-world', ['world' => $world])
         @endcan
         <div class="flex flex-col ml-5 pt-1">
+            <div class="flex justify-start">
             <h1>{{ $world->name }}</h1>
+            @can('edit', $world)
+                <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a>
+            @endcan
+            </div>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
             </div>
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
+        </div>
+        @if(Auth::check() && Auth::user()->can('leave', $world))
+        <div class="relative inline-block text-left">
+            <input type="checkbox" id="more-options" class="hidden peer"/>
+            <label for="more-options" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
+            <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
+                    <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
+                        @CSRF
+                        @method('DELETE')
+                        <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
+                    </form>
+            </div>
+        </div>
+        @endif
     </header>
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
     <section id="projects">
