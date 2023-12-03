@@ -56,7 +56,7 @@ class WorldController extends Controller
         $member = User::where('username', $username)->first()->persistentUser->member;
         try {
             $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-            NotificationController::WorldNotification($world,$member->id . ' added to ');
+            NotificationController::WorldNotification($world,$member->name . ' added to ');
             return response()->json([
                 'error' => false,
                 'id' => $member->id,

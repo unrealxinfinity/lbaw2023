@@ -16,6 +16,7 @@ use App\Models\World;
 use App\Events\CreateProjectNotification;
 use App\Events\CreateTagNotification;
 use App\Events\CreateTaskNotification;
+use App\Events\CreateWorldNotification;
 use App\Models\Task;
 use App\Models\Tag;
 
