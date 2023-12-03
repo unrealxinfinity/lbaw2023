@@ -52,7 +52,7 @@
         </ul>
         @endif
     </section>
-    @if (Auth::check() && Auth::user()->can('create'))
+    @if (Auth::check() && Auth::user()->can('edit', $world))
     @include('form.addmembertoworld', ['world' => $world])
     @include('form.project-create', ['world'=>$world])
     @endif
