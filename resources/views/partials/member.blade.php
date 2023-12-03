@@ -23,6 +23,7 @@
     <h2 class="mb-5">{{ $member->description }}</h2>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
         <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
+        <button type="button" id="delete-account" class="button">Delete Account</button>
         <h1> <a href = "/myworlds" >My Worlds</a></h1>
         <h1> <a href="/myprojects">My Projects</a></h1>
         <h1> <a href="/mytasks">My Tasks</a></h1>
