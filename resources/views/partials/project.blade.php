@@ -14,10 +14,11 @@
             </form>
         @endcan
         <div class="flex flex-col ml-5 pt-1">
-            <div class="flex"><h1 class="w-fit"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
-            @if (Auth::user()->can('edit', $project))
+            <div class="flex">
+            <h1>{{ $project->name }}</h1>
+            @can('edit', $project)
                 <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a>
-            @endif
+            @endcan
             </div>
             @include('partials.tag', ['tags' => $tags])
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
@@ -32,21 +33,21 @@
                 <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
                     @csrf
                     @method('DELETE')
-                    <button class="px-3 py-1 w-full" type="submit">Delete Project</button>
+                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Delete Project</button>
                 </form>
                 @endif
                 @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
                 <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
                     @csrf
                     @method('POST')
-                    <button class="px-3 py-1 w-full" type="submit">Archive Project</button>
+                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Archive Project</button>
                 </form>
                 @endif
                 @if(Auth::check() && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
                     <form method="POST" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
                         @CSRF
                         @method('DELETE')
-                        <button class="px-3 py-1 w-full" type="submit">Leave Project</button>
+                        <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave Project</button>
                     </form>
                 @endif
             </div>

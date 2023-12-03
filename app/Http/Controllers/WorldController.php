@@ -9,6 +9,7 @@ use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
+use App\Http\Requests\EditWorldRequest;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -26,7 +27,8 @@ class WorldController extends Controller
         $this->authorize('show', $world);
         
         return view('pages.world', [
-            'world' => $world
+            'world' => $world,
+            'edit' => false
         ]);
     }
 
@@ -44,6 +46,20 @@ class WorldController extends Controller
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
 
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
+    }
+
+    public function update(EditWorldRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::findOrFail($id);
+
+        $world->name = $fields['name'];
+        $world->description = $fields['description'];
+        
+        $world->save();
+
+        return redirect()->route('worlds.show', $id);
     }
 
     public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
@@ -148,6 +164,18 @@ class WorldController extends Controller
         $projectsJson = $projects->toJson();
         return response()->json([
             'projects' => $projectsJson,
+        ]);
+    }
+
+    public function showEditWorld(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'edit' => true
         ]);
     }
 }
