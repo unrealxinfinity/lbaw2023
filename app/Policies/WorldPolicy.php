@@ -43,7 +43,10 @@ class WorldPolicy
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
-
+    public function assignWorldAdmin(User $user, World $world): bool
+    {
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+    }
     public function leave(User $user, World $world): bool
     {
         $is_owner = $world->owner_id === $user->persistentUser->member->id;

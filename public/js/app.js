@@ -77,7 +77,6 @@ function addEventListeners() {
       ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
     let MemberAssigner = document.querySelectorAll('form#assign-member');
-    console.log(MemberAssigner);
 
     if (MemberAssigner != null){
       [].forEach.call(MemberAssigner, function(form) {
@@ -149,7 +148,14 @@ function addEventListeners() {
         removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       });
     }
-  
+    
+    let assignAdminToWorld = document.querySelectorAll('form.assign-admin-to-world');
+    console.log(assignAdminToWorld);
+    if(assignAdminToWorld != null){
+      assignAdminToWorld.forEach(form => {
+        form.addEventListener('submit', sendAssignAdminToWorldRequest);
+      });
+    }
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -654,6 +660,53 @@ function ShowNotificationsHandler(json){
 
 }
 
+
+
+
+async function sendAssignAdminToWorldRequest(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/worlds/' + id;
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    assignAdminToWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+
+
+}
+
+function assignAdminToWorldHandler(data) {
+  if(data.error){
+    const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+        else span.textContent = json.username + ' is already a admin of this world' + json.child + '.';
+        form.appendChild(span);
+  }
+  else{
+    alert("Admin added to world!");
+  }
+
+}
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
     let id = item.getAttribute('data-id');

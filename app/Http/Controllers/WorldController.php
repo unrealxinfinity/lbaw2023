@@ -81,6 +81,31 @@ class WorldController extends Controller
         }
     }
 
+    public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+
+        try {
+            $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
+            NotificationController::WorldNotification($world,$member->name . ' promoted to ');
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $fields['username'],
+                'world_id' => $world->id,
+                'picture' => $member->picture
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'username' => $fields['username'],
+                'child' => 'world'
+            ]);
+        }
+    }
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
     {   
         $request->validated();
@@ -103,7 +128,7 @@ class WorldController extends Controller
             ]);
         }
     }
-
+    
     public function leave(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
         try {

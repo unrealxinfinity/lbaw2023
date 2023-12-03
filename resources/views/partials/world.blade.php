@@ -12,6 +12,7 @@
                 <input class="button w-min" type="submit" value="Upload world picture">
             </form>
             @include('form.delete-world', ['world' => $world])
+            @include('form.assign-member-to-world', ['world' => $world])
         @endcan
         <div class="flex flex-col ml-5 pt-1">
             <h1>{{ $world->name }}</h1>
