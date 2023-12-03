@@ -81,7 +81,8 @@ class WorldController extends Controller
 
         
         try {
-            NotificationController::WorldNotification($world_id,$member->id . 'removed from ');
+            $world = World::findOrFail($world_id);
+            NotificationController::WorldNotification($world,$member->id . 'removed from ');
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
@@ -103,7 +104,7 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world_id,$member->id . ' left the ');
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {

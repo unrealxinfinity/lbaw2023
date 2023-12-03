@@ -621,31 +621,34 @@ function removeMemberFromProjectHandler(data) {
 
 
 async function sendShowNotificationsRequest(ev) {
-  ev.preventDefault();
-    const url = '/api/notifications';
-    const response = await fetch(url, {
-        method: 'GET', 
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
+  
+  if(ev != null){
+    ev.preventDefault();
+    }
+  const url = '/api/notifications';
+  const response = await fetch(url, {
+      method: 'GET', 
+      headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+  })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
     })
-      .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          ShowNotificationsHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    .then(data => {
+        ShowNotificationsHandler(data,ev);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 
 }
 
-function ShowNotificationsHandler(json){
+function ShowNotificationsHandler(json,ev){
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
 
@@ -668,8 +671,9 @@ function ShowNotificationsHandler(json){
     notificationContainer.appendChild(notificationDate);
     popup.appendChild(notificationContainer);
   }
-  notificationPopup.classList.toggle('hidden');
-
+  if(ev != null){
+    notificationPopup.classList.toggle('hidden'); 
+  }
 }
 
   function sendItemUpdateRequest() {
@@ -906,10 +910,12 @@ function pusherNotifications(projectContainer, worldContainer){
       const channelWorld = pusher.subscribe('World' + world_id);
       bindEvent(channelWorld, 'ProjectNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
         
       });
       bindEvent(channelWorld, 'WorldNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
     }
     for(let i = 0; i < projectContainer.length; i++){
@@ -917,10 +923,12 @@ function pusherNotifications(projectContainer, worldContainer){
       const channelProject = pusher.subscribe('Project' + project_id);
       bindEvent(channelProject, 'TaskNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
 
       bindEvent(channelProject, 'TagNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
     }
   
