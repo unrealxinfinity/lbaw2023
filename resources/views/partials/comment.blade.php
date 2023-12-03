@@ -8,6 +8,6 @@
     </header>
     <h4> {{ $comment->content }} </h4>
     <div class="comment-edit hidden">
-        @include('form.edit-comment', ['comment' => $comment, 'type' => 'type'])
+        @include('form.edit-comment', ['comment' => $comment, 'type' => $type])
     </div>
 </article>
