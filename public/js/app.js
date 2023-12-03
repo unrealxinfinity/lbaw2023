@@ -119,6 +119,12 @@ function addEventListeners() {
     let deleteAccount = document.querySelector("#delete-account");
     if (deleteAccount != null)
       deleteAccount.addEventListener('click', deleteAccountButton);
+
+    let confirmDeletion = document.querySelector("#confirm-deletion");
+    if (confirmDeletion != null)
+      setTimeout(() => {
+        confirmDeletion.submit();
+      }, 5000);
   
   }
 

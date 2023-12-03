@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteMemberRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeleteController extends Controller
 {
@@ -14,7 +15,7 @@ class DeleteController extends Controller
     {
         $request->validated();
 
-        $member = User::findOrFail($username)->persistentUser->member;
+        $member = User::where('username', $username)->first()->persistentUser->member;
         $persistentUser = $member->persistentUser;
         $user = $member->persistentUser->user;
 
@@ -33,12 +34,14 @@ class DeleteController extends Controller
         return redirect()->route('home')->withSuccess('Account deleted.');
     }
 
-    public function showConfirmation(Request $request, string $username): View
+    public function showConfirmation(Request $request, string $username)
     {
+        $member = User::where('username', $username)->first()->persistentUser->member;
+
         if (Auth::check()) {
-            return redirect('');
+            return view('pages.delete', ['member' => $member]);
         } else {
-            return view('pages.delete');
+            return redirect('');
         }        
     }
 
