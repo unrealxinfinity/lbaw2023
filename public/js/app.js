@@ -149,7 +149,25 @@ function addEventListeners() {
         removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       });
     }
+
+    let deleteAccount = document.querySelector("#delete-account");
+    if (deleteAccount != null)
+      deleteAccount.addEventListener('click', deleteAccountButton);
+
+    let confirmDeletion = document.querySelector("#confirm-deletion");
+    if (confirmDeletion != null)
+      setTimeout(() => {
+        confirmDeletion.submit();
+      }, 5000);
   
+  }
+
+  function deleteAccountButton() {
+    const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
+
+    if (text != "delete") return;
+
+    window.location.href = window.location.href + '/delete'
   }
 
   function bigBoxDragOverHandler(ev) {

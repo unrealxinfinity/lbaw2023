@@ -162,6 +162,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+   Route::get('/members/{username}/delete', 'showConfirmation')->name('delete-confirmation');
 });
 
 Route::controller(NotificationController::class)->group(function () {
