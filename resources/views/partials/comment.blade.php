@@ -6,7 +6,7 @@
         <button type="button" class="show-edit">Edit</button>
         <p> {{ $comment->date_ }} </p>
     </header>
-    <h4> {{ $comment->content }} </h4>
+    <h4 class="comment-content"> {{ $comment->content }} </h4>
     <div class="comment-edit hidden">
         @include('form.edit-comment', ['comment' => $comment, 'type' => $type])
     </div>

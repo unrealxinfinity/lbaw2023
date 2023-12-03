@@ -39,6 +39,11 @@ function addEventListeners() {
       bigbox.addEventListener("dragover", bigBoxDragOverHandler);
     })
 
+    let editorShows = document.querySelectorAll('button.show-edit');
+    [].forEach.call(editorShows, function(editorShow) {
+      editorShow.addEventListener('click', showEditComment);
+    });
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -116,6 +121,13 @@ function addEventListeners() {
       });
     }
   
+  }
+
+  function showEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
+    this.closest('article').querySelector('div.comment-edit').classList.remove('hidden');
+    this.classList.add('hidden');
   }
 
   function bigBoxDragOverHandler(ev) {
