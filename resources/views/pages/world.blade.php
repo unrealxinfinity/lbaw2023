@@ -20,8 +20,9 @@
             <h1 class="mt-3 ml-5"> Edit World </h1>
             <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
             </div>
+            @can('edit', $world)
             <div class="flex sm:h-36 h-24 m-5 mb-10">
-                @can('edit', $world)
+                
                     <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
@@ -35,9 +36,9 @@
                         <input name="type" type="hidden" value="world">
                         <input class="button w-min" type="submit" value="Upload world picture">
                     </form>
-                @endcan
             </div>
             @include('form.world-edit', ['world'=>$world])
+            @endcan
         </div>
     </div>
     @endif

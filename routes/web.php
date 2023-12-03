@@ -110,6 +110,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::put('/api/world/{id}', 'update')->name('update-world');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
+    Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
 });
 
 Route::controller(ProjectController::class)->group(function () {

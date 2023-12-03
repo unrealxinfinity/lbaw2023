@@ -18,7 +18,7 @@ use App\Models\Project;
 use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Requests\DeleteWorldRequest;
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -47,6 +47,14 @@ class WorldController extends Controller
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
 
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
+    }
+    public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
+    {
+        error_log("delete");
+        $request->validated();
+        $world = World::findOrFail($id);
+        $world->delete();
+        return redirect()->route('home')->withSuccess('World deleted!');
     }
 
     public function update(EditWorldRequest $request, string $id): RedirectResponse
