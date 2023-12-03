@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('edit-comment') }}">
+<form method="POST" action="{{ route('edit-comment', ['id' => $comment->id]) }}">
     @csrf
     @method('PUT')
 
