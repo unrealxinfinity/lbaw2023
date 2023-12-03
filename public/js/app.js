@@ -25,7 +25,7 @@ function addEventListeners() {
 
     let memberEditors =document.querySelectorAll('form.edit-member');
     [].forEach.call(memberEditors, function(editor) {
-      editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
+      editor.querySelector('.button').addEventListener('submit', sendEditMemberRequest);
     });
 
     let tasks = document.querySelectorAll('article.task');
@@ -38,6 +38,16 @@ function addEventListeners() {
       bigbox.addEventListener("drop", bigBoxDropHandler);
       bigbox.addEventListener("dragover", bigBoxDragOverHandler);
     })
+
+    let editorShows = document.querySelectorAll('button.show-edit');
+    [].forEach.call(editorShows, function(editorShow) {
+      editorShow.addEventListener('click', showEditComment);
+    });
+
+    let editorHides = document.querySelectorAll('button.close-edit');
+    [].forEach.call(editorHides, function(editorHide) {
+       editorHide.addEventListener('click', hideEditComment);
+    });
 
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
@@ -172,6 +182,20 @@ function addEventListeners() {
     if (text != "delete") return;
 
     window.location.href = window.location.href + '/delete'
+  }
+
+  function showEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
+    this.closest('article').querySelector('div.comment-edit').classList.remove('hidden');
+    this.classList.add('hidden');
+  }
+
+  function hideEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.remove('hidden');
+    this.closest('div.comment-edit').classList.add('hidden');
+    this.closest('article').querySelector('button.show-edit').classList.remove('hidden');
   }
 
   function bigBoxDragOverHandler(ev) {

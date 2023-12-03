@@ -9,7 +9,7 @@
         @if($project->status!="Active")<option value="Active">Active</option>@endif
         @if($project->status!="Archived")<option value="Archived">Archived</option>@endif
     </select>
-    <textarea type="text" class="project-description text-black max-h-40" rows="6" name="description"  placeholder="Description" required> {{ $project->description }} </textarea>
+    <textarea type="text" class="project-description text-black max-h-36" rows="3" name="description"  placeholder="Description" required> {{ $project->description }} </textarea>
 
     <input class="button" type="submit" id="submit-{{ $project->id }}" value="Edit Project">
 </form>

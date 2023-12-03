@@ -79,10 +79,12 @@
     <section id="comments">
         <h2 class="mt-10"> COMMENTS </h2>
         <ul>
-            @each('partials.comment', $world->comments()->orderBy('id')->get(), 'comment')
+            @foreach ($world->comments()->orderBy('id')->get() as $comment)
+                @include('partials.comment', ['comment' => $comment, 'type' => 'world'])
+            @endforeach
         </ul>
         @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
-        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id])
+        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id, 'type' => 'world'])
         @endif
     </section>
 </article>

@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\TaskComment;
+use App\Models\User;
+
+class TaskCommentPolicy
+{
+    /**
+     * Create a new policy instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    public function edit(User $user, TaskComment $comment): bool
+    {
+        $is_disabled = $user->persistentUser->type_ == 'Deleted' || $user->persistentUser->type_ == 'Blocked';
+        $is_owner = $comment->member->user_id == $user->id;
+        return !$is_disabled && $is_owner;
+    }
+}
