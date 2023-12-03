@@ -47,9 +47,15 @@ function addEventListeners() {
     if(button != null)
     button.addEventListener("click", addTagRequest);
     
-    let worldMemberAdder = document.querySelector('form#add-member-to-world');
-    if (worldMemberAdder != null)
-      worldMemberAdder.addEventListener('submit', sendAddMemberToWorld);
+    let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
+    console.log(worldMemberAdder);
+    if (worldMemberAdder != null){
+      [].forEach.call(worldMemberAdder, function(form) {
+        form.addEventListener('submit', sendAddMemberToWorld);
+      });
+    }
+    
+    
 
     let taskResults = document.getElementById('openPopupButton');
     if(taskResults != null)
@@ -70,9 +76,14 @@ function addEventListeners() {
     if (ProjectSearcher != null)
       ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
-    let MemberAssigner = document.querySelector('form#assign-member');
-    if (MemberAssigner != null)
-      MemberAssigner.addEventListener('submit', sendAssignMemberRequest);
+    let MemberAssigner = document.querySelectorAll('form#assign-member');
+    console.log(MemberAssigner);
+
+    if (MemberAssigner != null){
+      [].forEach.call(MemberAssigner, function(form) {
+        form.addEventListener('submit', sendAssignMemberRequest);
+      });
+    }
     
     let closePopup = document.getElementById('closePopUp');
     if(closePopup != null)
@@ -218,48 +229,51 @@ function addEventListeners() {
   }
 
   function addMemberHandler(json) {
-    const ul = document.querySelector('ul.members');
-    const form = document.querySelector('form.add-member');
-    const error = form.querySelector('span.error');
-    if (error !== null)
-    {
-      error.remove();
-    }
-
-    if (json.error)
-    {
-      const span = document.createElement('span');
-      span.classList.add('error');
-      const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
-      const index = members.find(x => x === json.username);
-      if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-      else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
-      form.appendChild(span);
-      return;
-    }
-
-    const member = document.createElement('article');
-
-    member.classList.add('member');
-    member.setAttribute('data-id', json.id);
-
-    const header = document.createElement('header');
-    header.classList.add('flex', 'justify-start');
-    const img = document.createElement('img');
-    img.classList.add('h-fit', 'aspect-square', 'mx-1');
-    const h4 = document.createElement('h4');
-    const a = document.createElement('a');
-    a.href = '/members/' + json.username;
-    a.textContent = json.username;
-    img.src = json.picture;
-    
-    h4.appendChild(a);
-    header.appendChild(img);
-    header.appendChild(h4);
-
-    member.appendChild(header);
-
-    ul.appendChild(member);
+    const list = document.querySelectorAll('ul.members');
+    [].forEach.call(list, function(ul) {
+      const form = document.querySelector('form.add-member');
+      const error = form.querySelector('span.error');
+      if (error !== null)
+      {
+        error.remove();
+      }
+  
+      if (json.error)
+      {
+        const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        form.appendChild(span);
+        return;
+      }
+  
+      const member = document.createElement('article');
+  
+      member.classList.add('member');
+      member.setAttribute('data-id', json.id);
+  
+      const header = document.createElement('header');
+      header.classList.add('flex', 'justify-start');
+      const img = document.createElement('img');
+      img.classList.add('h-fit', 'aspect-square', 'mx-1');
+      const h4 = document.createElement('h4');
+      const a = document.createElement('a');
+      a.href = '/members/' + json.username;
+      a.textContent = json.username;
+      img.src = json.picture;
+      
+      h4.appendChild(a);
+      header.appendChild(img);
+      header.appendChild(h4);
+  
+      member.appendChild(header);
+  
+      ul.appendChild(member);
+    });
+   
   }
 
   async function sendAddMemberToWorld(event){
@@ -291,7 +305,7 @@ function addEventListeners() {
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
-
+    
     console.log('/api/tasks/' + id + '/' + username);
     const response = await fetch('/api/tasks/' + id + '/' + username, {
       method: 'POST',
@@ -789,7 +803,7 @@ function getIdsHandler(json){
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
   
-  Pusher.logToConsole = true;
+  Pusher.logToConsole = false;
   
   
     const pusher = new Pusher("11f57573d00ddf0021b9", {
@@ -806,18 +820,21 @@ function pusherNotifications(projectContainer, worldContainer){
       
       
       const channelWorld = pusher.subscribe('World' + world_id);
-      bindEvent(channelWorld, 'CreateProjectNotification', function(data){
+      bindEvent(channelWorld, 'ProjectNotification', function(data){
+        alert(JSON.stringify(data.message));
+      });
+      bindEvent(channelWorld, 'WorldNotification', function(data){
         alert(JSON.stringify(data.message));
       });
     }
     for(let i = 0; i < projectContainer.length; i++){
       const project_id = projectContainer[i];
       const channelProject = pusher.subscribe('Project' + project_id);
-      bindEvent(channelProject, 'CreateTaskNotification', function(data){
+      bindEvent(channelProject, 'TaskNotification', function(data){
         alert(JSON.stringify(data.message));
       });
 
-      bindEvent(channelProject, 'CreateTagNotification', function(data){
+      bindEvent(channelProject, 'TagNotification', function(data){
         alert(JSON.stringify(data.message));
       });
     }

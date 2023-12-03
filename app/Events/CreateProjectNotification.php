@@ -37,6 +37,6 @@ class CreateProjectNotification implements ShouldBroadcast
     }
     public function broadcastAs()
     {
-        return 'CreateProjectNotification';
+        return 'ProjectNotification';
     }
 }

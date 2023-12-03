@@ -61,6 +61,7 @@ class ProjectController extends Controller
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
+            
             return response()->json([
                 'error' => false,
                 'id' => $member->id,

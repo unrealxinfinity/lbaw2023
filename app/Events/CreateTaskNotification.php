@@ -22,10 +22,10 @@ class CreateTaskNotification implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct($task_name,$project_id)
+    public function __construct($message,$project_id)
     {
         $this->project_id = $project_id;
-        $this->message = "Task " . $task_name ." created!";
+        $this->message = $message;
     }
 
     /**
@@ -39,7 +39,7 @@ class CreateTaskNotification implements ShouldBroadcast
     }
 
     public function broadcastAs() {
-        return "CreateTaskNotification";
+        return "TaskNotification";
     }
 
 }

@@ -71,7 +71,7 @@ class TaskController extends Controller
         $task->priority = $fields['priority'];
         
         $task->save();
-
+        NotificationController::TaskNotification($task,$task->project_id,'Edited');
         return redirect()->back()->withSuccess('Task edited');
     }
 
@@ -101,7 +101,8 @@ class TaskController extends Controller
 
         try {
             $member->tasks()->attach($task_id);
-            NotificationController::TaskNotification($task,$task->project_id,'Assigned to member '.$username);
+            dd("assigning");
+            NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);
             return response()->json([
                 'error' => false,
                 'id' => $member->id,

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Project;
+use App\Models\World;
 use App\Events\CreateProjectNotification;
 use App\Events\CreateTagNotification;
 use App\Events\CreateTaskNotification;
@@ -94,7 +95,7 @@ class NotificationController extends Controller
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              } 
-            event(new CreateTaskNotification($task->title,$project_id));
+            event(new CreateTaskNotification($message,$project_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -117,13 +118,36 @@ class NotificationController extends Controller
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              }
-             event(new CreateTagNotification($tag->name,$project_id));
+             event(new CreateTagNotification($message,$project_id));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
         }
     }
+
+    static function WorldNotification(World $world, string $action){
+        DB::beginTransaction();
+        try {
+            $message = $action.' World '.$world->name.'!';
+            $notification = Notification::create([
+                'text' => $message,
+                'level' => 'Medium',
+                'world_id' => $world->id,
+                'project_id' => null,
+                'task_id' => null,
+            ]);
+            foreach($world->members as $member){
+                $member->notifications()->attach($notification->id);
+             }
+             event(new CreateWorldNotification($message,$world->id));
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
 
     
     

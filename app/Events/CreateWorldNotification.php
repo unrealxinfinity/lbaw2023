@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CreateWorld
+class CreateWorldNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,10 +19,10 @@ class CreateWorld
     /**
      * Create a new event instance.
      */
-    public function __construct($world_name,$world_id)
+    public function __construct($message,$world_id)
     {
         $this->world_id = $world_id;
-        $this->message = "World " . $world_name ." created";
+        $this->message = $message;
     }
 
     /**
@@ -33,10 +33,10 @@ class CreateWorld
     public function broadcastOn(): array
     {
         return [
-            'CreateWorldOn'.$this->world_id,
+            'World'.$this->world_id,
         ];
     }
     public function broadcastAs() {
-        return "worldCreated";
+        return "WorldNotification";
     }
 }

@@ -19,10 +19,10 @@ class CreateTagNotification implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct($tag_name,$project_id)
+    public function __construct($message,$project_id)
     {    
         $this->project_id = $project_id;
-        $this->message= "Tag " . $tag_name ." created";
+        $this->message= $message;
     }
 
     /**
@@ -36,6 +36,6 @@ class CreateTagNotification implements ShouldBroadcast
     }
 
     public function broadcastAs() {
-        return 'CreateTagNotification';
+        return 'TagNotification';
     }
 }
