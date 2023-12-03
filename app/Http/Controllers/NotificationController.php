@@ -53,7 +53,7 @@ class NotificationController extends Controller
             else{
                 $level='Medium';
             }
-            $message = $action.' Project '.$project->name.'!';
+            $message = $action.' Project '."'".$project->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -85,7 +85,7 @@ class NotificationController extends Controller
             else{
                 $level='Medium';
             }
-            $message = $action.' Task '.$task->title.'!';
+            $message = $action.' Task '."'".$task->title."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -108,7 +108,7 @@ class NotificationController extends Controller
         $project = Project::find($project_id);
         DB::beginTransaction();
         try {
-            $message = $action.' Tag '.$tag->name.'!';
+            $message = $action.' Tag '."'".$tag->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => 'Low',
@@ -130,7 +130,7 @@ class NotificationController extends Controller
     static function WorldNotification(World $world, string $action){
         DB::beginTransaction();
         try {
-            $message = $action.' World '.$world->name.'!';
+            $message = $action.' World '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => 'Medium',

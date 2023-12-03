@@ -629,13 +629,19 @@ async function sendShowNotificationsRequest(ev) {
 
 function ShowNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
+  const notificationPopup = document.getElementById('notificationArea');
+
   let notifications = json.notifications;
   popup.innerHTML = "";
   for(let notification of notifications){    
     let notificationText = document.createElement('p');
+    notificationText.classList.add('text-black'); 
     let notificationPriority = document.createElement('p');
+    notificationPriority.classList.add('text-black');
     let notificationDate= document.createElement('p');
+    notificationDate.classList.add('text-black');
     let notificationContainer = document.createElement('div');
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
     notificationText.textContent = notification.text;
     notificationPriority.textContent = notification.level;
     notificationDate.textContent = notification.date_;
@@ -644,6 +650,8 @@ function ShowNotificationsHandler(json){
     notificationContainer.appendChild(notificationDate);
     popup.appendChild(notificationContainer);
   }
+  notificationPopup.classList.toggle('hidden');
+
 }
 
   function sendItemUpdateRequest() {
@@ -816,9 +824,13 @@ async function sendClearNotificationsRequest(ev){
 function clearNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
   popup.innerHTML = "";
+  let notificationContainer = document.createElement('div');
+  notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-2', 'rounded-lg', 'bg-white');
   let notificationText = document.createElement('p');
+  notificationText.classList.add('text-black');
   notificationText.textContent = json.message;
-  popup.appendChild(notificationText);
+  notificationContainer.appendChild(notificationText);
+  popup.appendChild(notificationContainer);
 
 }
  // Get member belongings in ajax on every page load for pusher notifications
@@ -876,6 +888,7 @@ function pusherNotifications(projectContainer, worldContainer){
       const channelWorld = pusher.subscribe('World' + world_id);
       bindEvent(channelWorld, 'ProjectNotification', function(data){
         alert(JSON.stringify(data.message));
+        
       });
       bindEvent(channelWorld, 'WorldNotification', function(data){
         alert(JSON.stringify(data.message));

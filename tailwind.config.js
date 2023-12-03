@@ -41,11 +41,17 @@ export default {
         '4xl': '2rem',
       },
       transitionProperty: {
-        'width': 'width'
+        'width': 'width',
+        'height': 'height',
+        'opacity': 'opacity',
+      },
+      transitionTimingFunction: {
+        'ease': 'ease',
       },
       backgroundImage: {
         'mine': "url('/resources/img/dark.png')"
       },
+      
     }
   },
   plugins: [
