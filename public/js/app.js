@@ -679,7 +679,7 @@ function removeMemberFromWorldHandler(data) {
   console.log(data);
   let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
-  let form = document.querySelector('form#remove-member-world [data-id="' + data.member_id + '"]');
+  let form = document.querySelector('form#remove-member-world[data-id="' + data.member_id + '"]');
   form.remove();
 }
 
@@ -713,7 +713,7 @@ async function sendRemoveMemberFromProjectRequest(ev) {
 function removeMemberFromProjectHandler(data) {
   let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
-  let form = document.querySelector('form#remove-member-project [data-id="' + data.member_id + '"]');
+  let form = document.querySelector('form#remove-member-project[data-id="' + data.member_id + '"]');
   form.remove();
 }
 
