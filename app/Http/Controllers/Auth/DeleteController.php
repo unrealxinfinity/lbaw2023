@@ -25,7 +25,7 @@ class DeleteController extends Controller
         $member->birthday = null;
         $member->description = null;
         $member->email = null;
-        $member->picture = 'deleted';
+        $member->picture = null;
 
         $member->save();
         $persistentUser->save();
