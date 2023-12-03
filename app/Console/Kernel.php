@@ -15,11 +15,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function() {
-            $tomorrow = date_add(date_time_set(new DateTime(), 0, 0), new DateInterval("P1D"));
-            $tasks = Task::all();
+            error_log("hello1");
+            $today = new \DateTime();
+            error_log("hello2");
+            $tomorrow = date_add(date_time_set(new \DateTime(), 0, 0), new \DateInterval("P1D"));
+            error_log("hello3");
+            $tasks = Task::all()->toArray();
+            error_log("hello4");
             $tasks = array_filter($tasks, function($task) {
-                return (new DateTime($task->due_at)) == $tomorrow;
+                return (new \DateTime($task['due_at'])) == $tomorrow;
             });
+            error_log("hello5");
             foreach ($tasks as $task) {
                 $notification = Notification::create([
                     'text' => "Task $task->title due tomorrow!",
@@ -31,7 +37,7 @@ class Kernel extends ConsoleKernel
                     $assignee->notifications()->attach($notification->id);
                 }
             }
-        })->daily();
+        })->everySecond();
     }
 
     /**
