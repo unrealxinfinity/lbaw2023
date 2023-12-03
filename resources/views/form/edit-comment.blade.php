@@ -7,4 +7,5 @@
 
     <input type="text" id="comment-text" name="text" value="{{ $comment->content }}" required>
     <input class="button" type="submit" value="Edit">
+    <button type="button" class="close-edit button">Cancel</button>
 </form>

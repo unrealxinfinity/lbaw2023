@@ -44,6 +44,11 @@ function addEventListeners() {
       editorShow.addEventListener('click', showEditComment);
     });
 
+    let editorHides = document.querySelectorAll('button.close-edit');
+    [].forEach.call(editorHides, function(editorHide) {
+       editorHide.addEventListener('click', hideEditComment);
+    });
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -128,6 +133,13 @@ function addEventListeners() {
     this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
     this.closest('article').querySelector('div.comment-edit').classList.remove('hidden');
     this.classList.add('hidden');
+  }
+
+  function hideEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.remove('hidden');
+    this.closest('div.comment-edit').classList.add('hidden');
+    this.closest('article').querySelector('button.show-edit').classList.remove('hidden');
   }
 
   function bigBoxDragOverHandler(ev) {
