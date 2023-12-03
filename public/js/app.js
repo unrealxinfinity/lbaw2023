@@ -349,6 +349,69 @@ function addEventListeners() {
    
   }
 
+  function addMemberToWorldHandler(json) {
+    const list = document.querySelectorAll('ul.members');
+    [].forEach.call(list, function(ul) {
+      const form = document.querySelector('form.add-member');
+      const error = form.querySelector('span.error');
+      if (error !== null)
+      {
+        error.remove();
+      }
+  
+      if (json.error)
+      {
+        const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        form.appendChild(span);
+        return;
+      }
+  
+      const member = document.createElement('article');
+  
+      member.classList.add('member');
+      member.setAttribute('data-id', json.id);
+  
+      const header = document.createElement('header');
+      header.classList.add('flex', 'justify-start');
+      const img = document.createElement('img');
+      img.classList.add('h-fit', 'aspect-square', 'mx-1');
+      const h4 = document.createElement('h4');
+      const a = document.createElement('a');
+      a.href = '/members/' + json.username;
+      a.textContent = json.username;
+      img.src = json.picture;
+      
+      h4.appendChild(a);
+      header.appendChild(img);
+      header.appendChild(h4);
+  
+      member.appendChild(header);
+
+      const removeForm = document.createElement('form');
+      removeForm.id= 'remove-member-world';
+      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      removeForm.innerHTML = `
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" class="id" name="id" value="${json.world_id}">
+        <input type="hidden" class="username" name="username" value="${json.username}">
+        <input type="submit" value="X">
+      `;
+
+      member.appendChild(removeForm);
+      removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+
+  
+      ul.appendChild(member);
+    });
+   
+  }
+
   async function sendAddMemberToWorld(event){
       event.preventDefault();
 
@@ -370,7 +433,7 @@ function addEventListeners() {
 
       const json = await response.json();
 
-      if (response.status !== 500) addMemberWorldHandler(json)
+      if (response.status !== 500) addMemberToWorldHandler(json)
   }
 
   async function sendAssignMemberRequest(event) {
@@ -613,6 +676,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
 }
 
 function removeMemberFromWorldHandler(data) {
+  console.log(data);
   let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
   element.remove();
   let form = document.querySelector('form#remove-member-world [data-id="' + data.member_id + '"]');
