@@ -36,7 +36,6 @@
                         <input name="type" type="hidden" value="world">
                         <input class="button w-min" type="submit" value="Upload world picture">
                     </form>
-                    @include('form.delete-world', ['world' => $world])
             </div>
             @include('form.world-edit', ['world'=>$world])
             @endcan

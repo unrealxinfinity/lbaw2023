@@ -1,5 +1,5 @@
-<form id="delete-world" class ="form-post" method="POST" action="{{ route('delete-world',['id'=> $world->id]) }}">
+<form id="delete-world" method="POST" action="{{ route('delete-world',['id'=> $world->id]) }}">
     @csrf
     @method('DELETE')
-    <button class="button" id="deleteWorldButton" type="submit">Delete World</button>
+    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" id="deleteWorldButton" type="submit">Delete World</button>
 </form>
