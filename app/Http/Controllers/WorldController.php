@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\LeaveWorldRequest;
 use App\Http\Requests\RemoveMemberFromWorldRequest;
-use App\Http\Requests\WorldCommentRequest;
 use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
@@ -128,7 +128,7 @@ class WorldController extends Controller
         }
     }
 
-    public function comment(WorldCommentRequest $request, string $id): RedirectResponse
+    public function comment(CommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
 

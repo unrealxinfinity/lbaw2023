@@ -2,6 +2,7 @@
     @csrf
 
     <input type="hidden" name="member" @if (Auth::user()->persistentUser->type_ === 'Member') value="{{ Auth::user()->persistentUser->member->id }}" @endif>
+    <input type="hidden" name="type" value="{{ $type }}">
 
     <label for="comment-text">Leave a comment!</label>
     @if ($errors->has('text'))

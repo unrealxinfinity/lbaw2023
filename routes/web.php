@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\DeleteController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
@@ -148,6 +149,10 @@ Route::controller(TaskController::class)->group(function () {
     Route::put('/api/tasks/{id}', 'move');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
+});
+
+Route::controller(CommentController::class)->group(function () {
+   Route::put('/comments/{id}', 'edit')->name('edit-comment');
 });
 
 // Authentication
