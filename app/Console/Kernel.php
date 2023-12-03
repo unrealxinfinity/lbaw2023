@@ -15,25 +15,21 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function() {
-            error_log("hello1");
-            $today = new \DateTime();
-            error_log("hello2");
-            $tomorrow = date_add(date_time_set(new \DateTime(), 0, 0), new \DateInterval("P1D"));
-            error_log("hello3");
-            $tasks = Task::all()->toArray();
-            error_log("hello4");
-            $tasks = array_filter($tasks, function($task) {
-                return (new \DateTime($task['due_at'])) == $tomorrow;
+            $tasks = Task::all()->reject(function (Task $task) {
+                $tomorrow = date_add(date_time_set(new \DateTime(), 0, 0), new \DateInterval("P1D"));
+                return (new \DateTime($task->due_at)) != $tomorrow;
             });
-            error_log("hello5");
             foreach ($tasks as $task) {
+                error_log($task->title);
                 $notification = Notification::create([
-                    'text' => "Task $task->title due tomorrow!",
+                    'text' => "Task '$task->title' due tomorrow!",
                     'level' => 'High',
                     'task_id' => $task->id
                 ]);
+                error_log($notification->id);
 
-                foreach ($tasks->assigned as $assignee) {
+                foreach ($task->assigned as $assignee) {
+                    error_log("hello7");
                     $assignee->notifications()->attach($notification->id);
                 }
             }
