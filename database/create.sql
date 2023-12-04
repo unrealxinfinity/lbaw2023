@@ -705,7 +705,7 @@ INSERT INTO member_world (member_id, world_id, is_admin) VALUES
     (1, 1, true),
     (2, 1, false),
     (2, 2, true),
-    (3, 2, false);
+    (3, 2, true);
 
 -- Sample data for the 'world_timeline' table
 INSERT INTO world_timeline (date_, description, world_id) VALUES

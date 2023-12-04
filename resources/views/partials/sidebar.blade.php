@@ -5,17 +5,28 @@
     <h1>Members</h1>
     <ul class="members mr-5">
         @if ($type == 'project')
+        <div id="project-leaders">
             <h2 class="text-grey font-semibold"> Project Leaders </h2>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
-                @include('partials.member', ['member' => $member, 'main' => false])
+                <div class="flex justify-between">
+                    @include('partials.member', ['member' => $member, 'main' => false])
+                    @can('removeLeader', $thing)
+                        @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                    @endcan
+                </div>
             @endforeach
+        </div>
+        <div id="members">
             <h2 class="mt-5 text-grey font-semibold"> Members </h2>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
-                @include('partials.member', ['member' => $member, 'main' => false])
-                @if (Auth::check() && Auth::user()->persistentUser->member->projects->where('id', $thing->id)->first()->pivot->permission_level=="Project Leader")
-                    @include('form.remove-member', ['thing' => $thing, 'member' => $member])
-                @endif
+                <div class="flex justify-between">
+                    @include('partials.member', ['member' => $member, 'main' => false])
+                    @can('removeMember', $thing)
+                        @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                    @endcan
+                </div>
             @endforeach
+        </div>
         @endif
         @if ($type == 'world')
             <h2 class="text-grey font-semibold"> World Owner </h2>
@@ -26,9 +37,9 @@
                     <div class="flex justify-between">
                         @if ($member->id != $thing->owner()->get()->first()->id)
                             @include('partials.member', ['member' => $member, 'main' => false])
-                            @if(Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $thing->id) && Auth::user()->persistentUser->member->id == $thing->owner()->get()->first()->id)
+                            @can('removeAdmin', $thing)
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
-                        @endif
+                            @endcan
                         @endif
                     </div>
                 @endforeach
@@ -38,9 +49,9 @@
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
                     <div class="flex justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
-                        @if(Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $thing->id) && Auth::user()->persistentUser->member->worlds->where('id', $thing->id)->first()->pivot->is_admin)
+                        @can('removeMember', $thing)
                             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
-                        @endif
+                        @endcan
                     </div>
                 @endforeach
             </div>

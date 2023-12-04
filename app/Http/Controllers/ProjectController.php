@@ -74,18 +74,21 @@ class ProjectController extends Controller
 
         try
         {
-            $is_admin = $member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
-            $type = $is_admin ? 'World Administrator' : $fields['type'];
+            $am_admin = Auth::user()->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
+            $am_leader = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
+            $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
-            
+            $can_remove = (($fields['type']=='Project Leader' && $am_admin) || ($fields['type']=='Member' && $am_leader));
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
                 'project_id' => $project->id,
-                'picture' => $member->picture
+                'picture' => $member->picture,
+                'is_leader' => $fields['type']=='Project Leader',
+                'can_remove' => $can_remove
             ]);
         } catch (\Exception $e)
         {

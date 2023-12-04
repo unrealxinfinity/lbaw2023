@@ -40,8 +40,16 @@ class ProjectPolicy
     {
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
-        return (!$is_disabled && $is_leader);
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $project->world_id) &&$user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
+        return (!$is_disabled && ($is_leader || $is_world_admin));
+    }
+    public function removeLeader(User $user, Project $project): bool
+    {
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $project->world_id) &&$user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
+        return (!$is_disabled && $is_world_admin);
     }
 
     public function leave(User $user, Project $project): bool

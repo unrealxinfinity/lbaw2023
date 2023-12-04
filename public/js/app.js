@@ -297,6 +297,7 @@ function addEventListeners() {
     });
 
     const json = await response.json();
+    console.log(json);
     
     if (response.status !== 500) addMemberHandler(json);
   }
@@ -343,10 +344,29 @@ function addEventListeners() {
       header.appendChild(h4);
   
       member.appendChild(header);
-  
-      ul.appendChild(member);
+
+      const removeForm = document.createElement('form');
+      removeForm.id= 'remove-member-world';
+      removeForm.setAttribute('data-id', json.id);
+      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      removeForm.innerHTML = `
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" class="id" name="id" value="${json.project_id}">
+        <input type="hidden" class="username" name="username" value="${json.username}">
+        <button type="submit"> &times; </button>
+      `;
+
+      const div = document.createElement('div');
+      div.classList.add("flex", "justify-between");
+      div.appendChild(member);
+      if (json.can_remove) {
+      div.appendChild(removeForm);
+      removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+      }
+      let section = json.is_leader=='true'? ul.querySelector('#project-leaders'):ul.querySelector('#members'); 
+      section.appendChild(div);
     });
-   
   }
 
   function addMemberToWorldHandler(json) {
@@ -393,13 +413,13 @@ function addEventListeners() {
       member.appendChild(header);
 
       const removeForm = document.createElement('form');
-      removeForm.id= 'remove-member-world';
+      removeForm.id= 'remove-member-project';
       removeForm.setAttribute('data-id', json.id);
       let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
       removeForm.innerHTML = `
         <input type="hidden" name="_token" value="${csrfToken}">
-        <input type="hidden" class="id" name="id" value="${json.world_id}">
+        <input type="hidden" class="id" name="id" value="${json.project_id}">
         <input type="hidden" class="username" name="username" value="${json.username}">
         <button type="submit"> &times; </button>
       `;
@@ -414,7 +434,6 @@ function addEventListeners() {
       let section = json.is_admin=='true'? ul.querySelector('#world-admins'):ul.querySelector('#members'); 
       section.appendChild(div);
     });
-   
   }
 
   async function sendAddMemberToWorld(event){
