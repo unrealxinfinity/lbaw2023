@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
 use App\Models\User;
@@ -126,5 +127,31 @@ class MemberController extends Controller
             'projects_ids' => $projects
         ]);
 
+    }
+
+    public function block(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $user = User::where('username', $username)->firstOrFail();
+
+        $user->persistentUser->type_ = 'Blocked';
+        $user->persistentUser->save();
+
+        return redirect()->back()->withSuccess('User blocked')->withFragment($username);
+    }
+
+    public function unblock(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $user = User::where('username', $username)->firstOrFail();
+
+        if ($user->persistentUser->type_ == 'Blocked') {
+            $user->persistentUser->type_ = 'Member';
+            $user->persistentUser->save();
+        }    
+
+        return redirect()->back()->withSuccess('User unblocked')->withFragment($username);
     }
 }

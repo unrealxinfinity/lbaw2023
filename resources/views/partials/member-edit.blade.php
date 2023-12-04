@@ -1,4 +1,4 @@
-<article class="member" data-id="{{ $member->id }}">
+<article class="member" data-id="{{ $member->id }}" id="{{ $member->persistentUser->user->username }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start sm:h-48 h-24 m-5">
         <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
@@ -93,5 +93,12 @@
         @endif
 
         <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
+        @if (Auth::user()->persistentUser->type_ == 'Administrator')
+            @if ($member->persistentUser->type_ != 'Blocked')
+                <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+            @else
+                <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
+            @endif
+        @endif
     </form>
 </article>
