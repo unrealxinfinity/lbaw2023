@@ -48,7 +48,6 @@ CREATE TABLE  members(
   picture VARCHAR,
   email VARCHAR,
   token VARCHAR,
-  invite_token VARCHAR,
   UNIQUE(email),
   user_id INT NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
