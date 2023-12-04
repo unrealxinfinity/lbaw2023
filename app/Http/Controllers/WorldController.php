@@ -19,6 +19,8 @@ use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
+use App\Mail\MailModel;
+use Illuminate\Support\Facades\Mail;
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -96,6 +98,28 @@ class WorldController extends Controller
             ]);
         }
     }
+
+    public function invite(AddMemberToWorldRequest $request,string $world_id, string $username): RedirectResponse
+    {   
+        $fields = $request->validated();
+
+        $world = World::findOrFail($world_id);
+
+        $member = User::where('username', $username)->first()->persistentUser->member;
+
+        $inviteToken = bin2hex(random_bytes(32));
+        $member->invite_token = $inviteToken;
+        $member->save();
+
+        $mailData = [
+            'name' => $member->name,
+            'link' => env('APP_URL') . '/invite?id=' . $member->id . '&adm='. $fields['type'] . '&wid' . $world_id . '&token=' . $inviteToken
+        ];
+
+        Mail::to($member->email)->send(new MailModel($mailData));
+        return redirect()->back()->withSuccess('User invited to the world.');
+    }
+
 
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
     {   
