@@ -1,4 +1,4 @@
-<form id="add-member-to-world" class="add-member form-post">
+<form class="form-post" action="invite-world">
     @csrf
     Invite member:
     <input type="hidden" class="id" name="id" value="{{ $world->id }}">
@@ -9,5 +9,5 @@
         <option value="true">World Administrator</option>
     </select>
     
-    <input class="button" type="submit" value="Add a member">
+    <input class="button" type="submit" value="Invite">
 </form>
