@@ -40,7 +40,7 @@ class ProjectPolicy
     {
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return (!$is_disabled && $is_leader);
     }
 
