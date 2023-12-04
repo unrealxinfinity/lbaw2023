@@ -141,6 +141,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/create-world', 'showCreateWorld')->name('world-create');
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
+    Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
 });
 
 Route::controller(TaskController::class)->group(function () {

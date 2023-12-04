@@ -138,6 +138,20 @@ class MemberController extends Controller
         $user->persistentUser->type_ = 'Blocked';
         $user->persistentUser->save();
 
-        return redirect()->back()->withSuccess('User blocked');
+        return redirect()->back()->withSuccess('User blocked')->withFragment($username);
+    }
+
+    public function unblock(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $user = User::where('username', $username)->firstOrFail();
+
+        if ($user->persistentUser->type_ == 'Blocked') {
+            $user->persistentUser->type_ = 'Member';
+            $user->persistentUser->save();
+        }    
+
+        return redirect()->back()->withSuccess('User unblocked')->withFragment($username);
     }
 }

@@ -1,4 +1,4 @@
-<article class="member" data-id="{{ $member->id }}">
+<article class="member" data-id="{{ $member->id }}" id="{{ $member->persistentUser->user->username }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start sm:h-48 h-24 m-5">
         <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
@@ -94,9 +94,19 @@
 
         <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
     </form>
-    <form method="POST" action="/members/{{ $member->persistentUser->user->username }}/block">
-        @csrf
-        @method('POST')
-        <input type="submit" class="button" value="Block">
-    </form>
+    @if (Auth::user()->persistentUser->type_ == 'Administrator')
+        @if ($member->persistentUser->type_ != 'Blocked')
+            <form method="POST" action="/members/{{ $member->persistentUser->user->username }}/block">
+                @csrf
+                @method('POST')
+                <input type="submit" class="button" value="Block">
+            </form>
+        @else
+            <form method="POST" action="/members/{{ $member->persistentUser->user->username }}/unblock">
+                @csrf
+                @method('POST')
+                <input type="submit" class="button" value="Unblock">
+            </form>
+        @endif
+    @endif
 </article>
