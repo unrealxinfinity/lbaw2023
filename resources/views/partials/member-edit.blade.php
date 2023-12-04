@@ -94,4 +94,9 @@
 
         <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
     </form>
+    <form method="POST" action="/members/{{ $member->persistentUser->user->username }}">
+        @csrf
+        @method('POST')
+        <input type="submit" class="button" value="Block">
+    </form>
 </article>
