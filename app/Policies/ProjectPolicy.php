@@ -92,10 +92,15 @@ class ProjectPolicy
 
     public function projectTagCreate(User $user,Project $project): bool
     {   
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
+        return (!$is_disabled && $is_member);
     }
     public function searchTask(User $user): bool
     {   
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        return $is_disabled;
     }
 }
