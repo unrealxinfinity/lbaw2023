@@ -39,6 +39,11 @@ class WorldPolicy
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
 
+    public function join(User $user, World $world): bool
+    {
+        return ($user->persistentUser->type_ === 'Member');
+    }
+
     public function removeMember(User $user, World $world): bool
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
