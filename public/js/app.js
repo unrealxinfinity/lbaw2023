@@ -58,7 +58,6 @@ function addEventListeners() {
     button.addEventListener("click", addTagRequest);
     
     let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
-    console.log(worldMemberAdder);
     if (worldMemberAdder != null){
       [].forEach.call(worldMemberAdder, function(form) {
         form.addEventListener('submit', sendAddMemberToWorld);
@@ -297,7 +296,6 @@ function addEventListeners() {
     });
 
     const json = await response.json();
-    console.log(json);
     
     if (response.status !== 500) addMemberHandler(json);
   }
@@ -337,7 +335,7 @@ function addEventListeners() {
       a.href = '/members/' + json.username;
       a.textContent = json.username;
       console.log(json.picture);
-      img.src = URL.createObjectURL(json.picture);
+      img.src = json.picture;
       
       h4.appendChild(a);
       header.appendChild(img);

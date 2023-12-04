@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 class ProjectController extends Controller
 {
@@ -74,13 +75,11 @@ class ProjectController extends Controller
 
         try
         {
-            $am_admin = Auth::user()->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
-            $am_leader = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
             $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
+            $can_remove = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
-            $can_remove = (($fields['type']=='Project Leader' && $am_admin) || ($fields['type']=='Member' && $am_leader));
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
