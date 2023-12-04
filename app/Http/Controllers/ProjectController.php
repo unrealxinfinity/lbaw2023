@@ -16,8 +16,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     public function show(string $id): View
