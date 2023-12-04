@@ -11,6 +11,15 @@
     </form>
     <section id="members">
         @each('partials.member-edit', $members, 'member')
+        <div class="flex ml-auto mr-auto">
+            <a href="#" class="button">
+              Previous
+            </a>
+          
+            <a href="#" class="button">
+              Next
+            </a>
+          </div>
         @include('form.createaccount')
     </section>
 @endsection
