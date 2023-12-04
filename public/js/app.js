@@ -346,7 +346,7 @@ function addEventListeners() {
       member.appendChild(header);
 
       const removeForm = document.createElement('form');
-      removeForm.id= 'remove-member-world';
+      removeForm.id= 'remove-member-project';
       removeForm.setAttribute('data-id', json.id);
       let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
