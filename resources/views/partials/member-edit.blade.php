@@ -93,20 +93,12 @@
         @endif
 
         <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
-    </form>
-    @if (Auth::user()->persistentUser->type_ == 'Administrator')
-        @if ($member->persistentUser->type_ != 'Blocked')
-            <form method="POST" action="/members/{{ $member->persistentUser->user->username }}/block">
-                @csrf
-                @method('POST')
-                <input type="submit" class="button" value="Block">
-            </form>
-        @else
-            <form method="POST" action="/members/{{ $member->persistentUser->user->username }}/unblock">
-                @csrf
-                @method('POST')
-                <input type="submit" class="button" value="Unblock">
-            </form>
+        @if (Auth::user()->persistentUser->type_ == 'Administrator')
+            @if ($member->persistentUser->type_ != 'Blocked')
+                <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+            @else
+                <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
+            @endif
         @endif
-    @endif
+    </form>
 </article>
