@@ -113,6 +113,7 @@ class WorldController extends Controller
 
         $mailData = [
             'name' => $member->name,
+            'world_name' => $world->name,
             'link' => env('APP_URL') . '/invite?id=' . $member->id . '&adm='. $fields['type'] . '&wid' . $world_id . '&token=' . $inviteToken
         ];
 
