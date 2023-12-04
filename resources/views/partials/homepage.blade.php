@@ -12,7 +12,7 @@
         @php
             $translateXValue = (strlen($task->title)>15)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
-        <div class="title"><a class="{{$translateXValue}}" href="/tasks/{{ $task->id }}">{{ $task->title }}</a></div>
+        <div class="title"><a class="{{$translateXValue}}" @if (Auth::user()->persistentUser->type_ != 'Blocked') href="/tasks/{{ $task->id }}" @endif>{{ $task->title }}</a></div>
         <div class="desc"><h4>{{ $task->description }}</h4></div>
     </div>
     @endforeach
@@ -28,14 +28,14 @@
         @php
             $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
-        <div class="title"><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></div>
+        <div class="title"><a class="{{$translateXValue}}" @if (Auth::user()->persistentUser->type_ != 'Blocked') href="/projects/{{ $project->id }}" @endif>{{ $project->name }}</a></div>
         <div class="desc"><h4>{{ $project->description }}</h4></div>
     </div>
     @endforeach
     </div>
     @endif
     @if(count($worlds) > 0)
-    <h1> MY CURRENT WORLDS <a class="round-button" href="/create-world">+</a></h1> 
+    <h1> MY CURRENT WORLDS @if (Auth::user()->persistentUser->type_ != 'Blocked') <a class="round-button" href="/create-world">+</a> @endif </h1> 
     <div class="panel">
     @foreach($worlds as $world)
     <div class="container worldsContainer" data-id="{{$world->id}}">
@@ -43,7 +43,7 @@
         @php
             $translateXValue = (strlen($world->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
         @endphp
-        <div class="title"><a class="{{$translateXValue}}" href="/worlds/{{ $world->id }}">{{ $world->name }}</a></div>
+        <div class="title"><a class="{{$translateXValue}}" @if (Auth::user()->persistentUser->type_ != 'Blocked') href="/worlds/{{ $world->id }}" @endif>{{ $world->name }}</a></div>
         <div class="desc"><h4>{{ $world->description }}</h4></div>
     </div>
     @endforeach
