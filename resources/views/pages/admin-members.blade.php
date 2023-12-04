@@ -11,12 +11,12 @@
     </form>
     <section id="members">
         @each('partials.member-edit', $members, 'member')
-        <div class="flex ml-auto mr-auto">
-            <a href="#" class="button">
+        <div id="pagination" class="flex ml-auto mr-auto">
+            <a href="#" class="button" id="prev-page">
               Previous
             </a>
           
-            <a href="#" class="button">
+            <a href="#" class="button" id="next-page">
               Next
             </a>
           </div>
