@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
 use App\Models\User;
@@ -126,5 +127,17 @@ class MemberController extends Controller
             'projects_ids' => $projects
         ]);
 
+    }
+
+    public function block(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $member = Member::where('username', $username)->firstOrFail();
+
+        $member->persistentUser->type_ = 'Blocked';
+        $member->save();
+
+        return redirect()->back()->withSuccess('User blocked');
     }
 }
