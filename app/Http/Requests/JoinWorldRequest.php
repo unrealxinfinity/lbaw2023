@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Models\World;
 
 
 class JoinWorldRequest extends FormRequest
@@ -14,7 +16,7 @@ class JoinWorldRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::user()->can('join', World::findOrFail($this->world_id));
     }
 
     /**
