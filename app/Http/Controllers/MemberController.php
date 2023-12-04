@@ -133,10 +133,10 @@ class MemberController extends Controller
     {
         $request->validated();
 
-        $member = Member::where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
 
-        $member->persistentUser->type_ = 'Blocked';
-        $member->save();
+        $user->persistentUser->type_ = 'Blocked';
+        $user->persistentUser->save();
 
         return redirect()->back()->withSuccess('User blocked');
     }
