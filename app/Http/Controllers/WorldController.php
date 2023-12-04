@@ -72,13 +72,16 @@ class WorldController extends Controller
         $member = User::where('username', $username)->first()->persistentUser->member;
         try {
             $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-            NotificationController::WorldNotification($world,$member->name . ' added to ');
+            NotificationController::WorldNotification($world, $member->name . ' added to ');
+            $can_remove = (($fields['type']=='true' && Auth::user()->persistentUser->member->id == $world->owner_id) || ($fields['type']=='false' && Auth::user()->persistentUser->member->worlds()->where('id', $world_id)->first()->pivot->is_admin));
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
                 'world_id' => $world->id,
-                'picture' => $member->picture
+                'picture' => $member->picture,
+                'is_admin' => $fields['type'],
+                'can_remove' => $can_remove
             ]);
         } catch (\Exception $e) {
             return response()->json([

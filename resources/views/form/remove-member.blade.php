@@ -4,7 +4,7 @@
             @CSRF
             <input type="hidden" class="id" name="id" value={{ $thing->id}}>
             <input type="hidden" class="username" name="username" value={{ $member->persistentUser->user->username}}>
-            <input type="submit" value="X">
+            <button type="submit"> &times; </button>
         </form>
     @endif
 @elseif($thing instanceof App\Models\Project)
@@ -13,7 +13,7 @@
             @CSRF
             <input type="hidden" class="id" value={{ $thing->id}}>
             <input type="hidden" class="username" value={{ $member->persistentUser->user->username }}>
-            <input type="submit" value="X">
+            <button type="submit"> &times; </button>
         </form>
     @endif
 @endif

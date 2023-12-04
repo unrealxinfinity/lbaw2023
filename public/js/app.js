@@ -322,7 +322,6 @@ function addEventListeners() {
         form.appendChild(span);
         return;
       }
-  
       const member = document.createElement('article');
   
       member.classList.add('member');
@@ -336,7 +335,8 @@ function addEventListeners() {
       const a = document.createElement('a');
       a.href = '/members/' + json.username;
       a.textContent = json.username;
-      img.src = json.picture;
+      console.log(json.picture);
+      img.src = URL.createObjectURL(json.picture);
       
       h4.appendChild(a);
       header.appendChild(img);
@@ -394,20 +394,25 @@ function addEventListeners() {
 
       const removeForm = document.createElement('form');
       removeForm.id= 'remove-member-world';
+      removeForm.setAttribute('data-id', json.id);
       let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
       removeForm.innerHTML = `
         <input type="hidden" name="_token" value="${csrfToken}">
         <input type="hidden" class="id" name="id" value="${json.world_id}">
         <input type="hidden" class="username" name="username" value="${json.username}">
-        <input type="submit" value="X">
+        <button type="submit"> &times; </button>
       `;
 
-      member.appendChild(removeForm);
+      const div = document.createElement('div');
+      div.classList.add("flex", "justify-between");
+      div.appendChild(member);
+      if (json.can_remove == true) {
+      div.appendChild(removeForm);
       removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
-
-  
-      ul.appendChild(member);
+      }
+      let section = json.is_admin=='true'? ul.querySelector('#world-admins'):ul.querySelector('#members'); 
+      section.appendChild(div);
     });
    
   }
@@ -671,16 +676,8 @@ async function sendRemoveMemberFromWorldRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromWorldHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
-}
-
-function removeMemberFromWorldHandler(data) {
-  console.log(data);
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-world[data-id="' + data.member_id + '"]');
-  form.remove();
 }
 
 async function sendRemoveMemberFromProjectRequest(ev) {
@@ -706,15 +703,15 @@ async function sendRemoveMemberFromProjectRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromProjectHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
 }
 
-function removeMemberFromProjectHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-project[data-id="' + data.member_id + '"]');
-  form.remove();
+function removeMemberFromThingHandler(data) {
+  let element = document.querySelectorAll('ul.members [data-id="' + data.member_id + '"]');
+  [].forEach.call(element, function(member) {
+    member.remove();
+  });
 }
 
 
