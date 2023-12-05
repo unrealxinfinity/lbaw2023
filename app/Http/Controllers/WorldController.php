@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
+use App\Http\Requests\JoinWorldRequest;
 use App\Http\Requests\LeaveWorldRequest;
 use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Models\Invitation;
@@ -125,6 +126,17 @@ class WorldController extends Controller
 
         Mail::to($member->email)->send(new MailModel($mailData));
         return redirect()->back()->withSuccess('User invited to the world.');
+    }
+
+    public function join(JoinWorldRequest $request) : RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::findOrFail($fields['world_id']);
+        $member = User::where('id', $fields['id'])->first()->persistentUser->member;
+        $world->members()->attach($member->id, ['is_admin' => $fields['is_admin']]);
+
+        return redirect()->route('home')->withSuccess('You joined the world.');
     }
 
 
