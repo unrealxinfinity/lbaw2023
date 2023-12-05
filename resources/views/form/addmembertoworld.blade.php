@@ -1,7 +1,6 @@
-<form class="form-post" action="invite-world">
+<form class="form-post" action={{ route ('invite-world', ['id' => $world->id]) }}>
     @csrf
     Invite member:
-    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>
     What role?
     <select name="type" class="type" required>
