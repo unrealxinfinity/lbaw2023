@@ -104,36 +104,51 @@ class WorldController extends Controller
         }
     }
 
-    public function invite(AddMemberToWorldRequest $request): RedirectResponse
+    public function invite(AddMemberToWorldRequest $request, string $world_id): JsonResponse
     {   
         $fields = $request->validated();
-
-        $world = World::findOrFail($fields['world_id']);
-
+        $world = World::findOrFail($world_id);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
 
-        if($member->worlds->contains('id', $fields['world_id'])) return redirect()->back()->withError('User already in the world.');
+        try
+        {
+            if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
 
-        $inviteToken = bin2hex(random_bytes(32));
+            $inviteToken = bin2hex(random_bytes(32));
 
-        Invitation::create([
-            'token' => $inviteToken,
-            'world_id' => $fields['world_id'],
-            'member_id' => $member->id,
-            'type' => $fields['type']
-        ]);
-    
+            Invitation::create([
+                'token' => $inviteToken,
+                'world_id' => $world_id,
+                'member_id' => $member->id,
+                'type' => $fields['type']
+            ]);
+        
 
-        $mailData = [
-            'view' => 'emails.invite',
-            'name' => $member->name,
-            'world_name' => $world->name,
-            'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $fields['world_id'] . '&token=' . $inviteToken
-        ];
+            $mailData = [
+                'view' => 'emails.invite',
+                'name' => $member->name,
+                'world_name' => $world->name,
+                'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $world_id . '&token=' . $inviteToken
+            ];
 
-        Mail::to($member->email)->send(new MailModel($mailData));
+            Mail::to($member->email)->send(new MailModel($mailData));
 
-        return redirect()->back()->withSuccess('User invited to the world.');
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $fields['username'],
+                'world_id' => $world->id,
+                'is_admin' => $fields['type'],
+                'can_remove' => false
+            ]);
+        } catch (\Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'username' => $fields['username'],
+                'child' => 'world'
+            ]);
+        }
     }
 
     public function showInvite(): View
