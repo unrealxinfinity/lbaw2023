@@ -58,7 +58,6 @@ function addEventListeners() {
     button.addEventListener("click", addTagRequest);
     
     let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
-    console.log(worldMemberAdder);
     if (worldMemberAdder != null){
       [].forEach.call(worldMemberAdder, function(form) {
         form.addEventListener('submit', sendAddMemberToWorld);
@@ -334,6 +333,73 @@ function addEventListeners() {
         form.appendChild(span);
         return;
       }
+      const member = document.createElement('article');
+  
+      member.classList.add('member');
+      member.setAttribute('data-id', json.id);
+  
+      const header = document.createElement('header');
+      header.classList.add('flex', 'justify-start');
+      const img = document.createElement('img');
+      img.classList.add('h-fit', 'aspect-square', 'mx-1');
+      const h4 = document.createElement('h4');
+      const a = document.createElement('a');
+      a.href = '/members/' + json.username;
+      a.textContent = json.username;
+      console.log(json.picture);
+      img.src = json.picture;
+      
+      h4.appendChild(a);
+      header.appendChild(img);
+      header.appendChild(h4);
+  
+      member.appendChild(header);
+
+      const removeForm = document.createElement('form');
+      removeForm.id= 'remove-member-project';
+      removeForm.setAttribute('data-id', json.id);
+      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      removeForm.innerHTML = `
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" class="id" name="id" value="${json.project_id}">
+        <input type="hidden" class="username" name="username" value="${json.username}">
+        <button type="submit"> &times; </button>
+      `;
+
+      const div = document.createElement('div');
+      div.classList.add("flex", "justify-between");
+      div.appendChild(member);
+      if (json.can_remove) {
+      div.appendChild(removeForm);
+      removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+      }
+      let section = json.is_leader=='true'? ul.querySelector('#project-leaders'):ul.querySelector('#members'); 
+      section.appendChild(div);
+    });
+  }
+
+  function addMemberToWorldHandler(json) {
+    const list = document.querySelectorAll('ul.members');
+    [].forEach.call(list, function(ul) {
+      const form = document.querySelector('form.add-member');
+      const error = form.querySelector('span.error');
+      if (error !== null)
+      {
+        error.remove();
+      }
+  
+      if (json.error)
+      {
+        const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
+        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        form.appendChild(span);
+        return;
+      }
   
       const member = document.createElement('article');
   
@@ -355,10 +421,29 @@ function addEventListeners() {
       header.appendChild(h4);
   
       member.appendChild(header);
-  
-      ul.appendChild(member);
+
+      const removeForm = document.createElement('form');
+      removeForm.id= 'remove-member-project';
+      removeForm.setAttribute('data-id', json.id);
+      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      removeForm.innerHTML = `
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" class="id" name="id" value="${json.project_id}">
+        <input type="hidden" class="username" name="username" value="${json.username}">
+        <button type="submit"> &times; </button>
+      `;
+
+      const div = document.createElement('div');
+      div.classList.add("flex", "justify-between");
+      div.appendChild(member);
+      if (json.can_remove == true) {
+      div.appendChild(removeForm);
+      removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+      }
+      let section = json.is_admin=='true'? ul.querySelector('#world-admins'):ul.querySelector('#members'); 
+      section.appendChild(div);
     });
-   
   }
 
   async function sendAddMemberToWorld(event){
@@ -382,7 +467,7 @@ function addEventListeners() {
 
       const json = await response.json();
 
-      if (response.status !== 500) addMemberWorldHandler(json)
+      if (response.status !== 500) addMemberToWorldHandler(json)
   }
 
   async function sendAssignMemberRequest(event) {
@@ -620,15 +705,8 @@ async function sendRemoveMemberFromWorldRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromWorldHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
-}
-
-function removeMemberFromWorldHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-world [data-id="' + data.member_id + '"]');
-  form.remove();
 }
 
 async function sendRemoveMemberFromProjectRequest(ev) {
@@ -654,15 +732,15 @@ async function sendRemoveMemberFromProjectRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromProjectHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
 }
 
-function removeMemberFromProjectHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-project [data-id="' + data.member_id + '"]');
-  form.remove();
+function removeMemberFromThingHandler(data) {
+  let element = document.querySelectorAll('ul.members [data-id="' + data.member_id + '"]');
+  [].forEach.call(element, function(member) {
+    member.remove();
+  });
 }
 
 

@@ -50,6 +50,10 @@ class WorldPolicy
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
+    public function removeAdmin(User $user, World $world): bool
+    {
+        return ($user->persistentUser->member->id == $world->owner()->get()->first()->id);
+    }
 
     public function leave(User $user, World $world): bool
     {

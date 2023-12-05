@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     public function show(string $id): View
@@ -74,18 +75,19 @@ class ProjectController extends Controller
 
         try
         {
-            $is_admin = $member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
-            $type = $is_admin ? 'World Administrator' : $fields['type'];
+            $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
+            $can_remove = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
-            
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
                 'project_id' => $project->id,
-                'picture' => $member->picture
+                'picture' => $member->picture,
+                'is_leader' => $fields['type']=='Project Leader',
+                'can_remove' => $can_remove
             ]);
         } catch (\Exception $e)
         {
