@@ -126,6 +126,9 @@ class WorldController extends Controller
         ];
 
         Mail::to($member->email)->send(new MailModel($mailData));
+
+        error_log('test');
+
         return redirect()->back()->withSuccess('User invited to the world.');
     }
 
@@ -137,7 +140,7 @@ class WorldController extends Controller
         $member = User::where('id', $fields['id'])->first()->persistentUser->member;
         $world->members()->attach($member->id, ['is_admin' => $fields['is_admin']]);
 
-        Invitation::where('world_id', $fields['world_id'])->where('member_id', $member->id)->delete();
+        Invitation::where('token', $fields['invite_token'])->delete();
 
         return redirect()->route('home')->withSuccess('You joined the world.');
     }
