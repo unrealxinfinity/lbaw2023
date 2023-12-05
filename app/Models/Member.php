@@ -72,4 +72,14 @@ class Member extends Model
     {
         return FileController::get('profile', $this->id);
     }
+
+    public function favoriteWorld(): BelongsToMany
+    {
+        return $this->belongsToMany(World::class, 'favorite_world');
+    }
+
+    public function favoriteProject(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'favorite_project');
+    }
 }

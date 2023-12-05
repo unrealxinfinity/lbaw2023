@@ -15,8 +15,23 @@
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
         </div>
+<<<<<<< e1d92e0348973d3adcc5779d54965c11892eb8d9
+        <div class="relative flex text-left">
+            @can('favorite', $world)
+                <form id="favorite">
+                    @csrf
+                    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+                    <input type="hidden" class="type" name="type" value="worlds">
+                    <button class="my-3 pr-2 w-full md:text-big text-bigPhone" type="submit">
+                        @if(Auth::check() && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
+                        @else &#9734; @endif</button>
+                </form>
+            @endcan
+            @if(Auth::check() && Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world))
+=======
         @if(Auth::check() && (Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world)))
         <div class="relative inline-block text-left">
+>>>>>>> aff5b8faf570a734dbb29140e4647d628451f7ec
             <input type="checkbox" id="more-options" class="hidden peer"/>
             <label for="more-options" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
             <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
@@ -31,9 +46,8 @@
                 </form>
                 @endif
             </div>
-            
+            @endif
         </div>
-        @endif
     </header>
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
     <section id="projects">

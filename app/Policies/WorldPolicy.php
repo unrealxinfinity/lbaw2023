@@ -69,6 +69,10 @@ class WorldPolicy
     public function searchProject(User $user, World $world): bool
     {
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+    }
 
+    public function favorite(User $user, World $world): bool
+    {
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
 }

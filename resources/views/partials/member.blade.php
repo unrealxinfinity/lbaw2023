@@ -18,6 +18,7 @@
         <a class="button">Appeal Block</a>
         @endif
         <button type="button" id="delete-account" class="button">Delete Account</button>
+        <h1> <a href = "/myfavorites" >My Favorites</a></h1>
         <h1> <a href = "/myworlds" >My Worlds</a></h1>
         <h1> <a href="/myprojects">My Projects</a></h1>
         <h1> <a href="/mytasks">My Tasks</a></h1>

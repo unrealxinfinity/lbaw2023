@@ -75,6 +75,15 @@ class MemberController extends Controller
         return view('pages.mytasks', ['tasks' => $tasks]);
     }
 
+    public function showMemberFavorites(): View
+    {
+        $this->authorize('showMemberFavorites', Member::class);
+        $id = Auth::user()->persistentUser->member->id;
+        $worlds = Member::findOrFail($id)->favoriteWorld;
+        $projects = Member::findOrFail($id)->favoriteProject;
+        return view('pages.myfavorites', ['worlds' => $worlds, 'projects' => $projects]);
+    }
+
     public function update(EditMemberRequest $request, string $username): RedirectResponse
     {
         $fields = $request->validated();
