@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\LeaveWorldRequest;
 use App\Http\Requests\RemoveMemberFromWorldRequest;
+use App\Models\Invitation;
 use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
@@ -106,15 +107,20 @@ class WorldController extends Controller
         $world = World::findOrFail($world_id);
 
         $member = User::where('username', $username)->first()->persistentUser->member;
-
         $inviteToken = bin2hex(random_bytes(32));
-        $member->invite_token = $inviteToken;
-        $member->save();
+
+        Invitation::create([
+            'token' => $inviteToken,
+            'world_id' => $world_id,
+            'member_id' => $member->id,
+            'type' => $fields['type']
+        ]);
+    
 
         $mailData = [
             'name' => $member->name,
             'world_name' => $world->name,
-            'link' => env('APP_URL') . '/invite?id=' . $member->id . '&adm='. $fields['type'] . '&wid' . $world_id . '&token=' . $inviteToken
+            'link' => env('APP_URL') . '/invite?username=' . $username . '&adm='. $fields['type'] . '&wid' . $world_id . '&token=' . $inviteToken
         ];
 
         Mail::to($member->email)->send(new MailModel($mailData));
