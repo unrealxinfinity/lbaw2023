@@ -14,6 +14,8 @@ class DeleteController extends Controller
     public function delete(DeleteMemberRequest $request, string $username): RedirectResponse
     {
         $request->validated();
+        if (Auth::user()->persistentUser->type_ == 'Administrator') $route = 'list-members';
+        else $route = 'home';
 
         $member = User::where('username', $username)->first()->persistentUser->member;
         $persistentUser = $member->persistentUser;
@@ -31,7 +33,7 @@ class DeleteController extends Controller
         $persistentUser->save();
         $user->delete();
 
-        return redirect()->route('home')->withSuccess('Account deleted.');
+        return redirect()->route($route)->withSuccess('Account deleted.');
     }
 
     public function showConfirmation(Request $request, string $username)

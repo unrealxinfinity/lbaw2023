@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
+use App\Models\PersistentUser;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -110,8 +112,12 @@ class MemberController extends Controller
         
         $search = $request['search'] ?? "";
 
-        $members = Member::where('name', 'like', '%' . $search . '%')
-            ->orWhere('email', 'like', '%' . $search . '%')->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
+        $members = Member::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%');
+        })->where(function ($query) {
+                $query->whereRaw("(select type_ from users where users.id = members.user_id) != 'Deleted'");
+            })->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);
     }
