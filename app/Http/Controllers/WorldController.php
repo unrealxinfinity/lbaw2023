@@ -132,7 +132,19 @@ class WorldController extends Controller
 
     public function showInvite(): View
     {
-        return view('pages.invite');
+        $world_id = request()->query('wid');
+        $world_name = World::findOrFail($world_id)->name;
+        $username = request()->query('username');
+        $token = request()->query('token');
+        $type = request()->query('adm');
+
+        return view('pages.invite', [
+            'world_id' => $world_id,
+            'world_name' => $world_name,
+            'username' => $username,
+            'token' => $token,
+            'type' => $type
+        ]);
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
