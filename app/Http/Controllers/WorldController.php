@@ -122,7 +122,7 @@ class WorldController extends Controller
             'view' => 'emails.invite',
             'name' => $member->name,
             'world_name' => $world->name,
-            'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid' . $fields['world_id'] . '&token=' . $inviteToken
+            'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $fields['world_id'] . '&token=' . $inviteToken
         ];
 
         Mail::to($member->email)->send(new MailModel($mailData));
