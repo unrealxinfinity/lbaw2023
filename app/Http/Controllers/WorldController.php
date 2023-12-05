@@ -23,6 +23,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\AssignWorldAdminRequest;
+
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -119,12 +121,11 @@ class WorldController extends Controller
     }
 
     public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
-    {
-        $fields = $request->validated();
+    {   
 
+        $fields = $request->validated();
         $world = World::findOrFail($id);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-
         try {
             $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
             NotificationController::WorldNotification($world,$member->name . ' promoted to ');

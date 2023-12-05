@@ -1,4 +1,4 @@
-<form class="assign-admin-to-world mt-5">
+<form method="POST" class="assign-admin-to-world mt-5">
     @csrf
    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
    <input type="text" class="username" name="username" placeholder="Username" required>

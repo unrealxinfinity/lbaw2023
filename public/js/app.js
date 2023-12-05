@@ -126,7 +126,10 @@ function addEventListeners() {
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
     
+    let main_body = document.getElementById('main-body');
+    if(main_body.getAttribute('data-auth') == true){
       window.addEventListener('load',getMemberBelingingsRequest);
+    }
     /*
     let removeMemberFromWorld = document.querySelector('');
     if(leaveWorld != null){
@@ -825,7 +828,7 @@ function assignAdminToWorldHandler(data) {
   else{
     alert("Admin added to world!");
   }
-
+  window.location.reload();
 }
   async function sendFavoriteRequest(event) {
     event.preventDefault();
