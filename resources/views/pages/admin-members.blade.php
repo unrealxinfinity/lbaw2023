@@ -12,7 +12,7 @@
     <section id="members">
         {{ $members->links() }}
         @each('partials.member-edit', $members, 'member')
-        @include('form.createaccount')
         {{ $members->links() }}
+        @include('form.createaccount')
     </section>
 @endsection
