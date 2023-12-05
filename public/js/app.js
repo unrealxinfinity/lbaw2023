@@ -788,7 +788,7 @@ async function sendAssignAdminToWorldRequest(ev) {
   let csrf = this.querySelector('input:first-child').value;
   let id = this.querySelector('input.id').value;
   let username = this.querySelector('input.username').value;
-  let url = '/api/worlds/' + id;
+  let url = '/api/worlds/' + id + '/assign';
   const response = await fetch(url, {
     method: 'PUT',
     headers: {
