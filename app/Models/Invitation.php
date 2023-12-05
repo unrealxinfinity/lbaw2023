@@ -12,6 +12,12 @@ class Invitation extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'token',
+        'member_id',
+        'world_id'
+    ];
+
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(Member::class);

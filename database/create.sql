@@ -92,10 +92,10 @@ DROP TABLE IF EXISTS invitations CASCADE;
 CREATE TABLE invitations(
   id SERIAL PRIMARY KEY,
   token VARCHAR NOT NULL,
-  user_id INT NOT NULL,
+  member_id INT NOT NULL,
   world_id INT NOT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 /*Has to implement model timeline and a trigger to maintain the world info after deleting it, alsoc change the structure of this table to correspond to eloquent*/
