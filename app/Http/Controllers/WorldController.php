@@ -155,7 +155,7 @@ class WorldController extends Controller
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
         Invitation::where('token', $fields['token'])->delete();
 
-        if($fields['acceptance'] == false) return redirect()->route('home')->withSuccess('You rejected the invitation.');
+        if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
 
         NotificationController::WorldNotification($world,$member->name . ' added to ');
         $world->members()->attach($member->id, ['is_admin' => $fields['type']]);

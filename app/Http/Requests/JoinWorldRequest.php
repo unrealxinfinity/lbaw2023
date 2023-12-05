@@ -28,10 +28,10 @@ class JoinWorldRequest extends FormRequest
     {
         return [
             'username' => ['required', 'exists:App\Models\User,username'],
-            'type' => ['required', 'boolean'],
+            'type' => [],
             'world_id' => ['required', 'exists:App\Models\World,id'],            
             'token' => ['required', 'exists:App\Models\Invitation,token'],
-            'acceptance' => ['required', 'boolean']
+            'acceptance' => []
         ];
     }
 }
