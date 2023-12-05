@@ -15,7 +15,7 @@
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
         </div>
         </div>
-        @if(Auth::check() && Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world))
+        @if(Auth::check() && (Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world)))
         <div class="relative inline-block text-left">
             <input type="checkbox" id="more-options" class="hidden peer"/>
             <label for="more-options" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>

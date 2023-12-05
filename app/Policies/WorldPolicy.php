@@ -16,7 +16,7 @@ class WorldPolicy
         //
     }
 
-    public function show(User $user, World $world): bool
+    public function show(?User $user, World $world): bool
     {
         if($user == null) return true;
         return ($user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted');
