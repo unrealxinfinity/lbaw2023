@@ -382,7 +382,7 @@ function addEventListeners() {
   function inviteMemberHandler(json) {
     const list = document.querySelectorAll('ul.members');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.add-member');
+      const form = document.querySelector('form.invite-member');
       const error = form.querySelector('span.error');
       if (error !== null)
       {
@@ -395,15 +395,15 @@ function addEventListeners() {
         span.classList.add('error');
         const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
         const index = members.find(x => x === json.username);
-        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        if (index === undefined) span.textContent = 'Please check if ' + json.username + ' already belongs to this world.';
+        else span.textContent = json.username + ' is already a member of this world.';
         form.appendChild(span);
         return;
       }
   
       const span = document.createElement('span');
       span.classList.add('success');
-      span.textContent = json.username + ' has been invited to join this ' + json.child + '.';
+      span.textContent = json.username + ' has been invited to join this world.';
       form.appendChild(span);
     });
   } 

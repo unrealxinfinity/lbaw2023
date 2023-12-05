@@ -79,10 +79,11 @@ class WorldController extends Controller
     {   
         $fields = $request->validated();
         $world = World::findOrFail($world_id);
-        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
 
         try
         {
+            $member = User::where('username', $fields['username'])->first()->persistentUser->member;
             if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
 
             $inviteToken = bin2hex(random_bytes(32));
@@ -107,15 +108,13 @@ class WorldController extends Controller
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
-                'username' => $fields['username'],
-                'world_id' => $world->id
+                'username' => $fields['username']
             ]);
         } catch (\Exception $e)
         {
             return response()->json([
                 'error' => true,
-                'username' => $fields['username'],
-                'child' => 'world'
+                'username' => $fields['username']
             ]);
         }
     }
