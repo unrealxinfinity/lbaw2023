@@ -137,6 +137,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/myworlds', 'showMemberWorlds');
     Route::get('/myprojects', 'showMemberProjects');//
     Route::get('/mytasks', 'showMemberTasks');//
+    Route::get('/myfavorites', 'showMemberFavorites');//
     Route::put('/api/members/{username}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
