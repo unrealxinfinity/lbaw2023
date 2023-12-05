@@ -714,7 +714,7 @@ INSERT INTO world_timeline (date_, description, world_id) VALUES
 
 -- Sample data for the 'favorite_world' table
 INSERT INTO favorite_world (member_id, world_id) VALUES
-    (1, 2),
+    (1, 1),
     (3, 1);
 
 -- Sample data for the 'project' table

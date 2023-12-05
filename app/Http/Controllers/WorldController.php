@@ -193,4 +193,34 @@ class WorldController extends Controller
             'edit' => true
         ]);
     }
+
+    public function favorite(string $id): JsonResponse
+    {
+        $world = World::findOrFail($id);
+        $this->authorize('favorite', $world);
+        $member = Auth::user()->persistentUser->member;
+
+        try {
+            if ($member->favoriteWorld->contains('id', $id)) {
+                $member->favoriteWorld()->detach($id);
+                $favorite = false;
+            } else {
+                $member->favoriteWorld()->attach($id);
+                $favorite = true;
+            }
+
+            $member->save();
+            
+            return response()->json([
+                'error' => false,
+                'favorite' => $favorite,
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true
+            ]);
+        }
+        
+    }
 }

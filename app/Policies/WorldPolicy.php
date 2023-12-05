@@ -64,4 +64,10 @@ class WorldPolicy
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
 
     }
+
+    public function favorite(User $user, World $world): bool
+    {
+        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted') && ($user->persistentUser->member->worlds->contains($world->id));
+
+    }
 }

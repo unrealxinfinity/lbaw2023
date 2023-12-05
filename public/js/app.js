@@ -177,6 +177,10 @@ function addEventListeners() {
     if (previewImg != null) {
       previewImg.addEventListener('change', PreviewImageHandler);
     }
+
+    let favouriter = document.querySelector('form#favorite');
+    if (favouriter != null)
+    favouriter.addEventListener('submit', sendFavoriteRequest);
   }
   
   function deleteAccountButton() {
@@ -799,6 +803,37 @@ function ShowNotificationsHandler(json,ev){
     notificationPopup.classList.toggle('hidden'); 
   }
 }
+
+  async function sendFavoriteRequest(event) {
+    event.preventDefault();
+
+    const id = this.querySelector('form#favorite input.id').value;
+    const csrf = this.querySelector('form#favorite input:first-child').value;
+
+    const response = await fetch('/api/worlds/' + id + '/favorite', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    });
+
+    const json = await response.json();
+    console.log(json);
+
+    if (response.status !== 500) favoriteHandler(json);
+}
+
+  function favoriteHandler(json) {
+    const button = document.querySelector('form#favorite button');
+    if (json.favorite) {
+      button.innerHTML = "&#9733";
+    } else {
+      button.innerHTML = "&#9734";
+    }
+  }
 
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');

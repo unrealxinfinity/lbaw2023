@@ -101,6 +101,7 @@ Route::controller(SearchController::class)->group(function() {
 });
 
 Route::controller(WorldController::class)->group(function () {
+    Route::post('/api/worlds/{id}/favorite', 'favorite');//
     Route::post('/api/worlds/{id}/{username}', 'addMember');//
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
