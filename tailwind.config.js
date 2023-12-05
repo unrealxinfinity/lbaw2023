@@ -3,6 +3,7 @@ export default {
   content: [
     "./resources/views/**/*.blade.php",
     "./public/js/*.js",
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
   ],
   theme: {
     screens: {

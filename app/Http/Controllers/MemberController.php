@@ -111,7 +111,7 @@ class MemberController extends Controller
         $search = $request['search'] ?? "";
 
         $members = Member::where('name', 'like', '%' . $search . '%')
-            ->orWhere('email', 'like', '%' . $search . '%')->get();
+            ->orWhere('email', 'like', '%' . $search . '%')->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);
     }
