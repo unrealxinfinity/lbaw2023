@@ -75,35 +75,6 @@ class WorldController extends Controller
         return redirect()->route('worlds.show', $id);
     }
 
-    public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
-    {   
-        $fields = $request->validated();
-
-        $world = World::findOrFail($world_id);
-        error_log($world);
-        $member = User::where('username', $username)->first()->persistentUser->member;
-        try {
-            $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-            NotificationController::WorldNotification($world, $member->name . ' added to ');
-            $can_remove = (($fields['type']=='true' && Auth::user()->persistentUser->member->id == $world->owner_id) || ($fields['type']=='false' && Auth::user()->persistentUser->member->worlds()->where('id', $world_id)->first()->pivot->is_admin));
-            return response()->json([
-                'error' => false,
-                'id' => $member->id,
-                'username' => $username,
-                'world_id' => $world->id,
-                'picture' => $member->picture,
-                'is_admin' => $fields['type'],
-                'can_remove' => $can_remove
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'username' => $username,
-                'child' => 'world'
-            ]);
-        }
-    }
-
     public function invite(AddMemberToWorldRequest $request, string $world_id): JsonResponse
     {   
         $fields = $request->validated();
@@ -137,9 +108,7 @@ class WorldController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $fields['username'],
-                'world_id' => $world->id,
-                'is_admin' => $fields['type'],
-                'can_remove' => false
+                'world_id' => $world->id
             ]);
         } catch (\Exception $e)
         {
