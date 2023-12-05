@@ -105,10 +105,6 @@ class WorldController extends Controller
     {   
         $fields = $request->validated();
 
-        error_log($fields['type']);
-        error_log($fields['world_id']);
-        error_log($fields['username']);
-
         $world = World::findOrFail($fields['world_id']);
 
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
@@ -131,9 +127,12 @@ class WorldController extends Controller
 
         Mail::to($member->email)->send(new MailModel($mailData));
 
-        error_log('test');
-
         return redirect()->back()->withSuccess('User invited to the world.');
+    }
+
+    public function showInvite(): View
+    {
+        return view('pages.invite');
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
