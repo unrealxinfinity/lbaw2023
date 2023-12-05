@@ -2,6 +2,7 @@
     @csrf
     @method('POST')
     Invite member:
+    <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>
     What role?
     <select name="type" class="type" required>

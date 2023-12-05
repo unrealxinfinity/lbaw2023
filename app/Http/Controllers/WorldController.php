@@ -101,18 +101,22 @@ class WorldController extends Controller
         }
     }
 
-    public function invite(AddMemberToWorldRequest $request,string $world_id, string $username): RedirectResponse
+    public function invite(AddMemberToWorldRequest $request): RedirectResponse
     {   
         $fields = $request->validated();
 
-        $world = World::findOrFail($world_id);
+        error_log($fields['type']);
+        error_log($fields['world_id']);
+        error_log($fields['username']);
 
-        $member = User::where('username', $username)->first()->persistentUser->member;
+        $world = World::findOrFail($fields['world_id']);
+
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
         $inviteToken = bin2hex(random_bytes(32));
 
         Invitation::create([
             'token' => $inviteToken,
-            'world_id' => $world_id,
+            'world_id' => $fields['world_id'],
             'member_id' => $member->id,
             'type' => $fields['type']
         ]);
@@ -122,7 +126,7 @@ class WorldController extends Controller
             'view' => 'emails.invite',
             'name' => $member->name,
             'world_name' => $world->name,
-            'link' => env('APP_URL') . '/invite?username=' . $username . '&adm='. $fields['type'] . '&wid' . $world_id . '&token=' . $inviteToken
+            'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid' . $fields['world_id'] . '&token=' . $inviteToken
         ];
 
         Mail::to($member->email)->send(new MailModel($mailData));
