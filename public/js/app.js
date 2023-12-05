@@ -809,8 +809,9 @@ function ShowNotificationsHandler(json,ev){
 
     const id = this.querySelector('form#favorite input.id').value;
     const csrf = this.querySelector('form#favorite input:first-child').value;
+    const type = this.querySelector('form#favorite input.type').value;
 
-    const response = await fetch('/api/worlds/' + id + '/favorite', {
+    const response = await fetch('/api/' + type + '/' + id + '/favorite', {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN': csrf,
@@ -821,7 +822,6 @@ function ShowNotificationsHandler(json,ev){
     });
 
     const json = await response.json();
-    console.log(json);
 
     if (response.status !== 500) favoriteHandler(json);
 }

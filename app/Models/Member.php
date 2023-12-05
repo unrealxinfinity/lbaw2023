@@ -73,8 +73,8 @@ class Member extends Model
         return $this->belongsToMany(World::class, 'favorite_world');
     }
 
-    public function favoriteProject(): HasMany
+    public function favoriteProject(): BelongsToMany
     {
-        return $this->hasMany(Project::class);
+        return $this->belongsToMany(Project::class, 'favorite_project');
     }
 }

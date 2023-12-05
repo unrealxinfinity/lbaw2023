@@ -225,4 +225,34 @@ class ProjectController extends Controller
             'edit' => true
         ]);
     }
+
+    public function favorite(string $id): JsonResponse
+    {
+        $project = Project::findOrFail($id);
+        $this->authorize('favorite', $project);
+        $member = Auth::user()->persistentUser->member;
+
+        try {
+            if ($member->favoriteProject->contains('id', $id)) {
+                $member->favoriteProject()->detach($id);
+                $favorite = false;
+            } else {
+                $member->favoriteProject()->attach($id);
+                $favorite = true;
+            }
+
+            $member->save();
+            
+            return response()->json([
+                'error' => false,
+                'favorite' => $favorite,
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true
+            ]);
+        }
+        
+    }
 }

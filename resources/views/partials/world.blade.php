@@ -20,6 +20,7 @@
                 <form id="favorite">
                     @csrf
                     <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+                    <input type="hidden" class="type" name="type" value="worlds">
                     <button class="my-3 pr-2 w-full md:text-big text-bigPhone" type="submit">
                         @if(Auth::check() && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
                         @else &#9734; @endif</button>

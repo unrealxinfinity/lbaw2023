@@ -115,6 +115,7 @@ Route::controller(WorldController::class)->group(function () {
 });
 
 Route::controller(ProjectController::class)->group(function () {
+    Route::post('/api/projects/{id}/favorite', 'favorite');//
     Route::post('/api/projects/{id}/{username}', 'addMember');//
     Route::delete('/api/projects/{id}/{username}', 'removeMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');//
