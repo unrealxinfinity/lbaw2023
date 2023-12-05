@@ -3,7 +3,9 @@
         <div class="grow-[1]">
             @include('partials.member', ['member' => $comment->member, 'main' => false])
         </div>
-        <button type="button" class="show-edit">Edit</button>
+        @if (Auth::check() && Auth::user()->persistentUser->member->id == $comment->member_id)
+            <button type="button" class="show-edit">Edit</button>
+        @endif
         <p> {{ $comment->date_ }} </p>
     </header>
     <h4 class="comment-content"> {{ $comment->content }} </h4>

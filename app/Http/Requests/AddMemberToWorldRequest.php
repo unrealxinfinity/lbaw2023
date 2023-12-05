@@ -26,7 +26,7 @@ class AddMemberToWorldRequest extends FormRequest
     {
         return [
             'type' => [Rule::in(['true', 'false'])],
-            'id' => ['exists:App\Models\World,id'],
+            'world_id' => ['exists:App\Models\World,id'],
             'username' => ['exists:App\Models\User,username']
         ];
     }
