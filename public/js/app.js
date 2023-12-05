@@ -57,7 +57,7 @@ function addEventListeners() {
     if(button != null)
     button.addEventListener("click", addTagRequest);
     
-    let worldMemberAdder = document.querySelectorAll('form#invite-world');
+    let worldMemberAdder = document.querySelectorAll('form#invite-member');
     if (worldMemberAdder != null){
       [].forEach.call(worldMemberAdder, function(form) {
         form.addEventListener('submit', sendInviteMember);
@@ -416,7 +416,7 @@ function addEventListeners() {
       const csrf = this.querySelector('input:first-child').value;
       const type = this.querySelector('select.type').value;
 
-      const response = await fetch('/api/worlds/' + id, {
+      const response = await fetch('/api/worlds/' + id + '/invite', {
         method: 'POST',
         headers: {
           'X-CSRF-TOKEN': csrf,
