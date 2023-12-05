@@ -102,5 +102,11 @@
                 @endif
             @endif
         </form>
+        <form class="admin-delete form-post outline-none" method="POST" action="/members/{{ $member->persistentUser->user->username }}">
+            @csrf
+            @method('DELETE')
+
+            <input type="submit" class="button" value="Delete">
+        </form>
     </div>   
 </article>
