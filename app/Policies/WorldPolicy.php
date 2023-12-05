@@ -18,8 +18,8 @@ class WorldPolicy
 
     public function show(User $user, World $world): bool
     {
-        // a guest or a normal user can see the world
-        return (!Auth::check() || ($user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted'));
+        if($user == null) return true;
+        return ($user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted');
     }
 
     public function create(User $user): bool
