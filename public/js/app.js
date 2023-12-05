@@ -25,7 +25,7 @@ function addEventListeners() {
 
     let memberEditors =document.querySelectorAll('form.edit-member');
     [].forEach.call(memberEditors, function(editor) {
-      editor.querySelector('button').addEventListener('click', sendEditMemberRequest);
+      editor.querySelector('.button').addEventListener('submit', sendEditMemberRequest);
     });
 
     let tasks = document.querySelectorAll('article.task');
@@ -39,6 +39,16 @@ function addEventListeners() {
       bigbox.addEventListener("dragover", bigBoxDragOverHandler);
     })
 
+    let editorShows = document.querySelectorAll('button.show-edit');
+    [].forEach.call(editorShows, function(editorShow) {
+      editorShow.addEventListener('click', showEditComment);
+    });
+
+    let editorHides = document.querySelectorAll('button.close-edit');
+    [].forEach.call(editorHides, function(editorHide) {
+       editorHide.addEventListener('click', hideEditComment);
+    });
+
     let memberAdder = document.querySelector('form#add-member');
     if (memberAdder != null)
       memberAdder.addEventListener('submit', sendAddMemberRequest);
@@ -47,11 +57,10 @@ function addEventListeners() {
     if(button != null)
     button.addEventListener("click", addTagRequest);
     
-    let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
-    console.log(worldMemberAdder);
+    let worldMemberAdder = document.querySelectorAll('form#invite-member');
     if (worldMemberAdder != null){
       [].forEach.call(worldMemberAdder, function(form) {
-        form.addEventListener('submit', sendAddMemberToWorld);
+        form.addEventListener('submit', sendInviteMember);
       });
     }
     
@@ -156,6 +165,59 @@ function addEventListeners() {
         form.addEventListener('submit', sendAssignAdminToWorldRequest);
       });
     }
+
+    let deleteAccount = document.querySelector("#delete-account");
+    if (deleteAccount != null)
+      deleteAccount.addEventListener('click', deleteAccountButton);
+
+    let confirmDeletion = document.querySelector("#confirm-deletion");
+    if (confirmDeletion != null)
+      setTimeout(() => {
+        confirmDeletion.submit();
+      }, 5000);
+      
+    let deleteWorld= document.querySelector("#delete-world");
+    if (deleteWorld != null)
+      deleteWorld.addEventListener('submit', deleteWorldButton);
+
+    let previewImg = document.querySelector('input#edit-img');
+    if (previewImg != null) {
+      previewImg.addEventListener('change', PreviewImageHandler);
+    }
+
+    let favouriter = document.querySelector('form#favorite');
+    if (favouriter != null)
+    favouriter.addEventListener('submit', sendFavoriteRequest);
+  }
+  
+  function deleteAccountButton() {
+    const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
+
+    if (text != "delete") return;
+
+    window.location.href = window.location.href + '/delete'
+  }
+  function deleteWorldButton(ev) {
+    ev.preventDefault();
+    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
+    if(text == "delete"){
+      this.submit();
+    };
+    
+    
+  }
+  function showEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
+    this.closest('article').querySelector('div.comment-edit').classList.remove('hidden');
+    this.classList.add('hidden');
+  }
+
+  function hideEditComment(ev) {
+    ev.preventDefault();
+    this.closest('article').querySelector('h4.comment-content').classList.remove('hidden');
+    this.closest('div.comment-edit').classList.add('hidden');
+    this.closest('article').querySelector('button.show-edit').classList.remove('hidden');
   }
 
   function bigBoxDragOverHandler(ev) {
@@ -198,6 +260,12 @@ function addEventListeners() {
       ev.target.ownerDocument.location.href,
     );
     ev.dataTransfer.dropEffect = "move";
+  }
+
+  function PreviewImageHandler(event) {
+    let selectedFile = event.target.files[0];
+    let img = document.querySelector('img#preview-img');
+    img.src = URL.createObjectURL(selectedFile);
   }
   
   function encodeForAjax(data) {
@@ -276,7 +344,6 @@ function addEventListeners() {
         form.appendChild(span);
         return;
       }
-  
       const member = document.createElement('article');
   
       member.classList.add('member');
@@ -290,6 +357,7 @@ function addEventListeners() {
       const a = document.createElement('a');
       a.href = '/members/' + json.username;
       a.textContent = json.username;
+      console.log(json.picture);
       img.src = json.picture;
       
       h4.appendChild(a);
@@ -297,21 +365,76 @@ function addEventListeners() {
       header.appendChild(h4);
   
       member.appendChild(header);
-  
-      ul.appendChild(member);
+
+      const removeForm = document.createElement('form');
+      removeForm.id= 'remove-member-project';
+      removeForm.setAttribute('data-id', json.id);
+      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      removeForm.innerHTML = `
+        <input type="hidden" name="_token" value="${csrfToken}">
+        <input type="hidden" class="id" name="id" value="${json.project_id}">
+        <input type="hidden" class="username" name="username" value="${json.username}">
+        <button type="submit"> &times; </button>
+      `;
+
+      const div = document.createElement('div');
+      div.classList.add("flex", "justify-between");
+      div.appendChild(member);
+      if (json.can_remove) {
+      div.appendChild(removeForm);
+      removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+      }
+      let section = json.is_leader=='true'? ul.querySelector('#project-leaders'):ul.querySelector('#members'); 
+      section.appendChild(div);
     });
-   
   }
 
-  async function sendAddMemberToWorld(event){
+  function inviteMemberHandler(json) {
+    const list = document.querySelectorAll('ul.members');
+    [].forEach.call(list, function(ul) {
+      const form = document.querySelector('form#invite-member');
+      const error = form.querySelector('span.error');
+      const invitation = form.querySelectorAll('span.success');
+      if (invitation.length !== 0)
+      {
+        invitation.forEach(element => {
+          element.remove();
+        });
+      }
+      if (error !== null)
+      {
+        error.remove();
+      }
+  
+      if (json.error)
+      {
+        const span = document.createElement('span');
+        span.classList.add('error');
+        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const index = members.find(x => x === json.username);
+        if (index === undefined) span.textContent = 'Please check if ' + json.username + ' already belongs to this world.';
+        else span.textContent = json.username + ' is already a member of this world.';
+        form.appendChild(span);
+        return;
+      }
+  
+      const span = document.createElement('span');
+      span.classList.add('success');
+      span.textContent = json.username + ' has been invited to join this world.';
+      form.appendChild(span);
+    });
+  } 
+
+  async function sendInviteMember(event){
       event.preventDefault();
 
       const username= this.querySelector('input.username').value;
-      const id = this.querySelector('input.id').value;
+      const id = this.querySelector('input.world_id').value;
       const csrf = this.querySelector('input:first-child').value;
       const type = this.querySelector('select.type').value;
 
-      const response = await fetch('/api/worlds/' + id + '/' + username, {
+      const response = await fetch('/api/worlds/' + id + '/invite', {
         method: 'POST',
         headers: {
           'X-CSRF-TOKEN': csrf,
@@ -319,12 +442,12 @@ function addEventListeners() {
           'Accept': 'application/json',
           "X-Requested-With": "XMLHttpRequest"
         },
-        body: JSON.stringify({type: type})
+        body: JSON.stringify({username: username, type: type})
       });
 
       const json = await response.json();
 
-      if (response.status !== 500) addMemberWorldHandler(json)
+      if (response.status !== 500) inviteMemberHandler(json);
   }
 
   async function sendAssignMemberRequest(event) {
@@ -562,15 +685,8 @@ async function sendRemoveMemberFromWorldRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromWorldHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
-}
-
-function removeMemberFromWorldHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-world [data-id="' + data.member_id + '"]');
-  form.remove();
 }
 
 async function sendRemoveMemberFromProjectRequest(ev) {
@@ -596,44 +712,47 @@ async function sendRemoveMemberFromProjectRequest(ev) {
       throw new Error('Response status not OK');
     }
   }).then(data => {
-    removeMemberFromProjectHandler(data);
+    removeMemberFromThingHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
 }
 
-function removeMemberFromProjectHandler(data) {
-  let element = document.querySelector('ul.members [data-id="' + data.member_id + '"]');
-  element.remove();
-  let form = document.querySelector('form#remove-member-project [data-id="' + data.member_id + '"]');
-  form.remove();
+function removeMemberFromThingHandler(data) {
+  let element = document.querySelectorAll('ul.members [data-id="' + data.member_id + '"]');
+  [].forEach.call(element, function(member) {
+    member.remove();
+  });
 }
 
 
 async function sendShowNotificationsRequest(ev) {
-  ev.preventDefault();
-    const url = '/api/notifications';
-    const response = await fetch(url, {
-        method: 'GET', 
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
+  
+  if(ev != null){
+    ev.preventDefault();
+    }
+  const url = '/api/notifications';
+  const response = await fetch(url, {
+      method: 'GET', 
+      headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+  })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
     })
-      .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          ShowNotificationsHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    .then(data => {
+        ShowNotificationsHandler(data,ev);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 
 }
 
-function ShowNotificationsHandler(json){
+function ShowNotificationsHandler(json,ev){
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
 
@@ -656,8 +775,9 @@ function ShowNotificationsHandler(json){
     notificationContainer.appendChild(notificationDate);
     popup.appendChild(notificationContainer);
   }
-  notificationPopup.classList.toggle('hidden');
-
+  if(ev != null){
+    notificationPopup.classList.toggle('hidden'); 
+  }
 }
 
 
@@ -707,6 +827,37 @@ function assignAdminToWorldHandler(data) {
   }
 
 }
+  async function sendFavoriteRequest(event) {
+    event.preventDefault();
+
+    const id = this.querySelector('form#favorite input.id').value;
+    const csrf = this.querySelector('form#favorite input:first-child').value;
+    const type = this.querySelector('form#favorite input.type').value;
+
+    const response = await fetch('/api/' + type + '/' + id + '/favorite', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    });
+
+    const json = await response.json();
+
+    if (response.status !== 500) favoriteHandler(json);
+}
+
+  function favoriteHandler(json) {
+    const button = document.querySelector('form#favorite button');
+    if (json.favorite) {
+      button.innerHTML = "&#9733";
+    } else {
+      button.innerHTML = "&#9734";
+    }
+  }
+
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
     let id = item.getAttribute('data-id');
@@ -941,10 +1092,12 @@ function pusherNotifications(projectContainer, worldContainer){
       const channelWorld = pusher.subscribe('World' + world_id);
       bindEvent(channelWorld, 'ProjectNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
         
       });
       bindEvent(channelWorld, 'WorldNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
     }
     for(let i = 0; i < projectContainer.length; i++){
@@ -952,10 +1105,12 @@ function pusherNotifications(projectContainer, worldContainer){
       const channelProject = pusher.subscribe('Project' + project_id);
       bindEvent(channelProject, 'TaskNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
 
       bindEvent(channelProject, 'TagNotification', function(data){
         alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
       });
     }
   

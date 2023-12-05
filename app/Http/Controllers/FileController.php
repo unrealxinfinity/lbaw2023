@@ -89,27 +89,25 @@ class FileController extends Controller
 
         $file = $request->file('file');
         $fileName = $file->hashName();
-
+        $file->storeAs($fields['type'], $fileName, self::$diskName);
+        
         switch($request->type) {
             case 'profile':
                 $member = Member::findOrFail($id);
                 $member->picture = $fileName;
                 $member->save();
-                break;
+                return redirect()->route('members.show', $member->persistentUser->user->username);
             case 'world':
                 $world = World::findOrFail($id);
                 $world->picture = $fileName;
                 $world->save();
-                break;
+                return redirect()->route('worlds.show', $id);
             case 'project':
                 $project = Project::findOrFail($id);
                 $project->picture = $fileName;
                 $project->save();
-                break;
+                return redirect()->route('projects.show', $id);
         }
-
-        $file->storeAs($fields['type'], $fileName, self::$diskName);
-        return redirect()->back()->withSuccess('File uploaded!');
     }
 
 }

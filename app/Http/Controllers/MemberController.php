@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Member;
+use App\Models\PersistentUser;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -72,6 +75,15 @@ class MemberController extends Controller
         return view('pages.mytasks', ['tasks' => $tasks]);
     }
 
+    public function showMemberFavorites(): View
+    {
+        $this->authorize('showMemberFavorites', Member::class);
+        $id = Auth::user()->persistentUser->member->id;
+        $worlds = Member::findOrFail($id)->favoriteWorld;
+        $projects = Member::findOrFail($id)->favoriteProject;
+        return view('pages.myfavorites', ['worlds' => $worlds, 'projects' => $projects]);
+    }
+
     public function update(EditMemberRequest $request, string $username): RedirectResponse
     {
         $fields = $request->validated();
@@ -109,8 +121,12 @@ class MemberController extends Controller
         
         $search = $request['search'] ?? "";
 
-        $members = Member::where('name', 'like', '%' . $search . '%')
-            ->orWhere('email', 'like', '%' . $search . '%')->get();
+        $members = Member::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%');
+        })->where(function ($query) {
+                $query->whereRaw("(select type_ from users where users.id = members.user_id) != 'Deleted'");
+            })->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);
     }
@@ -126,5 +142,31 @@ class MemberController extends Controller
             'projects_ids' => $projects
         ]);
 
+    }
+
+    public function block(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $user = User::where('username', $username)->firstOrFail();
+
+        $user->persistentUser->type_ = 'Blocked';
+        $user->persistentUser->save();
+
+        return redirect()->back()->withSuccess('User blocked')->withFragment($username);
+    }
+
+    public function unblock(BlockRequest $request, string $username): RedirectResponse
+    {
+        $request->validated();
+
+        $user = User::where('username', $username)->firstOrFail();
+
+        if ($user->persistentUser->type_ == 'Blocked') {
+            $user->persistentUser->type_ = 'Member';
+            $user->persistentUser->save();
+        }    
+
+        return redirect()->back()->withSuccess('User unblocked')->withFragment($username);
     }
 }

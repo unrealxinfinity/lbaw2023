@@ -41,7 +41,7 @@ class MailModel extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.recover',
+            view: $this->mailData['view'],
         );
     }
 

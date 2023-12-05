@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
+use App\Http\Requests\JoinWorldRequest;
 use App\Http\Requests\LeaveWorldRequest;
 use App\Http\Requests\RemoveMemberFromWorldRequest;
-use App\Http\Requests\WorldCommentRequest;
+use App\Models\Invitation;
 use App\Models\World;
 use App\Models\User;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
+use App\Http\Requests\EditWorldRequest;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -18,6 +21,8 @@ use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
+use App\Mail\MailModel;
+use Illuminate\Support\Facades\Mail;
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -27,7 +32,8 @@ class WorldController extends Controller
         $this->authorize('show', $world);
         
         return view('pages.world', [
-            'world' => $world
+            'world' => $world,
+            'edit' => false
         ]);
     }
 
@@ -55,28 +61,59 @@ class WorldController extends Controller
         return redirect()->route('home')->withSuccess('World deleted!');
     }
 
-    public function addMember(AddMemberToWorldRequest $request,string $world_id, string $username): JsonResponse
-    {   
+    public function update(EditWorldRequest $request, string $id): RedirectResponse
+    {
         $fields = $request->validated();
 
+        $world = World::findOrFail($id);
+
+        $world->name = $fields['name'];
+        $world->description = $fields['description'];
+        
+        $world->save();
+
+        return redirect()->route('worlds.show', $id);
+    }
+
+    public function invite(AddMemberToWorldRequest $request, string $world_id): JsonResponse
+    {   
+        $fields = $request->validated();
         $world = World::findOrFail($world_id);
-        error_log($world);
-        $member = User::where('username', $username)->first()->persistentUser->member;
-        try {
-            $member->worlds()->attach($world_id, ['is_admin' => $fields['type']]);
-            NotificationController::WorldNotification($world,$member->name . ' added to ');
+        
+
+        try
+        {
+            $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+            if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
+
+            $inviteToken = bin2hex(random_bytes(32));
+
+            Invitation::create([
+                'token' => $inviteToken,
+                'world_id' => $world_id,
+                'member_id' => $member->id,
+                'type' => $fields['type']
+            ]);
+        
+
+            $mailData = [
+                'view' => 'emails.invite',
+                'name' => $member->name,
+                'world_name' => $world->name,
+                'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $world_id . '&token=' . $inviteToken
+            ];
+
+            Mail::to($member->email)->send(new MailModel($mailData));
+
             return response()->json([
                 'error' => false,
-                'id' => $member->id,
-                'username' => $username,
-                'world_id' => $world->id,
-                'picture' => $member->picture
+                'username' => $fields['username']
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             return response()->json([
                 'error' => true,
-                'username' => $username,
-                'child' => 'world'
+                'username' => $fields['username']
             ]);
         }
     }
@@ -106,6 +143,40 @@ class WorldController extends Controller
             ]);
         }
     }
+    public function showInvite(): View
+    {
+        $world_id = request()->query('wid');
+        $world_name = World::findOrFail($world_id)->name;
+        $username = request()->query('username');
+        $token = request()->query('token');
+        $type = request()->query('adm');
+
+        return view('pages.invite', [
+            'world_id' => $world_id,
+            'world_name' => $world_name,
+            'username' => $username,
+            'token' => $token,
+            'type' => $type
+        ]);
+    }
+
+    public function join(JoinWorldRequest $request) : RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $world = World::findOrFail($fields['world_id']);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        Invitation::where('token', $fields['token'])->delete();
+
+        if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
+
+        NotificationController::WorldNotification($world,$member->name . ' added to ');
+        $world->members()->attach($member->id, ['is_admin' => $fields['type']]);
+
+        return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
+    }
+
+
     public function removeMember(RemoveMemberFromWorldRequest $request, string $world_id, string $username) : JsonResponse
     {   
         $request->validated();
@@ -114,7 +185,8 @@ class WorldController extends Controller
 
         
         try {
-            NotificationController::WorldNotification($world_id,$member->id . 'removed from ');
+            $world = World::findOrFail($world_id);
+            NotificationController::WorldNotification($world,$member->id . 'removed from ');
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
@@ -136,7 +208,7 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world_id,$member->id . ' left the ');
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
@@ -144,7 +216,7 @@ class WorldController extends Controller
         }
     }
 
-    public function comment(WorldCommentRequest $request, string $id): RedirectResponse
+    public function comment(CommentRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
 
@@ -185,5 +257,47 @@ class WorldController extends Controller
         return response()->json([
             'projects' => $projectsJson,
         ]);
+    }
+
+    public function showEditWorld(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'edit' => true
+        ]);
+    }
+
+    public function favorite(string $id): JsonResponse
+    {
+        $world = World::findOrFail($id);
+        $this->authorize('favorite', $world);
+        $member = Auth::user()->persistentUser->member;
+
+        try {
+            if ($member->favoriteWorld->contains('id', $id)) {
+                $member->favoriteWorld()->detach($id);
+                $favorite = false;
+            } else {
+                $member->favoriteWorld()->attach($id);
+                $favorite = true;
+            }
+
+            $member->save();
+            
+            return response()->json([
+                'error' => false,
+                'favorite' => $favorite,
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true
+            ]);
+        }
+        
     }
 }

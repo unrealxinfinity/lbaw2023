@@ -40,7 +40,7 @@ class ProjectPolicy
     {
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_leader = $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
+        $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         return (!$is_disabled && $is_leader);
     }
 
@@ -92,10 +92,20 @@ class ProjectPolicy
 
     public function projectTagCreate(User $user,Project $project): bool
     {   
-        return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
+        return (!$is_disabled && $is_member);
     }
     public function searchTask(User $user): bool
     {   
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        return $is_disabled;
+    }
+
+    public function favorite(User $user, Project $project): bool
+    {
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
 }

@@ -41,7 +41,7 @@
                                 
                             </svg>
                         </div>
-                        <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
+                        <a class="button" @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') href="{{ url('members/' . Auth::user()->username) }}" @endif> {{ Auth::user()->username }} </a>
                         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                     </ul>
                                         
@@ -78,7 +78,7 @@
         </div>
 
         <div id="notificationArea" class="hidden bg-white bg-opacity-50 pb-4 pt-4 sm:mx-10 sm:px-10 px-2 absolute right-40 top-20 mt-2 flex flex-col items-center transition-opacity rounded-lg ease duration-900" style="z-index: 999;">
-            <ul id="notificationList" class ="text-center">
+            <ul id="notificationList" class ="text-center  max-h-[400px] overflow-y-auto overflow-x-hidden">
             </ul>
             <a id="clearNotifications" class="button rounded-lg text-white text-center w-full ">Clear Notifications</a>
         </div>

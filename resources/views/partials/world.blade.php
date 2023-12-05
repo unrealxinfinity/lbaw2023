@@ -1,24 +1,47 @@
 <article class="world md:w-2/3 peer-checked:fixed" data-id="{{ $world->id }}">
     <p><a href="/">Home</a> > <a href="/worlds/{{ $world->id }}"> {{ $world->name }}</a></p>
-    <header class="flex justify-start sm:h-40 h-24 m-5">
-        <img class="h-full aspect-square " src={{ $world->getImage() }}>
-        @can('edit', $world)
-            <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-
-                <input class="text-white" name="file" type="file" required>
-                <input name="type" type="hidden" value="world">
-                <input class="button w-min" type="submit" value="Upload world picture">
-            </form>
-            @include('form.delete-world', ['world' => $world])
-            @include('form.assign-member-to-world', ['world' => $world])
-        @endcan
-        <div class="flex flex-col ml-5 pt-1">
-            <h1>{{ $world->name }}</h1>
+    <header class="flex justify-between sm:h-40 h-24 m-5">
+        <div class="flex justify-start">
+            <img class="h-full aspect-square " src={{ $world->getImage() }}>
+            <div class="flex flex-col ml-5 pt-1">
+                <div class="flex">
+                <h1>{{ $world->name }}</h1>
+                @can('edit', $world)
+                    <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a>
+                @endcan
+                </div>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
             </div>
             <label for="show-details" class="md:hidden cursor-pointer text-mediumPhone sm:m-3 m-2 w-fit mt-5 underline text-grey"> see details </label>
+        </div>
+        </div>
+        <div class="relative flex text-left">
+            @can('favorite', $world)
+                <form id="favorite">
+                    @csrf
+                    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+                    <input type="hidden" class="type" name="type" value="worlds">
+                    <button class="my-3 pr-2 w-full md:text-big text-bigPhone" type="submit">
+                        @if(Auth::check() && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
+                        @else &#9734; @endif</button>
+                </form>
+            @endcan
+            @if(Auth::check() && Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world))
+            <input type="checkbox" id="more-options" class="hidden peer"/>
+            <label for="more-options" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
+            <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
+                @if(Auth::check() && Auth::user()->can('delete', $world))
+                @include('form.delete-world', ['world' => $world])
+                @endif
+                @if(Auth::check() && Auth::user()->can('leave', $world))
+                <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
+                    @CSRF
+                    @method('DELETE')
+                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
+                </form>
+                @endif
+            </div>
+            @endif
         </div>
     </header>
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
@@ -61,10 +84,12 @@
     <section id="comments">
         <h2 class="mt-10"> COMMENTS </h2>
         <ul>
-            @each('partials.comment', $world->comments()->orderBy('id')->get(), 'comment')
+            @foreach ($world->comments()->orderBy('id')->get() as $comment)
+                @include('partials.comment', ['comment' => $comment, 'type' => 'world'])
+            @endforeach
         </ul>
         @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
-        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id])
+        @include('form.comment', ['route' => 'world-comment', 'id' => $world->id, 'type' => 'world'])
         @endif
     </section>
 </article>

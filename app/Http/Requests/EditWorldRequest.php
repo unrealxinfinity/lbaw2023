@@ -5,15 +5,17 @@ namespace App\Http\Requests;
 use App\Models\World;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class WorldCommentRequest extends FormRequest
+class EditWorldRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::user()->can('comment', World::find($this->route()->id));
+        
+        return Auth::user()->can('edit', World::where('id', $this->route()->id)->first());
     }
 
     /**
@@ -24,8 +26,8 @@ class WorldCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member' => ['exists:App\Models\Member,id'],
-            'text' => ['required', 'string']
+            'name' => ['string', 'required', 'max:30'],
+            'description' => ['string', 'max:255'],
         ];
     }
 }

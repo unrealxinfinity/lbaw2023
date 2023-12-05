@@ -4,12 +4,6 @@
 
 @tailwind utilities;
 
-@tailwind base;
-
-@tailwind components;
-
-@tailwind utilities;
-
 @layer base {
   h1 {
     @apply m-2 text-green text-bigPhone md:text-big font-bold;

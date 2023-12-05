@@ -72,7 +72,7 @@ CREATE TABLE worlds(
   created_at DATE DEFAULT CURRENT_DATE NOT NULL CHECK(created_at <= CURRENT_DATE),
   picture VARCHAR,
   owner_id INT NOT NULL,
-  FOREIGN KEY(owner_id) REFERENCES members(id)
+  FOREIGN KEY(owner_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -86,6 +86,16 @@ CREATE TABLE member_world(
   PRIMARY KEY(member_id,world_id),
   FOREIGN KEY (member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS invitations CASCADE;
+CREATE TABLE invitations(
+  id SERIAL PRIMARY KEY,
+  token VARCHAR NOT NULL,
+  member_id INT NOT NULL,
+  world_id INT NOT NULL,
+  FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 /*Has to implement model timeline and a trigger to maintain the world info after deleting it, alsoc change the structure of this table to correspond to eloquent*/
@@ -472,6 +482,24 @@ CREATE TRIGGER delete_member_tag
   FOR EACH ROW
   EXECUTE PROCEDURE delete_tags();
 
+DROP FUNCTION IF EXISTS delete_owned_worlds() CASCADE;
+CREATE FUNCTION delete_owned_worlds() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.type_ = 'Deleted' THEN
+        DELETE FROM worlds w WHERE w.owner_id = (SELECT m.id FROM members m WHERE m.user_id = NEW.id);
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS delete_owned_worlds ON users CASCADE;
+CREATE TRIGGER delete_owned_worlds
+    AFTER UPDATE ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE delete_owned_worlds();
+
 DROP INDEX IF EXISTS task_project CASCADE;
 CREATE INDEX task_project ON tasks USING hash (project_id);
 
@@ -687,7 +715,7 @@ INSERT INTO member_world (member_id, world_id, is_admin) VALUES
     (1, 1, true),
     (2, 1, false),
     (2, 2, true),
-    (3, 2, false);
+    (3, 2, true);
 
 -- Sample data for the 'world_timeline' table
 INSERT INTO world_timeline (date_, description, world_id) VALUES
@@ -696,7 +724,7 @@ INSERT INTO world_timeline (date_, description, world_id) VALUES
 
 -- Sample data for the 'favorite_world' table
 INSERT INTO favorite_world (member_id, world_id) VALUES
-    (1, 2),
+    (1, 1),
     (3, 1);
 
 -- Sample data for the 'project' table

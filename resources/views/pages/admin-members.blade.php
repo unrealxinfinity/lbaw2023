@@ -10,7 +10,9 @@
         <input class="button" type="submit" value="Search">
     </form>
     <section id="members">
+        {{ $members->links() }}
         @each('partials.member-edit', $members, 'member')
+        {{ $members->links() }}
         @include('form.createaccount')
     </section>
 @endsection

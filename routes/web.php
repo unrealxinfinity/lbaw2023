@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\DeleteController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
@@ -100,18 +101,25 @@ Route::controller(SearchController::class)->group(function() {
 });
 
 Route::controller(WorldController::class)->group(function () {
-    Route::post('/api/worlds/{id}/{username}', 'addMember');//
+    Route::post('/api/worlds/{id}/favorite', 'favorite');//
+    //Route::post('/api/worlds/{id}/{username}', 'addMember');//
+    Route::post('/api/worlds/{id}/invite', 'invite')->name('invite-world');
+    Route::post('/worlds/{id}', 'join')->name('join-world');
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
     Route::post('/worlds', 'create')->name('create-world');//
+    Route::get('/worlds/{id}/edit', 'showEditWorld')->name('edit-world');
+    Route::put('/api/world/{id}', 'update')->name('update-world');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
     Route::put('/api/worlds/{id}', 'assignWorldAdmin')->name('assign-world-admin');
+    Route::get('/invite', 'showInvite')->name('show-invite');
 });
 
 Route::controller(ProjectController::class)->group(function () {
+    Route::post('/api/projects/{id}/favorite', 'favorite');//
     Route::post('/api/projects/{id}/{username}', 'addMember');//
     Route::delete('/api/projects/{id}/{username}', 'removeMember');
     Route::get('/projects/{id}', 'show')->name('projects.show');//
@@ -129,15 +137,18 @@ Route::controller(TagController::class)->group(function () {
 });
 
 Route::controller(MemberController::class)->group(function () {
-    Route::get('members/{username}', 'show'); //
+    Route::get('members/{username}', 'show')->name('members.show');//
     Route::get('/myworlds', 'showMemberWorlds');
     Route::get('/myprojects', 'showMemberProjects');//
     Route::get('/mytasks', 'showMemberTasks');//
+    Route::get('/myfavorites', 'showMemberFavorites');//
     Route::put('/api/members/{username}', 'update')->name('update-member');//
     Route::get('/admin', 'list')->name('list-members');//
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
     Route::get('/create-world', 'showCreateWorld')->name('world-create');
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
+    Route::post('/members/{username}/block', 'block')->name('block-member');
+    Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
 });
 
 Route::controller(TaskController::class)->group(function () {
@@ -148,6 +159,10 @@ Route::controller(TaskController::class)->group(function () {
     Route::put('/api/tasks/{id}', 'move');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
+});
+
+Route::controller(CommentController::class)->group(function () {
+   Route::put('/comments/{id}', 'edit')->name('edit-comment');
 });
 
 // Authentication
@@ -164,6 +179,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(DeleteController::class)->group(function () {
    Route::delete('/members/{username}', 'delete')->name('delete-member');//
+   Route::get('/members/{username}/delete', 'showConfirmation')->name('delete-confirmation');
 });
 
 Route::controller(NotificationController::class)->group(function () {

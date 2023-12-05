@@ -38,6 +38,11 @@ class Member extends Model
         return $this->belongsToMany(World::class)->withPivot('is_admin');
     }
 
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class)->withPivot('permission_level');
@@ -66,5 +71,15 @@ class Member extends Model
     public function getProfileImage(): string
     {
         return FileController::get('profile', $this->id);
+    }
+
+    public function favoriteWorld(): BelongsToMany
+    {
+        return $this->belongsToMany(World::class, 'favorite_world');
+    }
+
+    public function favoriteProject(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'favorite_project');
     }
 }

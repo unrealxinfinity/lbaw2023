@@ -45,6 +45,7 @@ class RecoverController extends Controller
         $member->save();
 
         $mailData = [
+            'view' => 'emails.recover',
             'name' => $member->name,
             'link' => env('APP_URL') . '/reset?id=' . $member->id . '&token=' . $recoverToken
         ];
