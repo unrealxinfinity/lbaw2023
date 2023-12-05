@@ -981,19 +981,7 @@ function pusherNotifications(projectContainer, worldContainer){
   
 }
 
-function paginate() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const page = parseInt(urlParams.get('page'), 10) ?? 1;
-
-  const prev = document.querySelector("#prev-page");
-  const next = document.querySelector("#next-page");
-
-  prev.href = "?page=" + (page - 1);
-  next.href = "?page=" + (page + 1);
-}
-
 addEventListeners();
-paginate();
 
 function openSidebar() {
   console.log('hello');
