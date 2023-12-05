@@ -27,7 +27,7 @@ class JoinWorldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'exists:App\Models\Member,id'],
+            'username' => ['required', 'exists:App\Models\User,username'],
             'type' => ['required', 'boolean'],
             'world_id' => ['required', 'exists:App\Models\World,id'],            
             'token' => ['required', 'exists:App\Models\Invitation,token'],

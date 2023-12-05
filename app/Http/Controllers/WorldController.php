@@ -151,21 +151,13 @@ class WorldController extends Controller
     {
         $fields = $request->validated();
 
-        error_log($fields['acceptance']);
-        error_log($fields['token']);
-        error_log($fields['world_id']);
-        error_log($fields['id']);
-        error_log($fields['type']);
-
-        if($fields['acceptance'] == false) return redirect()->route('home')->withSuccess('You rejected the invitation.');
-
         $world = World::findOrFail($fields['world_id']);
-        $member = User::where('id', $fields['id'])->first()->persistentUser->member;
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
         Invitation::where('token', $fields['token'])->delete();
 
         if($fields['acceptance'] == false) return redirect()->route('home')->withSuccess('You rejected the invitation.');
 
-
+        NotificationController::WorldNotification($world,$member->name . ' added to ');
         $world->members()->attach($member->id, ['is_admin' => $fields['type']]);
 
         return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
