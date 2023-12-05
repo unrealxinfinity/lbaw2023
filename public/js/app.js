@@ -382,8 +382,15 @@ function addEventListeners() {
   function inviteMemberHandler(json) {
     const list = document.querySelectorAll('ul.members');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.invite-member');
+      const form = document.querySelector('form#invite-member');
       const error = form.querySelector('span.error');
+      const invitation = form.querySelectorAll('span.success');
+      if (invitation.length !== 0)
+      {
+        invitation.forEach(element => {
+          element.remove();
+        });
+      }
       if (error !== null)
       {
         error.remove();
