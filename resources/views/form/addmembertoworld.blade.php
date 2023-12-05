@@ -1,5 +1,6 @@
-<form class="form-post" action={{ route ('invite-world', ['id' => $world->id]) }}>
+<form class="form-post" action={{ route ('invite-world', ['id' => $world->id]) }} method="POST">
     @csrf
+    @method('POST')
     Invite member:
     <input type="text" class="username" name="username" placeholder="Username" required>
     What role?
