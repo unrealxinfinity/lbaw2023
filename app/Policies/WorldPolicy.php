@@ -43,7 +43,7 @@ class WorldPolicy
 
     public function join(User $user, World $world): bool
     {
-        return ($user->persistentUser->type_ === 'Member');
+        return ($user->persistentUser->type_ === 'Member' && !$user->persistentUser->member->worlds->contains('id', $world->id));
     }
 
     public function removeMember(User $user, World $world): bool

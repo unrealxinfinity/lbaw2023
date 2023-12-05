@@ -30,9 +30,7 @@ class JoinWorldRequest extends FormRequest
             'id' => ['required', 'exists:App\Models\Member,id'],
             'type' => ['required', 'boolean'],
             'world_id' => ['required', 'exists:App\Models\World,id'],            
-            'token' => ['required' ,Rule::exists('invitations', 'token')->where(function (Builder $query) {
-                $query->where('world_id', $this->world_id)->where('id', $this->id);
-            })],
+            'token' => ['required', 'exists:App\Models\Invitation,token'],
             'acceptance' => ['required', 'boolean']
         ];
     }
