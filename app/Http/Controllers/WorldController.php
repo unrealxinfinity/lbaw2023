@@ -136,6 +136,8 @@ class WorldController extends Controller
         $member = User::where('id', $fields['id'])->first()->persistentUser->member;
         $world->members()->attach($member->id, ['is_admin' => $fields['is_admin']]);
 
+        Invitation::where('world_id', $fields['world_id'])->where('member_id', $member->id)->delete();
+
         return redirect()->route('home')->withSuccess('You joined the world.');
     }
 
