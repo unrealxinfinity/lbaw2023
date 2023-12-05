@@ -57,10 +57,10 @@ function addEventListeners() {
     if(button != null)
     button.addEventListener("click", addTagRequest);
     
-    let worldMemberAdder = document.querySelectorAll('form#add-member-to-world');
+    let worldMemberAdder = document.querySelectorAll('form#invite-member');
     if (worldMemberAdder != null){
       [].forEach.call(worldMemberAdder, function(form) {
-        form.addEventListener('submit', sendAddMemberToWorld);
+        form.addEventListener('submit', sendInviteMember);
       });
     }
     
@@ -379,11 +379,18 @@ function addEventListeners() {
     });
   }
 
-  function addMemberToWorldHandler(json) {
+  function inviteMemberHandler(json) {
     const list = document.querySelectorAll('ul.members');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.add-member');
+      const form = document.querySelector('form#invite-member');
       const error = form.querySelector('span.error');
+      const invitation = form.querySelectorAll('span.success');
+      if (invitation.length !== 0)
+      {
+        invitation.forEach(element => {
+          element.remove();
+        });
+      }
       if (error !== null)
       {
         error.remove();
@@ -395,66 +402,28 @@ function addEventListeners() {
         span.classList.add('error');
         const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
         const index = members.find(x => x === json.username);
-        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-        else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
+        if (index === undefined) span.textContent = 'Please check if ' + json.username + ' already belongs to this world.';
+        else span.textContent = json.username + ' is already a member of this world.';
         form.appendChild(span);
         return;
       }
   
-      const member = document.createElement('article');
-  
-      member.classList.add('member');
-      member.setAttribute('data-id', json.id);
-  
-      const header = document.createElement('header');
-      header.classList.add('flex', 'justify-start');
-      const img = document.createElement('img');
-      img.classList.add('h-fit', 'aspect-square', 'mx-1');
-      const h4 = document.createElement('h4');
-      const a = document.createElement('a');
-      a.href = '/members/' + json.username;
-      a.textContent = json.username;
-      img.src = json.picture;
-      
-      h4.appendChild(a);
-      header.appendChild(img);
-      header.appendChild(h4);
-  
-      member.appendChild(header);
-
-      const removeForm = document.createElement('form');
-      removeForm.id= 'remove-member-project';
-      removeForm.setAttribute('data-id', json.id);
-      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-      removeForm.innerHTML = `
-        <input type="hidden" name="_token" value="${csrfToken}">
-        <input type="hidden" class="id" name="id" value="${json.project_id}">
-        <input type="hidden" class="username" name="username" value="${json.username}">
-        <button type="submit"> &times; </button>
-      `;
-
-      const div = document.createElement('div');
-      div.classList.add("flex", "justify-between");
-      div.appendChild(member);
-      if (json.can_remove == true) {
-      div.appendChild(removeForm);
-      removeForm.addEventListener('submit', sendRemoveMemberFromWorldRequest);
-      }
-      let section = json.is_admin=='true'? ul.querySelector('#world-admins'):ul.querySelector('#members'); 
-      section.appendChild(div);
+      const span = document.createElement('span');
+      span.classList.add('success');
+      span.textContent = json.username + ' has been invited to join this world.';
+      form.appendChild(span);
     });
-  }
+  } 
 
-  async function sendAddMemberToWorld(event){
+  async function sendInviteMember(event){
       event.preventDefault();
 
       const username= this.querySelector('input.username').value;
-      const id = this.querySelector('input.id').value;
+      const id = this.querySelector('input.world_id').value;
       const csrf = this.querySelector('input:first-child').value;
       const type = this.querySelector('select.type').value;
 
-      const response = await fetch('/api/worlds/' + id + '/' + username, {
+      const response = await fetch('/api/worlds/' + id + '/invite', {
         method: 'POST',
         headers: {
           'X-CSRF-TOKEN': csrf,
@@ -462,12 +431,12 @@ function addEventListeners() {
           'Accept': 'application/json',
           "X-Requested-With": "XMLHttpRequest"
         },
-        body: JSON.stringify({type: type})
+        body: JSON.stringify({username: username, type: type})
       });
 
       const json = await response.json();
 
-      if (response.status !== 500) addMemberToWorldHandler(json)
+      if (response.status !== 500) inviteMemberHandler(json);
   }
 
   async function sendAssignMemberRequest(event) {

@@ -1,7 +1,7 @@
-<form id="add-member-to-world" class="add-member form-post">
+<form class="form-post" id="invite-member">
     @csrf
-    Add member:
-    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+    Invite member: 
+    <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>
     What role?
     <select name="type" class="type" required>
@@ -9,5 +9,5 @@
         <option value="true">World Administrator</option>
     </select>
     
-    <input class="button" type="submit" value="Add a member">
+    <input class="button" type="submit" value="Invite">
 </form>
