@@ -768,17 +768,21 @@ function ShowNotificationsHandler(json,ev){
   for(let notification of notifications){    
     let notificationText = document.createElement('p');
     notificationText.classList.add('text-black'); 
-    let notificationPriority = document.createElement('p');
-    notificationPriority.classList.add('text-black');
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
     let notificationContainer = document.createElement('div');
-    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
+    if(notification.level == 'Low'){
+      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
+    }
+    else if(notification.level == 'Medium'){
+      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-yellow');
+    }
+    else if(notification.level == 'High'){
+      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-orange');
+    }
     notificationText.textContent = notification.text;
-    notificationPriority.textContent = notification.level;
     notificationDate.textContent = notification.date_;
     notificationContainer.appendChild(notificationText);
-    notificationContainer.appendChild(notificationPriority);
     notificationContainer.appendChild(notificationDate);
     if (popup.firstChild === null) {
       popup.appendChild(notificationContainer);
