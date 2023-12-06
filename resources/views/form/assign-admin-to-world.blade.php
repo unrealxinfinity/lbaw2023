@@ -1,4 +1,4 @@
-@if($isAdmin)
+@if ($isAdmin)
     <form method="POST" class="demote-admin-from-world">
         @csrf
     <input type="hidden" class="id" name="id" value="{{ $world->id }}">

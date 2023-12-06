@@ -38,7 +38,7 @@
                     </form>
             </div>
             @include('form.world-edit', ['world'=>$world])
-            @include('form.assign-admin-to-world', ['world'=>$world]);
+            
             @endcan
         </div>
     </div>
