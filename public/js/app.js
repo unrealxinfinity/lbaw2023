@@ -820,9 +820,7 @@ async function sendAssignAdminToWorldRequest(ev) {
 
 }
 
-function assignAdminToWorldHandler(data) {
-  
-    alert("Admin added to world!");
+function assignAdminToWorldHandler(data) {  
   window.location.reload();
 }
 
@@ -856,7 +854,6 @@ async function sendDemoteAdminFromWorldRequest(ev) {
 }
 
 function demoteAdminToWorldHandler(data) {
-  alert("Admin demoted from world!");
   window.location.reload();
 }
 
