@@ -40,7 +40,7 @@
                         @if ($member->id != $thing->owner()->get()->first()->id)
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
-                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=>true])
+                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                             @endcan
                         @endif
@@ -54,7 +54,7 @@
                     <div class="flex justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
-                            @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=>false])
+                            @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
                             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                         @endcan
                     </div>
