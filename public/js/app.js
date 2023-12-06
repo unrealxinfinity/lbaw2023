@@ -780,7 +780,11 @@ function ShowNotificationsHandler(json,ev){
     notificationContainer.appendChild(notificationText);
     notificationContainer.appendChild(notificationPriority);
     notificationContainer.appendChild(notificationDate);
-    popup.appendChild(notificationContainer);
+    if (popup.firstChild === null) {
+      popup.appendChild(notificationContainer);
+    } else {
+      popup.insertBefore(notificationContainer, popup.firstChild);
+    }
   }
   if(ev != null){
     notificationPopup.classList.toggle('hidden'); 

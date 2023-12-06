@@ -14,7 +14,6 @@ class AssignWorldAdminRequest extends FormRequest
      */
     public function authorize(): bool
     {    
-        error_log(Auth::user()->can('assignWorldAdmin', [World::find($this->route()->id)]));
         return Auth::user()->can('assignWorldAdmin', [World::find($this->route()->id)]);
     }
 

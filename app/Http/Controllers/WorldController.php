@@ -56,7 +56,6 @@ class WorldController extends Controller
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
     {
-        error_log("delete");
         $request->validated();
         $world = World::findOrFail($id);
         $world->delete();
@@ -128,7 +127,7 @@ class WorldController extends Controller
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
         
         $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
-        NotificationController::WorldNotification($world,$member->name . ' promoted to ');
+        NotificationController::WorldNotification($world,$member->name . ' promoted in ');
         return response()->json([
             'error' => false,
             'id' => $member->id,
@@ -145,7 +144,7 @@ class WorldController extends Controller
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
        
         $member->worlds()->updateExistingPivot($id, ['is_admin' => false]);
-        NotificationController::WorldNotification($world,$member->name . ' demoted from ');
+        NotificationController::WorldNotification($world,$member->name . ' demoted in ');
         return response()->json([
             'error' => false,
             'id' => $member->id,
