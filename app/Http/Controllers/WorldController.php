@@ -9,6 +9,7 @@ use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Models\Invitation;
 use App\Models\World;
 use App\Models\User;
+use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
@@ -21,6 +22,7 @@ use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
+use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 class WorldController extends Controller
@@ -273,6 +275,26 @@ class WorldController extends Controller
                 'error' => true
             ]);
         }
+    }
+
+    public function transfer(TransferOwnershipRequest $request, string $id): RedirectResponse
+    {
+        $fields = $request->validated();
+
+        $member = Member::findOrFail($fields['owner']);
+        $world = World::findOrFail($id);
+
+        if (!$member->worlds->contains('id', $id) || $member->persistentUser->type_ != 'Member') {
+            return redirect()->back()->withError("This member isn't a valid choice!");
+        }
+
+        $member->worlds()->updateExistingPivot($id, [
+            'is_admin' => true
+        ]);
+
+        $world->owner_id = $member->id;
+        $world->save();
         
+        return redirect()->back()->withSuccess("New owner established!");
     }
 }
