@@ -1,6 +1,15 @@
-<form method="POST" class="assign-admin-to-world mx-4 mt-5">
+@if($isAdmin)
+    <form method="POST" class="demote-admin-from-world">
+        @csrf
+    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+    <input type="text" class="username" name="username" value="{{$member->persistentUser->user->username}}" hidden>
+    <input class="button" type="submit" value="Demote World Admin">
+    </form>
+@else
+    <form method="POST" class="assign-admin-to-world">
     @csrf
-   <input type="hidden" class="id" name="id" value="{{ $world->id }}">
-   <input type="text" class="username" name="username" placeholder="Username" required>
-   <input class="button" type="submit" value="Assign World Admin">
-</form>
+    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+    <input type="text" class="username" name="username"  value="{{$member->persistentUser->user->username}}" hidden>
+    <input class="button" type="submit" value="Promote World Admin">
+    </form>
+@endif

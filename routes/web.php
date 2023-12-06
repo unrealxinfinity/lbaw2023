@@ -115,6 +115,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
     Route::put('/api/worlds/{id}/assign', 'assignNewWorldAdmin')->name('assign-world-admin');
+    Route::put('/api/worlds/{id}/demote', 'demoteWorldAdmin')->name('demote-world-admin');
     Route::get('/api/worlds/{id}/invite', 'showInvite')->name('show-invite');
 });
 

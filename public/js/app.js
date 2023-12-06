@@ -162,13 +162,17 @@ function addEventListeners() {
     }
     
     let assignAdminToWorld = document.querySelectorAll('form.assign-admin-to-world');
-    console.log(assignAdminToWorld);
     if(assignAdminToWorld != null){
       assignAdminToWorld.forEach(form => {
-        form.addEventListener('submit', sendAssignAdminToWorldRequest);
+       form.addEventListener('submit', sendAssignAdminToWorldRequest);
       });
     }
-
+    let demoteAdminFromWorld = document.querySelectorAll('form.demote-admin-from-world');
+    if(demoteAdminFromWorld != null){
+      demoteAdminFromWorld.forEach(form => {
+       form.addEventListener('submit', sendDemoteAdminFromWorldRequest);
+      });
+    }
     let deleteAccount = document.querySelector("#delete-account");
     if (deleteAccount != null)
       deleteAccount.addEventListener('click', deleteAccountButton);
@@ -792,6 +796,7 @@ async function sendAssignAdminToWorldRequest(ev) {
   let id = this.querySelector('input.id').value;
   let username = this.querySelector('input.username').value;
   let url = '/api/worlds/' + id + '/assign';
+  console.log(username);
   const response = await fetch(url, {
     method: 'PUT',
     headers: {
@@ -816,20 +821,46 @@ async function sendAssignAdminToWorldRequest(ev) {
 }
 
 function assignAdminToWorldHandler(data) {
-  if(data.error){
-    const span = document.createElement('span');
-        span.classList.add('error');
-        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
-        const index = members.find(x => x === json.username);
-        if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
-        else span.textContent = json.username + ' is already a admin of this world' + json.child + '.';
-        form.appendChild(span);
-  }
-  else{
+  
     alert("Admin added to world!");
-  }
   window.location.reload();
 }
+
+async function sendDemoteAdminFromWorldRequest(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/worlds/' + id + '/demote';
+  console.log(username);
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    demoteAdminToWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+
+}
+
+function demoteAdminToWorldHandler(data) {
+  alert("Admin demoted from world!");
+  window.location.reload();
+}
+
+
   async function sendFavoriteRequest(event) {
     event.preventDefault();
 

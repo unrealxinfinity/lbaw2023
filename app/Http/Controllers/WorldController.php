@@ -144,6 +144,29 @@ class WorldController extends Controller
             ]);
         }
     }
+    public function demoteWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {   
+        $fields = $request->validated();
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        try {
+            $member->worlds()->updateExistingPivot($id, ['is_admin' => false]);
+            NotificationController::WorldNotification($world,$member->name . ' demoted from ');
+            return response()->json([
+                'error' => false,
+                'id' => $member->id,
+                'username' => $fields['username'],
+                'world_id' => $world->id,
+                'picture' => $member->picture
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'username' => $fields['username'],
+                'child' => 'world'
+            ]);
+        }
+    }
     public function showInvite(): View
     {
         $world_id = request()->query('wid');
