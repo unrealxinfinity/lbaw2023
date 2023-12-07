@@ -115,6 +115,8 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
     Route::get('/invite', 'showInvite')->name('show-invite');
+    Route::get('/worlds/{id}/transfer', 'showTransfer')->name('show-transfer');
+    Route::post('/worlds/{id}/transfer', 'transfer')->name('transfer-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {

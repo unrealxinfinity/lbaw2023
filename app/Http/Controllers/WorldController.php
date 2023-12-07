@@ -9,6 +9,7 @@ use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Models\Invitation;
 use App\Models\World;
 use App\Models\User;
+use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
@@ -21,6 +22,7 @@ use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
+use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 class WorldController extends Controller
@@ -33,7 +35,10 @@ class WorldController extends Controller
         
         return view('pages.world', [
             'world' => $world,
-            'edit' => false
+            'subform' => false,
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -242,7 +247,12 @@ class WorldController extends Controller
 
         return view('pages.world', [
             'world' => $world,
-            'edit' => true
+            'subform' => true,
+            'formTitle' => 'Edit World',
+            'formName' => 'form.world-edit',
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -273,6 +283,43 @@ class WorldController extends Controller
                 'error' => true
             ]);
         }
+    }
+
+    public function showTransfer(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'subform' => true,
+            'formTitle' => 'Transfer Ownership',
+            'formName' => 'form.transferownership',
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
+        ]);
+    }
+
+    public function transfer(TransferOwnershipRequest $request, string $id)
+    {
+        $fields = $request->validated();
+
+        $member = Member::findOrFail($fields['owner']);
+        $world = World::findOrFail($id);
+
+        if (!$member->worlds->contains('id', $id) || $member->persistentUser->type_ != 'Member') {
+            return redirect()->back()->withError("This member isn't a valid choice!");
+        }
+
+        $member->worlds()->updateExistingPivot($id, [
+            'is_admin' => true
+        ]);
+
+        $world->owner_id = $member->id;
+        $world->save();
         
+        return redirect()->route('worlds.show', ['id' => $id])->withSuccess('Owner transfered');
     }
 }
