@@ -18,9 +18,6 @@
     @if ($member)
         @include('partials.homepage', ['member' => $member, 'tasks' => $member->tasks()->orderBy('id')->get(), 'projects' => $member->projects()->where('status', '=', 'Active')->orderBy('id')->get(), 'worlds' => $member->worlds()->orderBy('id')->get()])
     @endif
-    @if (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
-        <a href="/admin" class="button">Admin Page</a>
-    @endif
         
     
 @endsection

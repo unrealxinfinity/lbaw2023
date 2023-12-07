@@ -41,7 +41,9 @@
                         </svg>
                     </div>
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
-                            <a id="profile" class="button mx-3" href="{{ url('members/' . Auth::user()->username) }}"> {{ Auth::user()->username }} </a>
+                            <a id="profile" class="button desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}"> {{ Auth::user()->username }} </a>
+                        @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
+                            <a href="/admin" class="button">Admin Page</a>
                         @endif
                         <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                 </ul>                     
@@ -67,10 +69,6 @@
                     <ul class="visible desktop:hidden my-5">
                         <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                     </ul>
-                @else
-                    <ul class="md:hidden visible my-5">
-                        <a class="button" href="{{ url('/login') }}"> Login </a>
-                    </ul>
                 @endif
             </ul>
         </div>
@@ -78,7 +76,7 @@
             <ul id="notificationList" class ="text-center  max-h-[400px] overflow-y-auto overflow-x-hidden"></ul>
             <a id="clearNotifications" class="button rounded-lg text-white text-center w-full ">Clear Notifications</a>
         </div>
-        <main class="bg-opacity-50 pb-10 pt-32 sm:mx-10 sm:px-10 px-2 z-0">
+        <main class="bg-black bg-opacity-30 pb-10 pt-28 mobile:mx-10 tablet:px-10 px-2 z-0">
             <section id="content">
                 @yield('content')
             </section>
