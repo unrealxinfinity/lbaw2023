@@ -36,7 +36,9 @@ class WorldController extends Controller
         return view('pages.world', [
             'world' => $world,
             'subform' => false,
-            'members' => $world->members
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -248,7 +250,9 @@ class WorldController extends Controller
             'subform' => true,
             'formTitle' => 'Edit World',
             'formName' => 'form.world-edit',
-            'members' => $world->members
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -292,7 +296,9 @@ class WorldController extends Controller
             'subform' => true,
             'formTitle' => 'Transfer Ownership',
             'formName' => 'form.transferownership',
-            'members' => $world->members
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
