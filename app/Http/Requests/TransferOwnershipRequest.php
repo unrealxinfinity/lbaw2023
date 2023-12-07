@@ -24,7 +24,7 @@ class TransferOwnershipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'exists:App\Models\Member,id']
+            'owner' => ['required', 'exists:App\Models\Member,id']
         ];
     }
 }
