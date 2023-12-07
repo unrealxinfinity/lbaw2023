@@ -10,7 +10,7 @@
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
                     <input type="hidden" class="world_id" name="world_id" value="{{ $invite->world_id }}">
-                    <input type="hidden" class="username" name="username" value="{{ $invite->username }}">
+                    <input type="hidden" class="username" name="username" value="{{ $invite }}">
                     <input type="hidden" class="type" name="type" value="{{ $invite->type }}">
                     <input type="hidden" class="acceptance" name="acceptance" value="true">
                     <input class="button" type="submit" value="Yes">
