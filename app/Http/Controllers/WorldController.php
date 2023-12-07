@@ -296,7 +296,7 @@ class WorldController extends Controller
         ]);
     }
 
-    public function transfer(TransferOwnershipRequest $request, string $id): RedirectResponse
+    public function transfer(TransferOwnershipRequest $request, string $id)
     {
         $fields = $request->validated();
 
@@ -314,6 +314,6 @@ class WorldController extends Controller
         $world->owner_id = $member->id;
         $world->save();
         
-        return redirect()->back()->withSuccess("New owner established!");
+        return redirect()->route('worlds.show', ['id' => $id])->withSuccess('Owner transfered');
     }
 }
