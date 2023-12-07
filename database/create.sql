@@ -91,7 +91,7 @@ CREATE TABLE member_world(
 DROP TABLE IF EXISTS invitations CASCADE;
 CREATE TABLE invitations(
   id SERIAL PRIMARY KEY,
-  token VARCHAR NOT NULL,
+  token VARCHAR NOT NULL UNIQUE,
   member_id INT NOT NULL,
   world_id INT NOT NULL,
   is_admin BOOLEAN NOT NULL,

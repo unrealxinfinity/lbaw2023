@@ -99,7 +99,7 @@ class WorldController extends Controller
                 'view' => 'emails.invite',
                 'name' => $member->name,
                 'world_name' => $world->name,
-                'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $world_id . '&token=' . $inviteToken
+                'link' => env('APP_URL') . '/invite?wid=token=' . $inviteToken
             ];
 
             Mail::to($member->email)->send(new MailModel($mailData));
@@ -119,39 +119,39 @@ class WorldController extends Controller
 
     public function showInvite(): View
     {
-        $world_id = request()->query('wid');
-        $world_name = World::findOrFail($world_id)->name;
-        $username = request()->query('username');
         $token = request()->query('token');
-        $is_admin = request()->query('adm');
+        $invitation = Invitation::where('token', $token)->first();
+        $username = $invitation->member->user->username;
+        $world_id = $invitation->world_id;
+        $world_name = World::findOrFail($world_id)->name;
 
         return view('pages.invite', [
             'world_id' => $world_id,
             'world_name' => $world_name,
             'username' => $username,
-            'token' => $token,
-            'is_admin' => $is_admin
+            'token' => $token
         ]);
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
     {
-        error_log('JOIN');
+        error_log('test');
         $fields = $request->validated();
 
-        $world = World::findOrFail($fields['world_id']);
-        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        $invitation = Invitation::where('token', $fields['token'])->first();
+
         Invitation::where('token', $fields['token'])->delete();
 
         if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
 
+        $world = World::findOrFail($invitation->world_id);
+        $member = $invitation->member;
+
         NotificationController::WorldNotification($world,$member->name . ' added to ');
 
-        $adm = $fields['is_admin'] === "true" ? true : false;
+        $world->members()->attach($member->id, ['is_admin' => $invitation->is_admin]);
 
-        $world->members()->attach($member->id, ['is_admin' => $adm]);
-
-        return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
+        return redirect()->route('worlds.show', ['id' => $invitation->world_id])->withSuccess('You joined the world.');
     }
 
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Invitation extends Model
 {
@@ -19,9 +19,9 @@ class Invitation extends Model
         'is_admin'
     ];
 
-    public function members(): BelongsToMany
+    public function member(): BelongsTo
     {
-        return $this->belongsToMany(Member::class);
+        return $this->belongsTo(Member::class);
     }
 
 }

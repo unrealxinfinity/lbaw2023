@@ -9,20 +9,14 @@
                     @csrf
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
-                    <input type="hidden" class="world_id" name="world_id" value="{{ $invite->world_id }}">
-                    <input type="hidden" class="username" name="username" value="{{ $invite }}">
-                    <input type="hidden" class="type" name="type" value="{{ $invite->type }}">
-                    <input type="hidden" class="acceptance" name="acceptance" value="true">
+                    <input type="hidden" class="acceptance" name="acceptance" value=1>
                     <input class="button" type="submit" value="Yes">
                 </form>
                 <form class="form-post w-1/2 px-4" action={{ route ('join-world', ['id' => $invite->world_id]) }} method="POST">
                     @csrf
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
-                    <input type="hidden" class="world_id" name="world_id" value="{{ $invite->world_id }}">
-                    <input type="hidden" class="username" name="username" value="{{ $invite->username }}">
-                    <input type="hidden" class="type" name="type" value="{{ $invite->is_admin }}">
-                    <input type="hidden" class="acceptance" name="acceptance" value="false">
+                    <input type="hidden" class="acceptance" name="acceptance" value=0>
                     <input class="button" type="submit" value="No">
                 </form>
             </div>
