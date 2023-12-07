@@ -8,7 +8,7 @@
             <input type="hidden" class="token" name="token" value="{{ $token }}">
             <input type="hidden" class="world_id" name="world_id" value="{{ $world_id }}">
             <input type="hidden" class="username" name="username" value="{{ $username }}">
-            <input type="hidden" class="type" name="type" value="{{ $type }}">
+            <input type="hidden" class="is_admin" name="is_admin" value="{{ $is_admin }}">
             <input type="hidden" class="acceptance" name="acceptance" value="true">
             <input class="button" type="submit" value="Yes">
         </form>
@@ -18,7 +18,7 @@
             <input type="hidden" class="token" name="token" value="{{ $token }}">
             <input type="hidden" class="world_id" name="world_id" value="{{ $world_id }}">
             <input type="hidden" class="username" name="username" value="{{ $username }}">
-            <input type="hidden" class="type" name="type" value="{{ $type }}">
+            <input type="hidden" class="is_admin" name="is_admin" value="{{ $is_admin }}">
             <input type="hidden" class="acceptance" name="acceptance" value="false">
             <input class="button" type="submit" value="No">
         </form>

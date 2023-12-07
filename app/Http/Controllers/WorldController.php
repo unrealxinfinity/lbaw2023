@@ -91,7 +91,7 @@ class WorldController extends Controller
                 'token' => $inviteToken,
                 'world_id' => $world_id,
                 'member_id' => $member->id,
-                'type' => $fields['type']
+                'is_admin' => $fields['type']
             ]);
         
 
@@ -123,19 +123,20 @@ class WorldController extends Controller
         $world_name = World::findOrFail($world_id)->name;
         $username = request()->query('username');
         $token = request()->query('token');
-        $type = request()->query('adm');
+        $is_admin = request()->query('adm');
 
         return view('pages.invite', [
             'world_id' => $world_id,
             'world_name' => $world_name,
             'username' => $username,
             'token' => $token,
-            'type' => $type
+            'is_admin' => $is_admin
         ]);
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
     {
+        error_log('JOIN');
         $fields = $request->validated();
 
         $world = World::findOrFail($fields['world_id']);
@@ -145,7 +146,10 @@ class WorldController extends Controller
         if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
 
         NotificationController::WorldNotification($world,$member->name . ' added to ');
-        $world->members()->attach($member->id, ['is_admin' => $fields['type']]);
+
+        $adm = $fields['is_admin'] === "true" ? true : false;
+
+        $world->members()->attach($member->id, ['is_admin' => $adm]);
 
         return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
     }
