@@ -88,7 +88,7 @@ class MemberController extends Controller
     {
         $this->authorize('showInvites', Member::class);
         $id = Auth::user()->persistentUser->member->id;
-        $invites = Member::findOrFail($id)->invites;
+        $invites = Member::findOrFail($id)->invitations;
         return view('pages.invites', ['invites' => $invites]);
     }
 
