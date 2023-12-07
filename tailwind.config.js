@@ -11,6 +11,9 @@ export default {
       md: '780px',
       lg: '976px',
       xl: '1440px',
+      mobile: '450px',
+      tablet: '601px',
+      desktop: '1024px'
     },
     colors: {
       white: '#ffffff',
@@ -20,12 +23,19 @@ export default {
       red: '#FF0000',
     },
     fontFamily: {
-      sans: ['Graphik', 'sans-serif'],
-      serif: ['Merriweather', 'serif'],
       roboto: ['Roboto', 'sans-serif'],
       minecraft: ['Minecraft', 'sans-serif']
     },
     fontSize: {
+      sMobile: '9px',
+      sTablet: '11px',
+      sDesktop: '12px',
+      mMobile: '11px',
+      mTablet: '15px',
+      mDesktop: '17px',
+      bMobile: '17px',
+      bTablet: '20px',
+      bDesktop: '23px',
       superBig: '2.5rem',
       superBigPhone: '1.2rem',
       big: '1.6rem',

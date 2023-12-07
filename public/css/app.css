@@ -6,19 +6,16 @@
 
 @layer base {
   h1 {
-    @apply m-2 text-green text-bigPhone md:text-big font-bold;
-    }
-  h3 {
-    @apply m-2 text-green text-mediumPhone md:text-medium;
+    @apply text-bMobile tablet:text-bTablet desktop:text-bDesktop;
   }
   h2 {
-    @apply text-medium;
+      @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop;
   }
   input, select, option, textarea {
-    @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone md:text-medium;
+    @apply focus:outline focus:outline-green outline-none py-2 px-2 whitespace-nowrap text-black rounded text-sMobile tablet:text-sTablet desktop:text-sDesktop;
   }
   h4, p {
-    @apply text-mediumPhone md:text-medium break-words;
+    @apply text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words;
   }
 }
 
@@ -27,7 +24,10 @@
       @apply bg-black bg-opacity-50 py-2 h-16 flex justify-around items-center;
     }    
     .button {
-      @apply bg-green text-white rounded sm:py-2 sm:px-8 px-4 py-1 m-2 ml-0 md:text-medium text-mediumPhone cursor-pointer hover:animate-pulse;
+      @apply bg-green text-white rounded py-2 px-4 text-sMobile tablet:text-sTablet desktop:text-sDesktop cursor-pointer hover:animate-pulse;
+    }
+    .link {
+      @apply sm:py-2 mx-5 my-2 h-fit w-fit text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words cursor-pointer;
     }
     .round-button {
       @apply bg-green text-white rounded-full px-4 py-3 md:text-medium text-mediumPhone cursor-pointer;
