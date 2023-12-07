@@ -9,6 +9,9 @@
                 @can('edit', $world)
                     <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a>
                 @endcan
+                @can('transfer', $world)
+                    <a class="mt-2 ml-1 text-bigPhone md:text-big hover:text-green" href="/worlds/{{ $world->id }}/transfer">&#10132;</a>
+                @endcan
                 </div>
             <div class="flex"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
             </div>

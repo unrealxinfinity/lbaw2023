@@ -35,10 +35,8 @@ class WorldController extends Controller
         
         return view('pages.world', [
             'world' => $world,
-            'edit' => false,
-            'members' => $world->members()->reject(function ($member) {
-                return $member->persistentUser->type_ != 'Member';
-            })
+            'subform' => false,
+            'members' => $world->members
         ]);
     }
 
@@ -247,7 +245,10 @@ class WorldController extends Controller
 
         return view('pages.world', [
             'world' => $world,
-            'edit' => true
+            'subform' => true,
+            'formTitle' => 'Edit World',
+            'formName' => 'form.world-edit',
+            'members' => $world->members
         ]);
     }
 
@@ -278,6 +279,21 @@ class WorldController extends Controller
                 'error' => true
             ]);
         }
+    }
+
+    public function showTransfer(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'subform' => true,
+            'formTitle' => 'Transfer Ownership',
+            'formName' => 'form.transferownership',
+            'members' => $world->members
+        ]);
     }
 
     public function transfer(TransferOwnershipRequest $request, string $id): RedirectResponse
