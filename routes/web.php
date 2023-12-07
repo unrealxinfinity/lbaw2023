@@ -150,6 +150,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
+    Route::get('/invites', 'showInvites')->name('show-invites');
 });
 
 Route::controller(TaskController::class)->group(function () {

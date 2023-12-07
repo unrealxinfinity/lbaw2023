@@ -89,15 +89,14 @@ class WorldController extends Controller
         try
         {
             $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-            if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
-
+            if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
             $inviteToken = bin2hex(random_bytes(32));
 
             Invitation::create([
                 'token' => $inviteToken,
                 'world_id' => $world_id,
                 'member_id' => $member->id,
-                'type' => $fields['type']
+                'is_admin' => $fields['type']
             ]);
         
 
@@ -105,7 +104,7 @@ class WorldController extends Controller
                 'view' => 'emails.invite',
                 'name' => $member->name,
                 'world_name' => $world->name,
-                'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $world_id . '&token=' . $inviteToken
+                'link' => env('APP_URL') . '/invite?wid=token=' . $inviteToken
             ];
 
             Mail::to($member->email)->send(new MailModel($mailData));
@@ -125,18 +124,17 @@ class WorldController extends Controller
 
     public function showInvite(): View
     {
-        $world_id = request()->query('wid');
-        $world_name = World::findOrFail($world_id)->name;
-        $username = request()->query('username');
         $token = request()->query('token');
-        $type = request()->query('adm');
+        $invitation = Invitation::where('token', $token)->first();
+        $username = $invitation->member->user->username;
+        $world_id = $invitation->world_id;
+        $world_name = World::findOrFail($world_id)->name;
 
         return view('pages.invite', [
             'world_id' => $world_id,
             'world_name' => $world_name,
             'username' => $username,
-            'token' => $token,
-            'type' => $type
+            'token' => $token
         ]);
     }
 
@@ -144,16 +142,22 @@ class WorldController extends Controller
     {
         $fields = $request->validated();
 
-        $world = World::findOrFail($fields['world_id']);
-        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-        Invitation::where('token', $fields['token'])->delete();
+        $invitation = Invitation::where('token', $fields['token'])->first();
 
-        if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
+        $invitation->delete();
+
+        if($fields['acceptance'] == 0) {
+            return redirect()->route('show-invites')->withSuccess('You rejected the invitation.');
+        }
+
+        $world = World::findOrFail($invitation->world_id);
+        $member = $invitation->member;
 
         NotificationController::WorldNotification($world,$member->name . ' added to ');
-        $world->members()->attach($member->id, ['is_admin' => $fields['type']]);
 
-        return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
+        $world->members()->attach($member->id, ['is_admin' => $invitation->is_admin]);
+
+        return redirect()->route('worlds.show', ['id' => $invitation->world_id])->withSuccess('You joined the world.');
     }
 
 

@@ -84,6 +84,14 @@ class MemberController extends Controller
         return view('pages.myfavorites', ['worlds' => $worlds, 'projects' => $projects]);
     }
 
+    public function showInvites(): View
+    {
+        $this->authorize('showInvites', Member::class);
+        $id = Auth::user()->persistentUser->member->id;
+        $invites = Member::findOrFail($id)->invitations;
+        return view('pages.invites', ['invites' => $invites]);
+    }
+
     public function update(EditMemberRequest $request, string $username): RedirectResponse
     {
         $fields = $request->validated();
