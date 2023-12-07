@@ -15,7 +15,8 @@ class Invitation extends Model
     protected $fillable = [
         'token',
         'member_id',
-        'world_id'
+        'world_id',
+        'is_admin'
     ];
 
     public function members(): BelongsToMany
