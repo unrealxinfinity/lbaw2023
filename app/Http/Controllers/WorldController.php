@@ -35,7 +35,10 @@ class WorldController extends Controller
         
         return view('pages.world', [
             'world' => $world,
-            'edit' => false
+            'edit' => false,
+            'members' => $world->members()->reject(function ($member) {
+                return $member->persistentUser->type_ != 'Member';
+            })
         ]);
     }
 
