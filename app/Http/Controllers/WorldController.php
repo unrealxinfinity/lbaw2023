@@ -135,14 +135,15 @@ class WorldController extends Controller
 
     public function join(JoinWorldRequest $request) : RedirectResponse
     {
-        error_log('test');
         $fields = $request->validated();
 
         $invitation = Invitation::where('token', $fields['token'])->first();
 
-        Invitation::where('token', $fields['token'])->delete();
+        $invitation->delete();
 
-        if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
+        if($fields['acceptance'] == 0) {
+            return redirect()->route('show-invites')->withSuccess('You rejected the invitation.');
+        }
 
         $world = World::findOrFail($invitation->world_id);
         $member = $invitation->member;

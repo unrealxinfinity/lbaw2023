@@ -24,4 +24,9 @@ class Invitation extends Model
         return $this->belongsTo(Member::class);
     }
 
+    public function world(): BelongsTo
+    {
+        return $this->belongsTo(World::class);
+    }
+
 }
