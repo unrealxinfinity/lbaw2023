@@ -42,6 +42,15 @@ class WorldController extends Controller
         ]);
     }
 
+    public function showAll(): View
+    {
+        $worlds = World::all();
+
+        return view('pages.worlds', [
+            'worlds' => $worlds
+        ]);
+    }
+
     public function create(CreateWorldRequest $request): RedirectResponse
     {
         $fields = $request->validated();
