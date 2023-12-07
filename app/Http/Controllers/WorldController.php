@@ -84,8 +84,7 @@ class WorldController extends Controller
         try
         {
             $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-            if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
-
+            if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
             $inviteToken = bin2hex(random_bytes(32));
 
             Invitation::create([
