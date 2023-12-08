@@ -19,7 +19,8 @@ class Notification extends Model
         'world_id',
         'project_id',
         'task_id',
-        'member_id'
+        'member_id',
+        'is_request'
     ];
     
     public function members(): BelongsToMany

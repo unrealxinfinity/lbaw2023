@@ -18,6 +18,7 @@ use App\Events\CreateTagNotification;
 use App\Events\CreateTaskNotification;
 use App\Events\CreateWorldNotification;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Tag;
 
 class NotificationController extends Controller
@@ -51,6 +52,7 @@ class NotificationController extends Controller
     public function acceptRequest(string $id): JsonResponse {
         $request = Notification::findOrFail($id);
         $member = auth()->user()->persistentUser->member;
+        $recipient = Member::findOrFail($request->member_id);
         
         if (!$request->is_request) {
             return response()->json([
@@ -67,6 +69,7 @@ class NotificationController extends Controller
         } 
 
         $member->friends()->attach($request->member_id);
+        $recipient->friends()->attach($member->id);
         $member->notifications()->detach($request);
 
         return response()->json([
@@ -190,6 +193,28 @@ class NotificationController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    function friendRequest(string $username): JsonResponse
+    {
+        $user = Auth::user();
+        $message = "$user->username wants to be your friend!";
+
+        $recipient = User::where('username', $username)->firstOrFail()->persistentUser->member;
+        error_log($recipient->id);
+
+        $notification = Notification::create([
+            'text' => $message,
+            'level' => 'Medium',
+            'member_id' => $user->persistentUser->member->id,
+            'is_request' => true
+        ]);
+
+        $recipient->notifications()->attach($notification->id);
+
+        return response()->json([
+            'message' => 'Friend request sent!'
+        ]);
     }
 
 

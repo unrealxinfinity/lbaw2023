@@ -18,6 +18,11 @@ function addEventListeners() {
     [].forEach.call(cardDeleters, function(deleter) {
       deleter.addEventListener('click', sendDeleteCardRequest);
     });
+
+    let friendButtons = document.querySelectorAll('.friend-button');
+    [].forEach.call(friendButtons, function(friendButton) {
+      friendButton.addEventListener('click', sendFriendRequest);
+    });
   
     let cardCreator = document.querySelector('article.card form.new_card');
     if (cardCreator != null)
@@ -195,6 +200,23 @@ function addEventListeners() {
     let favouriter = document.querySelector('form#favorite');
     if (favouriter != null)
     favouriter.addEventListener('submit', sendFavoriteRequest);
+  }
+
+  async function sendFriendRequest(ev) {
+    ev.preventDefault();
+    const url = this.href;
+    console.log(url);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+      }
+    });
+
+    if (response.ok) this.remove();
   }
   
   function deleteAccountButton() {
@@ -811,7 +833,7 @@ function ShowNotificationsHandler(json,ev){
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
     const notificationCloser = document.createElement('a');
-    notificationCloser.href = `api/notifications/${notification.id}`;
+    notificationCloser.href = `/api/notifications/${notification.id}`;
     notificationCloser.textContent = 'X';
     notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
     notificationCloser.addEventListener('click', closeNotification);
@@ -836,8 +858,8 @@ function ShowNotificationsHandler(json,ev){
       const requestDenier = document.createElement('a');
       requestAccepter.classList.add('button');
       requestDenier.classList.add('button');
-      requestAccepter.href = `api/accept/${notification.id}`;
-      requestDenier.href = `api/notifications/${notification.id}`;
+      requestAccepter.href = `/api/accept/${notification.id}`;
+      requestDenier.href = `/api/notifications/${notification.id}`;
       requestAccepter.innerHTML = "&#10003;";
       requestDenier.innerHTML = "&#10005;";
       requestAccepter.addEventListener('click', sendRequestAccept);
