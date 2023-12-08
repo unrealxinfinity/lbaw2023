@@ -745,6 +745,26 @@ async function sendShowNotificationsRequest(ev) {
 
 }
 
+async function closeNotification(ev) {
+  ev.preventDefault();
+  const container = this.parentElement;
+
+  url = '/test';
+
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json()
+
+  if (response.ok) container.remove()
+}
+
 function ShowNotificationsHandler(json,ev){
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
@@ -758,14 +778,20 @@ function ShowNotificationsHandler(json,ev){
     notificationPriority.classList.add('text-black');
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
+    const notificationCloser = document.createElement('a');
+    notificationCloser.href = `/notifications/${notification.id}`;
+    notificationCloser.textContent = 'X';
+    notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
+    notificationCloser.addEventListener('click', closeNotification)
     let notificationContainer = document.createElement('div');
-    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white', 'relative');
     notificationText.textContent = notification.text;
     notificationPriority.textContent = notification.level;
     notificationDate.textContent = notification.date_;
     notificationContainer.appendChild(notificationText);
     notificationContainer.appendChild(notificationPriority);
     notificationContainer.appendChild(notificationDate);
+    notificationContainer.appendChild(notificationCloser);
     popup.appendChild(notificationContainer);
   }
   if(ev != null){
