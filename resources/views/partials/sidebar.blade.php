@@ -34,10 +34,13 @@
             <div id="world-admins">
                 <h2 class="mt-5 text-grey font-semibold"> World Admins </h2>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
+                    
                     <div class="flex justify-between">
+                        
                         @if ($member->id != $thing->owner()->get()->first()->id)
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
+                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                             @endcan
                         @endif
@@ -47,9 +50,11 @@
             <div id="members">
                 <h2 class="mt-5 text-grey font-semibold"> Members </h2>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
+               
                     <div class="flex justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
+                            @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
                             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                         @endcan
                     </div>
