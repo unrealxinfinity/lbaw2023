@@ -39,6 +39,42 @@ class NotificationController extends Controller
             'message'=>'Nothing Here'
         ]);
     }
+
+    public function clearSingle(string $id): JsonResponse {
+        $member = auth()->user()->persistentUser->member;
+        $member->notifications()->detach($id);
+        return response()->json([
+            'message'=>'Nothing Here'
+        ]);
+    }
+
+    public function acceptRequest(string $id): JsonResponse {
+        $request = Notification::findOrFail($id);
+        $member = auth()->user()->persistentUser->member;
+        
+        if (!$request->is_request) {
+            return response()->json([
+                'error' => 'true',
+                'message' => 'This notification is not a friend request!'
+            ]);
+        }
+
+        if (!$member->notifications->contains('id', $id)) {
+            return response()->json([
+                'error' => 'true',
+                'message' => 'This request does not belong to you!'
+            ]);
+        } 
+
+        $member->friends()->attach($request->member_id);
+        $member->notifications()->detach($request);
+
+        return response()->json([
+            'error' => 'false',
+            'message' => 'Friend request accepted!'
+        ]);
+    }
+
     static function ProjectNotification(Project $project,string $world_id, string $action){
         
         DB::beginTransaction();

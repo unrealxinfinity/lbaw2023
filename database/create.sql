@@ -246,9 +246,12 @@ CREATE TABLE notifications(
   world_id INT DEFAULT NULL,
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
+  member_id INT DEFAULT NULL,
+  is_request BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS member_notification CASCADE;
@@ -795,11 +798,13 @@ INSERT INTO faq_item (question, answer) VALUES
     ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and cannot be changed, while your display name can be changed.');
 
 -- Sample data for the 'notifications' table
-INSERT INTO notifications (text, level, world_id, project_id, task_id) VALUES
-    ('You have been added to a world!', 'Low', 1, NULL, NULL),
-    ('A new task was created in this project!', 'Medium', NULL, 1, NULL);
+INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id, is_request) VALUES
+    ('You have been added to a world!', 'Low', 1, NULL, NULL, NULL, FALSE),
+    ('A new task was created in this project!', 'Medium', NULL, 1, NULL, NULL, FALSE),
+    ('Some guy sent you a friend request!', 'Medium', NULL, NULL, NULL, 3, TRUE);
 
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
     (1, 1),
-    (2, 3);
+    (2, 3),
+    (3, 1);
