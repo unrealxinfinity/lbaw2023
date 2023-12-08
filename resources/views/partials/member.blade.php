@@ -31,7 +31,7 @@
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="pt-0.5 md:pt-0">deleted</h4>
         @endif
         @can('request', $member)
-            <a class="friend-button" href="/members/{{ $member->persistentUser->user->username }}/add">&#10010;</a>
+            <a class="friend-button" href="/api/request/{{ $member->persistentUser->user->username }}">&#10010;</a>
         @endcan        
     </header>
     @endif

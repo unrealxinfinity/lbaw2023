@@ -38,7 +38,7 @@
                     <h2 class="pl-3">{{ $otherMember->description }}</h2>
                     </div>
                     @can('request', $otherMember)
-                        <a class="friend-button" href="/members/{{ $otherMember->persistentUser->user->username }}/add">&#10010;</a>
+                        <a class="friend-button" href="/api/request/{{ $member->persistentUser->user->username }}">&#10010;</a>
                     @endcan
                 </header>
                 @endforeach
