@@ -24,7 +24,7 @@
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
-    <body class="min-h-full min-w-full bg-mine text-white font-roboto">
+    <body id="main-body"class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() ? 'true' : 'false' }}">
         <nav id="navbar" class="z-10 fixed top-0 w-full h-28 bg-opacity-90 bg-black flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">
                 <div class="items-start flex">
                 <label for="show-menu" class="cursor-pointer sm:text-big text-bigPhone sm:m-3 m-2">☰</label>
@@ -56,7 +56,7 @@
         <div class="fixed bg-opacity-90 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
             <ul id="menu-items" class="list-none text-center flex flex-col h-full">
                 <li class="menu-item"><a href="/">Home Page</a></li>
-                <li class="menu-item"><a href="#">All Worlds</a></li>
+                <li class="menu-item"><a href="/worlds">All Worlds</a></li>
                 @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
                     <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
                     <li class="menu-item"><a href="/myprojects">My Projects</a></li>

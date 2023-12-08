@@ -13,6 +13,7 @@ use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
+use Illuminate\Http\Request;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -25,6 +26,8 @@ use App\Http\Requests\DeleteWorldRequest;
 use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\AssignWorldAdminRequest;
+
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -39,6 +42,19 @@ class WorldController extends Controller
             'members' => $world->members()->get()->reject(function ($member) {
                 return $member->persistentUser->type_ != "Member";
             })
+        ]);
+    }
+
+    public function showAll(Request $request): View
+    {
+        $search = $request['search'] ?? "";
+
+        $worlds = World::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->cursorPaginate(10)->withQueryString()->withPath(route('show-all-worlds'));
+
+        return view('pages.worlds', [
+            'worlds' => $worlds
         ]);
     }
 
@@ -59,7 +75,6 @@ class WorldController extends Controller
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
     {
-        error_log("delete");
         $request->validated();
         $world = World::findOrFail($id);
         $world->delete();
@@ -122,6 +137,40 @@ class WorldController extends Controller
         }
     }
 
+    public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {   
+
+        $fields = $request->validated();
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
+        $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
+        NotificationController::WorldNotification($world,$member->name . ' promoted in ');
+        return response()->json([
+            'error' => false,
+            'id' => $member->id,
+            'username' => $fields['username'],
+            'world_id' => $world->id,
+            'picture' => $member->picture
+        ]);
+        
+    }
+    public function demoteWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {   
+        $fields = $request->validated();
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+       
+        $member->worlds()->updateExistingPivot($id, ['is_admin' => false]);
+        NotificationController::WorldNotification($world,$member->name . ' demoted in ');
+        return response()->json([
+            'error' => false,
+            'id' => $member->id,
+            'username' => $fields['username'],
+            'world_id' => $world->id,
+            'picture' => $member->picture
+        ]);
+    }
     public function showInvite(): View
     {
         $token = request()->query('token');
@@ -184,7 +233,7 @@ class WorldController extends Controller
             ]);
         }
     }
-
+    
     public function leave(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
         try {

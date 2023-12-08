@@ -86,7 +86,6 @@ function addEventListeners() {
       ProjectSearcher.addEventListener('submit', searchProjectRequest);
     
     let MemberAssigner = document.querySelectorAll('form#assign-member');
-    console.log(MemberAssigner);
 
     if (MemberAssigner != null){
       [].forEach.call(MemberAssigner, function(form) {
@@ -127,7 +126,10 @@ function addEventListeners() {
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, false);
     
+    let main_body = document.getElementById('main-body');
+    if(main_body.getAttribute('data-auth') == true){
       window.addEventListener('load',getMemberBelingingsRequest);
+    }
     /*
     let removeMemberFromWorld = document.querySelector('');
     if(leaveWorld != null){
@@ -158,7 +160,19 @@ function addEventListeners() {
         removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       });
     }
-
+    
+    let assignAdminToWorld = document.querySelectorAll('form.assign-admin-to-world');
+    if(assignAdminToWorld != null){
+      assignAdminToWorld.forEach(form => {
+       form.addEventListener('submit', sendAssignAdminToWorldRequest);
+      });
+    }
+    let demoteAdminFromWorld = document.querySelectorAll('form.demote-admin-from-world');
+    if(demoteAdminFromWorld != null){
+      demoteAdminFromWorld.forEach(form => {
+       form.addEventListener('submit', sendDemoteAdminFromWorldRequest);
+      });
+    }
     let deleteAccount = document.querySelector("#delete-account");
     if (deleteAccount != null)
       deleteAccount.addEventListener('click', deleteAccountButton);
@@ -794,8 +808,6 @@ function ShowNotificationsHandler(json,ev){
   for(let notification of notifications){    
     let notificationText = document.createElement('p');
     notificationText.classList.add('text-black'); 
-    let notificationPriority = document.createElement('p');
-    notificationPriority.classList.add('text-black');
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
     const notificationCloser = document.createElement('a');
@@ -804,19 +816,24 @@ function ShowNotificationsHandler(json,ev){
     notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
     notificationCloser.addEventListener('click', closeNotification);
     let notificationContainer = document.createElement('div');
-    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white', 'relative');
+    const colors = {
+      'High': 'bg-orange',
+      'Medium': 'bg-yellow',
+      'Low': 'bg-white'
+    };
+
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', colors[notification.level], 'relative');
+
     notificationText.textContent = notification.text;
-    notificationPriority.textContent = notification.level;
     notificationDate.textContent = notification.date_;
     notificationContainer.appendChild(notificationText);
-    notificationContainer.appendChild(notificationPriority);
     notificationContainer.appendChild(notificationDate);
     notificationContainer.appendChild(notificationCloser);
     popup.appendChild(notificationContainer);
 
     if (notification.is_request) {
-      requestAccepter = document.createElement('a');
-      requestDenier = document.createElement('a');
+      const requestAccepter = document.createElement('a');
+      const requestDenier = document.createElement('a');
       requestAccepter.classList.add('button');
       requestDenier.classList.add('button');
       requestAccepter.href = `api/accept/${notification.id}`;
@@ -825,17 +842,94 @@ function ShowNotificationsHandler(json,ev){
       requestDenier.innerHTML = "&#10005;";
       requestAccepter.addEventListener('click', sendRequestAccept);
       requestDenier.addEventListener('click', closeNotification);
-      requestButtons = document.createElement('nav');
+      const requestButtons = document.createElement('nav');
       requestButtons.classList.add('flex', 'justify-center');
       requestButtons.appendChild(requestAccepter);
       requestButtons.appendChild(requestDenier);
       notificationContainer.appendChild(requestButtons);
+    }
+
+    if (popup.firstChild === null) {
+      popup.appendChild(notificationContainer);
+    } else {
+      popup.insertBefore(notificationContainer, popup.firstChild);
     }
   }
   if(ev != null){
     notificationPopup.classList.toggle('hidden'); 
   }
 }
+
+
+
+
+async function sendAssignAdminToWorldRequest(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/worlds/' + id + '/assign';
+  console.log(username);
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    assignAdminToWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+
+
+}
+
+function assignAdminToWorldHandler(data) {  
+  window.location.reload();
+}
+
+async function sendDemoteAdminFromWorldRequest(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/worlds/' + id + '/demote';
+  console.log(username);
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    demoteAdminToWorldHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+
+}
+
+function demoteAdminToWorldHandler(data) {
+  window.location.reload();
+}
+
 
   async function sendFavoriteRequest(event) {
     event.preventDefault();

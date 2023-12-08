@@ -18,6 +18,8 @@ export default {
       grey: '#5E716A',
       green: '#008000',
       red: '#FF0000',
+      orange: '#FF5F15',
+      yellow: '#FFCC00',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
