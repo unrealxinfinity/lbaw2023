@@ -79,4 +79,9 @@ class WorldPolicy
     {
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
     }
+
+    public function transfer(User $user, World $world): bool
+    {
+        return (Auth::check() && $world->owner_id === $user->persistentUser->member->id);
+    }
 }

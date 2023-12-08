@@ -22,6 +22,7 @@
         <h1> <a href = "/myworlds" >My Worlds</a></h1>
         <h1> <a href="/myprojects">My Projects</a></h1>
         <h1> <a href="/mytasks">My Tasks</a></h1>
+        <h1> <a href="/invites">My Invites</a></h1>
     @endif
     @else
     <header class="h-10 flex justify-start">

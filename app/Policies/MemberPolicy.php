@@ -64,6 +64,11 @@ class MemberPolicy
         return $user->persistentUser->type_ == 'Member';
     }
 
+    public function showInvites(User $user): bool
+    {
+        return $user->persistentUser->type_ == 'Member';
+    }
+
     public function block(User $user): bool
     {
         return $user->persistentUser->type_ == 'Administrator';

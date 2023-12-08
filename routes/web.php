@@ -116,7 +116,9 @@ Route::controller(WorldController::class)->group(function () {
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
     Route::put('/api/worlds/{id}/assign', 'assignNewWorldAdmin')->name('assign-world-admin');
     Route::put('/api/worlds/{id}/demote', 'demoteWorldAdmin')->name('demote-world-admin');
-    Route::get('/api/worlds/{id}/invite', 'showInvite')->name('show-invite');
+    Route::get('/invite', 'showInvite')->name('show-invite');
+    Route::get('/worlds/{id}/transfer', 'showTransfer')->name('show-transfer');
+    Route::post('/worlds/{id}/transfer', 'transfer')->name('transfer-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -150,6 +152,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
+    Route::get('/invites', 'showInvites')->name('show-invites');
 });
 
 Route::controller(TaskController::class)->group(function () {

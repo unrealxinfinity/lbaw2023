@@ -9,6 +9,7 @@ use App\Http\Requests\RemoveMemberFromWorldRequest;
 use App\Models\Invitation;
 use App\Models\World;
 use App\Models\User;
+use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
@@ -21,6 +22,7 @@ use App\Http\Requests\SearchProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NotificationController;
 use App\Http\Requests\DeleteWorldRequest;
+use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
@@ -35,7 +37,10 @@ class WorldController extends Controller
         
         return view('pages.world', [
             'world' => $world,
-            'edit' => false
+            'subform' => false,
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -85,15 +90,14 @@ class WorldController extends Controller
         try
         {
             $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-            if($member->worlds->contains('id', $world_id)) return redirect()->back()->withError('User already in the world.');
-
+            if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
             $inviteToken = bin2hex(random_bytes(32));
 
             Invitation::create([
                 'token' => $inviteToken,
                 'world_id' => $world_id,
                 'member_id' => $member->id,
-                'type' => $fields['type']
+                'is_admin' => $fields['type']
             ]);
         
 
@@ -101,7 +105,7 @@ class WorldController extends Controller
                 'view' => 'emails.invite',
                 'name' => $member->name,
                 'world_name' => $world->name,
-                'link' => env('APP_URL') . '/invite?username=' . $fields['username'] . '&adm='. $fields['type'] . '&wid=' . $world_id . '&token=' . $inviteToken
+                'link' => env('APP_URL') . '/invite?wid=token=' . $inviteToken
             ];
 
             Mail::to($member->email)->send(new MailModel($mailData));
@@ -155,18 +159,17 @@ class WorldController extends Controller
     }
     public function showInvite(): View
     {
-        $world_id = request()->query('wid');
-        $world_name = World::findOrFail($world_id)->name;
-        $username = request()->query('username');
         $token = request()->query('token');
-        $type = request()->query('adm');
+        $invitation = Invitation::where('token', $token)->first();
+        $username = $invitation->member->user->username;
+        $world_id = $invitation->world_id;
+        $world_name = World::findOrFail($world_id)->name;
 
         return view('pages.invite', [
             'world_id' => $world_id,
             'world_name' => $world_name,
             'username' => $username,
-            'token' => $token,
-            'type' => $type
+            'token' => $token
         ]);
     }
 
@@ -174,16 +177,22 @@ class WorldController extends Controller
     {
         $fields = $request->validated();
 
-        $world = World::findOrFail($fields['world_id']);
-        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-        Invitation::where('token', $fields['token'])->delete();
+        $invitation = Invitation::where('token', $fields['token'])->first();
 
-        if($fields['acceptance'] === "false") return redirect()->route('home')->withSuccess('You rejected the invitation.');
+        $invitation->delete();
+
+        if($fields['acceptance'] == 0) {
+            return redirect()->route('show-invites')->withSuccess('You rejected the invitation.');
+        }
+
+        $world = World::findOrFail($invitation->world_id);
+        $member = $invitation->member;
 
         NotificationController::WorldNotification($world,$member->name . ' added to ');
-        $world->members()->attach($member->id, ['is_admin' => $fields['type']]);
 
-        return redirect()->route('worlds.show', ['id' => $fields['world_id']])->withSuccess('You joined the world.');
+        $world->members()->attach($member->id, ['is_admin' => $invitation->is_admin]);
+
+        return redirect()->route('worlds.show', ['id' => $invitation->world_id])->withSuccess('You joined the world.');
     }
 
 
@@ -277,7 +286,12 @@ class WorldController extends Controller
 
         return view('pages.world', [
             'world' => $world,
-            'edit' => true
+            'subform' => true,
+            'formTitle' => 'Edit World',
+            'formName' => 'form.world-edit',
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
         ]);
     }
 
@@ -308,6 +322,43 @@ class WorldController extends Controller
                 'error' => true
             ]);
         }
+    }
+
+    public function showTransfer(string $id): View
+    {
+        $world = World::findOrFail($id);
+
+        $this->authorize('edit', $world);
+
+        return view('pages.world', [
+            'world' => $world,
+            'subform' => true,
+            'formTitle' => 'Transfer Ownership',
+            'formName' => 'form.transferownership',
+            'members' => $world->members()->get()->reject(function ($member) {
+                return $member->persistentUser->type_ != "Member";
+            })
+        ]);
+    }
+
+    public function transfer(TransferOwnershipRequest $request, string $id)
+    {
+        $fields = $request->validated();
+
+        $member = Member::findOrFail($fields['owner']);
+        $world = World::findOrFail($id);
+
+        if (!$member->worlds->contains('id', $id) || $member->persistentUser->type_ != 'Member') {
+            return redirect()->back()->withError("This member isn't a valid choice!");
+        }
+
+        $member->worlds()->updateExistingPivot($id, [
+            'is_admin' => true
+        ]);
+
+        $world->owner_id = $member->id;
+        $world->save();
         
+        return redirect()->route('worlds.show', ['id' => $id])->withSuccess('Owner transfered');
     }
 }
