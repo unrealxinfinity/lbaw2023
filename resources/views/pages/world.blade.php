@@ -3,7 +3,7 @@
 @section('title', $world->name)
 
 @section('content')
-    <section id="worlds" class="desktop:flex justify-start">
+    <section id="worlds" class="desktop:flex">
         <input type="checkbox" id="show-details" class="hidden peer"/>
         @include('partials.world', ['world' => $world])
         <div class="desktop:hidden fixed bg-opacity-95 bg-black top-0 h-full w-0 right-0 tablet:peer-checked:w-1/3 peer-checked:w-full peer-checked:px-5 transition-width duration-500 z-10">

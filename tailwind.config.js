@@ -12,7 +12,7 @@ export default {
       lg: '976px',
       xl: '1440px',
       mobile: '450px',
-      tablet: '701px',
+      tablet: '650px',
       desktop: '1024px'
     },
     colors: {
