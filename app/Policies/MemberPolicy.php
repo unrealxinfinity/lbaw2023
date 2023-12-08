@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Member;
 use App\Models\User;
+use App\Models\Notification;
 
 class MemberPolicy
 {
@@ -72,5 +73,15 @@ class MemberPolicy
     public function block(User $user): bool
     {
         return $user->persistentUser->type_ == 'Administrator';
+    }
+
+    public function request(User $user, Member $member)
+    {
+        $is_self = $user->user_id == $member->user_id;
+        $is_friend = $user->persistentUser->member->friends->contains('id', $member->id);
+        $maybe = Notification::where('is_request', true)->where('member_id', $user->persistentUser->member->id)->first();
+        $has_request = isset($maybe) ? $maybe->members->contains('id', $member->id) : false;
+        $is_disabled = $user->persistentUser->type_ == 'Blocked' || $user->persistentUser->type_ == 'Deleted';
+        return !$is_disabled && !$is_self && !$is_friend && !$has_request;
     }
 }
