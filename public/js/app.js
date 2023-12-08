@@ -749,7 +749,7 @@ async function closeNotification(ev) {
   ev.preventDefault();
   const container = this.parentElement;
 
-  url = '/test';
+  url = this.href;
 
   const response = await fetch(url, {
     method: 'DELETE',
@@ -779,7 +779,7 @@ function ShowNotificationsHandler(json,ev){
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
     const notificationCloser = document.createElement('a');
-    notificationCloser.href = `/notifications/${notification.id}`;
+    notificationCloser.href = `api/notifications/${notification.id}`;
     notificationCloser.textContent = 'X';
     notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
     notificationCloser.addEventListener('click', closeNotification)
