@@ -3,11 +3,11 @@
 @section('title', 'Worlds')
 
 @section('content')
-
+    <p><a href="/">Home</a> > <a href="/worlds"> Worlds</a></p>
     <section id="worlds" class="md:flex justify-start">
-    <input type="checkbox" id="show-details" class="hidden peer"/>
-    @foreach ($worlds as $world)
-        @include('partials.world', ['world' => $world])
-    @endforeach
+        @foreach ($worlds as $world)
+            @include('partials.myworlds', ['world' => $world])
+        @endforeach
+    </section>
 
 @endsection

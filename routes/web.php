@@ -101,13 +101,14 @@ Route::controller(SearchController::class)->group(function() {
 });
 
 Route::controller(WorldController::class)->group(function () {
-    Route::post('/api/worlds/{id}/favorite', 'favorite');//
-    //Route::post('/api/worlds/{id}/{username}', 'addMember');//
+    Route::post('/api/worlds/{id}/favorite', 'favorite');
+    //Route::post('/api/worlds/{id}/{username}', 'addMember'); delete from openapi
     Route::post('/api/worlds/{id}/invite', 'invite')->name('invite-world');
     Route::post('/worlds/{id}', 'join')->name('join-world');
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
+    Route::get('/worlds', 'showAll');
     Route::post('/worlds', 'create')->name('create-world');//
     Route::get('/worlds/{id}/edit', 'showEditWorld')->name('edit-world');
     Route::put('/api/world/{id}', 'update')->name('update-world');//
