@@ -108,7 +108,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
-    Route::get('/worlds', 'showAll');
+    Route::get('/worlds', 'showAll')->name('show-all-worlds');
     Route::post('/worlds', 'create')->name('create-world');//
     Route::get('/worlds/{id}/edit', 'showEditWorld')->name('edit-world');
     Route::put('/api/world/{id}', 'update')->name('update-world');//

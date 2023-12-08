@@ -13,6 +13,7 @@ use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
+use Illuminate\Http\Request;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -25,6 +26,8 @@ use App\Http\Requests\DeleteWorldRequest;
 use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
+
+
 class WorldController extends Controller
 {
     public function show(string $id): View
@@ -42,8 +45,17 @@ class WorldController extends Controller
         ]);
     }
 
-    public function showAll(): View
+    public function showAll(Request $request): View
     {
+
+        $this->authorize('list', Member::class);   
+        
+        $search = $request['search'] ?? "";
+
+        $worlds = World::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->cursorPaginate(20)->withQueryString()->withPath(route('show-all-worlds'));
+
         $worlds = World::all();
 
         return view('pages.worlds', [
