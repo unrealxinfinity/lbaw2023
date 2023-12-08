@@ -26,7 +26,7 @@ use App\Http\Requests\DeleteWorldRequest;
 use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
-
+use App\Http\Requests\AssignWorldAdminRequest;
 
 class WorldController extends Controller
 {
@@ -75,7 +75,6 @@ class WorldController extends Controller
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
     {
-        error_log("delete");
         $request->validated();
         $world = World::findOrFail($id);
         $world->delete();
@@ -138,6 +137,40 @@ class WorldController extends Controller
         }
     }
 
+    public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {   
+
+        $fields = $request->validated();
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
+        $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
+        NotificationController::WorldNotification($world,$member->name . ' promoted in ');
+        return response()->json([
+            'error' => false,
+            'id' => $member->id,
+            'username' => $fields['username'],
+            'world_id' => $world->id,
+            'picture' => $member->picture
+        ]);
+        
+    }
+    public function demoteWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
+    {   
+        $fields = $request->validated();
+        $world = World::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+       
+        $member->worlds()->updateExistingPivot($id, ['is_admin' => false]);
+        NotificationController::WorldNotification($world,$member->name . ' demoted in ');
+        return response()->json([
+            'error' => false,
+            'id' => $member->id,
+            'username' => $fields['username'],
+            'world_id' => $world->id,
+            'picture' => $member->picture
+        ]);
+    }
     public function showInvite(): View
     {
         $token = request()->query('token');
@@ -200,7 +233,7 @@ class WorldController extends Controller
             ]);
         }
     }
-
+    
     public function leave(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
         try {

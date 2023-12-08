@@ -8,7 +8,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title') - {{env('APP_NAME')}} </title>
 
         <!-- Styles -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
-    <body class="min-h-full min-w-full bg-mine text-white font-roboto">
+    <body id="main-body"class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() ? 'true' : 'false' }}">
         <nav id="navbar" class="z-10 fixed top-0 w-full h-28 bg-opacity-90 bg-black flex flex-wrap items-center justify-between my-0 p-4 transition-transform duration-300 transform translate-y-0">
                 <div class="items-start flex">
                 <label for="show-menu" class="cursor-pointer sm:text-big text-bigPhone sm:m-3 m-2">☰</label>

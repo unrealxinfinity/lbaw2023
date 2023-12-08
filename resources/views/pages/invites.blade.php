@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'invite')
+@section('title', 'Invites')
 
 @section('content')
     @if (count($invites) !== 0)

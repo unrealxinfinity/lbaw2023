@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-
-@section('title', 'home')
+@section('title', 'Home')
 
 @section('content')
     <section id="homepage" class="mx-5">

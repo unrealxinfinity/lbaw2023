@@ -115,6 +115,8 @@ Route::controller(WorldController::class)->group(function () {
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
+    Route::put('/api/worlds/{id}/assign', 'assignNewWorldAdmin')->name('assign-world-admin');
+    Route::put('/api/worlds/{id}/demote', 'demoteWorldAdmin')->name('demote-world-admin');
     Route::get('/invite', 'showInvite')->name('show-invite');
     Route::get('/worlds/{id}/transfer', 'showTransfer')->name('show-transfer');
     Route::post('/worlds/{id}/transfer', 'transfer')->name('transfer-world');

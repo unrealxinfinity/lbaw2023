@@ -128,12 +128,19 @@ class NotificationController extends Controller
     }
 
     static function WorldNotification(World $world, string $action){
+        error_log($action);
+        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')){
+            $level='High';
+        }
+        else{
+            $level='Medium';
+        }
         DB::beginTransaction();
         try {
             $message = $action.' World '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
-                'level' => 'Medium',
+                'level' => $level,
                 'world_id' => $world->id,
                 'project_id' => null,
                 'task_id' => null,
