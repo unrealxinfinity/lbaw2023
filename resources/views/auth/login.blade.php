@@ -4,7 +4,7 @@
 <form method="POST" class="form-post first-letter" action="{{ route('login') }}">
     {{ csrf_field() }}
 
-    <label for="username">Username</label>
+    <h3><label for="username">Username</label></h3>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
         <span class="error">
@@ -12,21 +12,19 @@
         </span>
     @endif
 
-    <label for="password" >Password</label>
+    <h3><label for="password" >Password</label></h3>
     <input id="password" type="password" name="password" required>
-    <a href="/recover">Forgot your password?</a>
+    <h3><a href="/recover">Forgot your password?</a></h3>
     @if ($errors->has('password'))
         <span class="error">
             {{ $errors->first('password') }}
         </span>
     @endif
 
-    <label>
-        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-    </label>
+    <h3><label><input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me</label></h3>
     <div class="flex">
-    <button class="button w-1/4" type="submit"> Login </button>
-    <a class="button text-white bg-grey" href="{{ route('register') }}">Register</a>
+    <button class="button w-fit mx-3" type="submit"> Login </button>
+    <a class="link self-center" href="{{ route('register') }}">Register</a>
     </div>
     @if (session('success'))
         <p class="success">
