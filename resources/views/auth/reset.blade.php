@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Reset Password')
+
 @section('content')
 <form method="POST" class="form-post" action="{{ route('reset-password') }}">
     @csrf
