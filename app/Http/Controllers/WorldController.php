@@ -13,6 +13,7 @@ use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
+use Illuminate\Http\Request;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -41,6 +42,19 @@ class WorldController extends Controller
             'members' => $world->members()->get()->reject(function ($member) {
                 return $member->persistentUser->type_ != "Member";
             })
+        ]);
+    }
+
+    public function showAll(Request $request): View
+    {
+        $search = $request['search'] ?? "";
+
+        $worlds = World::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->cursorPaginate(10)->withQueryString()->withPath(route('show-all-worlds'));
+
+        return view('pages.worlds', [
+            'worlds' => $worlds
         ]);
     }
 

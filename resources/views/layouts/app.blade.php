@@ -56,7 +56,7 @@
         <div class="fixed bg-opacity-90 bg-black text-white top-28 h-full w-0 peer-checked:sm:w-1/4 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
             <ul id="menu-items" class="list-none text-center flex flex-col h-full">
                 <li class="menu-item"><a href="/">Home Page</a></li>
-                <li class="menu-item"><a href="#">All Worlds</a></li>
+                <li class="menu-item"><a href="/worlds">All Worlds</a></li>
                 @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
                     <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
                     <li class="menu-item"><a href="/myprojects">My Projects</a></li>
