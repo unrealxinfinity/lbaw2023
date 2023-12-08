@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $member->persistentUser->user->username)
+@section('title', 'Edit' . $member->persistentUser->user->username)
 
 @if (Auth::check() && (Auth::user()->id == $member->persistentUser->user->id || Auth::user()->persistentUser->type_=='Administrator'))
     @section('content')

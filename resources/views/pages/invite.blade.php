@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'invite')
+@section('title', 'Accept Invite')
 
 @section('content')
     @if(Auth::check() && Auth::user()->username == $username)
