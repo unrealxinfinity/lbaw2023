@@ -25,7 +25,7 @@
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
     <body class="min-h-full min-w-full bg-mine text-white font-roboto">
-        <nav id="navbar" class="z-10 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
+        <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
             <div id="navbar-left" class="items-center flex p-1 child:mx-2">
                 <h1><label for="show-menu" class="cursor-pointer">☰</label></h1>
                 <h1 class="font-bold"><a href="{{ url('') }}">MineMax!</a></h1>
@@ -37,7 +37,7 @@
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     <div id="notification-button" class="link mx-6 tablet:inline-flex hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-                            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
                         </svg>
                     </div>
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
@@ -76,7 +76,7 @@
             <ul id="notificationList" class ="text-center  max-h-[400px] overflow-y-auto overflow-x-hidden"></ul>
             <a id="clearNotifications" class="button rounded-lg text-white text-center w-full ">Clear Notifications</a>
         </div>
-        <main class="bg-black bg-opacity-30 pb-10 pt-28 mobile:mx-10 tablet:px-10 px-2 z-0">
+        <main class="bg-black bg-opacity-40 pb-10 pt-24 tablet:px-10 px-2 z-0">
             <section id="content">
                 @yield('content')
             </section>

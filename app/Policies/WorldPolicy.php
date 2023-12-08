@@ -27,12 +27,14 @@ class WorldPolicy
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted';
     }
 
-    public function edit(User $user, World $world): bool
+    public function edit(?User $user, World $world): bool
     {
+        if($user == null) return true;
         return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
-    public function delete(User $user, World $world): bool
+    public function delete(?User $user, World $world): bool
     {
+        if ($user == null) return false;
         return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     
@@ -55,8 +57,9 @@ class WorldPolicy
         return ($user->persistentUser->member->id == $world->owner()->get()->first()->id);
     }
 
-    public function leave(User $user, World $world): bool
+    public function leave(?User $user, World $world): bool
     {
+        if ($user == null) return false;
         $is_owner = $world->owner_id === $user->persistentUser->member->id;
         return Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
     }

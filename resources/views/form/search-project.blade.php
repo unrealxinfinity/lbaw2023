@@ -1,4 +1,4 @@
-    <form class = "search-project" data-id="{{ $world->id }}">
+    <form class = "search-project child:mx-0.5" data-id="{{ $world->id }}">
             @csrf
             <input type="text" id="projectName"name="projectName" placeholder="Project Name" required>
             <input type="hidden" name="world_id" value="{{ $world->id }}">
