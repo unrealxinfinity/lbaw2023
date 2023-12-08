@@ -707,7 +707,9 @@ INSERT INTO members (user_id, name, birthday, description, email) VALUES
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
     (1, 2),
-    (2, 3);
+    (2, 3),
+    (2, 1),
+    (3, 2);
 
 -- Sample data for the 'world' table
 INSERT INTO worlds (name, description, owner_id) VALUES

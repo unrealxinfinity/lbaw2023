@@ -52,6 +52,7 @@ class NotificationController extends Controller
     public function acceptRequest(string $id): JsonResponse {
         $request = Notification::findOrFail($id);
         $member = auth()->user()->persistentUser->member;
+        $recipient = Member::findOrFail($request->member_id);
         
         if (!$request->is_request) {
             return response()->json([
@@ -68,6 +69,7 @@ class NotificationController extends Controller
         } 
 
         $member->friends()->attach($request->member_id);
+        $recipient->friends()->attach($member->id);
         $member->notifications()->detach($request);
 
         return response()->json([
@@ -199,6 +201,7 @@ class NotificationController extends Controller
         $message = "$user->username wants to be your friend!";
 
         $recipient = User::where('username', $username)->firstOrFail()->persistentUser->member;
+        error_log($recipient->id);
 
         $notification = Notification::create([
             'text' => $message,
