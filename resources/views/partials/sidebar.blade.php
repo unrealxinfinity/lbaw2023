@@ -10,7 +10,12 @@
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
                 <div class="flex justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
-                    @can('removeLeader', $thing)
+                    @can('removeLeader',$thing)
+                        @cannot('assignOwn', [$member->persistentUser->id])
+                            @include('form.assign-project-leader', ['project' => $thing, 'member' => $member,'isPromote'=>false])
+                        @endcannot
+                    @endcan
+                    @can('removeMember', $thing)
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                     @endcan
                 </div>
@@ -22,6 +27,9 @@
                 <div class="flex justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeMember', $thing)
+                        @cannot('assignOwn', $member->persistentUser->id)
+                            @include('form.assign-project-leader', ['project' => $thing, 'member' => $member,'isPromote'=> true])
+                        @endcannot
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                     @endcan
                 </div>
