@@ -782,7 +782,7 @@ function ShowNotificationsHandler(json,ev){
     notificationCloser.href = `api/notifications/${notification.id}`;
     notificationCloser.textContent = 'X';
     notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
-    notificationCloser.addEventListener('click', closeNotification)
+    notificationCloser.addEventListener('click', closeNotification);
     let notificationContainer = document.createElement('div');
     notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white', 'relative');
     notificationText.textContent = notification.text;
@@ -793,6 +793,22 @@ function ShowNotificationsHandler(json,ev){
     notificationContainer.appendChild(notificationDate);
     notificationContainer.appendChild(notificationCloser);
     popup.appendChild(notificationContainer);
+
+    if (notification.is_request) {
+      requestAccepter = document.createElement('a');
+      requestDenier = document.createElement('a');
+      requestAccepter.classList.add('button');
+      requestDenier.classList.add('button');
+      requestAccepter.href = `api/accept/${notification.id}`;
+      requestDenier.href = `api/deny/${notification.id}`;
+      requestAccepter.innerHTML = "&#10003;";
+      requestDenier.innerHTML = "&#10005;";
+      requestButtons = document.createElement('nav');
+      requestButtons.classList.add('flex', 'justify-center');
+      requestButtons.appendChild(requestAccepter);
+      requestButtons.appendChild(requestDenier);
+      notificationContainer.appendChild(requestButtons);
+    }
   }
   if(ev != null){
     notificationPopup.classList.toggle('hidden'); 

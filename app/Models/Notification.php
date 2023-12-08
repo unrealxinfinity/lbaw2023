@@ -19,8 +19,9 @@ class Notification extends Model
         'world_id',
         'project_id',
         'task_id',
-        
+        'member_id'
     ];
+    
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(Member::class);
@@ -39,5 +40,10 @@ class Notification extends Model
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);
+    }
+
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
     }
 }
