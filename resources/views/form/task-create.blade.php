@@ -1,7 +1,7 @@
 <form class = "new-task form-post" method="POST" action="{{ route('create-task') }}">
     @csrf
     @method('POST')
-    Create a task:
+    <h2>Create a task</h2>
     <input type="text" name="title" placeholder="Title">
     @if ($errors->has('title'))
         <span class="error">

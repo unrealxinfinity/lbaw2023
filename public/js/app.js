@@ -226,7 +226,7 @@ function addEventListeners() {
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
     const box = ev.currentTarget;
-    const status = box.querySelector('h2').textContent;
+    const status = box.querySelector('h3').textContent;
 
     const response = await fetch('/api/tasks/' + data.slice(5), {
       method: 'PUT',
