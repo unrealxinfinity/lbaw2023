@@ -35,13 +35,6 @@ class ProjectPolicy
         $is_active = $project->status != 'Archived';
         return ($is_admin || (!$is_disabled && ($is_leader || $is_world_admin))) && $is_active;
     }
-    
-    public function assignOwn(User $user, string $u_id): bool
-    {   
-        error_log($user->persistentUser->id);
-        error_log($u_id);
-        $user->persistentUser->id == $u_id;
-    }
 
     
     public function removeMember(User $user, Project $project): bool

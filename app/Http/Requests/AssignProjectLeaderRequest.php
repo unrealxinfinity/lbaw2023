@@ -11,8 +11,8 @@ class AssignProjectLeaderRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {   error_log(Auth::user()->can('addMember', Project::find($this->route()->id)));
-        return Auth::user()->can('addMember', Project::find($this->route()->id));
+    {   
+        return Auth::user()->can('assignProjectLeader', Project::find($this->route()->id));
     }
 
     /**

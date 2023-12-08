@@ -141,14 +141,18 @@ class ProjectController extends Controller
             ]);
         }
     }
-    public function promoteMemberToPL(AssignProjectLeaderRequest $request,string $id): JsonResponse{
+    public function promoteToPL(AssignProjectLeaderRequest $request,string $id): JsonResponse{
+      
         $fields = $request->validated();
+      
         $project = Project::findOrFail($id);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
         try{
-            if($fields['username' == Auth::user()->username])
+            if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t promote yourself');
             $member->projects()->updateExistingPivot($id ,['permission_level' => 'Project Leader']);
+            error_log($member->projects()->pivot->permission_level);
             return response()->json([
                 'error' => false,
                 'username' => $fields['username'],
@@ -162,14 +166,17 @@ class ProjectController extends Controller
             ]);
         }
     }
-    public function demotePLToMember(AssignProjectLeaderRequest $request): JsonResponse{
+    public function demotePL(AssignProjectLeaderRequest $request,$id): JsonResponse{
+        error_log("here");
         $fields = $request->validated();
-        $project = Project::findOrFail($fields['project_id']);
+        $project = Project::findOrFail($id);
+        error_log($project);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        error_log($member);
         try{
-            if($fields['username' == Auth::user()->username])
+            if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t demote yourself');
-            $member->projects()->updateExistingPivot($fields['project_id'], ['permission_level' => 'Member']);
+            $member->projects()->updateExistingPivot($id, ['permission_level' => 'Member']);
             return response()->json([
                 'error' => false,
                 'username' => $fields['username'],
