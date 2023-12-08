@@ -747,7 +747,7 @@ async function sendShowNotificationsRequest(ev) {
 
 async function closeNotification(ev) {
   ev.preventDefault();
-  const container = this.parentElement;
+  const container = this.closest('div');
 
   url = this.href;
 
@@ -760,9 +760,29 @@ async function closeNotification(ev) {
     }
   });
 
-  const json = await response.json()
+  const json = await response.json();
 
-  if (response.ok) container.remove()
+  if (response.ok) container.remove();
+}
+
+async function sendRequestAccept(ev) {
+  ev.preventDefault();
+  const container = this.closest('div');
+
+  url = this.href;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json();
+
+  if (response.ok) container.remove();
 }
 
 function ShowNotificationsHandler(json,ev){
@@ -800,9 +820,11 @@ function ShowNotificationsHandler(json,ev){
       requestAccepter.classList.add('button');
       requestDenier.classList.add('button');
       requestAccepter.href = `api/accept/${notification.id}`;
-      requestDenier.href = `api/deny/${notification.id}`;
+      requestDenier.href = `api/notifications/${notification.id}`;
       requestAccepter.innerHTML = "&#10003;";
       requestDenier.innerHTML = "&#10005;";
+      requestAccepter.addEventListener('click', sendRequestAccept);
+      requestDenier.addEventListener('click', closeNotification);
       requestButtons = document.createElement('nav');
       requestButtons.classList.add('flex', 'justify-center');
       requestButtons.appendChild(requestAccepter);

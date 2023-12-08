@@ -798,9 +798,10 @@ INSERT INTO faq_item (question, answer) VALUES
     ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and cannot be changed, while your display name can be changed.');
 
 -- Sample data for the 'notifications' table
-INSERT INTO notifications (text, level, world_id, project_id, task_id, is_request) VALUES
-    ('You have been added to a world!', 'Low', 1, NULL, NULL, TRUE),
-    ('A new task was created in this project!', 'Medium', NULL, 1, NULL, TRUE);
+INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id, is_request) VALUES
+    ('You have been added to a world!', 'Low', 1, NULL, NULL, NULL, FALSE),
+    ('A new task was created in this project!', 'Medium', NULL, 1, NULL, NULL, FALSE),
+    ('Some guy sent you a friend request!', 'Medium', NULL, NULL, NULL, 3, TRUE);
 
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
