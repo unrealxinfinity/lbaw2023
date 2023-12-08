@@ -47,16 +47,11 @@ class WorldController extends Controller
 
     public function showAll(Request $request): View
     {
-
-        $this->authorize('list', Member::class);   
-        
         $search = $request['search'] ?? "";
 
         $worlds = World::where(function ($query) use($search) {
             $query->where('name', 'like', '%' . $search . '%');
         })->cursorPaginate(20)->withQueryString()->withPath(route('show-all-worlds'));
-
-        $worlds = World::all();
 
         return view('pages.worlds', [
             'worlds' => $worlds
