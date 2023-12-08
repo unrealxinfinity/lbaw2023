@@ -51,7 +51,7 @@ class WorldController extends Controller
 
         $worlds = World::where(function ($query) use($search) {
             $query->where('name', 'like', '%' . $search . '%');
-        })->cursorPaginate(20)->withQueryString()->withPath(route('show-all-worlds'));
+        })->cursorPaginate(10)->withQueryString()->withPath(route('show-all-worlds'));
 
         return view('pages.worlds', [
             'worlds' => $worlds

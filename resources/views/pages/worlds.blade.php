@@ -9,7 +9,9 @@
         <input class="button" type="submit" value="Search">
     </form>
     <section id="worlds">
+        {{ $worlds->links() }}
         @each('partials.myworlds', $worlds, 'world')
+        {{ $worlds->links() }}
     </section>
 
 @endsection
