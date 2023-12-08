@@ -806,4 +806,5 @@ INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
     (1, 1),
-    (2, 3);
+    (2, 3),
+    (3, 1);

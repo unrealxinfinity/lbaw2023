@@ -59,7 +59,7 @@ class NotificationController extends Controller
             ]);
         }
 
-        if (!$member->notifications()->contains($id)) {
+        if (!$member->notifications->contains('id', $id)) {
             return response()->json([
                 'error' => 'true',
                 'message' => 'This request does not belong to you!'
