@@ -13,7 +13,7 @@ class AssignWorldAdminRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {    
+    {   
         return Auth::user()->can('assignWorldAdmin', [World::find($this->route()->id)]);
     }
 
@@ -25,7 +25,7 @@ class AssignWorldAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //'username' => ['required', 'string']
+            'username' => ['required', 'string']
         ];
     }
 }

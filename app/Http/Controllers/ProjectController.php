@@ -152,7 +152,7 @@ class ProjectController extends Controller
             if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t promote yourself');
             $member->projects()->updateExistingPivot($id ,['permission_level' => 'Project Leader']);
-            error_log($member->projects()->pivot->permission_level);
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was promoted in the ');
             return response()->json([
                 'error' => false,
                 'username' => $fields['username'],
@@ -177,6 +177,7 @@ class ProjectController extends Controller
             if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t demote yourself');
             $member->projects()->updateExistingPivot($id, ['permission_level' => 'Member']);
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was demoted in the ');
             return response()->json([
                 'error' => false,
                 'username' => $fields['username'],

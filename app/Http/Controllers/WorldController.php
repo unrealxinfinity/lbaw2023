@@ -125,11 +125,9 @@ class WorldController extends Controller
 
     public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
     {   
-
         $fields = $request->validated();
         $world = World::findOrFail($id);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-        
         $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
         NotificationController::WorldNotification($world,$member->name . ' promoted in ');
         return response()->json([
