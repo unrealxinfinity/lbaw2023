@@ -526,21 +526,23 @@ function addEventListeners() {
   function searchTaskHandler(json){
     let popup = document.querySelector('#popup-content');
     popup.innerHTML = "";
-    let div = document.createElement('div');
-    div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded');
-    let outer_title = document.createElement('h2');
-    let inner_title = document.createElement('a');
-    let desc = document.createElement('p');
 
     let tasks = JSON.parse(json.tasks);
-    for (task of tasks) {
-      inner_title.setAttribute('href', '/tasks/' + task.id);
-      inner_title.textContent = task.title;
+    for (let task of tasks) {
+
+      let result_div = document.createElement('div');
+      result_div.classList.add('h-fit', 'self-center', 'p-3', 'mx-1', 'my-4', 'bg-black', 'outline', 'outline-1', 'outline-white/20', 'rounded');
+      let title = document.createElement('h2');
+      let link = document.createElement('a');
+      let desc = document.createElement('h4');
+
+      link.setAttribute('href', '/tasks/' + task.id);
+      link.textContent = task.title;
       desc.textContent = task.description;
-      outer_title.appendChild(inner_title);
-      div.appendChild(outer_title);
-      div.appendChild(desc); 
-      popup.appendChild(div);
+      title.appendChild(link);
+      result_div.appendChild(title);
+      result_div.appendChild(desc); 
+      popup.appendChild(result_div);
     };
     document.getElementById('popupContainer').classList.remove('hidden');
   }
