@@ -579,30 +579,30 @@ function addEventListeners() {
 function searchProjectHandler(json){
   let popup = document.querySelector('#popup-content');
   popup.innerHTML = "";
-  let outer_div = document.createElement('div');
-  outer_div.classList.add('bg-white', 'text-black', 'p-1', 'm-1', 'rounded', 'flex');
+  let result_div = document.createElement('div');
+  result_div.classList.add('flex', 'h-fit', 'p-3', 'mx-1', 'my-2', 'bg-black/60', 'outline', 'outline-white/20', 'outline-1', 'rounded');
   let img = document.createElement('img');
-  img.classList.add('h-16', 'aspect-square', 'mt-5', 'ml-5');
-  let inner_div = document.createElement('div');
-  inner_div.classList.add('flex', 'flex-col');
-  let outer_title = document.createElement('h1');
-  outer_title.classList.add('text-black');
-  let inner_title = document.createElement('a');
-  let desc = document.createElement('h2');
-  desc.classList.add('ml-3', 'mb-5');
+  img.classList.add('mobile:h-14', 'tablet:h-16', 'desktop:h-20', 'h-12', 'aspect-square');
+  let text_div = document.createElement('div');
+  text_div.classList.add('flex', 'flex-col', 'self-center', 'ml-3', 'w-11/12');
+  let title = document.createElement('h2');
+  title.classList.add('break-words');
+  let link = document.createElement('a');
+  let desc = document.createElement('h4');
+  desc.classList.add('break-words');
 
   let projects = JSON.parse(json.projects);
   for (project of projects) {
-    inner_title.setAttribute('href', '/projects/' + project.id);
+    link.setAttribute('href', '/projects/' + project.id);
     img.setAttribute('src', project.picture);
-    inner_title.textContent = project.name;
+    link.textContent = project.name;
     desc.textContent = project.description;
-    outer_title.appendChild(inner_title);
-    inner_div.appendChild(outer_title);
-    inner_div.appendChild(desc);
-    outer_div.appendChild(img);
-    outer_div.appendChild(inner_div);
-    popup.appendChild(outer_div);
+    title.appendChild(link);
+    result_div.appendChild(img);
+    text_div.appendChild(title);
+    text_div.appendChild(desc);
+    result_div.appendChild(text_div);
+    popup.appendChild(result_div);
   };
   document.getElementById('popupContainer').classList.remove('hidden');
 }

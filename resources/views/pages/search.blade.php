@@ -61,7 +61,7 @@
                 @endforeach
             @endif
         @else
-            <h1 class="mobile:m-10 m-5"> No results for "{{$search}}".. <br> Try searching for something else </h1>
+            <h1 class="mobile:m-10 m-5"> No results for "{{$search}}" <br> Try searching for something else </h1>
         @endif
     @endif
 @endsection
