@@ -183,10 +183,10 @@ function addEventListeners() {
         confirmDeletion.submit();
       }, 5000);
       
-    let deleteWorld= document.querySelectorAll("#delete-world");
-    [].forEach.call(deleteWorld, function(deleteWorld) {
+    let deleteWorld= document.querySelector("#delete-world");
+    if (deleteWorld != null)
       deleteWorld.addEventListener('submit', deleteWorldButton);
-    });
+
 
     let previewImg = document.querySelector('input#edit-img');
     if (previewImg != null) {
