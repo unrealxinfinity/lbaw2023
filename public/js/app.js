@@ -188,7 +188,7 @@ function addEventListeners() {
     if (deleteWorld != null)
       deleteWorld.addEventListener('submit', deleteWorldButton);
 
-    let deleteWorldInList = document.querySelectorAll("form.delete-world");
+    let deleteWorldInList = document.querySelectorAll("form.delete-world-list");
     if (deleteWorldInList != null){
       [].forEach.call(deleteWorldInList, function(form) {
         form.addEventListener('submit', deleteWorldAjaxButton);
@@ -223,7 +223,7 @@ function addEventListeners() {
     ev.preventDefault();
     const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
     if(text=="delete"){
-
+      console.log(this);
       const csrf = this.querySelector('input:first-child').value;
       const id = this.querySelector('input.id').value;
       const response = await fetch('/api/worlds/' + id, {
@@ -249,7 +249,7 @@ function addEventListeners() {
   }
 
   function removeWorldFromListHandler(data) {
-    let element = document.querySelectorAll('.myworld [data-id="' + data.id + '"]');
+    let element = document.querySelectorAll('.myworld[data-id="' + data.id + '"]');
     [].forEach.call(element, function(world) {
       world.remove();
     });
