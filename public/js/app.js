@@ -19,6 +19,12 @@ function addEventListeners() {
     deleter.addEventListener('click', sendDeleteCardRequest);
   });
 
+  let friendButtons = document.querySelectorAll('.friend-button');
+    [].forEach.call(friendButtons, function(friendButton) {
+      friendButton.addEventListener('click', sendFriendRequest);
+    });
+
+
   let cardCreator = document.querySelector('article.card form.new_card');
   if (cardCreator != null)
     cardCreator.addEventListener('submit', sendCreateCardRequest);
@@ -84,7 +90,6 @@ function addEventListeners() {
     ProjectSearcher.addEventListener('submit', searchProjectRequest);
   
   let MemberAssigner = document.querySelectorAll('form#assign-member');
-
   if (MemberAssigner != null){
     [].forEach.call(MemberAssigner, function(form) {
       form.addEventListener('submit', sendAssignMemberRequest);
@@ -197,6 +202,7 @@ function addEventListeners() {
     [].forEach.call(leaveWorldInList, function(form) {
       form.addEventListener('submit', sendLeaveWorldRequest);
     });
+  }
 
   let previewImg = document.querySelector('input#edit-img');
   if (previewImg != null) {
@@ -206,10 +212,25 @@ function addEventListeners() {
   let favouriter = document.querySelector('form#favorite');
   if (favouriter != null)
   favouriter.addEventListener('submit', sendFavoriteRequest);
-  }
 }
 
-    
+  async function sendFriendRequest(ev) {
+    ev.preventDefault();
+    const url = this.href;
+    console.log(url);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+      }
+    });
+
+    if (response.ok) this.remove();
+  }
+
   
   function deleteAccountButton() {
     const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
