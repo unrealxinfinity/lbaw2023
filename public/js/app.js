@@ -63,6 +63,7 @@ function addEventListeners() {
         form.addEventListener('submit', sendInviteMember);
       });
     }
+  }
     
     
 
@@ -187,6 +188,11 @@ function addEventListeners() {
     if (deleteWorld != null)
       deleteWorld.addEventListener('submit', deleteWorldButton);
 
+    let deleteWorldInList = document.querySelectorAll("form.delete-world");
+    if (deleteWorldInList != null){
+      [].forEach.call(deleteWorldInList, function(form) {
+        form.addEventListener('submit', deleteWorldAjaxButton);
+      });
 
     let previewImg = document.querySelector('input#edit-img');
     if (previewImg != null) {
@@ -211,9 +217,44 @@ function addEventListeners() {
     if(text == "delete"){
       this.submit();
     };
-    
-    
   }
+
+  async function deleteWorldAjaxButton(ev) {
+    ev.preventDefault();
+    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
+    if(text=="delete"){
+
+      const csrf = this.querySelector('input:first-child').value;
+      const id = this.querySelector('input.id').value;
+      const response = await fetch('/api/worlds/' + id, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        removeWorldFromListHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+
+    };
+  }
+
+  function removeWorldFromListHandler(data) {
+    let element = document.querySelectorAll('.myworld [data-id="' + data.id + '"]');
+    [].forEach.call(element, function(world) {
+      world.remove();
+    });
+  }
+
   function showEditComment(ev) {
     ev.preventDefault();
     this.closest('article').querySelector('h4.comment-content').classList.add('hidden');

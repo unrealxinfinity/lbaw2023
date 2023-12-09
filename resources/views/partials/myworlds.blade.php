@@ -12,7 +12,7 @@
         <label for="more-options-{{$world->id}}" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
         <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
             @if(Auth::check() && Auth::user()->can('delete', $world))
-                @include('form.delete-world', ['world' => $world])
+                @include('form.delete-world-in-list', ['world' => $world])
             @endif
             @if(Auth::check() && Auth::user()->can('leave', $world))
                 <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
