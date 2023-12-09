@@ -33,12 +33,23 @@ class WorldPolicy
     }
     public function delete(User $user, World $world): bool
     {
-        return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        if(Auth::check()){
+            if ($user->persistentUser->type_ === 'Admin') return true;
+            return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        } else {
+            return false;
+        }
+        
     }
     
     public function addMember(User $user, World $world): bool
     {
-        return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        if(Auth::check()){
+            return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        } else {
+            return false;
+        }
+        
     }
 
     public function join(User $user, World $world): bool
