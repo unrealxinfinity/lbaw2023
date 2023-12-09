@@ -81,7 +81,7 @@
                 @yield('content')
             </section>
         </main>
-        <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3 py-1 md:text-medium text-mediumPhone">
+        <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3 py-1">
             <p> @ 2023 MineMax, Inc. </p>
             <div class="flex space-x-3">
             <p> About </p>

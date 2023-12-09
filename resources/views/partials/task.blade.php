@@ -15,8 +15,8 @@
                 @include('partials.comment', ['comment' => $comment, 'type' => 'task'])
             @endforeach
         </ul>
-        @if (Auth::user()->can('edit', $task))
+        @can('edit', $task)
         @include('form.comment', ['route' => 'task-comment', 'id' => $task->id, 'type' => 'task'])
-        @endif
+        @endcan
     </section>
 </article>

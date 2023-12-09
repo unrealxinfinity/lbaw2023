@@ -31,13 +31,13 @@
                 <input type="checkbox" id="more-options" class="hidden peer"/>
                 <h1><label for="more-options" class="font-bold cursor-pointer">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
-                    @if (Auth::user()->can('delete', $project))
+                    @can('delete', $project)
                     <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
                         @csrf
                         @method('DELETE')
                         <h3><button class="px-3 py-1 w-full" type="submit">Delete Project</button></h3>
                     </form>
-                    @endif
+                    @endcan
                     @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
                     <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
                         @csrf
@@ -63,7 +63,7 @@
             <div class="big-box flex flex-col justify-start m-1 px-1 py-2 h-128 bg-black bg-opacity-50 outline outline-1 outline-white/20 rounded min-w-[12rem] w-48">
                 <h3 class="text-center inline-block mb-3"> {{$state}} </h3>
                 @foreach ($project->tasks()->where('status', '=', $state)->get() as $task)
-                <article class="task bg-white child:text-black p-2 m-1 rounded" @if (Auth::user()->can('edit', $task)) draggable="true" id="task-{{ $task->id }}" @endif>
+                <article class="task bg-white child:text-black p-2 m-1 rounded" @can('edit', $task) draggable="true" id="task-{{ $task->id }}" @endcan>
                     <h2 class="text-green font-semibold"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
                     <p>{{ $task->description }}</p>
                 </article>
@@ -71,19 +71,19 @@
             </div>
         @endforeach
     </div>
-    @if (Auth::user()->can('addMember', $project))
+    @can('addMember', $project)
     <section id="add-member">
         @include('form.addmember', ['project' => $project])
     </section>
-    @endif
-    @if (Auth::user()->can('createTask', $project))
+    @endcan
+    @can('createTask', $project)
     <section id="create-task">
         @include('form.task-create', ['project' => $project])
     </section>
-    @endif
-    @if (Auth::user()->can('projectTagCreate', $project))
+    @endcan
+    @can('projectTagCreate', $project)
     <section id="create-tag">
         @include('form.tag-create',['project'=> $project])
     </section>
-    @endif
+    @endcan
 </article>

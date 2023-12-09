@@ -13,7 +13,7 @@
             <input  class="button my-2" type="submit" value="Upload profile picture">
         </form>
     </header>
-    <div class="form-post m-0 p-0">
+    <div class="form-post m-0 p-0 mb-5">
         <form class="edit-member form-post outline-none mb-0 pb-0" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
             @csrf
             @method('PUT')
