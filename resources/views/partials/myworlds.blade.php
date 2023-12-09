@@ -8,8 +8,8 @@
     </div>
     @canany(['delete', 'leave'], $world)
         <input type="checkbox" id="more-options-{{$world->id}}" class="hidden peer"/>
-        <label for="more-options-{{$world->id}}" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
-        <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
+        <h1><label for="more-options-{{$world->id}}" class="font-bold cursor-pointer">&#8942;</label></h1>
+        <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
             @can('delete', $world)
                 @include('form.delete-world-in-list', ['world' => $world])
             @endcan
@@ -18,7 +18,7 @@
                     @CSRF
                     <input type="hidden" class="id" name="id" value={{$world->id}}>
                     <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
-                    <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
+                    <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
                 </form>
             @endcan
         </div>
