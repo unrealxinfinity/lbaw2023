@@ -47,14 +47,14 @@
         @endforeach
     @endif
         @if(count($members) > 0)
-        <h1> Members </h1>
+        <h1 class="mt-5"> Members </h1>
             @foreach($members as $otherMember)
-            <header class="flex justify-start sm:h-28 h-24 bg-grey rounded m-5">
-                <img src= {{$member->getProfileImage()}} class=" h-16 aspect-square mt-5 ml-5">
-                <div class="flex flex-col ml-5">
-                <h1 class="text-white mb-0">{{ $member->name }}</h1>
-                <h2 class="pl-3"> @ {{ $member->persistentUser->user->username }}</h2>
-                <h2 class="pl-3">{{ $member->description }}</h2>
+            <header class="myworld flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">
+                <img src= {{$member->getProfileImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
+                <div class="flex flex-col self-center ml-3 w-11/12">
+                <h2 class="break-words">{{ $member->name }}</h2>
+                <h3 class="break-words"> @ {{ $member->persistentUser->user->username }}</h3>
+                <h4 class="pt-2 break-words">{{ $member->description }}</h4>
                 </div>
             </header>
             @endforeach
