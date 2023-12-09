@@ -8,7 +8,7 @@
         <div id="project-leaders">
             <h3 class="text-green mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
-                <div class="flex justify-between">
+                <div class="grid grid-cols-2">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeLeader', $thing)
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
@@ -19,7 +19,7 @@
         <div id="members">
             <h3 class="text-green mb-1"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
-                <div class="flex justify-between">
+                <div class="grid grid-cols-2">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeMember', $thing)
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
@@ -34,7 +34,7 @@
             <div id="world-admins">
                 <h3 class="text-green mb-1"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
-                    <div class="flex justify-between">
+                    <div class="grid grid-cols-2">
                         @if ($member->id != $thing->owner()->get()->first()->id)
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
@@ -47,7 +47,7 @@
             <div id="members">
                 <h3 class="text-green mb-1"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
-                    <div class="flex justify-between">
+                    <div class="grid grid-cols-2">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
                             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
