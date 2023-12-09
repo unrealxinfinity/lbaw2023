@@ -10,7 +10,12 @@
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
                 <div class="flex justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
-                    @can('removeLeader', $thing)
+                    @can('removeLeader',$thing)   
+                        @cannot('assignOwn',$member)
+                            @include('form.assign-project-leader', ['project' => $thing, 'member' => $member,'isPromote'=>false])
+                        @endcannot
+                    @endcan
+                    @can('removeMember', $thing)
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                     @endcan
                 </div>
@@ -22,6 +27,11 @@
                 <div class="flex justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeMember', $thing)
+                        
+                            
+                        @cannot('assignOwn', $member)
+                            @include('form.assign-project-leader', ['project' => $thing, 'member' => $member,'isPromote'=>true])
+                        @endcannot
                         @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                     @endcan
                 </div>
@@ -40,7 +50,9 @@
                         @if ($member->id != $thing->owner()->get()->first()->id)
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
-                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
+                                @cannot('assignOwn',$member)
+                                    @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
+                                @endcannot
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                             @endcan
                         @endif
@@ -54,7 +66,9 @@
                     <div class="flex justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
-                            @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
+                            @cannot('assignOwn',$member)
+                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
+                            @endcannot
                             @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                         @endcan
                     </div>

@@ -1,0 +1,15 @@
+@if ($isPromote == false)
+    <form method="POST" class="demote-project-leader">
+    @csrf
+    <input type="hidden" class="id" name="id" value="{{ $project->id }}">
+    <input type="text" class="username" name="username" value="{{$member->persistentUser->user->username}}" hidden>
+    <input class="button" type="submit" value="Demote">
+    </form>
+@else
+    <form method="POST" class="assign-project-leader">
+    @csrf
+    <input type="hidden" class="id" name="id" value="{{ $project->id }}">
+    <input type="text" class="username" name="username"  value="{{$member->persistentUser->user->username}}" hidden>
+    <input class="button" type="submit" value="Promote">
+    </form>
+@endif

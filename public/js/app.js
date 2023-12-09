@@ -176,6 +176,19 @@ function addEventListeners() {
      form.addEventListener('submit', sendDemoteAdminFromWorldRequest);
     });
   }
+  
+  let assignProjectLeader = document.querySelectorAll('form.assign-project-leader');
+    if(assignProjectLeader != null){
+      assignProjectLeader.forEach(form => {
+        form.addEventListener('submit', sendAssignProjectLeader);
+      });
+    }
+    let demoteProjectLeader = document.querySelectorAll('form.demote-project-leader');
+    if(demoteProjectLeader != null){  
+      demoteProjectLeader.forEach(form => {
+        form.addEventListener('submit', sendDemoteProjectLeader);
+      });
+    }  
   let deleteAccount = document.querySelector("#delete-account");
   if (deleteAccount != null)
     deleteAccount.addEventListener('click', deleteAccountButton);
@@ -993,6 +1006,7 @@ function assignAdminToWorldHandler(data) {
   window.location.reload();
 }
 
+
 async function sendDemoteAdminFromWorldRequest(ev) {
   ev.preventDefault();
   let csrf = this.querySelector('input:first-child').value;
@@ -1027,6 +1041,69 @@ function demoteAdminToWorldHandler(data) {
 }
 
 
+async function sendAssignProjectLeader(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/projects/' + id + '/assign';
+  console.log(username);
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    assignProjectLeaderHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+
+
+}
+
+function assignProjectLeaderHandler(data) {  
+  window.location.reload();
+}
+
+async function sendDemoteProjectLeader(ev) {
+  ev.preventDefault();
+  let csrf = this.querySelector('input:first-child').value;
+  let id = this.querySelector('input.id').value;
+  let username = this.querySelector('input.username').value;
+  let url = '/api/projects/' + id + '/demote';
+  console.log(username);
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: JSON.stringify({username: username})
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    demoteProjectLeaderHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+}
+
+
   async function sendFavoriteRequest(event) {
     event.preventDefault();
 
@@ -1047,6 +1124,12 @@ function demoteAdminToWorldHandler(data) {
     const json = await response.json();
 
     if (response.status !== 500) favoriteHandler(json);
+}
+function demoteProjectLeaderHandler(data) {
+  if(data.error){
+    console.log(datal.message);
+  }
+  window.location.reload();
 }
 
   function favoriteHandler(json) {
