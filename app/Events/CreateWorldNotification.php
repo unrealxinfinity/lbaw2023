@@ -20,7 +20,7 @@ class CreateWorldNotification implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct($message,$world_id)
-    {
+    {   
         $this->world_id = $world_id;
         $this->message = $message;
     }

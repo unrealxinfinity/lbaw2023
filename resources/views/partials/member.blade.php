@@ -22,6 +22,7 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href = "/myworlds" >My Worlds</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/myprojects">My Projects</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/mytasks">My Tasks</a></h2>
+            <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
     @endif
     @else
@@ -30,6 +31,9 @@
         @if ($member->persistentUser->type_ == 'Member') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif
+        @can('request', $member)
+            <a class="friend-button justify-self-end" href="/api/request/{{ $member->persistentUser->user->username }}">&#10010;</a>
+        @endcan        
     </header>
     @endif
 </article>

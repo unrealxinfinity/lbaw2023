@@ -35,12 +35,18 @@ class WorldPolicy
     public function delete(?User $user, World $world): bool
     {
         if ($user == null) return false;
-        return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        if ($user->persistentUser->type_ === 'Administrator') return true;
+        return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     
     public function addMember(User $user, World $world): bool
     {
-        return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        if(Auth::check()){
+            return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        } else {
+            return false;
+        }
+        
     }
 
     public function join(User $user, World $world): bool
@@ -52,6 +58,10 @@ class WorldPolicy
     {
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
+    public function assignWorldAdmin(User $user, World $world): bool
+    {   
+        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+    }
     public function removeAdmin(User $user, World $world): bool
     {
         return ($user->persistentUser->member->id == $world->owner()->get()->first()->id);
@@ -60,8 +70,9 @@ class WorldPolicy
     public function leave(?User $user, World $world): bool
     {
         if ($user == null) return false;
+        if($user->persistentUser->type_ === 'Administrator') return false;
         $is_owner = $world->owner_id === $user->persistentUser->member->id;
-        return Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
+        return $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
     }
 
     public function comment(User $user, World $world): bool
@@ -77,5 +88,10 @@ class WorldPolicy
     public function favorite(User $user, World $world): bool
     {
         return ($user->persistentUser->type_ != 'Blocked') && ($user->persistentUser->type_ != 'Deleted');
+    }
+
+    public function transfer(User $user, World $world): bool
+    {
+        return (Auth::check() && $world->owner_id === $user->persistentUser->member->id);
     }
 }

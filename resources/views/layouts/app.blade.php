@@ -8,7 +8,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title') - {{env('APP_NAME')}} </title>
 
         <!-- Styles -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
     </head>
-    <body class="min-h-full min-w-full bg-mine text-white font-roboto">
+    <body id="main-body" class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() ? 'true' : 'false' }}">
         <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
             <div id="navbar-left" class="items-center flex p-1 child:mx-2">
                 <h1><label for="show-menu" class="cursor-pointer">☰</label></h1>
@@ -32,7 +32,6 @@
             </div>
             @if (Auth::check())
                 @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
-                
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     <div id="notification-button" class="link mx-6 tablet:inline-flex hidden">
@@ -57,7 +56,7 @@
         <div id="menu" class="fixed bg-opacity-90 bg-black text-white top-16 h-full w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
             <ul id="menu-items" class="list-none text-center flex flex-col h-full">
                 <li class="menu-item"><a href="/">Home Page</a></li>
-                <li class="menu-item"><a href="#">All Worlds</a></li>
+                <li class="menu-item"><a href="/worlds">All Worlds</a></li>
                 @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
                     <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
                     <li class="menu-item"><a href="/myprojects">My Projects</a></li>

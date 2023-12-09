@@ -47,4 +47,10 @@ class World extends Model
     {
         return FileController::get('world', $this->id);
     }
+
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
 }

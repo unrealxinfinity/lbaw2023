@@ -91,9 +91,10 @@ CREATE TABLE member_world(
 DROP TABLE IF EXISTS invitations CASCADE;
 CREATE TABLE invitations(
   id SERIAL PRIMARY KEY,
-  token VARCHAR NOT NULL,
+  token VARCHAR NOT NULL UNIQUE,
   member_id INT NOT NULL,
   world_id INT NOT NULL,
+  is_admin BOOLEAN NOT NULL,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -245,9 +246,12 @@ CREATE TABLE notifications(
   world_id INT DEFAULT NULL,
   project_id INT DEFAULT NULL,
   task_id INT DEFAULT NULL,
+  member_id INT DEFAULT NULL,
+  is_request BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(project_id) REFERENCES projects(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY(task_id) REFERENCES tasks(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS member_notification CASCADE;
@@ -703,7 +707,9 @@ INSERT INTO members (user_id, name, birthday, description, email) VALUES
 -- Sample data for the 'friend' table (assuming members are friends with each other)
 INSERT INTO friend (member_id, friend_id) VALUES
     (1, 2),
-    (2, 3);
+    (2, 3),
+    (2, 1),
+    (3, 2);
 
 -- Sample data for the 'world' table
 INSERT INTO worlds (name, description, owner_id) VALUES
@@ -794,11 +800,13 @@ INSERT INTO faq_item (question, answer) VALUES
     ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and cannot be changed, while your display name can be changed.');
 
 -- Sample data for the 'notifications' table
-INSERT INTO notifications (text, level, world_id, project_id, task_id) VALUES
-    ('You have been added to a world!', 'Low', 1, NULL, NULL),
-    ('A new task was created in this project!', 'Medium', NULL, 1, NULL);
+INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id, is_request) VALUES
+    ('You have been added to a world!', 'Low', 1, NULL, NULL, NULL, FALSE),
+    ('A new task was created in this project!', 'Medium', NULL, 1, NULL, NULL, FALSE),
+    ('Some guy sent you a friend request!', 'Medium', NULL, NULL, NULL, 3, TRUE);
 
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
     (1, 1),
-    (2, 3);
+    (2, 3),
+    (3, 1);

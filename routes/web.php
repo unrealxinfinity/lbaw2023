@@ -101,20 +101,27 @@ Route::controller(SearchController::class)->group(function() {
 });
 
 Route::controller(WorldController::class)->group(function () {
-    Route::post('/api/worlds/{id}/favorite', 'favorite');//
-    //Route::post('/api/worlds/{id}/{username}', 'addMember');//
+    Route::post('/api/worlds/{id}/favorite', 'favorite');
+    //Route::post('/api/worlds/{id}/{username}', 'addMember'); delete from openapi
     Route::post('/api/worlds/{id}/invite', 'invite')->name('invite-world');
     Route::post('/worlds/{id}', 'join')->name('join-world');
     Route::delete('/api/worlds/{id}/{username}', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
+    Route::delete('/api/worlds/{id}', 'leaveFromList');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');//
+    Route::get('/worlds', 'showAll')->name('show-all-worlds');
     Route::post('/worlds', 'create')->name('create-world');//
     Route::get('/worlds/{id}/edit', 'showEditWorld')->name('edit-world');
     Route::put('/api/world/{id}', 'update')->name('update-world');//
     Route::get('/api/worlds/{id}/projects', 'searchProjects')->name('search-projects');//
     Route::post('/worlds/{id}/comment', 'comment')->name('world-comment');//
     Route::delete('/worlds/{id}', 'delete')->name('delete-world');//
+    Route::delete('/api/worlds/{id}', 'deleteFromList'); 
+    Route::put('/api/worlds/{id}/assign', 'assignNewWorldAdmin')->name('assign-world-admin');
+    Route::put('/api/worlds/{id}/demote', 'demoteWorldAdmin')->name('demote-world-admin');
     Route::get('/invite', 'showInvite')->name('show-invite');
+    Route::get('/worlds/{id}/transfer', 'showTransfer')->name('show-transfer');
+    Route::post('/worlds/{id}/transfer', 'transfer')->name('transfer-world');
 });
 
 Route::controller(ProjectController::class)->group(function () {
@@ -148,6 +155,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
+    Route::get('/invites', 'showInvites')->name('show-invites');
 });
 
 Route::controller(TaskController::class)->group(function () {
@@ -185,7 +193,11 @@ Route::controller(NotificationController::class)->group(function () {
     Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
     Route::post('/api/notifications', 'createNotification')->name('createNotification');
     Route::delete('/api/notifications','clearNotifications')->name('clearNotification');
+    Route::delete('/api/notifications/{id}', 'clearSingle')->name('clearSingleNotification');
+    Route::post('/api/accept/{id}', 'acceptRequest')->name('accept-request');
+    Route::post('/api/request/{username}', 'friendRequest');
 });
+
 Route::controller(FileController::class)->group(function () {
    Route::post('/members/upload/{id}', 'upload');
    Route::post('/projects/upload/{id}', 'upload');

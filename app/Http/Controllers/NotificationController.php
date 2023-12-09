@@ -18,6 +18,7 @@ use App\Events\CreateTagNotification;
 use App\Events\CreateTaskNotification;
 use App\Events\CreateWorldNotification;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Tag;
 
 class NotificationController extends Controller
@@ -39,6 +40,44 @@ class NotificationController extends Controller
             'message'=>'Nothing Here'
         ]);
     }
+
+    public function clearSingle(string $id): JsonResponse {
+        $member = auth()->user()->persistentUser->member;
+        $member->notifications()->detach($id);
+        return response()->json([
+            'message'=>'Nothing Here'
+        ]);
+    }
+
+    public function acceptRequest(string $id): JsonResponse {
+        $request = Notification::findOrFail($id);
+        $member = auth()->user()->persistentUser->member;
+        $recipient = Member::findOrFail($request->member_id);
+        
+        if (!$request->is_request) {
+            return response()->json([
+                'error' => 'true',
+                'message' => 'This notification is not a friend request!'
+            ]);
+        }
+
+        if (!$member->notifications->contains('id', $id)) {
+            return response()->json([
+                'error' => 'true',
+                'message' => 'This request does not belong to you!'
+            ]);
+        } 
+
+        $member->friends()->attach($request->member_id);
+        $recipient->friends()->attach($member->id);
+        $member->notifications()->detach($request);
+
+        return response()->json([
+            'error' => 'false',
+            'message' => 'Friend request accepted!'
+        ]);
+    }
+
     static function ProjectNotification(Project $project,string $world_id, string $action){
         
         DB::beginTransaction();
@@ -128,12 +167,19 @@ class NotificationController extends Controller
     }
 
     static function WorldNotification(World $world, string $action){
+        error_log($action);
+        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')){
+            $level='High';
+        }
+        else{
+            $level='Medium';
+        }
         DB::beginTransaction();
         try {
             $message = $action.' World '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
-                'level' => 'Medium',
+                'level' => $level,
                 'world_id' => $world->id,
                 'project_id' => null,
                 'task_id' => null,
@@ -147,6 +193,28 @@ class NotificationController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    function friendRequest(string $username): JsonResponse
+    {
+        $user = Auth::user();
+        $message = "$user->username wants to be your friend!";
+
+        $recipient = User::where('username', $username)->firstOrFail()->persistentUser->member;
+        error_log($recipient->id);
+
+        $notification = Notification::create([
+            'text' => $message,
+            'level' => 'Medium',
+            'member_id' => $user->persistentUser->member->id,
+            'is_request' => true
+        ]);
+
+        $recipient->notifications()->attach($notification->id);
+
+        return response()->json([
+            'message' => 'Friend request sent!'
+        ]);
     }
 
 

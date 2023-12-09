@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Administer members')
+@section('title', 'Member Management')
 
 @section('content')
     <p><a href="/">Home</a> > <a href="/admin">Admin</a></p>
