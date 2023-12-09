@@ -161,7 +161,8 @@ class ProjectController extends Controller
         NotificationController::ProjectNotification($project,$world_id->id,'Deleted');
         $project->delete();
         return view('pages.world', [
-            'world' => $world_id
+            'world' => $world_id,
+            'edit' => false
         ]);
     }
     
