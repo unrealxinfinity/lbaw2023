@@ -17,7 +17,7 @@
                 @can('leave', $world)
                     <form class="leave-world-list">
                         @CSRF
-                        <input type="hidden" class="id" name="id" value={{$world_id}}>
+                        <input type="hidden" class="id" name="id" value={{$world->id}}>
                         <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
                         <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
                     </form>

@@ -271,12 +271,12 @@ class WorldController extends Controller
             NotificationController::WorldNotification($world,$member->id . ' left the ');
             return response()->json([
                 'error' => false,
-                'id' => $world_id,
+                'id' => $world_id
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'id' => $world_id,
+                'id' => $world_id
             ]);
         }
     }
