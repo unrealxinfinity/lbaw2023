@@ -7,10 +7,6 @@ export default {
   ],
   theme: {
     screens: {
-      sm: '480px',
-      md: '780px',
-      lg: '976px',
-      xl: '1440px',
       mobile: '450px',
       tablet: '650px',
       desktop: '1024px'
@@ -42,12 +38,6 @@ export default {
       bMobile: '17px',
       bTablet: '20px',
       bDesktop: '23px',
-      superBig: '2.5rem',
-      superBigPhone: '1.2rem',
-      big: '1.6rem',
-      bigPhone: '1rem',
-      medium: '0.8rem',
-      mediumPhone: '0.6rem',
     },
     extend: {
       spacing: {

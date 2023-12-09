@@ -3,7 +3,7 @@
     <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY ASSIGNED TASKS </h2>
     <div class="panel">
     @foreach($tasks as $task)
-    <div class="flex flex-col justify-end min-w-[11rem] w-44 h-32 tablet:min-w-[13rem] tablet:w-52 tablet:h-44 bg-black rounded" > 
+    <div class="flex flex-col justify-end m-1 min-w-[11rem] w-44 h-32 tablet:min-w-[13rem] tablet:w-52 tablet:h-44 bg-black rounded outline outline-1 outline-white/10"> 
         <div class="h-1/2 overflow-hidden px-5 flex flex-col justify-center">
             <h3><a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a>
                 > 
