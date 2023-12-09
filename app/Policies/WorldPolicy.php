@@ -34,7 +34,7 @@ class WorldPolicy
     public function delete(User $user, World $world): bool
     {
         if(Auth::check()){
-            if ($user->persistentUser->type_ === 'Admin') return true;
+            if ($user->persistentUser->type_ === 'Administrator') return true;
             return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
         } else {
             return false;
@@ -71,9 +71,13 @@ class WorldPolicy
     }
 
     public function leave(User $user, World $world): bool
-    {
-        $is_owner = $world->owner_id === $user->persistentUser->member->id;
-        return Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
+    {   
+        if(Auth::check()){
+            if($user->persistentUser->type_ === 'Administrator') return false;
+            $is_owner = $world->owner_id === $user->persistentUser->member->id;
+            return $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
+        }
+        return false;
     }
 
     public function comment(User $user, World $world): bool
