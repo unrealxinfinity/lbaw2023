@@ -1,9 +1,7 @@
-<article class="myproject bg-grey rounded m-5" data-id="{{ $project->id }}">
-    <div class="flex">
-        <img src={{$project->getImage()}} class="h-16 aspect-square mt-5 ml-5 ">
-        <div class="flex flex-col">
-            <h1 class="text-white"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h1>
-            <h2 class="ml-3 mb-5"> {{ $project->description }} </h2>
+<article class="myproject flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded" data-id="{{ $project->id }}">
+        <img src={{$project->getImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
+        <div class="flex flex-col self-center ml-3 w-11/12">
+            <h2 class="break-words"><a href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2>
+            <h4 class="break-words"> {{ $project->description }} </h4>
         </div>
-    </div>
 </article>
