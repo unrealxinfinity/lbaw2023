@@ -29,7 +29,12 @@
         </div>
         @endif
         @if ($type == 'world')
-            <h3 class="text-green mb-1"> World Owner </h3>
+            <div class="flex mb-1 items-center">
+                <h3 class="text-green"> World Owner </h3>
+                @can('transfer', $thing)
+                    <h2 class="ml-2 font-extrabold"><a href="/worlds/{{ $world->id }}/transfer">&#x2942;</a></h2>
+                @endcan
+            </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
             <div id="world-admins">
                 <h3 class="text-green mb-1 mt-4"> World Admins </h3>
