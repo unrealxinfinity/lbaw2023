@@ -32,27 +32,31 @@
             <h3 class="text-green mb-1"> World Owner </h3>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
             <div id="world-admins">
-                <h3 class="text-green mb-1"> World Admins </h3>
+                <h3 class="text-green mb-1 mt-4"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
-                    <div class="grid grid-cols-2">
-                        @if ($member->id != $thing->owner()->get()->first()->id)
+                    @if ($member->id != $thing->owner()->get()->first()->id)
+                        <div class="h-5 flex items-center justify-between">
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
-                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
-                                @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                                <div class="flex items-center child:mx-1">
+                                    @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
+                                    @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                                </div>
                             @endcan
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 @endforeach
             </div>
             <div id="members">
-                <h3 class="text-green mb-1"> Members </h3>
+                <h3 class="text-green mb-1 mt-4"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
-                    <div class="grid grid-cols-2">
+                    <div class="h-5 flex items-center justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
-                            @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
-                            @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                            <div class="flex items-center child:mx-1">
+                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
+                                @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                            </div>
                         @endcan
                     </div>
                 @endforeach
