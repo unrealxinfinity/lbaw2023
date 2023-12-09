@@ -28,36 +28,40 @@
             </select>
             <input class="button" type="submit" id="mainSearchButton" value='Filter'>
         </form>
-    @if(count($tasks) > 0)
-        <h1> Tasks </h1>
-        @foreach($tasks as $task)
-            @include('partials.mytasks', ['task' => $task])
-        @endforeach
-    @endif
-    @if(count($projects) > 0)
-        <h1> Projects </h1>
-        @foreach($projects as $project)
-            @include('partials.myprojects', ['project' => $project])
-        @endforeach
-    @endif
-    @if(count($worlds) > 0)
-        <h1> Worlds </h1>
-        @foreach($worlds as $world)
-            @include('partials.myworlds', ['world' => $world])
-        @endforeach
-    @endif
-        @if(count($members) > 0)
-        <h1 class="mt-5"> Members </h1>
-            @foreach($members as $otherMember)
-            <header class="myworld flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">
-                <img src= {{$member->getProfileImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
-                <div class="flex flex-col self-center ml-3 w-11/12">
-                <h2 class="break-words">{{ $member->name }}</h2>
-                <h3 class="break-words"> @ {{ $member->persistentUser->user->username }}</h3>
-                <h4 class="pt-2 break-words">{{ $member->description }}</h4>
-                </div>
-            </header>
-            @endforeach
+        @if(count($tasks) > 0 || count($projects) > 0 || count($worlds) > 0 || count($members) > 0)
+            @if(count($tasks) > 0)
+                <h1> Tasks </h1>
+                @foreach($tasks as $task)
+                    @include('partials.mytasks', ['task' => $task])
+                @endforeach
+            @endif
+            @if(count($projects) > 0)
+                <h1> Projects </h1>
+                @foreach($projects as $project)
+                    @include('partials.myprojects', ['project' => $project])
+                @endforeach
+            @endif
+            @if(count($worlds) > 0)
+                <h1> Worlds </h1>
+                @foreach($worlds as $world)
+                    @include('partials.myworlds', ['world' => $world])
+                @endforeach
+            @endif
+            @if(count($members) > 0)
+                <h1 class="mt-5"> Members </h1>
+                @foreach($members as $otherMember)
+                <header class="myworld flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">
+                    <img src= {{$member->getProfileImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
+                    <div class="flex flex-col self-center ml-3 w-11/12">
+                    <h2 class="break-words">{{ $member->name }}</h2>
+                    <h3 class="break-words"> @ {{ $member->persistentUser->user->username }}</h3>
+                    <h4 class="pt-2 break-words">{{ $member->description }}</h4>
+                    </div>
+                </header>
+                @endforeach
+            @endif
+        @else
+            <h1 class="mobile:m-10 m-5"> No results for "{{$search}}".. <br> Try searching for something else </h1>
         @endif
     @endif
 @endsection
