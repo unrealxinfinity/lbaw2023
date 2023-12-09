@@ -81,6 +81,17 @@ class WorldController extends Controller
         return redirect()->route('home')->withSuccess('World deleted!');
     }
 
+    public function deleteFromList(DeleteWorldRequest $request, string $id): JsonResponse
+    {
+        $request->validated();
+        $world = World::findOrFail($id);
+        $world->delete();
+        return response()->json([
+            'error' => false,
+            'id' => $id,
+        ]);
+    }
+
     public function update(EditWorldRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
@@ -241,11 +252,32 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
             return redirect()->route("worlds.show", ['id' => $world_id])->withError('You can\'t leave the world.');
+        }
+    }
+
+    public function leaveFromList(LeaveWorldRequest $request, string $world_id): JsonResponse
+    {
+        try {
+            $request->validated();
+
+            $world = World::findOrFail($world_id);
+            $member = Auth::user()->persistentUser->member;
+            $member->worlds()->detach($world_id);
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
+            return response()->json([
+                'error' => false,
+                'id' => $world_id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'id' => $world_id
+            ]);
         }
     }
 
