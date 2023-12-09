@@ -1,4 +1,5 @@
-<form action="{{ route('create-project') }}" id="new-project" class="form-post" method="POST">Create a New Project:
+<form action="{{ route('create-project') }}" id="new-project" class="form-post" method="POST">
+  <h2>Create a New Project</h2>
       @csrf
       @method('POST')
 

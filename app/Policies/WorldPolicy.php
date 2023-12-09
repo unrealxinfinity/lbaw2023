@@ -27,19 +27,16 @@ class WorldPolicy
         return $user->persistentUser->type_ !== "Blocked" && $user->persistentUser->type_ !== 'Deleted';
     }
 
-    public function edit(User $user, World $world): bool
+    public function edit(?User $user, World $world): bool
     {
+        if($user == null) return true;
         return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
-    public function delete(User $user, World $world): bool
+    public function delete(?User $user, World $world): bool
     {
-        if(Auth::check()){
-            if ($user->persistentUser->type_ === 'Administrator') return true;
-            return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
-        } else {
-            return false;
-        }
-        
+        if ($user == null) return false;
+        if ($user->persistentUser->type_ === 'Administrator') return true;
+        return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     
     public function addMember(User $user, World $world): bool
@@ -70,14 +67,12 @@ class WorldPolicy
         return ($user->persistentUser->member->id == $world->owner()->get()->first()->id);
     }
 
-    public function leave(User $user, World $world): bool
-    {   
-        if(Auth::check()){
-            if($user->persistentUser->type_ === 'Administrator') return false;
-            $is_owner = $world->owner_id === $user->persistentUser->member->id;
-            return $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
-        }
-        return false;
+    public function leave(?User $user, World $world): bool
+    {
+        if ($user == null) return false;
+        if($user->persistentUser->type_ === 'Administrator') return false;
+        $is_owner = $world->owner_id === $user->persistentUser->member->id;
+        return $user->persistentUser->member->worlds->contains('id', $world->id) && !$is_owner;
     }
 
     public function comment(User $user, World $world): bool

@@ -63,7 +63,10 @@ class SearchController extends Controller
                 'members' => $members,
                 'tasks' => $tasks,
                 'projects' => $projects,
-                'worlds' => $worlds
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
             ]);
         }
         else if($typeFilter == 'Member'){
@@ -74,7 +77,10 @@ class SearchController extends Controller
                 'members' => $members,
                 'tasks' => $tasks,
                 'projects' => $projects,
-                'worlds' => $worlds
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
             ]);
         }
         else if($typeFilter == 'Project'){
@@ -85,7 +91,10 @@ class SearchController extends Controller
                 'members' => $members,
                 'tasks' => $tasks,
                 'projects' => $projects,
-                'worlds' => $worlds
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
             ]);
         }
         else if($typeFilter == 'Task'){
@@ -96,7 +105,10 @@ class SearchController extends Controller
                 'members' => $members,
                 'tasks' => $tasks,
                 'projects' => $projects,
-                'worlds' => $worlds
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
             ]);
         }
         else if($typeFilter == 'World'){
@@ -107,7 +119,10 @@ class SearchController extends Controller
                 'members' => $members,
                 'tasks' => $tasks,
                 'projects' => $projects,
-                'worlds' => $worlds
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
             ]);
         }
        

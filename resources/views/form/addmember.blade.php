@@ -1,6 +1,6 @@
 <form id="add-member" class="add-member form-post">
     @csrf
-    Add member:
+    <h2> Add member </h2>
     <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     <input type="text" class="username" name="username" placeholder="Username" required>
     <select name="type" class="type">

@@ -8,7 +8,7 @@
 
     <input type="hidden" name="member" value="on">
 
-    <label for="username">Name</label>
+    <h3 class="my-0 mt-3"><label for="username">Name</label></h3>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
       <span class="error">
@@ -16,7 +16,7 @@
       </span>
     @endif
 
-    <label for="email">E-Mail Address</label>
+    <h3 class="my-0 mt-1"><label for="email">E-Mail Address</label></h3>
     <input id="email" type="email" name="email" value="{{ old('email') }}" required>
     @if ($errors->has('email'))
       <span class="error">
@@ -24,7 +24,7 @@
       </span>
     @endif
 
-    <label for="password">Password</label>
+    <h3 class="my-0 mt-1"><label for="password">Password</label></h3>
     <input id="password" type="password" name="password" required>
     @if ($errors->has('password'))
       <span class="error">
@@ -32,7 +32,7 @@
       </span>
     @endif
 
-    <label for="password-confirm">Confirm Password</label>
+    <h3 class="my-0 mt-1"><label for="password-confirm">Confirm Password</label></h3>
     <input id="password-confirm" type="password" name="password_confirmation" required>
     <button class="button" type="submit"> Register </button>
 </form>

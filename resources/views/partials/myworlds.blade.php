@@ -1,28 +1,26 @@
-<article class="myworld bg-grey rounded m-5" data-id="{{ $world->id }}">
-    <div class="flex justify-between">
-        <div class="flex m-3">
-            <img src={{$world->getImage()}} class="h-16 aspect-square mr-3">
-            <div class="self-center">
-                <h1 class="text-white"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h1>
-                <h2 class=""> {{ $world->description }} </h2>
-            </div>
+<article class="myworld flex justify-between h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded" data-id="{{ $world->id }}">
+    <div class="flex">
+        <img src={{$world->getImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
+        <div class="flex flex-col self-center ml-3 w-11/12">
+            <h2 class="break-words"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h2>
+            <h4 class="break-words"> {{ $world->description }} </h4>
         </div>
-        @canany(['delete', 'leave'], $world)
-            <input type="checkbox" id="more-options-{{$world->id}}" class="hidden peer"/>
-            <label for="more-options-{{$world->id}}" class="text-start font-bold md:text-big text-bigPhone h-fit my-3 sm:mr-5 cursor-pointer">&#8942;</label>
-            <div class="absolute right-0 z-10 w-40 sm:mr-5 px-2 rounded bg-grey peer-checked:block hidden divide-y divide-white divide-opacity-25">
-                @can('delete', $world)
-                    @include('form.delete-world-in-list', ['world' => $world])
-                @endcan
-                @can('leave', $world)
-                    <form class="leave-world-list">
-                        @CSRF
-                        <input type="hidden" class="id" name="id" value={{$world->id}}>
-                        <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
-                        <button class="px-3 py-1 w-full md:text-medium text-mediumPhone" type="submit">Leave World</button>
-                    </form>
-                @endcan
-            </div>
-        @endcanany
     </div>
+    @canany(['delete', 'leave'], $world)
+        <input type="checkbox" id="more-options-{{$world->id}}" class="hidden peer"/>
+        <h1><label for="more-options-{{$world->id}}" class="font-bold cursor-pointer">&#8942;</label></h1>
+        <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
+            @can('delete', $world)
+                @include('form.delete-world-in-list', ['world' => $world])
+            @endcan
+            @can('leave', $world)
+                <form class="leave-world-list">
+                    @CSRF
+                    <input type="hidden" class="id" name="id" value={{$world->id}}>
+                    <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
+                    <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                </form>
+            @endcan
+        </div>
+    @endcanany
 </article>

@@ -1,12 +1,12 @@
-<article id="comment" class="bg-grey border-solid border-green border-1 rounded py-3 px-5 my-5 mx-1 break-words overflow-clip text-mediumPhone md:text-medium" data-id = "{{ $comment->id }}">
+<article id="comment" class="outline outline-1 outline-white/20 bg-black bg-opacity-80 p-3 my-3 break-words overflow-clip rounded" data-id = "{{ $comment->id }}">
     <header class="h-10 flex">
-        <div class="grow-[1]">
+        <div class="grow-[1] pt-0.5">
             @include('partials.member', ['member' => $comment->member, 'main' => false])
         </div>
         @if (Auth::check() && Auth::user()->persistentUser->member->id == $comment->member_id)
-            <button type="button" class="show-edit">Edit</button>
+            <h3><button type="button" class="show-edit mobile:mr-3 mr-1 py-0.5 px-1.5 rounded-full outline outline-1 outline-white/20">Edit</button></h3>
         @endif
-        <p> {{ $comment->date_ }} </p>
+        <p class="pt-1"> {{ $comment->date_ }} </p>
     </header>
     <h4 class="comment-content"> {{ $comment->content }} </h4>
     <div class="comment-edit hidden">

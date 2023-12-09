@@ -2,24 +2,22 @@
     <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
-            <span class="button">
-                {!! __('pagination.previous') !!}
-            </span>
+            <h2>
+            </h2>
         @else
-            <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="button">
+            <h2><a href="{{ $paginator->previousPageUrl() }}" rel="prev">
                 {!! __('pagination.previous') !!}
-            </a>
+            </a></h2>
         @endif
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
-            <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="button">
+            <h2><a href="{{ $paginator->nextPageUrl() }}" rel="next">
                 {!! __('pagination.next') !!}
-            </a>
+            </a></h2>
         @else
-            <span class="button">
-                {!! __('pagination.next') !!}
-            </span>
+            <h2>
+            </h2>
         @endif
     </nav>
 @endif

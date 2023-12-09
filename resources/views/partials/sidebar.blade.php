@@ -1,14 +1,14 @@
-<article class="md:w-1/3 mt-8">
-    <label for="show-details" class="md:hidden cursor-pointer md:text-big text-bigPhone sm:m-3 m-2 w-fit">&times;</label>
-    <h1> Description </h1>
-    <p>{{ $thing->description }}</p>
-    <h1>Members</h1>
-    <ul class="members mr-5">
+<article id="sidebar" class="desktop:w-1/3 desktop:mt-8 mt-20 desktop:ml-5 mr-3">
+    <label for="show-details" class="desktop:hidden cursor-pointer m-2">&times;</label>
+    <h2> Description </h2>
+    <p class="mt-3 mb-5 desktop:w-11/12">{{ $thing->description }}</p>
+    <h2>Members</h2>
+    <ul class="members mr-5 ml-2 mt-2">
         @if ($type == 'project')
         <div id="project-leaders">
-            <h2 class="text-grey font-semibold"> Project Leaders </h2>
+            <h3 class="text-green mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
-                <div class="flex justify-between">
+                <div class="grid grid-cols-2">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeLeader',$thing)   
                         @cannot('assignOwn',$member)
@@ -22,9 +22,9 @@
             @endforeach
         </div>
         <div id="members">
-            <h2 class="mt-5 text-grey font-semibold"> Members </h2>
+            <h3 class="text-green mb-1"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
-                <div class="flex justify-between">
+                <div class="grid grid-cols-2">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @can('removeMember', $thing)
                         
@@ -39,37 +39,43 @@
         </div>
         @endif
         @if ($type == 'world')
-            <h2 class="text-grey font-semibold"> World Owner </h2>
+            <div class="flex mb-1 items-center">
+                <h3 class="text-green"> World Owner </h3>
+                @can('transfer', $thing)
+                    <h2 class="ml-2 font-extrabold"><a href="/worlds/{{ $world->id }}/transfer">&#x2942;</a></h2>
+                @endcan
+            </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
             <div id="world-admins">
-                <h2 class="mt-5 text-grey font-semibold"> World Admins </h2>
+                <h3 class="text-green mb-1 mt-4"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
-                    
-                    <div class="flex justify-between">
-                        
-                        @if ($member->id != $thing->owner()->get()->first()->id)
+                    @if ($member->id != $thing->owner()->get()->first()->id)
+                        <div class="h-5 flex items-center justify-between">
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @can('removeAdmin', $thing)
-                                @cannot('assignOwn',$member)
-                                    @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
-                                @endcannot
-                                @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                                <div class="flex items-center child:mx-1">
+                                    @cannot('assignOwn',$member)
+                                        @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> true])
+                                    @endcannot
+                                    @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                                </div>
                             @endcan
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 @endforeach
             </div>
             <div id="members">
-                <h2 class="mt-5 text-grey font-semibold"> Members </h2>
+                <h3 class="text-green mb-1 mt-4"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
-               
-                    <div class="flex justify-between">
+                    <div class="h-5 flex items-center justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @can('removeMember', $thing)
-                            @cannot('assignOwn',$member)
-                                @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
-                            @endcannot
-                            @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                            <div class="flex items-center child:mx-1">
+                                @cannot('assignOwn',$member)
+                                    @include('form.assign-admin-to-world', ['world' => $thing, 'member' => $member,'isAdmin'=> false])
+                                @endcannot
+                                @include('form.remove-member', ['thing' => $thing, 'member' => $member])
+                            </div>
                         @endcan
                     </div>
                 @endforeach

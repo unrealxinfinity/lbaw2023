@@ -6,19 +6,19 @@
 
 @layer base {
   h1 {
-    @apply m-2 text-green text-bigPhone md:text-big font-bold;
-    }
-  h3 {
-    @apply m-2 text-green text-mediumPhone md:text-medium;
+    @apply text-bMobile tablet:text-bTablet desktop:text-bDesktop;
   }
   h2 {
-    @apply text-medium;
+      @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop text-white text-opacity-90;
   }
+  h3 {
+    @apply text-msMobile tablet:text-msTablet desktop:text-msDesktop text-white text-opacity-80;
+}
   input, select, option, textarea {
-    @apply focus:outline focus:outline-green outline-none md:py-2 py-1 px-2 mr-3 whitespace-nowrap text-black rounded text-mediumPhone md:text-medium;
+    @apply focus:outline focus:outline-green outline-none py-2 px-2 whitespace-nowrap text-black rounded text-sMobile tablet:text-sTablet desktop:text-sDesktop;
   }
   h4, p {
-    @apply text-mediumPhone md:text-medium break-words;
+    @apply text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words text-white text-opacity-75;
   }
 }
 
@@ -27,22 +27,22 @@
       @apply bg-black bg-opacity-50 py-2 h-16 flex justify-around items-center;
     }    
     .button {
-      @apply bg-green text-white rounded sm:py-2 sm:px-8 px-4 py-1 m-2 ml-0 md:text-medium text-mediumPhone cursor-pointer hover:animate-pulse;
+      @apply bg-green text-white rounded py-2 px-4 text-sMobile tablet:text-sTablet desktop:text-sDesktop cursor-pointer hover:animate-pulse;
     }
-    .round-button {
-      @apply bg-green text-white rounded-full px-4 py-3 md:text-medium text-mediumPhone cursor-pointer;
+    .link {
+      @apply py-2 mx-5 h-fit w-fit text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words cursor-pointer;
     }
     .panel {
-      @apply flex overflow-auto justify-start;
+      @apply flex overflow-auto justify-start my-5;
     }
     .container {
-      @apply flex flex-col justify-end min-w-[14rem] w-56 h-32 sm:min-w-[18rem] sm:w-72 sm:h-44 mx-4 my-2 bg-opacity-60 bg-grey rounded;
+      @apply flex flex-col justify-end min-w-[10rem] w-48 tablet:min-w-[14rem] tablet:w-56 desktop:min-w-[18rem] desktop:w-72 h-28 tablet:h-36 desktop:h-40 m-1 mr-4 bg-black rounded outline outline-1 outline-white/10;
     }
     .title {
-      @apply h-1/4 w-full md:text-big text-bigPhone overflow-hidden whitespace-nowrap pt-1 px-4 pb-1;
+      @apply h-1/4 w-full overflow-hidden whitespace-nowrap py-2 px-4;
     }
     .desc {
-      @apply h-1/4 md:text-medium text-mediumPhone overflow-hidden pt-0 pb-3 px-4;
+      @apply h-1/4 overflow-hidden pt-0 pb-3 px-4;
     }
     .desc h4 {
       transform: translateY(0);
@@ -57,12 +57,12 @@
       transform: translateY(calc(1.5em - 100%));
     }
     .tag {
-      @apply md:p-2 p-1 mx-1 bg-grey rounded-full md:text-medium text-mediumPhone;
+      @apply bg-grey rounded-full h-fit w-fit p-1 m-0.5;
     }
     .form-post {
-      @apply md:text-medium text-mediumPhone flex flex-col py-5 px-3 m-1 my-4 child:my-2 outline-green outline-dotted rounded;
+      @apply flex flex-col py-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
     }
     .error {
-      @apply text-red md:text-medium text-mediumPhone;
+      @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;
     }
 }

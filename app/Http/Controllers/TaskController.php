@@ -6,6 +6,7 @@ use App\Http\Requests\AssignMemberRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\MoveTaskRequest;
+use App\Http\Requests\EditTaskRequest;
 use App\Models\Task;
 use App\Models\TaskComment;
 use App\Models\User;
@@ -49,20 +50,14 @@ class TaskController extends Controller
         return redirect()->route('projects.show', ['id' => $fields['project_id']])->withSuccess('New Task created!');
     }
 
-    public function edit(Request $request, string $id): RedirectResponse
+    public function edit(EditTaskRequest $request, string $id): RedirectResponse
     {
 
-        $fields = $request->validate([
-            'title' => ['string'],
-            'description' => ['string'],
-            'status' => [Rule::in('BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done')],
-            'due_at' => ['date', 'after:today'],
-            'effort' => ['integer'],
-            'priority' => ['string'],
-        ]);
+        $fields = $request->validated();
 
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
+
         $task->title = $fields['title'];
         $task->description = $fields['description'];
         $task->status = $fields['status'];
