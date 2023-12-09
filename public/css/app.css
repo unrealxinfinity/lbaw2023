@@ -32,14 +32,11 @@
     .link {
       @apply sm:py-2 mx-5 h-fit w-fit text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words cursor-pointer;
     }
-    .round-button {
-      @apply bg-gree rounded-full h-fit px-1 cursor-pointer;
-    }
     .panel {
       @apply flex overflow-auto justify-start my-5;
     }
     .container {
-      @apply flex flex-col justify-end min-w-[10rem] w-48 tablet:min-w-[14rem] tablet:w-56 desktop:min-w-[18rem] desktop:w-72 h-28 tablet:h-36 desktop:h-40 mr-4 bg-black rounded;
+      @apply flex flex-col justify-end min-w-[10rem] w-48 tablet:min-w-[14rem] tablet:w-56 desktop:min-w-[18rem] desktop:w-72 h-28 tablet:h-36 desktop:h-40 m-1 mr-4 bg-black rounded outline outline-1 outline-white/10;
     }
     .title {
       @apply h-1/4 w-full overflow-hidden whitespace-nowrap py-2 px-4;
@@ -63,7 +60,7 @@
       @apply bg-grey rounded-full h-fit w-fit p-1 m-0.5;
     }
     .form-post {
-      @apply flex flex-col pb-5 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
+      @apply flex flex-col pb-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
     }
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;

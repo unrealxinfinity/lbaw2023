@@ -43,7 +43,7 @@
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <a id="profile" class="button desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}"> {{ Auth::user()->username }} </a>
                         @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
-                            <a href="/admin" class="button">Admin Page</a>
+                            <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a>
                         @endif
                         <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
                 </ul>                     

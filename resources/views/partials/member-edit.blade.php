@@ -13,8 +13,8 @@
             <input  class="button my-2" type="submit" value="Upload profile picture">
         </form>
     </header>
-    <div class="form-post">
-        <form class="edit-member form-post outline-none" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
+    <div class="form-post m-0 p-0">
+        <form class="edit-member form-post outline-none mb-0 pb-0" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
             @csrf
             @method('PUT')
 
@@ -94,18 +94,18 @@
             <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
             @if (Auth::user()->persistentUser->type_ == 'Administrator')
                 @if ($member->persistentUser->type_ != 'Blocked')
-                    <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+                    <button type="submit" class="button bg-grey text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
                 @else
-                    <button type="submit" class="button" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
+                    <button type="submit" class="button bg-grey text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
                 @endif
             @endif
         </form>
         @if (Auth::user()->persistentUser->type_=='Administrator')
-            <form class="admin-delete form-post outline-none" method="POST" action="/members/{{ $member->persistentUser->user->username }}">
+            <form class="admin-delete form-post outline-none mt-0 pt-0" method="POST" action="/members/{{ $member->persistentUser->user->username }}">
                 @csrf
                 @method('DELETE')
 
-                <input type="submit" class="button" value="Delete">
+                <input type="submit" class="button bg-grey text-red/80" value="Delete">
             </form>
         @endif
     </div>   
