@@ -15,7 +15,7 @@
                 @each('partials.myprojects', $projects, 'project')
             @endif
         @else
-        <h1 class="m-10">Nothing to see here yet.. <br> Try adding something to your favorites!</h1>
+        <h1 class="mobile:m-10 m-5">Nothing to see here yet.. <br> Try adding something to your favorites!</h1>
         @endif
     </section>
 @endsection
