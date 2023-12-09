@@ -3,7 +3,7 @@
 
     <input type="hidden" name="login" value="0">
 
-    <h3 class="my-0 mt-2"><label for="username">Username</label></h3>
+    <h3 class="my-0"><label for="username">Username</label></h3>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required>
     @if ($errors->has('username'))
         <span class="error">

@@ -60,7 +60,7 @@
       @apply bg-grey rounded-full h-fit w-fit p-1 m-0.5;
     }
     .form-post {
-      @apply flex flex-col pb-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
+      @apply flex flex-col py-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
     }
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;

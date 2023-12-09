@@ -94,9 +94,9 @@
             <input class="button" type="submit" id="submit-{{ $member->id }}" value="Edit Profile">
             @if (Auth::user()->persistentUser->type_ == 'Administrator')
                 @if ($member->persistentUser->type_ != 'Blocked')
-                    <button type="submit" class="button bg-grey text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+                    <button type="submit" class="button bg-dark text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
                 @else
-                    <button type="submit" class="button bg-grey text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
+                    <button type="submit" class="button bg-dark text-red/80" formmethod="POST" formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
                 @endif
             @endif
         </form>
@@ -105,7 +105,7 @@
                 @csrf
                 @method('DELETE')
 
-                <input type="submit" class="button bg-grey text-red/80" value="Delete">
+                <input type="submit" class="button bg-dark text-red/80" value="Delete">
             </form>
         @endif
     </div>   
