@@ -81,6 +81,17 @@ class WorldController extends Controller
         return redirect()->route('home')->withSuccess('World deleted!');
     }
 
+    public function adminDelete(DeleteWorldRequest $request, string $id): JsonResponse
+    {
+        $request->validated();
+        $world = World::findOrFail($id);
+        $world->delete();
+        return response()->json([
+            'error' => false,
+            'id' => $id,
+        ]);
+    }
+
     public function update(EditWorldRequest $request, string $id): RedirectResponse
     {
         $fields = $request->validated();
