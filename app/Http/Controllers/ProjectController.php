@@ -5,6 +5,7 @@ use App\Http\Requests\AddMemberRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\DeleteProjectRequest;
 use App\Http\Requests\LeaveProjectRequest;
+use App\Http\Requests\AssignProjectLeaderRequest;
 use App\Http\Requests\RemoveMemberRequest;
 use App\Http\Requests\SearchTaskRequest;
 use App\Http\Requests\EditProjectRequest;
@@ -18,6 +19,9 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
+
+
+
 class ProjectController extends Controller
 {
     public function show(string $id): View
@@ -137,7 +141,57 @@ class ProjectController extends Controller
             ]);
         }
     }
-
+    public function promoteToPL(AssignProjectLeaderRequest $request,string $id): JsonResponse{
+      
+        $fields = $request->validated();
+      
+        $project = Project::findOrFail($id);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
+        try{
+            if($fields['username'] == Auth::user()->persistentUser->username)
+                throw new \Exception('You can\'t promote yourself');
+            $member->projects()->updateExistingPivot($id ,['permission_level' => 'Project Leader']);
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was promoted in the ');
+            return response()->json([
+                'error' => false,
+                'username' => $fields['username'],
+                'message' => 'Promoted'
+            ]);
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => true,
+                'username' => $fields['username'],
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    public function demotePL(AssignProjectLeaderRequest $request,$id): JsonResponse{
+        error_log("here");
+        $fields = $request->validated();
+        $project = Project::findOrFail($id);
+        error_log($project);
+        $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        error_log($member);
+        try{
+            if($fields['username'] == Auth::user()->persistentUser->username)
+                throw new \Exception('You can\'t demote yourself');
+            $member->projects()->updateExistingPivot($id, ['permission_level' => 'Member']);
+            NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was demoted in the ');
+            return response()->json([
+                'error' => false,
+                'username' => $fields['username'],
+                'message' => 'Demoted'
+                
+            ]);
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => true,
+                'username' => $fields['username'],
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
     public function leave(LeaveProjectRequest $request, string $id): RedirectResponse
     {
         try{

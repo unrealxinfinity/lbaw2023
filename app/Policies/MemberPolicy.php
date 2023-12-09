@@ -74,6 +74,10 @@ class MemberPolicy
     {
         return $user->persistentUser->type_ == 'Administrator';
     }
+    public function assignOwn(User $user, Member $member): bool
+    {  
+        return $user->id == $member->user_id;
+    }
 
     public function request(User $user, Member $member)
     {

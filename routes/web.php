@@ -136,6 +136,8 @@ Route::controller(ProjectController::class)->group(function () {
     Route::post('/projects/{id}/archive', 'archive')->name('archive-project');//
     Route::get('/api/projects/{id}/tasks', 'searchTask')->name('search-tasks');//
     Route::delete('projects/{id}/{username}', 'leave')->name('leave-project');//
+    Route::put('/api/projects/{id}/assign', 'promoteToPL')->name('assign-project-leader');
+    Route::put('/api/projects/{id}/demote', 'demotePL')->name('demote-project-leader');
 });
 
 Route::controller(TagController::class)->group(function () {
