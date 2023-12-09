@@ -82,4 +82,9 @@ class Member extends Model
     {
         return $this->belongsToMany(Project::class, 'favorite_project');
     }
+
+    public function friends(): BelongsToMany
+    {
+        return $this->belongsToMany(Member::class, 'friend', 'member_id', 'friend_id');
+    }
 }

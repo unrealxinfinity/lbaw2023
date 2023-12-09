@@ -1,179 +1,183 @@
 function addEventListeners() {
-    let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
-    [].forEach.call(itemCheckers, function(checker) {
-      checker.addEventListener('change', sendItemUpdateRequest);
+  let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
+  [].forEach.call(itemCheckers, function(checker) {
+    checker.addEventListener('change', sendItemUpdateRequest);
+  });
+
+  let itemCreators = document.querySelectorAll('article.card form.new_item');
+  [].forEach.call(itemCreators, function(creator) {
+    creator.addEventListener('submit', sendCreateItemRequest);
+  });
+
+  let itemDeleters = document.querySelectorAll('article.card li a.delete');
+  [].forEach.call(itemDeleters, function(deleter) {
+    deleter.addEventListener('click', sendDeleteItemRequest);
+  });
+
+  let cardDeleters = document.querySelectorAll('article.card header a.delete');
+  [].forEach.call(cardDeleters, function(deleter) {
+    deleter.addEventListener('click', sendDeleteCardRequest);
+  });
+
+  let friendButtons = document.querySelectorAll('.friend-button');
+    [].forEach.call(friendButtons, function(friendButton) {
+      friendButton.addEventListener('click', sendFriendRequest);
     });
+
+
+  let cardCreator = document.querySelector('article.card form.new_card');
+  if (cardCreator != null)
+    cardCreator.addEventListener('submit', sendCreateCardRequest);
+
+  let memberEditors =document.querySelectorAll('form.edit-member');
+  [].forEach.call(memberEditors, function(editor) {
+    editor.querySelector('.button').addEventListener('submit', sendEditMemberRequest);
+  });
+
+  let tasks = document.querySelectorAll('article.task');
+  [].forEach.call(tasks, function(task) {
+    task.addEventListener("dragstart", taskDragStartHandler);
+  });
+
+  let bigboxes = document.querySelectorAll('div.big-box');
+  [].forEach.call(bigboxes, function(bigbox) {
+    bigbox.addEventListener("drop", bigBoxDropHandler);
+    bigbox.addEventListener("dragover", bigBoxDragOverHandler);
+  })
+
+  let editorShows = document.querySelectorAll('button.show-edit');
+  [].forEach.call(editorShows, function(editorShow) {
+    editorShow.addEventListener('click', showEditComment);
+  });
+
+  let editorHides = document.querySelectorAll('button.close-edit');
+  [].forEach.call(editorHides, function(editorHide) {
+     editorHide.addEventListener('click', hideEditComment);
+  });
+
+  let memberAdder = document.querySelector('form#add-member');
+  if (memberAdder != null)
+    memberAdder.addEventListener('submit', sendAddMemberRequest);
+
+  let button = document.getElementById("createTagButton");
+  if(button != null)
+  button.addEventListener("click", addTagRequest);
   
-    let itemCreators = document.querySelectorAll('article.card form.new_item');
-    [].forEach.call(itemCreators, function(creator) {
-      creator.addEventListener('submit', sendCreateItemRequest);
+  let worldMemberAdder = document.querySelectorAll('form#invite-member');
+  if (worldMemberAdder != null){
+    [].forEach.call(worldMemberAdder, function(form) {
+      form.addEventListener('submit', sendInviteMember);
     });
-  
-    let itemDeleters = document.querySelectorAll('article.card li a.delete');
-    [].forEach.call(itemDeleters, function(deleter) {
-      deleter.addEventListener('click', sendDeleteItemRequest);
-    });
-  
-    let cardDeleters = document.querySelectorAll('article.card header a.delete');
-    [].forEach.call(cardDeleters, function(deleter) {
-      deleter.addEventListener('click', sendDeleteCardRequest);
-    });
-  
-    let cardCreator = document.querySelector('article.card form.new_card');
-    if (cardCreator != null)
-      cardCreator.addEventListener('submit', sendCreateCardRequest);
+  }
 
-    let memberEditors =document.querySelectorAll('form.edit-member');
-    [].forEach.call(memberEditors, function(editor) {
-      editor.querySelector('.button').addEventListener('submit', sendEditMemberRequest);
-    });
-
-    let tasks = document.querySelectorAll('article.task');
-    [].forEach.call(tasks, function(task) {
-      task.addEventListener("dragstart", taskDragStartHandler);
-    });
-
-    let bigboxes = document.querySelectorAll('div.big-box');
-    [].forEach.call(bigboxes, function(bigbox) {
-      bigbox.addEventListener("drop", bigBoxDropHandler);
-      bigbox.addEventListener("dragover", bigBoxDragOverHandler);
-    })
-
-    let editorShows = document.querySelectorAll('button.show-edit');
-    [].forEach.call(editorShows, function(editorShow) {
-      editorShow.addEventListener('click', showEditComment);
-    });
-
-    let editorHides = document.querySelectorAll('button.close-edit');
-    [].forEach.call(editorHides, function(editorHide) {
-       editorHide.addEventListener('click', hideEditComment);
-    });
-
-    let memberAdder = document.querySelector('form#add-member');
-    if (memberAdder != null)
-      memberAdder.addEventListener('submit', sendAddMemberRequest);
-
-    let button = document.getElementById("createTagButton");
-    if(button != null)
-    button.addEventListener("click", addTagRequest);
-    
-    let worldMemberAdder = document.querySelectorAll('form#invite-member');
-    if (worldMemberAdder != null){
-      [].forEach.call(worldMemberAdder, function(form) {
-        form.addEventListener('submit', sendInviteMember);
-      });
-    }
-    
-    
-
-    let taskResults = document.getElementById('openPopupButton');
-    if(taskResults != null)
-      taskResults.addEventListener('click', function() {
-        if(document.getElementById('popupContainer').style.display == 'block'){
-          document.getElementById('popupContainer').style.display = 'none';
-        }
-        else{
-          document.getElementById('popupContainer').style.display = 'block';
-        }
-      });
-
-    let TaskSearcher = document.querySelector('form.search-task');
-    if (TaskSearcher != null)
-      TaskSearcher.addEventListener('submit', searchTaskRequest);
-
-    let ProjectSearcher = document.querySelector('form.search-project');
-    if (ProjectSearcher != null)
-      ProjectSearcher.addEventListener('submit', searchProjectRequest);
-    
-    let MemberAssigner = document.querySelectorAll('form#assign-member');
-
-    if (MemberAssigner != null){
-      [].forEach.call(MemberAssigner, function(form) {
-        form.addEventListener('submit', sendAssignMemberRequest);
-      });
-    }
-    
-    let closePopup = document.getElementById('closePopUp');
-    if(closePopup != null)
-      closePopup.addEventListener('click', closeSearchedTaskPopup);
-    
-    let removeMemberFromWorlds = document.querySelectorAll('form#remove-member-world');
-    if(removeMemberFromWorlds != null){
-      removeMemberFromWorlds.forEach(removeMemberFromWorld => {
-        removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
-      });
-    }
-
-    let createTask = document.getElementById("createTaskButton");
-    if(createTask != null)
-      createTask.addEventListener("click", sendCreateTaskRequest);
-
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', function() {
-      let currentScroll = document.documentElement.scrollTop;
-    
-      if (currentScroll > lastScrollTop) {
-        // Scroll down
-        document.querySelector('#navbar').classList.remove('translate-y-0');
-        document.querySelector('#navbar').classList.add('-translate-y-full');
-        document.querySelector('#show-menu').checked = false;
-      } else {
-        // Scroll up
-        document.querySelector('#navbar').classList.remove('-translate-y-full');
-        document.querySelector('#navbar').classList.add('translate-y-0');
+  let taskResults = document.getElementById('openPopupButton');
+  if(taskResults != null)
+    taskResults.addEventListener('click', function() {
+      if(document.getElementById('popupContainer').style.display == 'block'){
+        document.getElementById('popupContainer').style.display = 'none';
       }
-    
-      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    }, false);
-    
-    let main_body = document.getElementById('main-body');
-    if(main_body.getAttribute('data-auth') == true){
-      window.addEventListener('load',getMemberBelingingsRequest);
-    }
-    /*
-    let removeMemberFromWorld = document.querySelector('');
-    if(leaveWorld != null){
-      leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
-    }
-    */ 
-    
-    let notificationButton = document.getElementById('notification-button');
-    if(notificationButton != null){
-      notificationButton.addEventListener('click', sendShowNotificationsRequest);
-    }
+      else{
+        document.getElementById('popupContainer').style.display = 'block';
+      }
+    });
 
-    let clearNotificationsButton = document.getElementById('clearNotifications');
-    if(clearNotificationsButton != null){
-      clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+  let TaskSearcher = document.querySelector('form.search-task');
+  if (TaskSearcher != null)
+    TaskSearcher.addEventListener('submit', searchTaskRequest);
+
+  let ProjectSearcher = document.querySelector('form.search-project');
+  if (ProjectSearcher != null)
+    ProjectSearcher.addEventListener('submit', searchProjectRequest);
+  
+  let MemberAssigner = document.querySelectorAll('form#assign-member');
+  if (MemberAssigner != null){
+    [].forEach.call(MemberAssigner, function(form) {
+      form.addEventListener('submit', sendAssignMemberRequest);
+    });
+  }
+  
+  let closePopup = document.getElementById('closePopUp');
+  if(closePopup != null)
+    closePopup.addEventListener('click', closeSearchedTaskPopup);
+  
+  let removeMemberFromWorlds = document.querySelectorAll('form#remove-member-world');
+  if(removeMemberFromWorlds != null){
+    removeMemberFromWorlds.forEach(removeMemberFromWorld => {
+      removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+    });
+  }
+
+  let createTask = document.getElementById("createTaskButton");
+  if(createTask != null)
+    createTask.addEventListener("click", sendCreateTaskRequest);
+
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', function() {
+    let currentScroll = document.documentElement.scrollTop;
+  
+    if (currentScroll > lastScrollTop) {
+      // Scroll down
+      document.querySelector('#navbar').classList.remove('translate-y-0');
+      document.querySelector('#navbar').classList.add('-translate-y-full');
+      document.querySelector('#show-menu').checked = false;
+    } else {
+      // Scroll up
+      document.querySelector('#navbar').classList.remove('-translate-y-full');
+      document.querySelector('#navbar').classList.add('translate-y-0');
     }
+  
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }, false);
+  
+  let main_body = document.getElementById('main-body');
+  if(main_body.getAttribute('data-auth') == true){
+    window.addEventListener('load',getMemberBelingingsRequest);
+  }
+  /*
+  let removeMemberFromWorld = document.querySelector('');
+  if(leaveWorld != null){
+    leaveWorld.addEventListener('submit', sendLeaveWorldRequest);
+  }
+  */ 
+  
+  let notificationButton = document.getElementById('notification-button');
+  if(notificationButton != null){
+    notificationButton.addEventListener('click', sendShowNotificationsRequest);
+  }
+
+  let clearNotificationsButton = document.getElementById('clearNotifications');
+  if(clearNotificationsButton != null){
+    clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+  }
 
 
-    let ProjectEditCloser = document.querySelector('#go-back');
-    if (ProjectEditCloser != null)
-    ProjectEditCloser.addEventListener('click', function() {
-        window.history.back();
-      });
+  let ProjectEditCloser = document.querySelector('#go-back');
+  if (ProjectEditCloser != null)
+  ProjectEditCloser.addEventListener('click', function() {
+      window.history.back();
+    });
 
-    let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
-    if(removeMemberFromProjects != null){
-      removeMemberFromProjects.forEach(removeMemberFromProject => {
-        removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
-      });
-    }
-    
-    let assignAdminToWorld = document.querySelectorAll('form.assign-admin-to-world');
-    if(assignAdminToWorld != null){
-      assignAdminToWorld.forEach(form => {
-       form.addEventListener('submit', sendAssignAdminToWorldRequest);
-      });
-    }
-    let demoteAdminFromWorld = document.querySelectorAll('form.demote-admin-from-world');
-    if(demoteAdminFromWorld != null){
-      demoteAdminFromWorld.forEach(form => {
-       form.addEventListener('submit', sendDemoteAdminFromWorldRequest);
-      });
-    }
-    let assignProjectLeader = document.querySelectorAll('form.assign-project-leader');
+  let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
+  if(removeMemberFromProjects != null){
+    removeMemberFromProjects.forEach(removeMemberFromProject => {
+      removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+    });
+  }
+  
+  let assignAdminToWorld = document.querySelectorAll('form.assign-admin-to-world');
+  if(assignAdminToWorld != null){
+    assignAdminToWorld.forEach(form => {
+     form.addEventListener('submit', sendAssignAdminToWorldRequest);
+    });
+  }
+  let demoteAdminFromWorld = document.querySelectorAll('form.demote-admin-from-world');
+  if(demoteAdminFromWorld != null){
+    demoteAdminFromWorld.forEach(form => {
+     form.addEventListener('submit', sendDemoteAdminFromWorldRequest);
+    });
+  }
+  
+  let assignProjectLeader = document.querySelectorAll('form.assign-project-leader');
     if(assignProjectLeader != null){
       assignProjectLeader.forEach(form => {
         form.addEventListener('submit', sendAssignProjectLeader);
@@ -185,29 +189,61 @@ function addEventListeners() {
         form.addEventListener('submit', sendDemoteProjectLeader);
       });
     }  
-    let deleteAccount = document.querySelector("#delete-account");
-    if (deleteAccount != null)
-      deleteAccount.addEventListener('click', deleteAccountButton);
+  let deleteAccount = document.querySelector("#delete-account");
+  if (deleteAccount != null)
+    deleteAccount.addEventListener('click', deleteAccountButton);
 
-    let confirmDeletion = document.querySelector("#confirm-deletion");
-    if (confirmDeletion != null)
-      setTimeout(() => {
-        confirmDeletion.submit();
-      }, 5000);
-      
-    let deleteWorld= document.querySelector("#delete-world");
-    if (deleteWorld != null)
-      deleteWorld.addEventListener('submit', deleteWorldButton);
+  let confirmDeletion = document.querySelector("#confirm-deletion");
+  if (confirmDeletion != null)
+    setTimeout(() => {
+      confirmDeletion.submit();
+    }, 5000);
+    
+  let deleteWorld= document.querySelector("#delete-world");
+  if (deleteWorld != null)
+    deleteWorld.addEventListener('submit', deleteWorldButton);
 
-    let previewImg = document.querySelector('input#edit-img');
-    if (previewImg != null) {
-      previewImg.addEventListener('change', PreviewImageHandler);
-    }
-
-    let favouriter = document.querySelector('form#favorite');
-    if (favouriter != null)
-    favouriter.addEventListener('submit', sendFavoriteRequest);
+  let deleteWorldInList = document.querySelectorAll("form.delete-world-list");
+  if (deleteWorldInList != null){
+    [].forEach.call(deleteWorldInList, function(form) {
+      form.addEventListener('submit', deleteWorldAjaxButton);
+    });
   }
+  
+  let leaveWorldInList = document.querySelectorAll("form.leave-world-list");
+  if (leaveWorldInList != null){
+    [].forEach.call(leaveWorldInList, function(form) {
+      form.addEventListener('submit', sendLeaveWorldRequest);
+    });
+  }
+
+  let previewImg = document.querySelector('input#edit-img');
+  if (previewImg != null) {
+    previewImg.addEventListener('change', PreviewImageHandler);
+  }
+
+  let favouriter = document.querySelector('form#favorite');
+  if (favouriter != null)
+  favouriter.addEventListener('submit', sendFavoriteRequest);
+}
+
+  async function sendFriendRequest(ev) {
+    ev.preventDefault();
+    const url = this.href;
+    console.log(url);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+      }
+    });
+
+    if (response.ok) this.remove();
+  }
+
   
   function deleteAccountButton() {
     const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
@@ -222,9 +258,70 @@ function addEventListeners() {
     if(text == "delete"){
       this.submit();
     };
-    
-    
   }
+  
+
+  async function deleteWorldAjaxButton(ev) {
+    ev.preventDefault();
+    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
+    if(text=="delete"){
+      const csrf = this.querySelector('input:first-child').value;
+      const id = this.querySelector('input.id').value;
+      const response = await fetch('/api/worlds/' + id, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        removeWorldFromListHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+
+    };
+  }
+
+  function removeWorldFromListHandler(data) {
+    let element = document.querySelectorAll('.myworld[data-id="' + data.id + '"]');
+    [].forEach.call(element, function(world) {
+      world.remove();
+    });
+  }
+
+  async function sendLeaveWorldRequest(ev) {
+    ev.preventDefault();
+    const csrf = this.querySelector('input:first-child').value;
+    const id = this.querySelector('input.id').value;
+    const username = this.querySelector('input.username').value;
+    const response = await fetch('/api/worlds/' + id, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({username: username})
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      removeWorldFromListHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+
   function showEditComment(ev) {
     ev.preventDefault();
     this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
@@ -771,6 +868,46 @@ async function sendShowNotificationsRequest(ev) {
 
 }
 
+async function closeNotification(ev) {
+  ev.preventDefault();
+  const container = this.closest('div');
+
+  url = this.href;
+
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json();
+
+  if (response.ok) container.remove();
+}
+
+async function sendRequestAccept(ev) {
+  ev.preventDefault();
+  const container = this.closest('div');
+
+  url = this.href;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json();
+
+  if (response.ok) container.remove();
+}
+
 function ShowNotificationsHandler(json,ev){
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
@@ -782,20 +919,45 @@ function ShowNotificationsHandler(json,ev){
     notificationText.classList.add('text-black'); 
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
+    const notificationCloser = document.createElement('a');
+    notificationCloser.href = `/api/notifications/${notification.id}`;
+    notificationCloser.textContent = 'X';
+    notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
+    notificationCloser.addEventListener('click', closeNotification);
     let notificationContainer = document.createElement('div');
-    if(notification.level == 'Low'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
-    }
-    else if(notification.level == 'Medium'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-yellow');
-    }
-    else if(notification.level == 'High'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-orange');
-    }
+    const colors = {
+      'High': 'bg-orange',
+      'Medium': 'bg-yellow',
+      'Low': 'bg-white'
+    };
+
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', colors[notification.level], 'relative');
+
     notificationText.textContent = notification.text;
     notificationDate.textContent = notification.date_;
     notificationContainer.appendChild(notificationText);
     notificationContainer.appendChild(notificationDate);
+    notificationContainer.appendChild(notificationCloser);
+    popup.appendChild(notificationContainer);
+
+    if (notification.is_request) {
+      const requestAccepter = document.createElement('a');
+      const requestDenier = document.createElement('a');
+      requestAccepter.classList.add('button');
+      requestDenier.classList.add('button');
+      requestAccepter.href = `/api/accept/${notification.id}`;
+      requestDenier.href = `/api/notifications/${notification.id}`;
+      requestAccepter.innerHTML = "&#10003;";
+      requestDenier.innerHTML = "&#10005;";
+      requestAccepter.addEventListener('click', sendRequestAccept);
+      requestDenier.addEventListener('click', closeNotification);
+      const requestButtons = document.createElement('nav');
+      requestButtons.classList.add('flex', 'justify-center');
+      requestButtons.appendChild(requestAccepter);
+      requestButtons.appendChild(requestDenier);
+      notificationContainer.appendChild(requestButtons);
+    }
+
     if (popup.firstChild === null) {
       popup.appendChild(notificationContainer);
     } else {

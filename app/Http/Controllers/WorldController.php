@@ -13,6 +13,7 @@ use App\Models\Member;
 use App\Http\Requests\AddMemberToWorldRequest;
 use App\Http\Requests\CreateWorldRequest;
 use App\Http\Requests\EditWorldRequest;
+use Illuminate\Http\Request;
 use App\Models\WorldComment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -44,6 +45,19 @@ class WorldController extends Controller
         ]);
     }
 
+    public function showAll(Request $request): View
+    {
+        $search = $request['search'] ?? "";
+
+        $worlds = World::where(function ($query) use($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->cursorPaginate(10)->withQueryString()->withPath(route('show-all-worlds'));
+
+        return view('pages.worlds', [
+            'worlds' => $worlds
+        ]);
+    }
+
     public function create(CreateWorldRequest $request): RedirectResponse
     {
         $fields = $request->validated();
@@ -65,6 +79,17 @@ class WorldController extends Controller
         $world = World::findOrFail($id);
         $world->delete();
         return redirect()->route('home')->withSuccess('World deleted!');
+    }
+
+    public function deleteFromList(DeleteWorldRequest $request, string $id): JsonResponse
+    {
+        $request->validated();
+        $world = World::findOrFail($id);
+        $world->delete();
+        return response()->json([
+            'error' => false,
+            'id' => $id,
+        ]);
     }
 
     public function update(EditWorldRequest $request, string $id): RedirectResponse
@@ -125,9 +150,11 @@ class WorldController extends Controller
 
     public function assignNewWorldAdmin(AssignWorldAdminRequest $request, string $id): JsonResponse
     {   
+
         $fields = $request->validated();
         $world = World::findOrFail($id);
         $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+        
         $member->worlds()->updateExistingPivot($id, ['is_admin' => true]);
         NotificationController::WorldNotification($world,$member->name . ' promoted in ');
         return response()->json([
@@ -225,11 +252,32 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world,$member->id . ' left the ');
             $member->worlds()->detach($world_id);
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
             return redirect()->route("worlds.show", ['id' => $world_id])->withError('You can\'t leave the world.');
+        }
+    }
+
+    public function leaveFromList(LeaveWorldRequest $request, string $world_id): JsonResponse
+    {
+        try {
+            $request->validated();
+
+            $world = World::findOrFail($world_id);
+            $member = Auth::user()->persistentUser->member;
+            $member->worlds()->detach($world_id);
+            NotificationController::WorldNotification($world,$member->id . ' left the ');
+            return response()->json([
+                'error' => false,
+                'id' => $world_id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'id' => $world_id
+            ]);
         }
     }
 
