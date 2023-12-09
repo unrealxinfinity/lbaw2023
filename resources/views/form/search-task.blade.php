@@ -14,7 +14,7 @@
     <input id="searchTaskButton" class="button" type="submit" value="Search Tasks">
 </form>
 
-<div id="popupContainer" class="popup z-20 bg-grey rounded fixed hidden shadow h-fit w-128 top-[35%] left-[25%] justify-center m-10">
-    <span id="closePopUp" class="p-2 cursor-pointer">&times;</span>
-    <div id="popup-content" class="px-5 py-2"></div>
+<div id="popupContainer" class="popup hidden z-20 bg-grey outline outline-white/20 outline-1 rounded fixed h-1/2 tablet:w-1/2 w-2/3 top-[30%] tablet:left-[23%] left-[15%] justify-center">
+    <span id="closePopUp" class="my-2 mx-5 cursor-pointer">&times;</span>
+    <div id="popup-content" class="p-2 h-5/6 overflow-y-scroll"></div>
 </div>

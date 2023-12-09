@@ -101,7 +101,7 @@ class ProjectPolicy
     {   
         $type = $user->persistentUser->type_;
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        return $is_disabled;
+        return !$is_disabled;
     }
 
     public function favorite(User $user, Project $project): bool
