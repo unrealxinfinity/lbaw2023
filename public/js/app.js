@@ -579,20 +579,22 @@ function addEventListeners() {
 function searchProjectHandler(json){
   let popup = document.querySelector('#popup-content');
   popup.innerHTML = "";
-  let result_div = document.createElement('div');
-  result_div.classList.add('flex', 'h-fit', 'p-3', 'mx-1', 'my-2', 'bg-black/60', 'outline', 'outline-white/20', 'outline-1', 'rounded');
-  let img = document.createElement('img');
-  img.classList.add('mobile:h-14', 'tablet:h-16', 'desktop:h-20', 'h-12', 'aspect-square');
-  let text_div = document.createElement('div');
-  text_div.classList.add('flex', 'flex-col', 'self-center', 'ml-3', 'w-11/12');
-  let title = document.createElement('h2');
-  title.classList.add('break-words');
-  let link = document.createElement('a');
-  let desc = document.createElement('h4');
-  desc.classList.add('break-words');
 
   let projects = JSON.parse(json.projects);
-  for (project of projects) {
+  for (let project of projects) {
+
+    let result_div = document.createElement('div');
+    result_div.classList.add('flex', 'h-fit', 'p-3', 'mx-1', 'my-2', 'bg-black/60', 'outline', 'outline-white/20', 'outline-1', 'rounded');
+    let img = document.createElement('img');
+    img.classList.add('mobile:h-14', 'tablet:h-16', 'desktop:h-20', 'h-12', 'aspect-square');
+    let text_div = document.createElement('div');
+    text_div.classList.add('flex', 'flex-col', 'self-center', 'ml-3', 'w-11/12');
+    let title = document.createElement('h2');
+    title.classList.add('break-words');
+    let link = document.createElement('a');
+    let desc = document.createElement('h4');
+    desc.classList.add('break-words');
+
     link.setAttribute('href', '/projects/' + project.id);
     img.setAttribute('src', project.picture);
     link.textContent = project.name;

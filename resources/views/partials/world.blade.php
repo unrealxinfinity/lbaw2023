@@ -58,7 +58,7 @@
                         $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
                     @endphp
                     <div class="title"><h2><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2></div>
-                    <div class="desc"><h4>{{ $project->name }}</h4></div>
+                    <div class="desc"><h4>{{ $project->description }}</h4></div>
                 </nav>
             @endforeach
         </ul>
@@ -73,7 +73,7 @@
                     $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
                 @endphp
                 <div class="title"><h2><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2></div>
-                <div class="desc"><h4>{{ $project->name }}</h4></div>
+                <div class="desc"><h4>{{ $project->description }}</h4></div>
             </nav>
             @endforeach
         </ul>
