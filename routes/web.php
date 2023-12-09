@@ -193,7 +193,11 @@ Route::controller(NotificationController::class)->group(function () {
     Route::get('/api/notifications', 'listNotifications')->name('listNotifications');
     Route::post('/api/notifications', 'createNotification')->name('createNotification');
     Route::delete('/api/notifications','clearNotifications')->name('clearNotification');
+    Route::delete('/api/notifications/{id}', 'clearSingle')->name('clearSingleNotification');
+    Route::post('/api/accept/{id}', 'acceptRequest')->name('accept-request');
+    Route::post('/api/request/{username}', 'friendRequest');
 });
+
 Route::controller(FileController::class)->group(function () {
    Route::post('/members/upload/{id}', 'upload');
    Route::post('/projects/upload/{id}', 'upload');

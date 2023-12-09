@@ -855,6 +855,46 @@ async function sendShowNotificationsRequest(ev) {
 
 }
 
+async function closeNotification(ev) {
+  ev.preventDefault();
+  const container = this.closest('div');
+
+  url = this.href;
+
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json();
+
+  if (response.ok) container.remove();
+}
+
+async function sendRequestAccept(ev) {
+  ev.preventDefault();
+  const container = this.closest('div');
+
+  url = this.href;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Content-Type': "application/json",
+      'Accept': 'application/json',
+    }
+  });
+
+  const json = await response.json();
+
+  if (response.ok) container.remove();
+}
+
 function ShowNotificationsHandler(json,ev){
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
@@ -866,20 +906,45 @@ function ShowNotificationsHandler(json,ev){
     notificationText.classList.add('text-black'); 
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-black');
+    const notificationCloser = document.createElement('a');
+    notificationCloser.href = `/api/notifications/${notification.id}`;
+    notificationCloser.textContent = 'X';
+    notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
+    notificationCloser.addEventListener('click', closeNotification);
     let notificationContainer = document.createElement('div');
-    if(notification.level == 'Low'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-white');
-    }
-    else if(notification.level == 'Medium'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-yellow');
-    }
-    else if(notification.level == 'High'){
-      notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', 'bg-orange');
-    }
+    const colors = {
+      'High': 'bg-orange',
+      'Medium': 'bg-yellow',
+      'Low': 'bg-white'
+    };
+
+    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', colors[notification.level], 'relative');
+
     notificationText.textContent = notification.text;
     notificationDate.textContent = notification.date_;
     notificationContainer.appendChild(notificationText);
     notificationContainer.appendChild(notificationDate);
+    notificationContainer.appendChild(notificationCloser);
+    popup.appendChild(notificationContainer);
+
+    if (notification.is_request) {
+      const requestAccepter = document.createElement('a');
+      const requestDenier = document.createElement('a');
+      requestAccepter.classList.add('button');
+      requestDenier.classList.add('button');
+      requestAccepter.href = `/api/accept/${notification.id}`;
+      requestDenier.href = `/api/notifications/${notification.id}`;
+      requestAccepter.innerHTML = "&#10003;";
+      requestDenier.innerHTML = "&#10005;";
+      requestAccepter.addEventListener('click', sendRequestAccept);
+      requestDenier.addEventListener('click', closeNotification);
+      const requestButtons = document.createElement('nav');
+      requestButtons.classList.add('flex', 'justify-center');
+      requestButtons.appendChild(requestAccepter);
+      requestButtons.appendChild(requestDenier);
+      notificationContainer.appendChild(requestButtons);
+    }
+
     if (popup.firstChild === null) {
       popup.appendChild(notificationContainer);
     } else {
