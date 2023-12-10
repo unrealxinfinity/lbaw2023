@@ -120,10 +120,12 @@ function addEventListeners() {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
       document.querySelector('#show-menu').checked = false;
+      document.querySelector('#notificationArea').classList.add('hidden');
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
+      document.querySelector('#notificationArea').classList.add('hidden');
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
@@ -874,7 +876,7 @@ async function sendShowNotificationsRequest(ev) {
 
 async function closeNotification(ev) {
   ev.preventDefault();
-  const container = this.closest('div');
+  const container = this.closest('div.notification');
 
   url = this.href;
 
@@ -919,29 +921,32 @@ function ShowNotificationsHandler(json,ev){
   let notifications = json.notifications;
   popup.innerHTML = "";
   for(let notification of notifications){    
-    let notificationText = document.createElement('p');
-    notificationText.classList.add('text-black'); 
+    let notificationText = document.createElement('h3');
+    notificationText.classList.add('text-white', 'h-fit', 'break-words'); 
     let notificationDate= document.createElement('p');
-    notificationDate.classList.add('text-black');
+    notificationDate.classList.add('text-white');
     const notificationCloser = document.createElement('a');
     notificationCloser.href = `/api/notifications/${notification.id}`;
-    notificationCloser.textContent = 'X';
-    notificationCloser.classList.add('absolute', 'top-0', 'left-0', 'text-black');
+    notificationCloser.innerHTML = '&times;';
+    notificationCloser.classList.add('text-white');
     notificationCloser.addEventListener('click', closeNotification);
     let notificationContainer = document.createElement('div');
+    let notificationTop = document.createElement('div');
     const colors = {
-      'High': 'bg-orange',
-      'Medium': 'bg-yellow',
-      'Low': 'bg-white'
+      'High': 'bg-darkRed',
+      'Medium': 'bg-orange',
+      'Low': 'bg-white/30'
     };
-
-    notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-4', 'rounded-lg', colors[notification.level], 'relative');
+    notificationContainer.classList.add('notification', 'm-2', 'px-3', 'py-1', 'rounded', colors[notification.level]);
+    notificationTop.classList.add('flex', 'justify-between', 'items-center');
 
     notificationText.textContent = notification.text;
     notificationDate.textContent = notification.date_;
+    notificationTop.appendChild(notificationDate);
+    notificationTop.appendChild(notificationCloser);
+    notificationContainer.appendChild(notificationTop);
     notificationContainer.appendChild(notificationText);
-    notificationContainer.appendChild(notificationDate);
-    notificationContainer.appendChild(notificationCloser);
+    
     popup.appendChild(notificationContainer);
 
     if (notification.is_request) {

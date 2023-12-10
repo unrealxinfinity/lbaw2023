@@ -71,9 +71,12 @@
                 @endif
             </ul>
         </div>
-        <div id="notificationArea" class="hidden bg-white bg-opacity-50 pb-4 pt-4 sm:mx-10 sm:px-10 px-2 absolute right-40 top-20 mt-2 flex-col items-center transition-opacity rounded-lg ease duration-900" style="z-index: 999;">
-            <ul id="notificationList" class ="text-center  max-h-[400px] overflow-y-auto overflow-x-hidden"></ul>
-            <a id="clearNotifications" class="button rounded-lg text-white text-center w-full ">Clear Notifications</a>
+        <div id="notificationArea" class="fixed hidden z-10 bg-dark right-36 top-16 p-1">
+            <div class="flex justify-between">
+                <h2 class="text-white py-1 mx-5">Notifications</h2>
+                <a id="clearNotifications" class="link">Clear Notifications</a>
+            </div>
+            <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
         </div>
         <main class="bg-black bg-opacity-40 pb-10 pt-24 tablet:px-10 px-2 z-0">
             <section id="content">

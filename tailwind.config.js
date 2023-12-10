@@ -18,8 +18,8 @@ export default {
       dark: '#222222',
       green: '#008000',
       red: '#FF0000',
-      orange: '#FF5F15',
-      yellow: '#FFCC00',
+      darkRed: '#8b0000',
+      orange: '#ba610b',
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
