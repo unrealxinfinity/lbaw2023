@@ -182,13 +182,13 @@ function addEventListeners() {
   let assignProjectLeader = document.querySelectorAll('form.assign-project-leader');
     if(assignProjectLeader != null){
       assignProjectLeader.forEach(form => {
-        form.addEventListener('submit', sendAssignProjectLeader);
+        form.addEventListener('submit', sendAssignProjectLeaderRequest);
       });
     }
     let demoteProjectLeader = document.querySelectorAll('form.demote-project-leader');
     if(demoteProjectLeader != null){  
       demoteProjectLeader.forEach(form => {
-        form.addEventListener('submit', sendDemoteProjectLeader);
+        form.addEventListener('submit', sendDemoteProjectLeaderRequest);
       });
     }  
   let deleteAccount = document.querySelector("#delete-account");
@@ -450,7 +450,7 @@ function addEventListeners() {
       {
         error.remove();
       }
-  
+      
       if (json.error)
       {
         const span = document.createElement('span');
@@ -468,14 +468,14 @@ function addEventListeners() {
       member.setAttribute('data-id', json.id);
   
       const header = document.createElement('header');
-      header.classList.add('flex', 'justify-start');
+      header.classList.add('h-fit', 'flex', 'justify-start');
       const img = document.createElement('img');
-      img.classList.add('h-fit', 'aspect-square', 'mx-1');
+      img.classList.add('h-5', 'aspect-square', 'mr-3');
       const h4 = document.createElement('h4');
+      h4.classList.add('self-center');
       const a = document.createElement('a');
       a.href = '/members/' + json.username;
       a.textContent = json.username;
-      console.log(json.picture);
       img.src = json.picture;
       
       h4.appendChild(a);
@@ -484,26 +484,61 @@ function addEventListeners() {
   
       member.appendChild(header);
 
-      const removeForm = document.createElement('form');
-      removeForm.id= 'remove-member-project';
-      removeForm.setAttribute('data-id', json.id);
-      let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-      removeForm.innerHTML = `
-        <input type="hidden" name="_token" value="${csrfToken}">
-        <input type="hidden" class="id" name="id" value="${json.project_id}">
-        <input type="hidden" class="username" name="username" value="${json.username}">
-        <button type="submit"> &times; </button>
-      `;
-
       const div = document.createElement('div');
-      div.classList.add("flex", "justify-between");
+      const options_div = document.createElement('div');
+      div.classList.add('h-5', 'flex', 'items-center', 'justify-between');
+      options_div.classList.add('flex', 'items-center', 'child:mx-1');
       div.appendChild(member);
-      if (json.can_remove) {
-      div.appendChild(removeForm);
-      removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+
+      if (json.can_move) {
+
+        const moveForm = document.createElement('form');
+        moveForm.setAttribute('data-id', json.id);
+        let csrfToken_ = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        if (json.is_leader) {
+          moveForm.id= 'demote-project-leader';
+
+          moveForm.innerHTML = `
+            <input type="hidden" name="_token" value="${csrfToken_}">
+            <input type="hidden" class="id" name="id" value="${json.project_id}">
+            <input type="text" class="username" name="username" value="${json.username}" hidden>
+            <input class="button bg-grey p-0 px-2" type="submit" value="Demote">
+          `;
+
+            options_div.appendChild(moveForm);
+            moveForm.addEventListener('submit', sendDemoteProjectLeaderRequest);
+        } else {
+          moveForm.id= 'assign-project-leader';
+
+          moveForm.innerHTML = `
+            <input type="hidden" name="_token" value="${csrfToken_}">
+            <input type="hidden" class="id" name="id" value="${json.project_id}">
+            <input type="text" class="username" name="username" value="${json.username}" hidden>
+            <input class="button bg-grey p-0 px-2" type="submit" value="Promote">
+          `;
+          options_div.appendChild(moveForm);
+          moveForm.addEventListener('submit', sendAssignProjectLeaderRequest);
+        }
       }
-      let section = json.is_leader=='true'? ul.querySelector('#project-leaders'):ul.querySelector('#members'); 
+      if (json.can_remove) {
+        const removeForm = document.createElement('form');
+        removeForm.id= 'remove-member-project';
+        removeForm.setAttribute('data-id', json.id);
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  
+        removeForm.innerHTML = `
+          <input type="hidden" name="_token" value="${csrfToken}">
+          <input type="hidden" class="id" name="id" value="${json.project_id}">
+          <input type="hidden" class="username" name="username" value="${json.username}">
+          <button type="submit"> &times; </button>
+        `;
+
+        options_div.appendChild(removeForm);
+        removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+      }
+      div.append(options_div);
+      let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
       section.appendChild(div);
     });
   }
@@ -1050,7 +1085,7 @@ function demoteAdminToWorldHandler(data) {
 }
 
 
-async function sendAssignProjectLeader(ev) {
+async function sendAssignProjectLeaderRequest(ev) {
   ev.preventDefault();
   let csrf = this.querySelector('input:first-child').value;
   let id = this.querySelector('input.id').value;
@@ -1084,7 +1119,7 @@ function assignProjectLeaderHandler(data) {
   window.location.reload();
 }
 
-async function sendDemoteProjectLeader(ev) {
+async function sendDemoteProjectLeaderRequest(ev) {
   ev.preventDefault();
   let csrf = this.querySelector('input:first-child').value;
   let id = this.querySelector('input.id').value;

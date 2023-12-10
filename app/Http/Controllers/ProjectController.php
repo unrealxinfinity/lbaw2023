@@ -83,6 +83,7 @@ class ProjectController extends Controller
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
             $can_remove = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
+            $can_move = $can_remove || Auth::user()->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
             return response()->json([
                 'error' => false,
@@ -91,7 +92,8 @@ class ProjectController extends Controller
                 'project_id' => $project->id,
                 'picture' => $member->picture,
                 'is_leader' => $fields['type']=='Project Leader',
-                'can_remove' => $can_remove
+                'can_remove' => $can_remove,
+                'can_move' => $can_move
             ]);
         } catch (\Exception $e)
         {
