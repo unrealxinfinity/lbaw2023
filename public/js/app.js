@@ -776,8 +776,9 @@ function searchProjectHandler(json){
     const tagForms = document.getElementsByClassName('new-tag');
     const id = tagForms[0].getAttribute('data-id');
     let tagElem = tagForms[0].children;
-    let tagName= tagElem[1].value;
+    let tagName= tagElem[2].value;
     const csrf = tagElem[0].value;
+    
     const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
         method: 'POST',
         headers: {

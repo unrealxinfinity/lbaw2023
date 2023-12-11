@@ -42,6 +42,14 @@ Route::get('/', function () {
     return view('pages.homepage');
 })->name('home');
 
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
+
+Route::get('/contacts', function () {
+    return view('pages.contacts');
+})->name('contacts');
+
 Route::get('/login/github', function () {
     return Socialite::driver('github')->redirect();
 })->name('github-login');

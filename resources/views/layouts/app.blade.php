@@ -86,9 +86,9 @@
         <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3 py-1">
             <p> @ 2023 MineMax, Inc. </p>
             <div class="flex space-x-3">
-            <p> About </p>
+            <p> <a href="/about">About </a></p>
             <p> | </p>
-            <p> Contact Us </p>
+            <p> <a href="/contacts">Contact Us </a></p>
             </div>
         </nav>
     </body>
