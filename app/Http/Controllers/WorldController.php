@@ -221,16 +221,38 @@ class WorldController extends Controller
     {
         $token = request()->query('token');
         $invitation = Invitation::where('token', $token)->first();
-        $username = $invitation->member->user->username;
-        $world_id = $invitation->world_id;
-        $world_name = World::findOrFail($world_id)->name;
 
-        return view('pages.invite', [
-            'world_id' => $world_id,
-            'world_name' => $world_name,
-            'username' => $username,
-            'token' => $token
-        ]);
+        if($invitation->username != null){
+            $username = $invitation->member->user->username;
+            $world_id = $invitation->world_id;
+            $world_name = World::findOrFail($world_id)->name;
+
+            return view('pages.invite', [
+                'world_id' => $world_id,
+                'world_name' => $world_name,
+                'username' => $username,
+                'token' => $token
+            ]);
+        } else if ($invitation->email != null){
+            $email = $invitation->email;
+            $world_id = $invitation->world_id;
+            $world_name = World::findOrFail($world_id)->name;
+
+            return view('auth.register-invite', [
+                'world_id' => $world_id,
+                'world_name' => $world_name,
+                'email' => $email,
+                'token' => $token
+            ]);
+        } else {
+            return view('pages.invite', [
+                'world_id' => null,
+                'world_name' => null,
+                'username' => null,
+                'token' => null
+            ]);
+        }
+        
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
