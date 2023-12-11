@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
+use App\Models\Appeal;
 use App\Models\Member;
 use App\Models\PersistentUser;
 use App\Models\User;
@@ -42,6 +43,19 @@ class MemberController extends Controller
             'member' => $member,
             'appeal' => true
         ]);
+    }
+
+    public function appeal(AppealRequest $request, int $id): RedirectResponse
+    {
+        $fields = $request->validated();
+        $member = Member::findOrFail($id);
+
+        Appeal::create([
+            'text' => $fields['text'],
+            'member_id' => $member->id
+        ]);
+
+        return redirect()->route('members.show', ['username' => $member->persistentUser->user->username])->withSuccess('Appeal sent!');
     }
 
     public function showCreateWorld(): View
