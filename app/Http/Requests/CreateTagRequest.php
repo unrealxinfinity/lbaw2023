@@ -10,9 +10,9 @@ class CreateTagRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(Project $project): bool
-    {
-        return Auth::user()->can('projectTagCreate', $project);
+    public function authorize(): bool
+    {   
+        return Auth::user()->can('projectTagCreate', Project::find($this->project_id));
     }
 
     /**
