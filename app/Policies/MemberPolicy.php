@@ -26,6 +26,13 @@ class MemberPolicy
         //return ($user->persistentUser->type_ === 'Administrator') || ($member->user->id === $user->id);
     }
 
+    public function appeal(User $user): bool
+    {
+        $is_blocked = $user->persistentUser->type_ == 'Blocked';
+        $has_appeal = isset($user->persistentUser->member->appeal);
+        return $is_blocked && !$has_appeal;
+    }
+
     public function create(User $user, Member $member): bool
     {
         return $user->persistentUser->type_ === 'Administrator';

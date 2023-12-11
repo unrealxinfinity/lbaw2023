@@ -14,7 +14,7 @@
         @if ($member->persistentUser->type_ == 'Member')
             <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
         @elseif ($member->persistentUser->type_ == 'Blocked')
-            <a class="button">Appeal Block</a>
+            <a class="button" href="/appeal">Appeal Block</a>
         @endif
         <button type="button" id="delete-account" class="link text-red">Delete Account</button>
         <div class="flex mobile:flex-row flex-col justify-around mt-10 child:self-center">
@@ -32,7 +32,7 @@
             <h1 class="mt-3 ml-5"> Appeal Block </h1>
             <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
             </div>
-            @include('form.appeal', ['member' => $members])
+            @include('form.appeal', ['member' => $member])
         </div>
     </div>
     @endif
