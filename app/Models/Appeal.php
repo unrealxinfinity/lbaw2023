@@ -10,6 +10,13 @@ class Appeal extends Model
 {
     use HasFactory;
 
+    protected $timestamps = false;
+
+    protected $fillable = [
+        'text',
+        'member_id'
+    ];
+
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);

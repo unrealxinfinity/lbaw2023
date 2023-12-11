@@ -4,5 +4,5 @@
 
     <textarea type="text" class="world-description text-black max-h-40" rows="4" name="text"  placeholder="Why do you think you should be unblocked?" required></textarea>
 
-    <input class="button" type="submit" value="Edit World">
+    <input class="button" type="submit" value="Appeal">
 </form>
