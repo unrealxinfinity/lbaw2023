@@ -10,7 +10,7 @@ class Appeal extends Model
 {
     use HasFactory;
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         'text',

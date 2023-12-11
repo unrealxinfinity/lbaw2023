@@ -14,7 +14,11 @@
         @if ($member->persistentUser->type_ == 'Member')
             <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
         @elseif ($member->persistentUser->type_ == 'Blocked')
-            <a class="button" href="/appeal">Appeal Block</a>
+            @can('appeal', Member::class)
+                <a class="button" href="/appeal">Appeal Block</a>
+            @else
+                <a class="button">Appeal Sent</a>
+            @endcan
         @endif
         <button type="button" id="delete-account" class="link text-red">Delete Account</button>
         <div class="flex mobile:flex-row flex-col justify-around mt-10 child:self-center">
