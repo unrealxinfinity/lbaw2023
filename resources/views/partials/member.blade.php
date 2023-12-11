@@ -25,6 +25,17 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
     @endif
+    @if ($appeal)
+    <div id="appeal-box" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
+        <div class="bg-black tablet:w-3/4 tablet:h-4/5 h-full rounded drop-shadow tablet:mx-auto">
+            <div class="flex"> 
+            <h1 class="mt-3 ml-5"> Appeal Block </h1>
+            <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
+            </div>
+            @include('form.appeal', ['member' => $members])
+        </div>
+    </div>
+    @endif
     @else
     <header class="h-fit flex justify-start">
         <img src="{{$member->getProfileImage()}}" class="h-5 aspect-square mr-3">

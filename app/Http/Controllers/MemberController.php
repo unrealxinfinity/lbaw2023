@@ -27,7 +27,20 @@ class MemberController extends Controller
         $member = $user->persistentUser->member;
 
         return view('pages.member', [
-            'member' => $member
+            'member' => $member,
+            'appeal' => false
+        ]);
+    }
+
+    public function showAppeal(): View
+    {
+        $this->authorize('appeal', Member::class);
+
+        $member = Auth::user()->persistentUser->member;
+
+        return view('pages.member', [
+            'member' => $member,
+            'appeal' => true
         ]);
     }
 

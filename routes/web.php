@@ -158,6 +158,8 @@ Route::controller(MemberController::class)->group(function () {
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
     Route::get('/invites', 'showInvites')->name('show-invites');
+    Route::get('/appeal', 'showAppeal')->name('show-appeal');
+    Route::post('/appeal/{id}', 'appeal')->name('appeal');
 });
 
 Route::controller(TaskController::class)->group(function () {
