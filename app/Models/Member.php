@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Member extends Model
 {
@@ -86,5 +87,10 @@ class Member extends Model
     public function friends(): BelongsToMany
     {
         return $this->belongsToMany(Member::class, 'friend', 'member_id', 'friend_id');
+    }
+
+    public function appeal(): HasOne
+    {
+        return $this->hasOne(Appeal::class);
     }
 }
