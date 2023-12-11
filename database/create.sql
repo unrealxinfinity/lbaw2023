@@ -102,6 +102,7 @@ CREATE TABLE invitations(
   member_id INT NOT NULL,
   world_id INT NOT NULL,
   is_admin BOOLEAN NOT NULL,
+  email VARCHAR,
   FOREIGN KEY(world_id) REFERENCES worlds(id) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
