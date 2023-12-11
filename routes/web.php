@@ -150,6 +150,7 @@ Route::controller(ProjectController::class)->group(function () {
 
 Route::controller(TagController::class)->group(function () {
     Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
+    Route::post('/api/worlds/{id}/tags/create', 'createWorldTag')->name('create-world-tag');
 });
 
 Route::controller(MemberController::class)->group(function () {

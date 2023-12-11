@@ -132,8 +132,8 @@ function addEventListeners() {
   }, false);
   
   let main_body = document.getElementById('main-body');
-  if(main_body.getAttribute('data-auth') == true){
-    window.addEventListener('load',getMemberBelingingsRequest);
+  if(main_body.getAttribute('data-auth') == 'true'){
+    window.addEventListener('load',getMemberBelongingsRequest);
   }
   /*
   let removeMemberFromWorld = document.querySelector('');
@@ -772,14 +772,21 @@ function searchProjectHandler(json){
 }
 
   async function addTagRequest() {
-
+    
     const tagForms = document.getElementsByClassName('new-tag');
     const id = tagForms[0].getAttribute('data-id');
+    const type = tagForms[0].getAttribute('data-type');
     let tagElem = tagForms[0].children;
     let tagName= tagElem[2].value;
     const csrf = tagElem[0].value;
-    
-    const response = await fetch('/api/projects/' + id + '/' +'tags/create', {
+    let url= "";
+    if(type == "project"){
+       url = '/api/projects/' + id + '/' +'tags/create';
+    }
+    else if(type == "world"){
+       url = '/api/worlds/' + id + '/' +'tags/create';
+    }
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': csrf,
@@ -801,14 +808,21 @@ function searchProjectHandler(json){
           addTagHandler(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-      tagElem[1].value = "";
+      tagElem[2].value = "";
     
 
 }
 
 function addTagHandler(json){
   if(json.error){
-    console.log('Already exists entry');
+    let tagForm = document.getElementsByClassName('new-tag');
+    let error = document.createElement('a');
+    error.classList.add('error');
+    error.textContent = json.tagName + " Already exists!";
+    tagForm[0][2].insertAdjacentElement('afterend',error);
+    setTimeout(() => {
+      error.remove();
+    }, 3000);
   }
   else{
     let newTag = document.createElement('p');
@@ -816,7 +830,6 @@ function addTagHandler(json){
     newTag.textContent = json.tagName;
     document.getElementsByClassName('tagList flex')[0].appendChild(newTag);
   }
-  
 }
 
 async function sendRemoveMemberFromWorldRequest(ev) {
@@ -1366,7 +1379,7 @@ function clearNotificationsHandler(json){
 
 }
  // Get member belongings in ajax on every page load for pusher notifications
-async function getMemberBelingingsRequest(ev){
+async function getMemberBelongingsRequest(ev){
   ev.preventDefault();
   const url = '/api/allBelongings';
     const response = await fetch(url, {
@@ -1427,7 +1440,12 @@ function pusherNotifications(projectContainer, worldContainer){
         alert(JSON.stringify(data.message));
         sendShowNotificationsRequest();
       });
+      bindEvent(channelWorld,'TagNotification', function(data){
+        alert(JSON.stringify(data.message));
+        sendShowNotificationsRequest();
+      });
     }
+
     for(let i = 0; i < projectContainer.length; i++){
       const project_id = projectContainer[i];
       const channelProject = pusher.subscribe('Project' + project_id);

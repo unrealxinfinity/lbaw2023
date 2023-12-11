@@ -15,14 +15,17 @@ class CreateTagNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $message;
-    public $project_id;
+    public $id;
+    public $type;
     /**
      * Create a new event instance.
      */
-    public function __construct($message,$project_id)
+    public function __construct($message,$id,$type)
     {    
-        $this->project_id = $project_id;
+    
+        $this->id = $id;
         $this->message= $message;
+        $this->type = $type;
     }
 
     /**
@@ -32,7 +35,14 @@ class CreateTagNotification implements ShouldBroadcast
      */
     public function broadcastOn():array
     {   
-        return ['Project'.$this->project_id];
+        if($this->type == 'World'){
+            return ['World'.$this->id];
+        }
+        else if($this->type=='Project')
+        {
+            return ['Project'.$this->id];
+        }
+        
     }
 
     public function broadcastAs() {
