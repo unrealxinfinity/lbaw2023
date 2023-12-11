@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppealRequest;
 use App\Http\Requests\BlockRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Appeal;
