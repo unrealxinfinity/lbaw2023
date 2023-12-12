@@ -59,8 +59,7 @@ class RegisterController extends Controller
             Member::create([
                 'name' => $name,
                 'email' => $request->email,
-                'user_id' => $persistentUser->id,
-                'picture' => 'example.com'
+                'user_id' => $persistentUser->id
             ]);
 
             if($request->invite_token) {
