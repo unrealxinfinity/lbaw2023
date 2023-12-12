@@ -11,7 +11,7 @@
 
         <input type="hidden" name="member" value="on">
 
-        <h3 class="my-0 mt-3"><label for="username">Name</label></h3>
+        <h3 class="my-0 mt-3"><label for="username">Username</label></h3>
         <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
         @if ($errors->has('username'))
         <span class="error">
@@ -38,7 +38,7 @@
         <h3 class="my-0 mt-1"><label for="password-confirm">Confirm Password</label></h3>
         <input id="password-confirm" type="password" name="password_confirmation" required>
 
-        <input type="hidden" name="invite_token" value="{{ $invite_token }}">
+        <input type="hidden" name="invite_token" value="{{ $token }}">
 
         <button class="button" type="submit"> Register </button>
     </form>
