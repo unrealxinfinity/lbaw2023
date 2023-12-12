@@ -30,7 +30,7 @@
                         <div class="sm:h-36 h-24 aspect-square sm:ml-5 ml-1">
                             <label for="edit-img">
                                 <label class="absolute sm:h-36 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none md:text-big text-bigPhone">&#9998;</label>
-                                <img id='preview-img' class="sm:h-36 h-24 aspect-square hover:opacity-50" src={{ $project->getImage() }}>
+                                <img id='preview-img object-cover' class="sm:h-36 h-24 aspect-square hover:opacity-50" src={{ $project->getImage() }}>
                             </label>
                         </div>
                         <input id="edit-img" class="hidden" name="file" type="file" required>
