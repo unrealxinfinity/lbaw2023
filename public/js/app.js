@@ -1602,10 +1602,7 @@ function pusherNotifications(projectContainer, worldContainer){
         alert(JSON.stringify(data.message));
         sendShowNotificationsRequest();
       });
-      bindEvent(channelWorld,'TagNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
+      
     }
 
     for(let i = 0; i < projectContainer.length; i++){
@@ -1616,10 +1613,6 @@ function pusherNotifications(projectContainer, worldContainer){
         sendShowNotificationsRequest();
       });
 
-      bindEvent(channelProject, 'TagNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
     }
   
   
