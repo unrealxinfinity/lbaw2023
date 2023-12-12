@@ -14,9 +14,9 @@
         </div>
     </section>
     @if ($subform)
-    <div id="edit-world" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
-        <div class="bg-black tablet:w-3/4 tablet:h-4/5 h-full pt-16 tablet:pt-0 tablet:rounded drop-shadow tablet:mx-auto">
-            <div class="flex"> 
+    <div id="edit-world" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center scroll">
+        <div class="bg-black tablet:w-3/4 tablet:h-fit h-full tablet:rounded drop-shadow tablet:mx-auto">
+            <div class="flex my-3"> 
             <h1 class="mt-3 ml-5"> {{ $formTitle }} </h1>
             <h1><a id="go-back" class="cursor-pointer fixed right-5 mt-1">&times;</a></h1>
             </div>
