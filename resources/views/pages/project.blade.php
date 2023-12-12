@@ -15,6 +15,9 @@
         </div>
     </section>
     @if ($edit)
+    <script>
+        document.body.style.overflow = 'hidden';
+    </script>
     <div id="edit-project" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
         <div class="bg-black tablet:w-3/4 tablet:h-fit h-full tablet:rounded drop-shadow tablet:mx-auto">
             <div class="flex my-3">
