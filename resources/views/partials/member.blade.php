@@ -8,9 +8,6 @@
             <h2> @ {{ $member->persistentUser->user->username }}</h2>
             @include('partials.tag', ['tags' => $member->tags,'type'=>'member'])
         </div>
-        @can('memberTagCreate', $member)
-            @include('form.tag-create', ['type' => 'member'])
-        @endcan
     </header>
     <h3 class="mb-5">{{ $member->description }}</h3>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
@@ -31,6 +28,9 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/mytasks">My Tasks</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
+        @can('memberTagCreate', $member)
+            @include('form.tag-create', ['type' => 'member'])
+        @endcan
     @endif
     @if ($appeal)
     <div id="appeal-box" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
