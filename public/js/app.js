@@ -72,7 +72,7 @@ function addEventListeners() {
   console.log(deleteTagForms);  
   if(deleteTagForms != null){
     for(let i = 0; i < deleteTagForms.length; i++){
-      console.log(deleteTagForms[i].querySelector('button').addEventListener('click', sendDeleteTagRequest));
+      console.log(deleteTagForms[i].querySelector('#deleteTagButton').addEventListener('click', sendDeleteTagRequest));
     }
   }
 
@@ -949,7 +949,7 @@ function addTagHandler(json){
 async function sendDeleteTagRequest(ev) {
 
   ev.preventDefault();
-  const tagForms = ev.target.parentElement;
+  const tagForms = ev.target.parentElement.parentElement;
     const id = tagForms.getAttribute('data-id');
     const type = tagForms.getAttribute('data-type');
     let tagElem = tagForms.children;
@@ -986,12 +986,11 @@ async function sendDeleteTagRequest(ev) {
     deleteTagHandler(data);
   }).catch(error => console.error('Error fetching data:', error.message));
 }
-async function deleteTagHandler(json, ev){
-  let tag = document.querySelectorAll('p.tag');
+async function deleteTagHandler(json){
+  let tag = document.querySelectorAll('div.tag p');
   [].forEach.call(tag, function(tag) {
     if(tag.textContent == json.tagName){
-      tag.nextElementSibling.remove();
-      tag.remove();
+      tag.parentElement.remove();
     }
   });
 }

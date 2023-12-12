@@ -79,12 +79,12 @@
         </ul>
         @endif
     </section>
-    @can('worldTagCreate', $world)
-        @include('form.tag-create',['world'=> $world,'type' => 'world'])
-    @endcan
     @can('edit', $world)
         @include('form.addmembertoworld', ['world' => $world])
         @include('form.project-create', ['world'=>$world])
+    @endcan
+    @can('worldTagCreate', $world)
+        @include('form.tag-create',['world'=> $world,'type' => 'world'])
     @endcan
     <section id="comments">
         <h2 class="mt-10"> COMMENTS </h2>
