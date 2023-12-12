@@ -41,7 +41,8 @@ class WorldController extends Controller
             'subform' => false,
             'members' => $world->members()->get()->reject(function ($member) {
                 return $member->persistentUser->type_ != "Member";
-            })
+            }),
+            'tags' => $world->tags
         ]);
     }
 

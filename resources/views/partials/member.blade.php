@@ -6,7 +6,7 @@
         <div class="flex flex-col tablet:ml-5 mobile:ml-2 ml-1 pt-1">
             <h1>{{ $member->name }}</h1>
             <h2> @ {{ $member->persistentUser->user->username }}</h2>
-            <div class="flex flex-wrap overflow-hidden mt-2"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
+            @include('partials.tag', ['tags' => $member->tags,'type'=>'member'])
         </div>
     </header>
     <h3 class="mb-5">{{ $member->description }}</h3>
@@ -28,6 +28,9 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/mytasks">My Tasks</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
+        @can('memberTagCreate', $member)
+            @include('form.tag-create', ['type' => 'member'])
+        @endcan
     @endif
     @if ($appeal)
     <div id="appeal-box" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">

@@ -30,7 +30,8 @@ class MemberController extends Controller
 
         return view('pages.member', [
             'member' => $member,
-            'appeal' => false
+            'appeal' => false,
+            'tags' => $member->tags
         ]);
     }
 
@@ -168,8 +169,7 @@ class MemberController extends Controller
     }
     public function getAllBelongings():JsonResponse
     {
-        
-        $member = Member::where('user_id', Auth::user()->persistentUser->member->id)->firstOrFail();
+        $member = Member::where('user_id', Auth::user()->id)->firstOrFail();
         $worlds = $member->worlds->pluck('id');
         $projects = $member->projects->pluck('id');
 

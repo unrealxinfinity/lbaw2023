@@ -12,7 +12,14 @@ class Tag extends Model
 
     public function projects()
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class, 'project_tag');
     }
-
+    public function worlds()
+    {
+        return $this->belongsToMany(World::class, 'world_tag');
+    }
+    public function members()
+    {
+        return $this->belongsTo(Member::class, 'member_tag');
+    }
 }

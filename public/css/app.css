@@ -57,7 +57,7 @@
       transform: translateY(calc(1.5em - 100%));
     }
     .tag {
-      @apply bg-grey rounded-full h-fit w-fit p-1 m-0.5;
+      @apply bg-grey rounded-full h-fit items-center w-fit p-1 m-0.5;
     }
     .form-post {
       @apply flex flex-col py-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;

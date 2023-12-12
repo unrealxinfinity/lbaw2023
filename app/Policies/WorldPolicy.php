@@ -94,4 +94,18 @@ class WorldPolicy
     {
         return (Auth::check() && $world->owner_id === $user->persistentUser->member->id);
     }
+    public function worldTagCreate(User $user, World $world): bool
+    {
+        $is_banned = ($user->persistentUser->type_ == 'Blocked');
+        $is_deleted = ($user->persistentUser->type_ == 'Deleted');
+        $is_member = ($user->persistentUser->type_ === 'Member') && $user->persistentUser->member->worlds->contains($world->id);
+        return !$is_banned && !$is_deleted && $is_member;
+    }
+    public function deleteWorldTag(User $user, World $world): bool
+    {   
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $world->id);
+        return (!$is_disabled && $is_member);
+    }
 }

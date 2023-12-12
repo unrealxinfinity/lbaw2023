@@ -99,6 +99,7 @@ class NotificationController extends Controller
                 'world_id' => $world_id,
                 'project_id' => null,
                 'task_id' => null,
+                'member_id' => null,
             ]);
              foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
@@ -131,6 +132,7 @@ class NotificationController extends Controller
                 'world_id' => null,
                 'project_id' => $project_id,
                 'task_id' => null,
+                'member_id' => null,
             ]);
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
@@ -143,27 +145,75 @@ class NotificationController extends Controller
         }
     }
 
-    static function TagNotification(Tag $tag,string $project_id, string $action){
-        $project = Project::find($project_id);
-        DB::beginTransaction();
-        try {
-            $message = $action.' Tag '."'".$tag->name."'".'!';
-            $notification = Notification::create([
-                'text' => $message,
-                'level' => 'Low',
-                'world_id' => null,
-                'project_id' => $project_id,
-                'task_id' => null,
-            ]);
-            foreach($project->members as $member){
-                $member->notifications()->attach($notification->id);
-             }
-             event(new CreateTagNotification($message,$project_id));
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
+    static function TagNotification(Tag $tag,string $idOrUname,string $type, string $action){
+        if($type == 'Project'){
+            $thing = Project::find($idOrUname);
+            $message = $action.' Tag '."'".$tag->name."'"." on Project ".$thing->name.' !';
+            DB::beginTransaction();
+            try {
+                $notification = Notification::create([
+                    'text' => $message,
+                    'level' => 'Low',
+                    'world_id' => null,
+                    'project_id' => $idOrUname,
+                    'task_id' => null,
+                    'member_id' => null,
+                ]);
+                foreach($thing->members as $member){
+                    $member->notifications()->attach($notification->id);
+                    error_log($member->notifications()->get());
+                 }
+                 event(new CreateTagNotification($message,$idOrUname,$type));
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
         }
+        else if($type == 'World'){
+            $thing = World::find($idOrUname);
+            $message = $action.' Tag '."'".$tag->name."'"." on World ".$thing->name.' !';
+            DB::beginTransaction();
+            try {
+                $notification = Notification::create([
+                    'text' => $message,
+                    'level' => 'Low',
+                    'world_id' => $idOrUname,
+                    'project_id' => null,
+                    'task_id' => null,
+                    'member_id' => null,
+                ]);
+                foreach($thing->members as $member){
+                    $member->notifications()->attach($notification->id);
+                 }
+
+                 event(new CreateTagNotification($message,$idOrUname,$type));
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+        else if($type == 'Member'){
+            $thing = Member::where('name',$idOrUname)->first();
+            $message = $action.' Tag '."'".$tag->name."'"." on ".$thing->name."'s profile!";
+            DB::beginTransaction();
+            try {
+                $notification = Notification::create([
+                    'text' => $message,
+                    'level' => 'Low',
+                    'world_id' => null,
+                    'project_id' => null,
+                    'task_id' => null,
+                    'member_id' => $thing->id,
+                ]);
+                $thing->notifications()->attach($notification->id);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }       
     }
 
     static function WorldNotification(World $world, string $action){

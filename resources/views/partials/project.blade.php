@@ -13,7 +13,7 @@
                 <h1><a class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a></h1>
             @endcan
             </div>
-            @include('partials.tag', ['tags' => $tags])
+            @include('partials.tag', ['tags' => $tags,'type' => 'project'])
         </div>
         </div>
         <div class="relative flex text-left pt-1">
@@ -71,6 +71,11 @@
             </div>
         @endforeach
     </div>
+    @can('projectTagCreate', $project)
+    <section id="create-tag">
+        @include('form.tag-create',['project'=> $project,'type' => 'project'])
+    </section>
+    @endcan
     @can('addMember', $project)
     <section id="add-member">
         @include('form.addmember', ['project' => $project])
@@ -81,9 +86,5 @@
         @include('form.task-create', ['project' => $project])
     </section>
     @endcan
-    @can('projectTagCreate', $project)
-    <section id="create-tag">
-        @include('form.tag-create',['project'=> $project])
-    </section>
-    @endcan
+    
 </article>

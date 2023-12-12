@@ -5,7 +5,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTagRequest extends FormRequest
+class CreateProjectTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

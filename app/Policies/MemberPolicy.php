@@ -95,4 +95,17 @@ class MemberPolicy
         $is_disabled = $user->persistentUser->type_ == 'Blocked' || $user->persistentUser->type_ == 'Deleted';
         return !$is_disabled && !$is_self && !$is_friend && !$has_request;
     }
+    public function memberTagCreate(User $user, Member $member): bool
+    {
+        $is_disabled = $user->persistentUser->type_ == 'Blocked' || $user->persistentUser->type_ == 'Deleted';
+        $is_self = $user->persistentUser->member->id == $member->id;
+        return !$is_disabled && $is_self;
+    }
+    public function deleteMemberTag(User $user, Member $member): bool
+    {   
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $type === 'Member' && ($user->persistentUser->member->id == $member->id);
+        return (!$is_disabled && $is_member);
+    }
 }

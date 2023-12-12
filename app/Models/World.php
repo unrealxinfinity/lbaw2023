@@ -52,5 +52,8 @@ class World extends Model
     {
         return $this->hasMany(Invitation::class);
     }
-
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'world_tag');
+    }
 }

@@ -13,7 +13,7 @@
                     <h1><a class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a></h1>
                 @endcan
                 </div>
-            <div class="flex flex-wrap overflow-hidden"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p> <p class="tag"> placeholder </p> <p class="tag"> placeholder </p>
+                @include('partials.tag', ['tags' => $world->tags,'type'=>'world'])
             </div>
         </div>
         </div>
@@ -80,9 +80,12 @@
         @endif
     </section>
     @can('edit', $world)
-    @include('form.addmembertoworld', ['world' => $world])
-    @include('form.project-create', ['world'=>$world])
-    @endif
+        @include('form.addmembertoworld', ['world' => $world])
+        @include('form.project-create', ['world'=>$world])
+    @endcan
+    @can('worldTagCreate', $world)
+        @include('form.tag-create',['world'=> $world,'type' => 'world'])
+    @endcan
     <section id="comments">
         <h2 class="mt-10"> COMMENTS </h2>
         <ul>
