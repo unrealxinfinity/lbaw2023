@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 
 class RecoverController extends Controller
 {
-    function showRecoverForm(): View
+    function showRecoverForm(): View|RedirectResonse
     {
         if (Auth::check()) {
             return redirect('');
