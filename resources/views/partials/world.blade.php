@@ -5,7 +5,7 @@
     </div>
     <header class="flex justify-between mobile:h-28 tablet:h-32 desktop:h-40 h-20 tablet:my-5 my-2 ml-1">
         <div class="flex justify-start">
-            <img class="h-full aspect-square  object-cover" src={{ $world->getImage() }}>
+            <img class="h-full aspect-square object-cover" src={{ $world->getImage() }}>
             <div class="flex flex-col tablet:ml-5 mobile:ml-2 ml-1 pt-1">
                 <div class="flex">
                 <h1>{{ $world->name }}</h1>

@@ -1,19 +1,16 @@
-<div class="flex sm:h-36 h-24 m-5 mb-10">
-                
-    <form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
-        @csrf
-        @method('POST')
-        <div class="sm:h-36 h-24 aspect-square sm:ml-5 ml-1">
-            <label for="edit-img">
-                <label class="absolute sm:h-36 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none md:text-big text-bigPhone">&#9998;</label>
-                <img id='preview-img' class="sm:h-36 h-24 aspect-square hover:opacity-50 object-cover" src={{ $world->getImage() }}>
-            </label>
-        </div>
-        <input id="edit-img" class="hidden" name="file" type="file" required>
-        <input name="type" type="hidden" value="world">
-        <input class="button w-min" type="submit" value="Upload world picture">
-    </form>
-</div>
+<form method="POST" action="/worlds/upload/{{ $world->id }}" enctype="multipart/form-data">
+    @csrf
+    @method('POST')
+    <div class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square tablet:mx-5 mx-2 my-1">
+        <label for="edit-img">
+            <h1 class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square text-center flex flex-col justify-around pointer-events-none"><label>&#9998;</label></h1>
+            <img id='preview-img' class="h-full aspect-square hover:opacity-50 object-cover" src={{ $world->getImage() }}>
+        </label>
+    </div>
+    <input id="edit-img" class="hidden" name="file" type="file" required>
+    <input name="type" type="hidden" value="world">
+    <input class="button tablet:ml-5 ml-2" type="submit" value="Upload world picture">
+</form>
 <form class="edit-world form-post outline-none" method="POST" action="{{ route('update-world', ['id' => $world->id]) }}">
     @csrf
     @method('PUT')
