@@ -661,8 +661,42 @@ function changeToInviteOutsideMember(ev) {
 
     const json = await response.json();
 
-    if (response.status !== 500) inviteMemberHandler(json);
+    if (response.status !== 500) inviteNewMemberHandler(json);
 }
+
+function inviteNewMemberHandler(json) {
+  const list = document.querySelectorAll('ul.members');
+  [].forEach.call(list, function(ul) {
+    const form = document.querySelector('form#invite-new-member');
+    const error = form.querySelector('span.error');
+    const invitation = form.querySelectorAll('span.success');
+    if (invitation.length !== 0)
+    {
+      invitation.forEach(element => {
+        element.remove();
+      });
+    }
+    if (error !== null)
+    {
+      error.remove();
+    }
+
+    if (json.error)
+    {
+      const span = document.createElement('span');
+      span.classList.add('error');
+      span.textContent = json.message;
+      form.appendChild(span);
+      return;
+    }
+
+    const span = document.createElement('span');
+    span.classList.add('success');
+    span.textContent = json.email + ' has been invited to join this world.';
+    form.appendChild(span);
+  });
+}
+
 
   async function sendAssignMemberRequest(event) {
     event.preventDefault();
