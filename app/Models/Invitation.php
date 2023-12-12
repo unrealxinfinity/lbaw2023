@@ -16,7 +16,8 @@ class Invitation extends Model
         'token',
         'member_id',
         'world_id',
-        'is_admin'
+        'is_admin',
+        'email'
     ];
 
     public function member(): BelongsTo

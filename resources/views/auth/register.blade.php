@@ -8,7 +8,7 @@
 
     <input type="hidden" name="member" value="on">
 
-    <h3 class="my-0 mt-3"><label for="username">Name</label></h3>
+    <h3 class="my-0 mt-3"><label for="username">Username</label></h3>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
       <span class="error">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
+use App\Models\Invitation;
 use App\Models\PersistentUser;
 use Illuminate\Http\Request;
 
@@ -35,14 +36,13 @@ class RegisterController extends Controller
             'password' => 'required|min:8|confirmed',
             'login' => 'nullable|boolean',
             'member' => 'nullable',
-            'name' => 'nullable|string|max:250'
+            'name' => 'nullable|string|max:250',
+            'invite_token' => 'nullable'
         ]);
-
-        error_log("hello");
 
         $login = $request->login ?? true;
         $member = $request->member === 'on';
-        error_log($member ? "true" : "false");
+
         $name = $request->name ?? 'New Member';
         $persistentUser = PersistentUser::create([
             'type_' => $member ? 'Member' : 'Administrator'
@@ -62,6 +62,17 @@ class RegisterController extends Controller
                 'user_id' => $persistentUser->id,
                 'picture' => 'example.com'
             ]);
+
+            if($request->invite_token) {
+                $invite = Invitation::where('token', $request->invite_token)->first();
+                $member = Member::where('user_id', $persistentUser->id)->first();
+                
+                $member->worlds()->attach($invite->world_id, ['is_admin' => $invite->is_admin]);
+
+                if ($invite) {
+                    $invite->delete();
+                }
+            }
         }
 
         if ($login) {
@@ -75,4 +86,7 @@ class RegisterController extends Controller
             return redirect()->back()->withSuccess('You have created a new account!');
         }
     }
+    
+
+
 }
