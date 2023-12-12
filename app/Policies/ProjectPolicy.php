@@ -114,6 +114,13 @@ class ProjectPolicy
         $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
         return (!$is_disabled && $is_member);
     }
+    public function deleteProjectTag(User $user,Project $project): bool
+    {   
+        $type = $user->persistentUser->type_;
+        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
+        return (!$is_disabled && $is_member);
+    }
     public function searchTask(User $user): bool
     {   
         $type = $user->persistentUser->type_;

@@ -18,5 +18,8 @@ class Tag extends Model
     {
         return $this->belongsToMany(World::class, 'world_tag');
     }
-
+    public function members()
+    {
+        return $this->belongsTo(Member::class, 'member_tag');
+    }
 }

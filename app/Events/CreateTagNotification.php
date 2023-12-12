@@ -42,7 +42,6 @@ class CreateTagNotification implements ShouldBroadcast
         {
             return ['Project'.$this->id];
         }
-        
     }
 
     public function broadcastAs() {

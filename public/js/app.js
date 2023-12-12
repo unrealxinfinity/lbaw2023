@@ -60,8 +60,22 @@ function addEventListeners() {
     memberAdder.addEventListener('submit', sendAddMemberRequest);
 
   let button = document.getElementById("createTagButton");
-  if(button != null)
-  button.addEventListener("click", addTagRequest);
+  let TagForm = document.getElementsByClassName('new-tag');
+  if(TagForm != null){
+    for(let i = 0; i < TagForm.length; i++){
+      TagForm[i].addEventListener('submit', addTagRequest);
+    }
+  }
+  if(button != null) button.addEventListener("click", addTagRequest);
+
+  let deleteTagForms = document.getElementsByClassName('delete-tag');
+  console.log(deleteTagForms);  
+  if(deleteTagForms != null){
+    for(let i = 0; i < deleteTagForms.length; i++){
+      console.log(deleteTagForms[i].querySelector('button').addEventListener('click', sendDeleteTagRequest));
+    }
+  }
+
   
   let worldMemberAdder = document.querySelectorAll('form#invite-member');
   if (worldMemberAdder != null){
@@ -132,6 +146,7 @@ function addEventListeners() {
   }, false);
   
   let main_body = document.getElementById('main-body');
+  console.log(main_body.getAttribute('data-auth'));
   if(main_body.getAttribute('data-auth') == 'true'){
     window.addEventListener('load',getMemberBelongingsRequest);
   }
@@ -786,6 +801,9 @@ function searchProjectHandler(json){
     else if(type == "world"){
        url = '/api/worlds/' + id + '/' +'tags/create';
     }
+    else if(type == "member"){
+      url = '/api/members/' + id + '/' +'tags/create';
+    }
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -829,9 +847,59 @@ function addTagHandler(json){
     newTag.classList.add('tag');
     newTag.textContent = json.tagName;
     document.getElementsByClassName('tagList flex')[0].appendChild(newTag);
+    window.location.reload();
+    
   }
 }
+async function sendDeleteTagRequest(ev) {
 
+  ev.preventDefault();
+  const tagForms = ev.target.parentElement;
+    const id = tagForms.getAttribute('data-id');
+    const type = tagForms.getAttribute('data-type');
+    let tagElem = tagForms.children;
+    let tagName= tagElem[1].value;
+    let tagId= tagElem[2].value;
+    const csrf = tagElem[0].value;
+  let url = "";
+  if(type == "project"){
+    url = '/api/projects/' + id + '/' +'tags/' + 'delete/'+ tagId;
+  }
+  else if(type == "world"){
+    url = '/api/worlds/' + id + '/' +'tags/' + 'delete/'+ tagId;
+  }
+  else if(type == "member"){
+    url = '/api/members/' + id + '/' +'tags/' + 'delete/'+ tagId;
+  }
+  console.log(url);
+  const response = fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': csrf,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }).then(response => {
+    if(response.ok){
+      return response.json();
+    }
+    else{
+      throw new Error('Response status not OK');
+    }
+  }).then(data => {
+    deleteTagHandler(data);
+  }).catch(error => console.error('Error fetching data:', error.message));
+}
+async function deleteTagHandler(json, ev){
+  let tag = document.querySelectorAll('p.tag');
+  [].forEach.call(tag, function(tag) {
+    if(tag.textContent == json.tagName){
+      tag.nextElementSibling.remove();
+      tag.remove();
+    }
+  });
+}
 async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
   let csrf = this.querySelector('input:first-child').value;

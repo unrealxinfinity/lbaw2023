@@ -151,6 +151,10 @@ Route::controller(ProjectController::class)->group(function () {
 Route::controller(TagController::class)->group(function () {
     Route::post('/api/projects/{project_id}/tags/create', 'createProjectTag')->name('create-project-tag');
     Route::post('/api/worlds/{id}/tags/create', 'createWorldTag')->name('create-world-tag');
+    Route::post('/api/members/{username}/tags/create', 'createMemberTag')->name('create-member-tag');
+    Route::delete('/api/projects/{project_id}/tags/delete/{tag_id}', 'deleteProjectTag')->name('delete-project-tag');
+    Route::delete('/api/worlds/{id}/tags/delete/{tag_id}', 'deleteWorldTag')->name('delete-world-tag');
+    Route::delete('/api/members/{username}/tags/delete/{tag_id}', 'deleteMemberTag')->name('delete-member-tag');
 });
 
 Route::controller(MemberController::class)->group(function () {

@@ -93,4 +93,8 @@ class Member extends Model
     {
         return $this->hasOne(Appeal::class);
     }
+    public function tags(): BelongsToMany
+    {
+        return $this->BelongsToMany(Tag::class, 'member_tag');
+    }
 }

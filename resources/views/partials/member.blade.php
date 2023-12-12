@@ -6,8 +6,11 @@
         <div class="flex flex-col tablet:ml-5 mobile:ml-2 ml-1 pt-1">
             <h1>{{ $member->name }}</h1>
             <h2> @ {{ $member->persistentUser->user->username }}</h2>
-            <div class="flex flex-wrap overflow-hidden mt-2"> <p class="tag"> placeholder </p> <p class="tag"> for tags </p>
+            @include('partials.tag', ['tags' => $member->tags,'type'=>'member'])
         </div>
+        @can('memberTagCreate', $member)
+            @include('form.tag-create', ['type' => 'member'])
+        @endcan
     </header>
     <h3 class="mb-5">{{ $member->description }}</h3>
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
