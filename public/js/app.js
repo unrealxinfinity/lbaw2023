@@ -70,6 +70,13 @@ function addEventListeners() {
     });
   }
 
+  let worldNewMemberAdder = document.querySelectorAll('form#invite-new-member');
+  if (worldNewMemberAdder != null){
+    [].forEach.call(worldMemberAdder, function(form) {
+      form.addEventListener('submit', sendInviteNewMember);
+    });
+  }
+
   let taskResults = document.getElementById('openPopupButton');
   if(taskResults != null)
     taskResults.addEventListener('click', function() {
@@ -227,7 +234,37 @@ function addEventListeners() {
   let favouriter = document.querySelector('form#favorite');
   if (favouriter != null)
   favouriter.addEventListener('submit', sendFavoriteRequest);
+
+  let changeInviteType = document.querySelectorAll('#invite-outside-member');
+  if (changeInviteType != null){
+    [].forEach.call(changeInviteType, function(button) {
+      button.addEventListener('click', changeToInviteOutsideMember);
+    });
+  }
+
+  let inviteOutsideMember = document.querySelector('form#invite-new-member');
+  if (inviteOutsideMember != null){
+    inviteOutsideMember.addEventListener('submit', sendInviteNewMember);
+  }
+
 }
+
+function changeToInviteOutsideMember(ev) {
+  ev.preventDefault();
+  let outsideForm = document.querySelector('form#invite-new-member');
+  let insideForm = document.querySelector('form#invite-member');
+
+  console.log('test');
+
+  if(outsideForm.classList.contains('hidden')){
+    outsideForm.classList.remove('hidden');
+    insideForm.classList.add('hidden');
+  } else{
+    outsideForm.classList.add('hidden');
+    insideForm.classList.remove('hidden');
+  }
+}
+
 
   async function sendFriendRequest(ev) {
     ev.preventDefault();
@@ -602,6 +639,30 @@ function addEventListeners() {
 
       if (response.status !== 500) inviteMemberHandler(json);
   }
+
+  async function sendInviteNewMember(event){
+    event.preventDefault();
+
+    const email= this.querySelector('input.email').value;
+    const id = this.querySelector('input.world_id').value;
+    const csrf = this.querySelector('input:first-child').value;
+    const type = this.querySelector('select.type').value;
+
+    const response = await fetch('/api/worlds/' + id + '/invite', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({email: email, type: type})
+    });
+
+    const json = await response.json();
+
+    if (response.status !== 500) inviteMemberHandler(json);
+}
 
   async function sendAssignMemberRequest(event) {
     event.preventDefault();
