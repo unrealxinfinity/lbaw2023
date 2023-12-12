@@ -37,7 +37,7 @@ class RegisterController extends Controller
             'login' => 'nullable|boolean',
             'member' => 'nullable',
             'name' => 'nullable|string|max:250',
-            'invite_token' => 'nullable|integer'
+            'invite_token' => 'nullable'
         ]);
 
         $login = $request->login ?? true;
