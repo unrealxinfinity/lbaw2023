@@ -4,9 +4,9 @@
         <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
             @csrf
             @method('POST')
-                <label for="edit-img" class="">
+                <label for="edit-img">
                     <h1><label class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</label></h1>
-                    <img id="preview-img" class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square hover:opacity-50" src= {{$member->getProfileImage()}}>
+                    <img id="preview-img object-cover" class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square hover:opacity-50" src= {{$member->getProfileImage()}}>
                 </label>
             <input id="edit-img" class="hidden" name="file" type="file" required>
             <input name="type" type="hidden" value="profile">

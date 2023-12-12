@@ -111,13 +111,46 @@ class WorldController extends Controller
     {   
         $fields = $request->validated();
         $world = World::findOrFail($world_id);
-        
 
         try
         {
-            $member = User::where('username', $fields['username'])->first()->persistentUser->member;
-            if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
             $inviteToken = bin2hex(random_bytes(32));
+
+            if($fields['username'] != null){
+                $member = User::where('username', $fields['username'])->first()->persistentUser->member;
+            } else if ($fields['email'] != null){
+                $member = Member::where('email', $fields['email'])->first();
+                if($member == null){
+
+                    Invitation::create([
+                        'token' => $inviteToken,
+                        'world_id' => $world_id,
+                        'email' => $fields['email'],
+                        'is_admin' => $fields['type']
+                    ]);
+
+                    $mailData = [
+                        'view' => 'emails.new-member-invite',
+                        'world_name' => $world->name,
+                        'link' => env('APP_URL') . '/invite?token=' . $inviteToken
+                    ];
+
+                    Mail::to($fields['email'])->send(new MailModel($mailData));
+                    
+                    return response()->json([
+                        'error' => false,
+                        'email' => $fields['email']
+                    ]);
+                }
+                else {
+                    throw new \Exception('Member already has a MineMax account.');
+                }
+            } else {
+                throw new \Exception('No username or email provided.');
+            }
+           
+            if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
+            
 
             Invitation::create([
                 'token' => $inviteToken,
@@ -131,7 +164,7 @@ class WorldController extends Controller
                 'view' => 'emails.invite',
                 'name' => $member->name,
                 'world_name' => $world->name,
-                'link' => env('APP_URL') . '/invite?wid=token=' . $inviteToken
+                'link' => env('APP_URL') . '/invite?token=' . $inviteToken
             ];
 
             Mail::to($member->email)->send(new MailModel($mailData));
@@ -144,7 +177,9 @@ class WorldController extends Controller
         {
             return response()->json([
                 'error' => true,
-                'username' => $fields['username']
+                //'username' => $fields['username'],
+                'username' => 'test',
+                'message' => $e->getMessage()
             ]);
         }
     }
@@ -187,16 +222,38 @@ class WorldController extends Controller
     {
         $token = request()->query('token');
         $invitation = Invitation::where('token', $token)->first();
-        $username = $invitation->member->user->username;
-        $world_id = $invitation->world_id;
-        $world_name = World::findOrFail($world_id)->name;
 
-        return view('pages.invite', [
-            'world_id' => $world_id,
-            'world_name' => $world_name,
-            'username' => $username,
-            'token' => $token
-        ]);
+        if($invitation->username != null){
+            $username = $invitation->member->user->username;
+            $world_id = $invitation->world_id;
+            $world_name = World::findOrFail($world_id)->name;
+
+            return view('pages.invite', [
+                'world_id' => $world_id,
+                'world_name' => $world_name,
+                'username' => $username,
+                'token' => $token
+            ]);
+        } else if ($invitation->email != null){
+            $email = $invitation->email;
+            $world_id = $invitation->world_id;
+            $world_name = World::findOrFail($world_id)->name;
+
+            return view('auth.register-invite', [
+                'world_id' => $world_id,
+                'world_name' => $world_name,
+                'email' => $email,
+                'token' => $token
+            ]);
+        } else {
+            return view('pages.invite', [
+                'world_id' => null,
+                'world_name' => null,
+                'username' => null,
+                'token' => null
+            ]);
+        }
+        
     }
 
     public function join(JoinWorldRequest $request) : RedirectResponse
