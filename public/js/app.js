@@ -632,7 +632,7 @@ function changeToInviteOutsideMember(ev) {
           'Accept': 'application/json',
           "X-Requested-With": "XMLHttpRequest"
         },
-        body: JSON.stringify({username: username, type: type})
+        body: JSON.stringify({username: username, type: type, email: null})
       });
 
       const json = await response.json();
@@ -656,7 +656,7 @@ function changeToInviteOutsideMember(ev) {
         'Accept': 'application/json',
         "X-Requested-With": "XMLHttpRequest"
       },
-      body: JSON.stringify({email: email, type: type})
+      body: JSON.stringify({email: email, type: type, username: null})
     });
 
     const json = await response.json();

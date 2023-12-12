@@ -110,7 +110,6 @@ class WorldController extends Controller
     {   
         $fields = $request->validated();
         $world = World::findOrFail($world_id);
-        
 
         try
         {
@@ -177,7 +176,8 @@ class WorldController extends Controller
         {
             return response()->json([
                 'error' => true,
-                'username' => $fields['username'],
+                //'username' => $fields['username'],
+                'username' => 'test',
                 'message' => $e->getMessage()
             ]);
         }
