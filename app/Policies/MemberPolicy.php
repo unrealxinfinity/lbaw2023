@@ -88,6 +88,7 @@ class MemberPolicy
 
     public function request(User $user, Member $member)
     {
+        if($user->persistentUser->type_ === 'Administrator') return false;
         $is_self = $user->user_id == $member->user_id;
         $is_friend = $user->persistentUser->member->friends->contains('id', $member->id);
         $maybe = Notification::where('is_request', true)->where('member_id', $user->persistentUser->member->id)->first();

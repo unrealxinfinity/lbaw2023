@@ -24,7 +24,7 @@
                     <input type="hidden" class="id" name="id" value="{{ $world->id }}">
                     <input type="hidden" class="type" name="type" value="worlds">
                     <h1><button class="pr-2" type="submit">
-                        @if(Auth::check() && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
+                        @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
                         @else &#9734; @endif</button></h1>
                 </form>
             @endcan
@@ -93,7 +93,7 @@
                 @include('partials.comment', ['comment' => $comment, 'type' => 'world'])
             @endforeach
         </ul>
-        @if (Auth::check() && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
+        @if (Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
         @include('form.comment', ['route' => 'world-comment', 'id' => $world->id, 'type' => 'world'])
         @endif
     </section>

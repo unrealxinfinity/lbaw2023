@@ -30,6 +30,7 @@ class WorldPolicy
     public function edit(?User $user, World $world): bool
     {
         if($user == null) return false;
+        else if ($user->persistentUser->type_ === 'Administrator') return false;
         return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     public function delete(?User $user, World $world): bool
@@ -56,7 +57,7 @@ class WorldPolicy
 
     public function removeMember(User $user, World $world): bool
     {
-        return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        return ($user->persistentUser->type_ !== 'Administrator' && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     public function assignWorldAdmin(User $user, World $world): bool
     {   
@@ -95,7 +96,7 @@ class WorldPolicy
 
     public function transfer(User $user, World $world): bool
     {
-        return (Auth::check() && $world->owner_id === $user->persistentUser->member->id);
+        return (Auth::check() && $user->persistentUser->type_ !== 'Administrator' && $world->owner_id === $user->persistentUser->member->id);
     }
     public function worldTagCreate(User $user, World $world): bool
     {
