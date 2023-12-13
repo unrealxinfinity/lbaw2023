@@ -28,22 +28,22 @@
                         @else &#9734; @endif</button></h1>
                 </form>
             @endcan
-            @if(Auth::user()->can('leave', $world) || Auth::user()->can('delete', $world))
-            <input type="checkbox" id="more-options" class="hidden peer"/>
-            <h1><label for="more-options" class="font-bold cursor-pointer">&#8942;</label></h1>
-            <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
-                @can('delete', $world)
-                @include('form.delete-world', ['world' => $world])
-                @endcan
-                @can('leave', $world)
-                <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
-                    @CSRF
-                    @method('DELETE')
-                    <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
-                </form>
-                @endcan
-            </div>
-            @endif
+            @canany('leave','delete', $world)
+                <input type="checkbox" id="more-options" class="hidden peer"/>
+                <h1><label for="more-options" class="font-bold cursor-pointer">&#8942;</label></h1>
+                <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
+                    @can('delete', $world)
+                    @include('form.delete-world', ['world' => $world])
+                    @endcan
+                    @can('leave', $world)
+                    <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
+                        @CSRF
+                        @method('DELETE')
+                        <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                    </form>
+                    @endcan
+                </div>
+            @endcanany
         </div>
     </header>
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
