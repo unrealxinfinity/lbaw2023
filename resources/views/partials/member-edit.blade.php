@@ -11,6 +11,11 @@
             <input id="edit-img" class="hidden" name="file" type="file" required>
             <input name="type" type="hidden" value="profile">
             <input  class="button my-2" type="submit" value="Upload profile picture">
+            @if ($self ?? false)
+                <label for="mc-username">Use your Minecraft face!</label>
+                <input type="text" placeholder="MC Username" id="mc-username">
+                <input id="mc-img-submit" class="button" type="submit" value="Confirm">
+            @endif
         </form>
     </header>
     <div class="form-post m-0 p-0 mb-5">
