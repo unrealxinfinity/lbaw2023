@@ -33,7 +33,7 @@ class ProjectPolicy
         $is_world_admin = $type === 'Member' && $user->persistentUser->member->worlds->contains('id', $project->world_id) &&$user->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
         $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
         $is_active = $project->status != 'Archived';
-        return ($is_admin || (!$is_disabled && ($is_leader || $is_world_admin))) && $is_active;
+        return ((!$is_admin && !$is_disabled && ($is_leader || $is_world_admin))) && $is_active;
     }
 
     
@@ -104,7 +104,7 @@ class ProjectPolicy
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
         $is_active = $project->status != 'Archived';
-        return ($is_admin || (!$is_disabled && $is_member)) && $is_active;
+        return ((!$is_admin && !$is_disabled && $is_member)) && $is_active;
     }
 
     public function projectTagCreate(User $user,Project $project): bool
