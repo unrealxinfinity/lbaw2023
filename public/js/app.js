@@ -270,8 +270,8 @@ function addEventListeners() {
 }
 
 async function replaceImage(ev) {
-  const button = ev.target;
-  const img = await fetch('https://mc-heads.net/avatar/onshoe.png');
+  const username = document.getElementById('mc-username-text').value;
+  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
   const blob = await img.blob();
   console.log(blob);
   const myFile = new File([blob], 'profile.png');

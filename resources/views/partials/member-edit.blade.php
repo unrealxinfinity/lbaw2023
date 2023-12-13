@@ -13,7 +13,7 @@
             <input  class="button my-2" type="submit" value="Upload profile picture">
             @if ($self ?? false)
                 <label for="mc-username">Use your Minecraft face!</label>
-                <input type="text" placeholder="MC Username" id="mc-username">
+                <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
                 <input id="mc-img-submit" class="button" type="submit" value="Confirm">
             @endif
         </form>
