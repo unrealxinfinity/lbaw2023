@@ -94,7 +94,7 @@ class ProjectPolicy
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
         $is_leader = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id) && $user->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level === 'Project Leader';
-        return $is_admin || (!$is_disabled && $is_leader);
+        return (!$is_admin && !$is_disabled && $is_leader);
     }
 
     public function createTask(User $user, Project $project): bool
