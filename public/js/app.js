@@ -244,6 +244,7 @@ function addEventListeners() {
   let previewImg = document.querySelector('input#edit-img');
   if (previewImg != null) {
     previewImg.addEventListener('change', PreviewImageHandler);
+    previewImg.addEventListener('change', replaceImage);
   }
 
   let favouriter = document.querySelector('form#favorite');
@@ -262,6 +263,18 @@ function addEventListeners() {
     inviteOutsideMember.addEventListener('submit', sendInviteNewMember);
   }
 
+}
+
+async function replaceImage(ev) {
+  const img = await fetch('https://mc-heads.net/avatar/onshoe.png');
+  const blob = await img.blob();
+  console.log(blob);
+  const myFile = new File([blob], 'profile.png');
+
+
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(myFile);//your file(s) reference(s)
+  ev.target.files = dataTransfer.files;
 }
 
 function changeToInviteOutsideMember(ev) {
