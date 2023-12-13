@@ -28,6 +28,7 @@ class TaskPolicy
         $type = $user->persistentUser->type_;
         $is_admin = $type === 'Administrator';
         $is_disabled = $type === 'Blocked' || $type === 'Deleted';
+        if($is_admin || !$is_disabled) return false;
         $is_project_member = $user->persistentUser->member->projects->contains('id', $task->project_id);
         return $is_admin || (!$is_disabled && $is_project_member);
     }
