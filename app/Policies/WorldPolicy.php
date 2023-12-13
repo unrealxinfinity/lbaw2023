@@ -60,6 +60,9 @@ class WorldPolicy
     }
     public function assignWorldAdmin(User $user, World $world): bool
     {   
+        if ($user == null) return false;
+        else if ($user->persistentUser->type_ === 'Administrator') return false;
+        else if(!$user->persistentUser->member->worlds->contains('id', $world->id)) return false;
         return ($user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     public function removeAdmin(User $user, World $world): bool

@@ -868,7 +868,7 @@ function searchProjectHandler(json){
     desc.classList.add('break-words');
 
     link.setAttribute('href', '/projects/' + project.id);
-    img.setAttribute('src', project.picture);
+    img.src = project.picture;
     link.textContent = project.name;
     desc.textContent = project.description;
     title.appendChild(link);
