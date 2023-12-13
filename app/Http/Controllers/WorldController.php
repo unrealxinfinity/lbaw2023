@@ -368,7 +368,11 @@ class WorldController extends Controller
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND world_id = ?", [$searchProject, $id])
             ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchProject])
-            ->get();
+            ->get()
+            ->map(function ($project) {
+                $project->picture = $project->getImage();
+                return $project;
+            });
         if($order == 'A-Z'){
             $projects = $projects->sortByDesc('name')->values();
         }
