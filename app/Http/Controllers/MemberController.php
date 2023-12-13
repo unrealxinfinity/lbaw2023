@@ -71,7 +71,7 @@ class MemberController extends Controller
 
     public function showEditProfile(string $username): View
     {
-        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         if($user->persistentUser->type_ == "Administrator"){
             abort(404);
         }
