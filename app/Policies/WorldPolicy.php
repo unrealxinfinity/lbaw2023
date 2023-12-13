@@ -29,7 +29,7 @@ class WorldPolicy
 
     public function edit(?User $user, World $world): bool
     {
-        if($user == null) return true;
+        if($user == null) return false;
         return (Auth::check() && $user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     public function delete(?User $user, World $world): bool
