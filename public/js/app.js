@@ -169,6 +169,11 @@ function addEventListeners() {
     notificationButton.addEventListener('click', sendShowNotificationsRequest);
   }
 
+  let mcImgConfirm = document.getElementById('mc-img-submit');
+  if (mcImgConfirm != null) {
+    mcImgConfirm.addEventListener('click', replaceImage);
+  }
+
   let clearNotificationsButton = document.getElementById('clearNotifications');
   if(clearNotificationsButton != null){
     clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
@@ -244,7 +249,6 @@ function addEventListeners() {
   let previewImg = document.querySelector('input#edit-img');
   if (previewImg != null) {
     previewImg.addEventListener('change', PreviewImageHandler);
-    previewImg.addEventListener('change', replaceImage);
   }
 
   let favouriter = document.querySelector('form#favorite');
@@ -266,6 +270,7 @@ function addEventListeners() {
 }
 
 async function replaceImage(ev) {
+  const button = ev.target;
   const img = await fetch('https://mc-heads.net/avatar/onshoe.png');
   const blob = await img.blob();
   console.log(blob);
@@ -274,7 +279,9 @@ async function replaceImage(ev) {
 
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(myFile);//your file(s) reference(s)
-  ev.target.files = dataTransfer.files;
+  document.querySelector('#edit-img').files = dataTransfer.files;
+  
+  ev.target.closest('form').submit();
 }
 
 function changeToInviteOutsideMember(ev) {
