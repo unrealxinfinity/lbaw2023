@@ -10,6 +10,8 @@ use App\Models\Member;
 use App\Models\PersistentUser;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -22,7 +24,7 @@ class MemberController extends Controller
 {
     public function show(string $username): View
     {
-        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         if($user->persistentUser->type_ == "Administrator"){
             abort(404);
         }
@@ -69,7 +71,7 @@ class MemberController extends Controller
 
     public function showEditProfile(string $username): View
     {
-        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         if($user->persistentUser->type_ == "Administrator"){
             abort(404);
         }

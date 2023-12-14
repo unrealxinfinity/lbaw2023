@@ -3,7 +3,7 @@
         <div class="grow-[1] pt-0.5">
             @include('partials.member', ['member' => $comment->member, 'main' => false])
         </div>
-        @if (Auth::check() && Auth::user()->persistentUser->member->id == $comment->member_id)
+        @if (Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->id == $comment->member_id)
             <h3><button type="button" class="show-edit mobile:mr-3 mr-1 py-0.5 px-1.5 rounded-full outline outline-1 outline-white/20">Edit</button></h3>
         @endif
         <p class="pt-1"> {{ $comment->date_ }} </p>
