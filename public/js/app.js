@@ -169,6 +169,11 @@ function addEventListeners() {
     notificationButton.addEventListener('click', sendShowNotificationsRequest);
   }
 
+  let mcImgConfirm = document.getElementById('mc-img-submit');
+  if (mcImgConfirm != null) {
+    mcImgConfirm.addEventListener('click', replaceImage);
+  }
+
   let clearNotificationsButton = document.getElementById('clearNotifications');
   if(clearNotificationsButton != null){
     clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
@@ -262,6 +267,21 @@ function addEventListeners() {
     inviteOutsideMember.addEventListener('submit', sendInviteNewMember);
   }
 
+}
+
+async function replaceImage(ev) {
+  const username = document.getElementById('mc-username-text').value;
+  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
+  const blob = await img.blob();
+  console.log(blob);
+  const myFile = new File([blob], 'profile.png');
+
+
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(myFile);//your file(s) reference(s)
+  document.querySelector('#edit-img').files = dataTransfer.files;
+  
+  ev.target.closest('form').submit();
 }
 
 function changeToInviteOutsideMember(ev) {
