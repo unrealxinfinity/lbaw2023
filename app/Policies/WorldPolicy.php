@@ -68,6 +68,8 @@ class WorldPolicy
     }
     public function removeAdmin(User $user, World $world): bool
     {
+        if ($user == null) return false;
+        else if ($user->persistentUser->type_ === 'Administrator') return false;
         return ($user->persistentUser->member->id == $world->owner()->get()->first()->id);
     }
 
