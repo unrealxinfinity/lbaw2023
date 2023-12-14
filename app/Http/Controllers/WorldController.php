@@ -251,12 +251,7 @@ class WorldController extends Controller
                 'token' => $token
             ]);
         } else {
-            return view('pages.invite', [
-                'world_id' => null,
-                'world_name' => null,
-                'username' => null,
-                'token' => null
-            ]);
+            return redirect()->route('home');
         }
         
     }
