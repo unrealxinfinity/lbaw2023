@@ -218,10 +218,11 @@ class WorldController extends Controller
             'picture' => $member->picture
         ]);
     }
-    public function showInvite(): View
+    public function showInvite()
     {
         $token = request()->query('token');
-        $invitation = Invitation::where('token', $token)->first();
+
+        $invitation = Invitation::where('token', $token)->firstOrFail();
 
         if($invitation->username != null){
             $username = $invitation->member->user->username;
