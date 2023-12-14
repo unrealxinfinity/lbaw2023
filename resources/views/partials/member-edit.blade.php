@@ -1,3 +1,4 @@
+@can('edit', $member)
 <article class="member" data-id="{{ $member->id }}" id="{{ $member->persistentUser->user->username }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
@@ -122,3 +123,4 @@
         @endif
     </div>   
 </article>
+@endcan
