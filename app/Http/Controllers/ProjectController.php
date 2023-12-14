@@ -44,7 +44,7 @@ class ProjectController extends Controller
            'name' => $fields['name'],
            'description' => $fields['description'],
            'status' => 'Active',
-           'picture' => 'pic',
+           'picture' => null,
             'world_id' => $fields['world_id']
         ]);
         
@@ -218,7 +218,7 @@ class ProjectController extends Controller
         $project->delete();
         return view('pages.world', [
             'world' => $world_id,
-            'edit' => false
+            'subform' => false
         ]);
     }
     
