@@ -1,9 +1,10 @@
 <article class="member" data-id="{{ $member->id }}" id="{{ $member->persistentUser->user->username }}">
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a> > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
-        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
+        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data" class="grid grid-cols-2">
             @csrf
             @method('POST')
+            <div>
                 <label for="edit-img">
                     <h1><label class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</label></h1>
                     <img id="preview-img object-cover" class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square hover:opacity-50" src= {{$member->getProfileImage()}}>
@@ -11,10 +12,13 @@
             <input id="edit-img" class="hidden" name="file" type="file" required>
             <input name="type" type="hidden" value="profile">
             <input  class="button my-2" type="submit" value="Upload profile picture">
+            </div>
             @if ($self ?? false)
-                <label for="mc-username">Use your Minecraft face!</label>
+            <div class="form-post">
+                <label for="mc-username">...Or use your Minecraft face!</label>
                 <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
                 <input id="mc-img-submit" class="button" type="submit" value="Confirm">
+            </div>
             @endif
         </form>
     </header>
