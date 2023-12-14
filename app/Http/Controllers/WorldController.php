@@ -220,6 +220,7 @@ class WorldController extends Controller
     }
     public function showInvite()
     {
+
         $token = request()->query('token');
 
         $invitation = Invitation::where('token', $token)->firstOrFail();
@@ -236,6 +237,9 @@ class WorldController extends Controller
                 'token' => $token
             ]);
         } else if ($invitation->email != null){
+            if(Auth::check()) {
+                return redirect()->route('home');
+            }
             $email = $invitation->email;
             $world_id = $invitation->world_id;
             $world_name = World::findOrFail($world_id)->name;
