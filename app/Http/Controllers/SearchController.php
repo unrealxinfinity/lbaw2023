@@ -8,7 +8,7 @@ use App\Models\Member;
 use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
-
+use App\Models\Tag;
 class SearchController extends Controller
 {
     public function show(SearchRequest $request): View
@@ -44,7 +44,33 @@ class SearchController extends Controller
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        
+        $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$searchedText])
+        ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$searchedText])
+        ->get();
+       
+        foreach($tags as $tag){
+            if($tag->members != null){
+                foreach($tag->members as $member){
+                    if(!$members->contains($member)){
+                        $members->push($member);
+                    }
+                }
+            }
+            if($tag->projects != null){
+                foreach($tag->projects as $project){
+                    if(!$projects->contains($project)){
+                        $projects->push($project);
+                    }
+                }
+            }
+            if($tag->worlds != null){
+                foreach($tag->worlds as $world){
+                    if(!$worlds->contains($world)){
+                        $worlds->push($world);
+                    }
+                }   
+            }
+        } 
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
             $projects = $projects->sortBy('name');
@@ -115,6 +141,29 @@ class SearchController extends Controller
             $tasks = [];
             $projects = [];
             $members = [];
+            return view('pages.search', [
+                'members' => $members,
+                'tasks' => $tasks,
+                'projects' => $projects,
+                'worlds' => $worlds,
+                'search' => $request->input('anything'),
+                'type' => $typeFilter,
+                'order' => $order
+            ]);
+        }
+        else if($typeFilter == 'Tag'){
+            $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$searchedText])
+            ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$searchedText])
+            ->get();
+            $members = collect();
+            $projects = collect();
+            $worlds = collect();
+            $tasks=[];
+            foreach($tags as $tag){
+                $members = $members->union($tag->members);
+                $projects= $projects->union($tag->projects);
+                $worlds = $worlds->union($tag->worlds);
+            }
             return view('pages.search', [
                 'members' => $members,
                 'tasks' => $tasks,

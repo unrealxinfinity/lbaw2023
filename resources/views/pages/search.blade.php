@@ -19,6 +19,7 @@
                 @if($type!="Project")<option value="Project" >Project</option>@endif
                 @if($type!="Task")<option value="Task">Task</option>@endif
                 @if($type!="Member")<option value="Member">Member</option>@endif
+                @if($type!="Tag")<option value="Tag">Tag</option>@endif
             </select>
             <select id="order" name="order">
                 <option value= "{{ $order }}" selected>{{ $order }}</option>
