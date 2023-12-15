@@ -78,7 +78,6 @@ class TagController extends Controller
             ]);
         }
         $member->tags()->attach($tag->id);
-        error_log("here");
         NotificationController::TagNotification($tag,$username,"Member",'Created');
         return response()->json([
             'error' => false,

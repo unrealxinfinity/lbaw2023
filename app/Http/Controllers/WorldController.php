@@ -27,6 +27,7 @@ use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
+use App\Models\Tag;
 
 class WorldController extends Controller
 {
@@ -359,13 +360,17 @@ class WorldController extends Controller
         $searchProject = $request->query('search');
         $searchProject = strip_tags($searchProject);
         $order= $request->query('order');
+        $type=$request->query('type');
+        $projects=collect();
         $arr = explode(' ', $searchProject);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
         }
         $searchProject = implode(' | ', $arr);
-        
-        $projects = Project::select('id', 'name', 'description', 'status', 'picture')
+        error_log($order);
+        error_log($type);
+        if($type == "Name"){
+            $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND world_id = ?", [$searchProject, $id])
             ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchProject])
             ->get()
@@ -373,6 +378,28 @@ class WorldController extends Controller
                 $project->picture = $project->getImage();
                 return $project;
             });
+            
+        }
+        else if($type == "Tag"){
+            $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ plainto_tsquery('english', ?)", [$searchProject])
+            ->orderByRaw("ts_rank(searchTag, plainto_tsquery('english', ?)) DESC", [$searchProject])
+            ->get();
+            foreach($tags as $tag){
+                if($tag->projects != null){
+                    $temp = $tag->projects->filter(function ($project) use ($id) {
+                        return $project->world_id == $id;
+                    })->map(function ($project) {
+                        $project->picture = $project->getImage();
+                        return $project;
+                    });
+                    $projects = $projects->merge($temp)->unique();
+                }
+            }
+
+           
+            error_log($projects);
+        }
+        
         if($order == 'A-Z'){
             $projects = $projects->sortByDesc('name')->values();
         }

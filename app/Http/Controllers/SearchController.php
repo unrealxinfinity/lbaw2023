@@ -47,7 +47,6 @@ class SearchController extends Controller
         $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$searchedText])
         ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$searchedText])
         ->get();
-       
         foreach($tags as $tag){
             if($tag->members != null){
                 foreach($tag->members as $member){

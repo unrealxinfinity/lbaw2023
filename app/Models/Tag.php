@@ -20,6 +20,6 @@ class Tag extends Model
     }
     public function members()
     {
-        return $this->belongsTo(Member::class, 'member_tag');
+        return $this->belongsToMany(Member::class, 'member_tag');
     }
 }
