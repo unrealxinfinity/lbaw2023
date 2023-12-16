@@ -5,7 +5,7 @@
 @section('content')
     <p><a href="/">Home</a> > <a href="/appeals">Admin</a></p>
     <h1 class="my-2">Manage members</h1>
-    <form method="GET" action="/admin/appeals">
+    <form method="GET" action="/appeals">
         <input type="text" name="search" placeholder="Search by email/username" required>
         <input class="button" type="submit" value="Search">
     </form>
