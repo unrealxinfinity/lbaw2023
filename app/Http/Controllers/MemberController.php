@@ -179,6 +179,20 @@ class MemberController extends Controller
 
         return view('pages.admin-members', ['members' => $members]);
     }
+
+    public function allAppeals(Request $request): View
+    {
+        $this->authorize('list', Member::class);
+
+        $search = $request['search'] ?? "";
+
+        $appeals = Appeal::join('members', 'appeals.member_id', '=', 'members.id')->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')
+        //$appeals = Appeal::whereRaw("exists (select * from members m where m.id = member_id and (name like %$search% or email like %$search%))")
+            ->cursorPaginate(4)->withQueryString()->withPath(route('appeals'));
+
+        return view('pages.admin-appeals', ['appeals' => $appeals]);
+    }
+
     public function getAllBelongings():JsonResponse
     {
         $member = Member::where('user_id', Auth::user()->id)->firstOrFail();

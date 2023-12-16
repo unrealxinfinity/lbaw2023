@@ -169,7 +169,7 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
-    Route::post('/appeal/{id}', 'denyAppeal')->name('deny-appeal');
+    Route::post('/appeals/{id}', 'denyAppeal')->name('deny-appeal');
     Route::get('/appeals', 'allAppeals')->name('appeals');
     Route::get('/invites', 'showInvites')->name('show-invites');
     Route::get('/appeal', 'showAppeal')->name('show-appeal');
