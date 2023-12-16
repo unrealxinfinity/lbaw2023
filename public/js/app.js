@@ -1602,7 +1602,6 @@ function showRedDot(){
     document.getElementById('redDot').classList.remove('hidden');
   }
   else{
-    console.log("here")
     document.getElementById('redDot').classList.add('hidden');
   }
 }
