@@ -152,6 +152,18 @@ function addEventListeners() {
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   }, false);
+
+  let main = document.querySelector('main');
+  main.addEventListener('click', function() {
+    let showMenu = document.querySelector('#show-menu');
+    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+    if (showMenu.checked) {
+      document.querySelector('#show-menu').checked = false;
+    }
+    if (!showNotif) {
+      document.querySelector('#notificationArea').classList.toggle('hidden');
+    }
+  });
   
   let main_body = document.getElementById('main-body');
   console.log(main_body.getAttribute('data-auth'));
