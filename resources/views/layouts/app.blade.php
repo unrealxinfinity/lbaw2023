@@ -34,7 +34,7 @@
         <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
             <div id="navbar-left" class="items-center flex p-1 child:mx-2">
                 <h1><label for="show-menu" class="cursor-pointer">☰</label></h1>
-                <h1 class="font-bold"><a href="{{ url('') }}">MineMax!</a></h1>
+                <a href="{{ url('') }}"><img class="tablet:h-8 h-4 object-cover" src="{{asset('minemax/MineMax.png')}}"></a>
             </div>
             @if (Auth::check())
                 @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
