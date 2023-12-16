@@ -69,10 +69,9 @@ function addEventListeners() {
   if(button != null) button.addEventListener("click", addTagRequest);
 
   let deleteTagForms = document.getElementsByClassName('delete-tag');
-  console.log(deleteTagForms);  
   if(deleteTagForms != null){
     for(let i = 0; i < deleteTagForms.length; i++){
-      console.log(deleteTagForms[i].querySelector('#deleteTagButton').addEventListener('click', sendDeleteTagRequest));
+      deleteTagForms[i].querySelector('#deleteTagButton').addEventListener('click', sendDeleteTagRequest);
     }
   }
 
@@ -166,7 +165,6 @@ function addEventListeners() {
   });
   
   let main_body = document.getElementById('main-body');
-  console.log(main_body.getAttribute('data-auth'));
   if(main_body.getAttribute('data-auth') == 'true'){
     window.addEventListener('load',getMemberBelongingsRequest);
   }
@@ -281,12 +279,11 @@ function addEventListeners() {
   }
 
 }
-
+  
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
   const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
   const blob = await img.blob();
-  console.log(blob);
   const myFile = new File([blob], 'profile.png');
 
 
@@ -302,7 +299,6 @@ function changeToInviteOutsideMember(ev) {
   let outsideForm = document.querySelector('form#invite-new-member');
   let insideForm = document.querySelector('form#invite-member');
 
-  console.log('test');
 
   if(outsideForm.classList.contains('hidden')){
     outsideForm.classList.remove('hidden');
@@ -317,7 +313,6 @@ function changeToInviteOutsideMember(ev) {
   async function sendFriendRequest(ev) {
     ev.preventDefault();
     const url = this.href;
-    console.log(url);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -430,8 +425,6 @@ function changeToInviteOutsideMember(ev) {
 
   async function bigBoxDropHandler(ev) {
     ev.preventDefault();
-    console.log(ev.target);
-    console.log(ev.currentTarget);
     const data = ev.dataTransfer.getData("text/plain");
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
@@ -455,7 +448,6 @@ function changeToInviteOutsideMember(ev) {
   }
 
   function taskDragStartHandler(ev) {
-    console.log(ev.target.id);
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setData("text/html", ev.target.outerHTML);
     ev.dataTransfer.setData(
@@ -480,7 +472,6 @@ function changeToInviteOutsideMember(ev) {
   
   function sendAjaxRequest(method, url, data, handler) {
     let request = new XMLHttpRequest();
-    console.log(url);
   
     request.open(method, url, true);
     request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -509,7 +500,6 @@ function changeToInviteOutsideMember(ev) {
     const csrf = this.querySelector('input:first-child').value;
     const type = this.querySelector('select.type').value;
 
-    console.log('/api/projects/' + id + '/' + username);
     const response = await fetch('/api/projects/' + id + '/' + username, {
       method: 'POST',
       headers: {
@@ -752,7 +742,6 @@ function inviteNewMemberHandler(json) {
     const id = this.querySelector('input.id').value;
     const csrf = this.querySelector('input:first-child').value;
     
-    console.log('/api/tasks/' + id + '/' + username);
     const response = await fetch('/api/tasks/' + id + '/' + username, {
       method: 'POST',
       headers: {
@@ -773,7 +762,6 @@ function inviteNewMemberHandler(json) {
   }
   function sendCreateTaskRequest1(event) {
     event.preventDefault();
-    console.log("hello")    
     
   }
   function sendCreateTaskRequest() {
@@ -1000,7 +988,6 @@ async function sendDeleteTagRequest(ev) {
   else if(type == "member"){
     url = '/api/members/' + id + '/' +'tags/' + 'delete/'+ tagId;
   }
-  console.log(url);
   const response = fetch(url, {
     method: 'DELETE',
     headers: {
@@ -1160,9 +1147,11 @@ async function sendRequestAccept(ev) {
 }
 
 function ShowNotificationsHandler(json,ev){
+  sessionStorage.setItem('showDot', 'false');
+  showRedDot();
+
   let popup = document.getElementById("notificationList");
   const notificationPopup = document.getElementById('notificationArea');
-
   let notifications = json.notifications;
   popup.innerHTML = "";
   for(let notification of notifications){    
@@ -1232,7 +1221,6 @@ async function sendAssignAdminToWorldRequest(ev) {
   let id = this.querySelector('input.id').value;
   let username = this.querySelector('input.username').value;
   let url = '/api/worlds/' + id + '/assign';
-  console.log(username);
   const response = await fetch(url, {
     method: 'PUT',
     headers: {
@@ -1607,53 +1595,77 @@ function getIdsHandler(json){
 }
 
 
+
+function showRedDot(){
+  let showDot= sessionStorage.getItem('showDot') == 'true';
+  if(showDot){
+    document.getElementById('redDot').classList.remove('hidden');
+  }
+  else{
+    console.log("here")
+    document.getElementById('redDot').classList.add('hidden');
+  }
+}
+
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
   
   Pusher.logToConsole = false;
   
-  
-    const pusher = new Pusher("11f57573d00ddf0021b9", {
-      cluster: "eu",
-      encrypted: true
+  const pusher = new Pusher("11f57573d00ddf0021b9", {
+    cluster: "eu",
+    encrypted: true
+  });
+
+  function bindEvent(channel, eventName, callback) {
+    channel.bind(eventName, callback);
+  } 
+
+  for (let i = 0; i < worldContainer.length; i++) { 
+    const world_id = worldContainer[i];
+    const channelWorld = pusher.subscribe('World' + world_id);
+    bindEvent(channelWorld, 'ProjectNotification', function(data){
+      let showDot = sessionStorage.getItem('showDot') == 'true';
+      if(!showDot){
+        sessionStorage.setItem('showDot', 'true'); 
+        showRedDot();
+      }
     });
-  
-    function bindEvent(channel, eventName, callback) {
-      channel.bind(eventName, callback);
-    }
-    
-    for (let i = 0; i < worldContainer.length; i++) { 
-      const world_id = worldContainer[i];
-      
-      
-      const channelWorld = pusher.subscribe('World' + world_id);
-      bindEvent(channelWorld, 'ProjectNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-        
-      });
-      bindEvent(channelWorld, 'WorldNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
-      
-    }
+    bindEvent(channelWorld, 'WorldNotification', function(data){
+      let showDot = sessionStorage.getItem('showDot') == 'true';
+      if(!showDot){
+        sessionStorage.setItem('showDot', 'true');
+      }
+    });
+    bindEvent(channelWorld,'TagNotification', function(data){
+      let showDot = sessionStorage.getItem('showDot') == 'true';
+      if(!showDot){
+        sessionStorage.setItem('showDot', 'true');
+      }
+    });
+  }
 
-    for(let i = 0; i < projectContainer.length; i++){
-      const project_id = projectContainer[i];
-      const channelProject = pusher.subscribe('Project' + project_id);
-      bindEvent(channelProject, 'TaskNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
-
-    }
-  
-  
+  for(let i = 0; i < projectContainer.length; i++){
+    const project_id = projectContainer[i];
+    const channelProject = pusher.subscribe('Project' + project_id);
+    bindEvent(channelProject, 'TaskNotification', function(data){
+      let showDot = sessionStorage.getItem('showDot') == 'true';
+      if(!showDot){
+        sessionStorage.setItem('showDot', 'true');
+      }
+      
+    });
+    bindEvent(channelProject,'TagNotification', function(data){
+      let showDot = sessionStorage.getItem('showDot') == 'true';
+      if(!showDot){
+        sessionStorage.setItem('showDot', 'true');
+      }
+    });
+  }
 }
 
 addEventListeners();
-
+showRedDot();
 function openSidebar() {
   console.log('hello');
   document.querySelector('#sidebar-text').click();
