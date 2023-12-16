@@ -34,7 +34,7 @@
         <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
             <div id="navbar-left" class="items-center flex p-1 child:mx-2">
                 <h1><label for="show-menu" class="cursor-pointer">☰</label></h1>
-                <h1 class="font-bold"><a href="{{ url('') }}">MineMax!</a></h1>
+                <a href="{{ url('') }}"><img class="tablet:h-8 h-4 object-cover" src="{{asset('minemax/MineMax.png')}}"></a>
             </div>
             @if (Auth::check())
                 @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
@@ -48,7 +48,9 @@
                         
                     </div>
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
-                            <a id="profile" class="button desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}"> {{ Auth::user()->username }} </a>
+                            <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
+                                <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
+                            </a>
                         @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
                             <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a>
                         @endif
