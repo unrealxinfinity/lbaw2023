@@ -20,12 +20,7 @@
                 @if($type!="Task")<option value="Task">Task</option>@endif
                 @if($type!="Member")<option value="Member">Member</option>@endif
             </select>
-            <select id="isTag" name="isTag">
-                <option value="{{ $isTag }}" selected>{{ $isTag }}</option>
-                @if($isTag!="All")<option value="All" >All</option>@endif
-                @if($isTag!="Name")<option value="Name">Name</option>@endif
-                @if($isTag!="Tag")<option value="Tag">Tag</option>@endif
-            </select>
+            <input type="text" id="Tags" name="tags" placeholder="tag1,tag2"> 
             <select id="order" name="order">
                 <option value= "{{ $order }}" selected>{{ $order }}</option>
                 @if($order!="Relevance")<option value= "Relevance">Relevance</option>@endif

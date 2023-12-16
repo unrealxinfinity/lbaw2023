@@ -17,15 +17,18 @@ class SearchController extends Controller
         $searchedText = strval($request->input('anything'));
         $searchedText = strip_tags($searchedText);
         $typeFilter = $request->input('typeFilter','All');
-        $isTag = $request->input('isTag','All');
+        $inputTags = $request->input('tags');
+        $inputTags= strip_tags($inputTags);
         $order = $request->input('order','Relevance');
         $member = Member::where('user_id', auth()->user()->id)->first(); 
         $id = $member->user_id;
+        $inputTags = explode(',',$searchedText);
         $arr = explode(' ', $searchedText);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
         }
         $searchedText = implode(' | ', $arr);
+
         $tasks = Task::select('id','title','description','due_at','status','effort','priority')
                 ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
                 ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
@@ -44,97 +47,50 @@ class SearchController extends Controller
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$searchedText])
-            ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get();
         
-        foreach($tags as $tag){
-            if($tag->members != null){
-                foreach($tag->members as $member){
-                    if(!$members->contains($member)){
-                        $members->push($member);
-                    }
-                }
-            }
-            if($tag->projects != null){
-                foreach($tag->projects as $project){
-                    if(!$projects->contains($project)){
-                        $projects->push($project);
-                    }
-                }
-            }
-            if($tag->worlds != null){
-                foreach($tag->worlds as $world){
-                    if(!$worlds->contains($world)){
-                        $worlds->push($world);
-                    }
-                }   
-            }
-        }
-        if($isTag == 'Name'){
-            $tasks = collect();
-            $projects = collect();
-            $worlds = collect();
-            $members = collect();
-            $tasks = Task::select('id','title','description','due_at','status','effort','priority')
-                ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
-                ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
+        if(!empty($inputTags)){
+            $members=collect();
+            $tasks=collect();
+            $projects=collect();
+            $worlds=collect();
+
+            foreach($inputTags as $tagName){
+                $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$tagName])
+                ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$tagName])
                 ->get();
-            $projects = Project::select('id', 'name', 'description', 'status', 'picture')
-                ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
-                ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
-                ->get();
-            $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
-            ->join('user_info', 'members.user_id', '=', 'user_info.id')
-            ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
-            ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
-            ->get();
-            
-            $worlds = World::select('id', 'picture','name', 'description')
-                ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
-                ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
-                ->get();
-        }
-        else if($isTag == 'Tag'){
-            $tasks = collect();
-            $projects = collect();
-            $worlds = collect();
-            $members = collect();
-            $tags = collect();
-            $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$searchedText])
-            ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get();
-            foreach($tags as $tag){
-                if($tag->members != null){
-                    foreach($tag->members as $member){
-                        if(!$members->contains(function($value, $key) use ($member) {
-                            return $value->id == $member->id;
-                        })) {
-                            $members->push($member);
+                foreach($tags as $tag){
+                    if($tag->members != null){
+                        foreach($tag->members as $member){
+                            if(!$members->contains(function($value, $key) use ($member) {
+                                return $value->id == $member->id;
+                            })) {
+                                $members->push($member);
+                            }
                         }
                     }
-                }
-                if($tag->projects != null){
-                    foreach($tag->projects as $project){
-                        if(!$projects->contains(function($value, $key) use ($project) {
-                            return $value->id == $project->id;
-                        })) {
-                            $projects->push($project);
+                    if($tag->projects != null){
+                        foreach($tag->projects as $project){
+                            if(!$projects->contains(function($value, $key) use ($project) {
+                                return $value->id == $project->id;
+                            })) {
+                                $projects->push($project);
+                            }
                         }
                     }
-                }
-                if($tag->worlds != null){
-                    foreach($tag->worlds as $world){
-                        if(!$worlds->contains(function($value, $key) use ($world) {
-                            return $value->id == $world->id;
-                        })) {
-                            $worlds->push($world);
-                        }
-                    }   
+                    if($tag->worlds != null){
+                        foreach($tag->worlds as $world){
+                            if(!$worlds->contains(function($value, $key) use ($world) {
+                                return $value->id == $world->id;
+                            })) {
+                                $worlds->push($world);
+                            }
+                        }   
+                    }
                 }
             }
-            $tasks=[]; 
         }
+        
+        
         
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
@@ -157,7 +113,6 @@ class SearchController extends Controller
                 'worlds' => $worlds,
                 'search' => $request->input('anything'),
                 'type' => $typeFilter,
-                'isTag'=> $isTag,
                 'order' => $order
             ]);
         }
@@ -172,7 +127,6 @@ class SearchController extends Controller
                 'worlds' => $worlds,
                 'search' => $request->input('anything'),
                 'type' => $typeFilter,
-                'isTag'=> $isTag,
                 'order' => $order
             ]);
         }
@@ -187,7 +141,6 @@ class SearchController extends Controller
                 'worlds' => $worlds,
                 'search' => $request->input('anything'),
                 'type' => $typeFilter,
-                'isTag'=> $isTag,
                 'order' => $order
             ]);
         }
@@ -202,7 +155,6 @@ class SearchController extends Controller
                 'worlds' => $worlds,
                 'search' => $request->input('anything'),
                 'type' => $typeFilter,
-                'isTag'=> $isTag,
                 'order' => $order
             ]);
         }
@@ -217,7 +169,6 @@ class SearchController extends Controller
                 'worlds' => $worlds,
                 'search' => $request->input('anything'),
                 'type' => $typeFilter,
-                'isTag'=> $isTag,
                 'order' => $order
             ]);
         }
