@@ -71,8 +71,6 @@ class SearchController extends Controller
                 }   
             }
         }
-        error_log($isTag);
-        error_log($order);
         if($isTag == 'Name'){
             $tasks = collect();
             $projects = collect();
