@@ -22,7 +22,7 @@ class SearchController extends Controller
         $order = $request->input('order','Relevance');
         $member = Member::where('user_id', auth()->user()->id)->first(); 
         $id = $member->user_id;
-        $inputTags = explode(',',$searchedText);
+        $inputTags = explode(',',$inputTags);
         $arr = explode(' ', $searchedText);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
@@ -48,49 +48,59 @@ class SearchController extends Controller
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
         
-        if(!empty($inputTags)){
-            $members=collect();
+        if($inputTags[0] != ""){
+            $membersAux=collect();
             $tasks=collect();
-            $projects=collect();
-            $worlds=collect();
-
-            foreach($inputTags as $tagName){
-                $tags = Tag::select('id', 'name')->whereRaw("searchTag @@ to_tsquery('english', ?)", [$tagName])
-                ->orderByRaw("ts_rank(searchTag, to_tsquery('english', ?)) DESC", [$tagName])
-                ->get();
-                foreach($tags as $tag){
-                    if($tag->members != null){
-                        foreach($tag->members as $member){
-                            if(!$members->contains(function($value, $key) use ($member) {
-                                return $value->id == $member->id;
-                            })) {
-                                $members->push($member);
-                            }
-                        }
-                    }
-                    if($tag->projects != null){
-                        foreach($tag->projects as $project){
-                            if(!$projects->contains(function($value, $key) use ($project) {
-                                return $value->id == $project->id;
-                            })) {
-                                $projects->push($project);
-                            }
-                        }
-                    }
-                    if($tag->worlds != null){
-                        foreach($tag->worlds as $world){
-                            if(!$worlds->contains(function($value, $key) use ($world) {
-                                return $value->id == $world->id;
-                            })) {
-                                $worlds->push($world);
-                            }
-                        }   
+            $projectsAux=collect();
+            $worldsAux=collect();
+            foreach($members as $member){
+                $memberTags = $member->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$memberTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
                     }
                 }
+                if($containsAllTags){
+                    $membersAux->push($member);
+                }
             }
+            $members=$membersAux;
+
+            foreach($projects as $project){
+                $projectTags = $project->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$projectTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $projectsAux->push($project);
+                }
+            }
+            $projects=$projectsAux;
+
+            foreach($worlds as $world){
+                $worldTags = $world->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$worldTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $worldsAux->push($world);
+                }
+            }
+            $worlds=$worldsAux;
         }
-        
-        
         
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
