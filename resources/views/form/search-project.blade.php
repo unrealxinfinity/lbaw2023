@@ -2,10 +2,7 @@
     @csrf
     <input type="text" id="projectName"name="projectName" placeholder="Project Name" required>
     <input type="hidden" name="world_id" value="{{ $world->id }}">
-    <select id="type" name="type">
-        <option value="Name" selected>Name</option>
-        <option value="Tag">Tag</option>
-    </select>
+    <input type="text" id="Tags" name="tags" placeholder="tag1,tag2">
     <select id="order" name="order">
         <option value= "Relevance" selected>Relevance</option>
         <option value="A-Z">A-Z</option>

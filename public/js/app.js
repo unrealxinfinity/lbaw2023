@@ -845,9 +845,9 @@ function inviteNewMemberHandler(json) {
     let searchProjectElems = searchProjectForms[0];
     let searchedProject = searchProjectElems[1].value;
     const csrf = searchProjectElems[0].value;
-    let type = searchProjectElems[3].value;
+    let tags= searchProjectElems[3].value;
     let order = searchProjectElems[4].value;
-    let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order + '&type=' + type;
+    let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order + '&tags=' + tags;
     const response = await fetch(url, {
       method: 'GET', 
       headers: {
