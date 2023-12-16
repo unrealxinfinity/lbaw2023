@@ -19,7 +19,12 @@
                 @if($type!="Project")<option value="Project" >Project</option>@endif
                 @if($type!="Task")<option value="Task">Task</option>@endif
                 @if($type!="Member")<option value="Member">Member</option>@endif
-                @if($type!="Tag")<option value="Tag">Tag</option>@endif
+            </select>
+            <select id="isTag" name="isTag">
+                <option value="{{ $isTag }}" selected>{{ $isTag }}</option>
+                @if($isTag!="All")<option value="All" >All</option>@endif
+                @if($isTag!="Name")<option value="Name">Name</option>@endif
+                @if($isTag!="Tag")<option value="Tag">Tag</option>@endif
             </select>
             <select id="order" name="order">
                 <option value= "{{ $order }}" selected>{{ $order }}</option>

@@ -787,9 +787,10 @@ function inviteNewMemberHandler(json) {
     let searchTaskElems = searchTaskForms[0];
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    let order = searchTaskElems[3].value;
+    let type = searchTaskElems[3].value;
+    let order = searchTaskElems[4].value;
 
-    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
+    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order + '&type=' + type;
 
     const response = await fetch(url, {
         method: 'GET', 

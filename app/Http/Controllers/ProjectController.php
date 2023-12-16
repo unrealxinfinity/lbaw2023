@@ -230,6 +230,7 @@ class ProjectController extends Controller
         $searchedTaskText = strval($request->query('search'));
         $searchedTaskText = strip_tags($searchedTaskText);  
         $order= $request->query('order');
+        $type = $request->query('type');
         $order = strip_tags($order);
         $arr = explode(' ', $searchedTaskText);
         for ($i = 0; $i < count($arr); $i++) {
@@ -237,10 +238,10 @@ class ProjectController extends Controller
         }
         $searchedTaskText = implode(' | ', $arr);
 
+       
         $tasks = Task::select('id','title','description','due_at','status','effort','priority')->whereRaw("searchedTasks @@ plainto_tsquery('english', ?) AND project_id = ?", [$searchedTaskText, $id])
-            ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])
-            ->get();
-
+        ->orderByRaw("ts_rank(searchedTasks, plainto_tsquery('english', ?)) DESC", [$searchedTaskText])
+        ->get();
         
         if($order == 'A-Z'){
             $tasks = $tasks->sortByDesc('title')->values();
