@@ -27,6 +27,7 @@ use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
+use App\Models\Tag;
 
 class WorldController extends Controller
 {
@@ -359,6 +360,9 @@ class WorldController extends Controller
         $searchProject = $request->query('search');
         $searchProject = strip_tags($searchProject);
         $order= $request->query('order');
+        $inputTags = $request->query('tags');
+        $inputTags= strip_tags($inputTags);
+        $inputTags = explode(',',$inputTags);
         $arr = explode(' ', $searchProject);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
@@ -373,6 +377,26 @@ class WorldController extends Controller
                 $project->picture = $project->getImage();
                 return $project;
             });
+        if($inputTags[0] != ""){
+            $projectsAux=collect();
+            foreach($projects as $project){
+                $projectTags = $project->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$projectTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $projectsAux->push($project);
+                }
+            }
+            $projects=$projectsAux;
+            error_log($projects);
+        }
+        
         if($order == 'A-Z'){
             $projects = $projects->sortByDesc('name')->values();
         }

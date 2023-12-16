@@ -2,11 +2,13 @@
     @csrf
     <input type="text" id="projectName"name="projectName" placeholder="Project Name" required>
     <input type="hidden" name="world_id" value="{{ $world->id }}">
+    <input type="text" id="Tags" name="tags" placeholder="tag1,tag2">
     <select id="order" name="order">
         <option value= "Relevance" selected>Relevance</option>
         <option value="A-Z">A-Z</option>
         <option value="Z-A">Z-A</option>
     </select>
+    
     <input id="searchProjectButton" class="button" type="submit" value="Search Projects">
 </form>
 

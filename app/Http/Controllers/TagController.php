@@ -17,9 +17,9 @@ class TagController extends Controller
     public function createProjectTag(CreateProjectTagRequest $request,string $project_id):JsonResponse{
 
         $fields = $request->validate(['tagName' => ['required', 'string', 'max:30']]);
-
+        $tagName=strip_tags($fields['tagName']);
         $project = Project::find($project_id);
-        if($project->tags()->where('name',$fields['tagName'])->exists()){
+        if($project->tags()->where('name',$tagName)->exists()){
             return response()->json([
                 'error' => true,
                 'tagName'=> ''
@@ -27,7 +27,7 @@ class TagController extends Controller
         }
         else{
             $tag = Tag::updateOrCreate([
-                'name' => $fields['tagName'],
+                'name' => $tagName,
             ]);
             
         }
@@ -41,8 +41,9 @@ class TagController extends Controller
     }
     public function createWorldTag(CreateWorldTagRequest $request,string $id):JsonResponse{
         $fields = $request->validate(['tagName' => ['required', 'string', 'max:30']]);
+        $tagName=strip_tags($fields['tagName']);
         $world = World::find($id);
-        if($world->tags()->where('name',$fields['tagName'])->exists()){
+        if($world->tags()->where('name',$tagName)->exists()){
             return response()->json([
                 'error' => true,
                 'tagName'=> ''
@@ -50,7 +51,7 @@ class TagController extends Controller
         }
         else{
             $tag = Tag::updateOrCreate([
-                'name' => $fields['tagName'],
+                'name' => $tagName,
             ]);
         }
         
@@ -65,8 +66,9 @@ class TagController extends Controller
     }
    public function createMemberTag(CreateMemberTagRequest $request, string $username){
         $fields = $request->validate(['tagName' => ['required', 'string', 'max:30']]);
+        $tagName=strip_tags($fields['tagName']);
         $member = Member::where('name',$username)->first();
-        if($member->tags()->where('name',$fields['tagName'])->exists()){
+        if($member->tags()->where('name',$tagName)->exists()){
             return response()->json([
                 'error' => true,
                 'tagName'=> ''
@@ -74,18 +76,17 @@ class TagController extends Controller
         }
         else{
             $tag = Tag::updateOrCreate([
-                'name' => $fields['tagName'],
+                'name' => $tagName,
             ]);
         }
         $member->tags()->attach($tag->id);
-        error_log("here");
         NotificationController::TagNotification($tag,$username,"Member",'Created');
         return response()->json([
             'error' => false,
             'tagName'=> $tag->name
         ]);
     }
-
+    
     public function deleteProjectTag(string $project_id, string $tag_id):JsonResponse{
         $project = Project::find($project_id);
         $tag = Tag::find($tag_id);

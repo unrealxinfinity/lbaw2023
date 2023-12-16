@@ -20,6 +20,7 @@
                 @if($type!="Task")<option value="Task">Task</option>@endif
                 @if($type!="Member")<option value="Member">Member</option>@endif
             </select>
+            <input type="text" id="Tags" name="tags" placeholder="tag1,tag2"> 
             <select id="order" name="order">
                 <option value= "{{ $order }}" selected>{{ $order }}</option>
                 @if($order!="Relevance")<option value= "Relevance">Relevance</option>@endif

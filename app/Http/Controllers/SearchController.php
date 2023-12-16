@@ -8,7 +8,7 @@ use App\Models\Member;
 use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
-
+use App\Models\Tag;
 class SearchController extends Controller
 {
     public function show(SearchRequest $request): View
@@ -16,20 +16,23 @@ class SearchController extends Controller
         $request->validated();
         $searchedText = strval($request->input('anything'));
         $searchedText = strip_tags($searchedText);
-        $typeFilter = $request->input('typeFilter');
-        $order = $request->input('order');
+        $typeFilter = $request->input('typeFilter','All');
+        $inputTags = $request->input('tags');
+        $inputTags= strip_tags($inputTags);
+        $order = $request->input('order','Relevance');
         $member = Member::where('user_id', auth()->user()->id)->first(); 
         $id = $member->user_id;
+        $inputTags = explode(',',$inputTags);
         $arr = explode(' ', $searchedText);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
         }
         $searchedText = implode(' | ', $arr);
-        
+
         $tasks = Task::select('id','title','description','due_at','status','effort','priority')
-            ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
-            ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get();
+                ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
+                ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
+                ->get();
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
@@ -44,6 +47,60 @@ class SearchController extends Controller
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
+        
+        if($inputTags[0] != ""){
+            $membersAux=collect();
+            $tasks=collect();
+            $projectsAux=collect();
+            $worldsAux=collect();
+            foreach($members as $member){
+                $memberTags = $member->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$memberTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $membersAux->push($member);
+                }
+            }
+            $members=$membersAux;
+
+            foreach($projects as $project){
+                $projectTags = $project->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$projectTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $projectsAux->push($project);
+                }
+            }
+            $projects=$projectsAux;
+
+            foreach($worlds as $world){
+                $worldTags = $world->tags;
+                $containsAllTags=true;
+                foreach($inputTags as $tagName){
+                    if(!$worldTags->contains(function($value, $key) use ($tagName) {
+                        return stripos($value->name, $tagName) !== false;
+                    })){
+                        $containsAllTags=false;
+                    }
+                }
+                if($containsAllTags){
+                    $worldsAux->push($world);
+                }
+            }
+            $worlds=$worldsAux;
+        }
         
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
