@@ -50,7 +50,7 @@
                         @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
                             <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a>
                         @endif
-                        <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+                        <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a>
                 </ul>                     
                 @else
                     <ul id="navbar-right" class="items-center flex mx-5">
@@ -59,24 +59,20 @@
             @endif
         </nav>
         <input id="show-menu" type="checkbox" class="hidden peer"/>
-        <div id="menu" class="fixed bg-opacity-90 bg-black text-white top-16 h-full w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-hidden z-10">
-            <ul id="menu-items" class="list-none text-center flex flex-col h-full">
-                <li class="menu-item"><a href="/">Home Page</a></li>
-                <li class="menu-item"><a href="/worlds">All Worlds</a></li>
-                @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
-                    <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
-                    <li class="menu-item"><a href="/myprojects">My Projects</a></li>
-                    <li class="menu-item"><a href="/mytasks">My Tasks</a></li>
-                    <li class="menu-item"><a href="/members/{{Auth::User()->username}}">Profile</a></li>
-                    <li class="menu-item"><a href="/create-world">Create World</a></li>
-                @endif
-                @if (Auth::check())
-                    <ul class="visible desktop:hidden my-5">
-                        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-                    </ul>
-                @endif
-            </ul>
-        </div>
+        <ul id="menu" class="fixed bg-opacity-90 bg-black text-white list-none text-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
+            <li class="menu-item"><a href="/">Home Page</a></li>
+            <li class="menu-item"><a href="/worlds">All Worlds</a></li>
+            @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
+                <li class="menu-item"><a href="/myworlds">My Worlds</a></li>
+                <li class="menu-item"><a href="/myprojects">My Projects</a></li>
+                <li class="menu-item"><a href="/mytasks">My Tasks</a></li>
+                <li class="menu-item"><a href="/members/{{Auth::User()->username}}">Profile</a></li>
+                <li class="menu-item"><a href="/create-world">Create World</a></li>
+            @endif
+            @if (Auth::check())
+                <li class="button visible desktop:hidden mx-5"><a href="{{ url('/logout') }}"> Logout </a></li>
+            @endif
+        </ul>
         <div id="notificationArea" class="fixed hidden z-10 bg-dark right-36 top-16 p-1">
             <div class="flex justify-between">
                 <h2 class="text-white py-1 mx-5">Notifications</h2>

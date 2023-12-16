@@ -135,22 +135,35 @@ function addEventListeners() {
   let lastScrollTop = 0;
   window.addEventListener('scroll', function() {
     let currentScroll = document.documentElement.scrollTop;
+    let showMenu = document.querySelector('#show-menu');
+    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
   
     if (currentScroll > lastScrollTop) {
       // Scroll down
+      if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
-      document.querySelector('#show-menu').checked = false;
-      document.querySelector('#notificationArea').classList.add('hidden');
+      }
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-      document.querySelector('#notificationArea').classList.add('hidden');
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   }, false);
+
+  let main = document.querySelector('main');
+  main.addEventListener('click', function() {
+    let showMenu = document.querySelector('#show-menu');
+    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+    if (showMenu.checked) {
+      document.querySelector('#show-menu').checked = false;
+    }
+    if (!showNotif) {
+      document.querySelector('#notificationArea').classList.toggle('hidden');
+    }
+  });
   
   let main_body = document.getElementById('main-body');
   console.log(main_body.getAttribute('data-auth'));
@@ -787,10 +800,9 @@ function inviteNewMemberHandler(json) {
     let searchTaskElems = searchTaskForms[0];
     let searchedTask = searchTaskElems[1].value;
     const csrf = searchTaskElems[0].value;
-    let type = searchTaskElems[3].value;
-    let order = searchTaskElems[4].value;
+    let order = searchTaskElems[3].value;
 
-    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order + '&type=' + type;
+    const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
 
     const response = await fetch(url, {
         method: 'GET', 
