@@ -13,21 +13,21 @@
     @if (Auth::check() && Auth::user()->id == $member->persistentUser->user->id)
         @if ($member->persistentUser->type_ == 'Member')
             <a class="button" href="/members/{{ $member->persistentUser->user->username }}/edit">Edit Profile</a>
-        @elseif ($member->persistentUser->type_ == 'Blocked')
-            @can('appeal', Member::class)
-                <a class="button" href="/appeal">Appeal Block</a>
-            @else
-                <a class="button">Appeal Sent</a>
-            @endcan
-        @endif
-        <button type="button" id="delete-account" class="link text-red">Delete Account</button>
-        <div class="flex mobile:flex-row flex-col justify-around mt-10 child:self-center">
+            <button type="button" id="delete-account" class="link text-red">Delete Account</button>
+            <div class="flex mobile:flex-row flex-col justify-around mt-10 child:self-center">
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href = "/myfavorites" >My Favorites</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href = "/myworlds" >My Worlds</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/myprojects">My Projects</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/mytasks">My Tasks</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
+        @elseif ($member->persistentUser->type_ == 'Blocked')
+            @can('appeal', $member)
+                <a class="button" href="/appeal">Appeal Block</a>
+            @else
+                <a class="button">Appeal Sent</a>
+            @endcan
+        @endif
         @can('memberTagCreate', $member)
             @include('form.tag-create', ['type' => 'member'])
         @endcan
@@ -46,7 +46,7 @@
     @else
     <header class="h-fit flex justify-start">
         <img src="{{$member->getProfileImage()}}" class="h-5 aspect-square mr-3 object-cover">
-        @if ($member->persistentUser->type_ == 'Member') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
+        @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif
         @can('request', $member)

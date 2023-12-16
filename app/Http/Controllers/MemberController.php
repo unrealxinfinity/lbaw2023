@@ -10,6 +10,8 @@ use App\Models\Member;
 use App\Models\PersistentUser;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -22,7 +24,7 @@ class MemberController extends Controller
 {
     public function show(string $username): View
     {
-        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         if($user->persistentUser->type_ == "Administrator"){
             abort(404);
         }
@@ -47,6 +49,16 @@ class MemberController extends Controller
         ]);
     }
 
+    public function denyAppeal(int $id): RedirectResponse
+    {
+        $this->authorize('create', Member::class);
+
+        $appeal = Appeal::findOrFail($id);
+        $appeal->delete();
+
+        return redirect()->back()->withResponse('Appeal denied.');
+    }
+
     public function appeal(AppealRequest $request, int $id): RedirectResponse
     {
         $fields = $request->validated();
@@ -69,7 +81,7 @@ class MemberController extends Controller
 
     public function showEditProfile(string $username): View
     {
-        $user = Auth::user()->persistentUser->user->where('username', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         if($user->persistentUser->type_ == "Administrator"){
             abort(404);
         }
@@ -167,6 +179,20 @@ class MemberController extends Controller
 
         return view('pages.admin-members', ['members' => $members]);
     }
+
+    public function allAppeals(Request $request): View
+    {
+        $this->authorize('list', Member::class);
+
+        $search = $request['search'] ?? "";
+
+        $appeals = Appeal::join('members', 'appeals.member_id', '=', 'members.id')->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')
+        //$appeals = Appeal::whereRaw("exists (select * from members m where m.id = member_id and (name like %$search% or email like %$search%))")
+            ->cursorPaginate(4)->withQueryString()->withPath(route('appeals'));
+
+        return view('pages.admin-appeals', ['appeals' => $appeals]);
+    }
+
     public function getAllBelongings():JsonResponse
     {
         $member = Member::where('user_id', Auth::user()->id)->firstOrFail();
@@ -201,6 +227,10 @@ class MemberController extends Controller
         if ($user->persistentUser->type_ == 'Blocked') {
             $user->persistentUser->type_ = 'Member';
             $user->persistentUser->save();
+
+            if (isset($user->persistentUser->member->appeal)) {
+                $user->persistentUser->member->appeal->delete();
+            }
         }    
 
         return redirect()->back()->withSuccess('User unblocked')->withFragment($username);

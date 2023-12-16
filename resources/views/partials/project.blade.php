@@ -23,8 +23,8 @@
                     <input type="hidden" class="id" name="id" value="{{ $project->id }}">
                     <input type="hidden" class="type" name="type" value="projects">
                     <h1><button class="pr-2" type="submit">
-                        @if(Auth::check() && Auth::user()->persistentUser->member->favoriteProject->contains('id', $project->id)) &#9733; 
-                        @else &#9734; @endif</button></h1>
+                        @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteProject->contains('id', $project->id)) &#9733; 
+                        @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
                 </form>
             @endcan
             @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
@@ -45,7 +45,7 @@
                         <h3><button class="px-3 py-1 w-full" type="submit">Archive Project</button></h3>
                     </form>
                     @endif
-                    @if(Auth::check() && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
+                    @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
                         <form method="POST" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
                             @CSRF
                             @method('DELETE')

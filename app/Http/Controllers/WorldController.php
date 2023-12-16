@@ -66,7 +66,7 @@ class WorldController extends Controller
         $world = World::create([
            'name' => $fields['name'],
            'description' => $fields['description'],
-           'picture' => 'pic',
+           'picture' => null,
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
         
@@ -218,10 +218,12 @@ class WorldController extends Controller
             'picture' => $member->picture
         ]);
     }
-    public function showInvite(): View
+    public function showInvite()
     {
+
         $token = request()->query('token');
-        $invitation = Invitation::where('token', $token)->first();
+
+        $invitation = Invitation::where('token', $token)->firstOrFail();
 
         if($invitation->username != null){
             $username = $invitation->member->user->username;
@@ -235,6 +237,9 @@ class WorldController extends Controller
                 'token' => $token
             ]);
         } else if ($invitation->email != null){
+            if(Auth::check()) {
+                return redirect()->route('home');
+            }
             $email = $invitation->email;
             $world_id = $invitation->world_id;
             $world_name = World::findOrFail($world_id)->name;
@@ -246,12 +251,7 @@ class WorldController extends Controller
                 'token' => $token
             ]);
         } else {
-            return view('pages.invite', [
-                'world_id' => null,
-                'world_name' => null,
-                'username' => null,
-                'token' => null
-            ]);
+            return redirect()->route('home');
         }
         
     }
@@ -368,7 +368,11 @@ class WorldController extends Controller
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ plainto_tsquery('english', ?) AND world_id = ?", [$searchProject, $id])
             ->orderByRaw("ts_rank(searchedProjects, plainto_tsquery('english', ?)) DESC", [$searchProject])
-            ->get();
+            ->get()
+            ->map(function ($project) {
+                $project->picture = $project->getImage();
+                return $project;
+            });
         if($order == 'A-Z'){
             $projects = $projects->sortByDesc('name')->values();
         }
