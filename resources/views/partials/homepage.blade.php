@@ -35,21 +35,33 @@
     </div>
     @endif
     @if(count($worlds) > 0)
-    <div class="flex">
-        <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY CURRENT WORLDS</h2>
-        @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world">+</a></h2> @endif  
-    </div>
-    <div class="panel">
-    @foreach($worlds as $world)
-    <div class="container worldsContainer" data-id="{{$world->id}}">
-        <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src={{ $world->getImage() }}>
-        @php
-            $translateXValue = (strlen($world->name)>25)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
-        @endphp
-        <div class="title"><h2><a class="{{$translateXValue}}" @if (Auth::user()->persistentUser->type_ != 'Blocked') href="/worlds/{{ $world->id }}" @endif>{{ $world->name }}</a></h2></div>
-        <div class="desc"><h4>{{ $world->description }}</h4></div>
-    </div>
-    @endforeach
-    </div>
+        <div class="flex">
+            <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY CURRENT WORLDS</h2>
+            @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world">+</a></h2> @endif  
+        </div>
+        <div class="panel">
+            @foreach($worlds as $world)
+                <div class="container worldsContainer" data-id="{{$world->id}}">
+                    <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src={{ $world->getImage() }}>
+                    @php
+                        $translateXValue = (strlen($world->name)>25)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                    @endphp
+                    <div class="title"><h2><a class="{{$translateXValue}}" @if (Auth::user()->persistentUser->type_ != 'Blocked') href="/worlds/{{ $world->id }}" @endif>{{ $world->name }}</a></h2></div>
+                    <div class="desc"><h4>{{ $world->description }}</h4></div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div class="flex">
+            <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY CURRENT WORLDS</h2>
+            @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world">+</a></h2> @endif  
+        </div>
+        <div class="panel">
+            <div class="container worldsContainer">
+                <h2 class="text-center"> You do not belong to any worlds yet! </h2>
+                <div class="title"><h2><a class="hover:translate-x-[0%]" href="/create-world">Create a new World</a></h2></div>
+                <div class="desc"><h4>Click here to create a new World</h4></div>
+            </div>
+        </div>
     @endif
 </article>

@@ -6,8 +6,8 @@
     <section id="homepage" class="mx-5">
         @unless (Auth::check())
         <h1>Welcome to MineMax!</h1>
-        <p>Here you can manage your Worlds and Projects.</p>
-        <p>Log in to get started!</p>
+        <h2>Here you can manage your Worlds and Projects.</p>
+        <h2>Log in to get started!</p>
         @endunless
     </section>
     @php
