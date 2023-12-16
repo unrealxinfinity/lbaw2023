@@ -135,18 +135,19 @@ function addEventListeners() {
   let lastScrollTop = 0;
   window.addEventListener('scroll', function() {
     let currentScroll = document.documentElement.scrollTop;
+    let showMenu = document.querySelector('#show-menu');
+    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
   
     if (currentScroll > lastScrollTop) {
       // Scroll down
+      if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
-      document.querySelector('#show-menu').checked = false;
-      document.querySelector('#notificationArea').classList.add('hidden');
+      }
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-      document.querySelector('#notificationArea').classList.add('hidden');
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
@@ -1602,21 +1603,12 @@ function pusherNotifications(projectContainer, worldContainer){
         alert(JSON.stringify(data.message));
         sendShowNotificationsRequest();
       });
-      bindEvent(channelWorld,'TagNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
     }
 
     for(let i = 0; i < projectContainer.length; i++){
       const project_id = projectContainer[i];
       const channelProject = pusher.subscribe('Project' + project_id);
       bindEvent(channelProject, 'TaskNotification', function(data){
-        alert(JSON.stringify(data.message));
-        sendShowNotificationsRequest();
-      });
-
-      bindEvent(channelProject, 'TagNotification', function(data){
         alert(JSON.stringify(data.message));
         sendShowNotificationsRequest();
       });
