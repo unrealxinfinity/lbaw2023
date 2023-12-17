@@ -66,9 +66,9 @@
             @endif
         </nav>
         @if (session('success'))
-            <div id="session-message" class="z-20 fixed w-full bg-mine-lime py-2 h-8 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
+            <div id="session-message" class="z-20 fixed w-full bg-mine-lime py-2 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
                 <h2>{{ session('success') }}</h2>
-                <span>X</span>
+                <span class="button" id="session-close">X</span>
             </div>
         @endif
         <input id="show-menu" type="checkbox" class="hidden peer"/>

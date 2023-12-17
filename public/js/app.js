@@ -194,6 +194,11 @@ function addEventListeners() {
     clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
   }
 
+  let sessionClose = document.getElementById('session-close');
+  if (sessionClose != null) {
+    sessionClose.addEventListener('click', closeSessionHandler);
+  }
+
 
   let ProjectEditCloser = document.querySelector('#go-back');
   if (ProjectEditCloser != null)
@@ -300,6 +305,11 @@ function addEventListeners() {
     });
   }
 }
+
+function closeSessionHandler() {
+  this.parentElement.remove();
+}
+
 function leaveProjectAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this project?","This action can't be reverted!", "Left the project successfully!","", "Leave", this.submit.bind(this),1000);
