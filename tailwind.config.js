@@ -57,7 +57,8 @@ export default {
         'ease': 'ease',
       },
       backgroundImage: {
-        'mine': "url('/resources/img/dark.png')"
+        'mine': "url('/resources/img/dark.png')",
+        'mine-lime': "url('/resources/img/lime.png')",
       },
       maxWidth: {
         '1/2': '50%',

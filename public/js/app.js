@@ -143,13 +143,13 @@ function addEventListeners() {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
       document.querySelector('#session-message').classList.remove('translate-y-0');
-      document.querySelector('#session-message').classList.add('-translate-y-full');
+      document.querySelector('#session-message').classList.add('-translate-y-16');
       }
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-      document.querySelector('#session-message').classList.remove('-translate-y-full');
+      document.querySelector('#session-message').classList.remove('-translate-y-16');
       document.querySelector('#session-message').classList.add('translate-y-0');
     }
   
