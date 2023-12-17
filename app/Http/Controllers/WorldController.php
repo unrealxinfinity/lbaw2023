@@ -72,7 +72,7 @@ class WorldController extends Controller
         ]);
         
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
-
+        NotificationController::WorldNotification($world,'You created the ');
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
@@ -88,6 +88,7 @@ class WorldController extends Controller
         $request->validated();
         $world = World::findOrFail($id);
         $world->delete();
+        NotificationController::WorldNotification($world,'You deleted the ');
         return response()->json([
             'error' => false,
             'id' => $id,
@@ -104,7 +105,8 @@ class WorldController extends Controller
         $world->description = $fields['description'];
         
         $world->save();
-
+        $member = Auth::user()->persistentUser->member;
+        NotificationController::WorldNotification($world,$member->name .' updated the ');
         return redirect()->route('worlds.show', $id);
     }
 
@@ -306,13 +308,14 @@ class WorldController extends Controller
     
     public function leave(LeaveWorldRequest $request, string $world_id): RedirectResponse
     {
+        
         try {
             $request->validated();
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
+            NotificationController::WorldNotification($world, 'You left the ');
             $member->worlds()->detach($world_id);
-            NotificationController::WorldNotification($world,$member->id . ' left the ');
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {
             return redirect()->route("worlds.show", ['id' => $world_id])->withError('You can\'t leave the world.');
@@ -321,14 +324,12 @@ class WorldController extends Controller
 
     public function leaveFromList(LeaveWorldRequest $request, string $world_id): JsonResponse
     {
-        error_log("leaveFromList");
         try {
             $request->validated();
-
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
+            NotificationController::WorldNotification($world,'You left the ');
             $member->worlds()->detach($world_id);
-            NotificationController::WorldNotification($world,$member->id . ' left the ');
             return response()->json([
                 'error' => false,
                 'id' => $world_id

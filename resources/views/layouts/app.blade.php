@@ -16,6 +16,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
         <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal/minimal.css" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -28,7 +29,9 @@
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
+        
     </head>
     <body id="main-body" class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() ? 'true' : 'false' }}">
         <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
@@ -40,10 +43,12 @@
                 @include('form.main-search', ['member' => Auth::user()->persistentUser->member])
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
-                    <div id="notification-button" class="link mx-6 tablet:inline-flex hidden">
+                    <div id="notification-button" class="link mx-6 tablet:inline-flex hidden relative">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
                             <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
                         </svg>
+                        <span id="redDot" class="bg-red rounded-full w-2 h-2 absolute top-0 right-0 hidden"></span>
+                        
                     </div>
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">

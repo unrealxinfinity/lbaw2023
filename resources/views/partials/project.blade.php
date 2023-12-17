@@ -32,7 +32,7 @@
                 <h1><label for="more-options" class="font-bold cursor-pointer">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
                     @can('delete', $project)
-                    <form method="POST" action="{{ route('delete-project', ['id' => $project->id]) }}">
+                    <form method="POST" class= "delete-project" action="{{ route('delete-project', ['id' => $project->id]) }}">
                         @csrf
                         @method('DELETE')
                         <h3><button class="px-3 py-1 w-full" type="submit">Delete Project</button></h3>
@@ -46,7 +46,7 @@
                     </form>
                     @endif
                     @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
-                        <form method="POST" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
+                        <form method="POST" class="leave-project" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
                             @CSRF
                             @method('DELETE')
                             <h3><button class="px-3 py-1 w-full" type="submit">Leave Project</button></h3>

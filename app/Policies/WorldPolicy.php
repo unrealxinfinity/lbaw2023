@@ -74,7 +74,7 @@ class WorldPolicy
     }
 
     public function leave(?User $user, World $world): bool
-    {
+    {   
         if ($user == null) return false;
         if($user->persistentUser->type_ === 'Administrator') return false;
         $is_owner = $world->owner_id === $user->persistentUser->member->id;
