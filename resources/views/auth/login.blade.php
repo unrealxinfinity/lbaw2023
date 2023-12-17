@@ -7,7 +7,7 @@
     {{ csrf_field() }}
 
     <h3><label for="username">Username</label></h3>
-    <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
+    <input id="username" type="text" name="username" placeholder="Username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
         <span class="error">
           {{ $errors->first('username') }}
@@ -15,7 +15,7 @@
     @endif
 
     <h3><label for="password" >Password</label></h3>
-    <input id="password" type="password" name="password" required>
+    <input id="password" type="password" name="password" placeholder="Password" required>
     <h3><a href="/recover">Forgot your password?</a></h3>
     @if ($errors->has('password'))
         <span class="error">

@@ -92,7 +92,7 @@ class NotificationController extends Controller
             else{
                 $level='Medium';
             }
-            $message = $action.' Project '."'".$project->name."'".'!';
+            $message = $action.' project '."'".$project->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -125,7 +125,7 @@ class NotificationController extends Controller
             else{
                 $level='Medium';
             }
-            $message = $action.' Task '."'".$task->title."'".'!';
+            $message = $action.' task '."'".$task->title."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -148,7 +148,7 @@ class NotificationController extends Controller
     static function TagNotification(Tag $tag,string $idOrUname,string $type, string $action){
         if($type == 'Project'){
             $thing = Project::find($idOrUname);
-            $message = $action.' Tag '."'".$tag->name."'"." on Project ".$thing->name.' !';
+            $message = $action.' tag '."'".$tag->name."'"." on Project ".$thing->name.' !';
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -172,7 +172,7 @@ class NotificationController extends Controller
         }
         else if($type == 'World'){
             $thing = World::find($idOrUname);
-            $message = $action.' Tag '."'".$tag->name."'"." on World ".$thing->name.' !';
+            $message = $action.' tag '."'".$tag->name."'"." on World ".$thing->name.' !';
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -196,7 +196,7 @@ class NotificationController extends Controller
         }
         else if($type == 'Member'){
             $thing = Member::where('name',$idOrUname)->first();
-            $message = $action.' Tag '."'".$tag->name."'"." on ".$thing->name."'s profile!";
+            $message = $action.' tag '."'".$tag->name."'"." on ".$thing->name."'s profile!";
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -227,7 +227,7 @@ class NotificationController extends Controller
         
         DB::beginTransaction();
         try {
-            $message = $action.' World '."'".$world->name."'".'!';
+            $message = $action.' world '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,

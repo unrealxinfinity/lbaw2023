@@ -3,7 +3,7 @@
     <h2>Invite member. </h2> 
     <h3>Do you want to invite someone outside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
     <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
-    <input type="text" class="username" name="username" placeholder="Username" required>
+    <input type="text" class="username" name="username" placeholder="Username -> required" required>
     <p class="m-0">What role?</p>
     <select name="type" class="type mt-1" required>
         <option value="false">Member</option>
@@ -17,7 +17,7 @@
     <h2>Invite outside member. </h2> 
     <h3>Do you want to invite someone inside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
     <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
-    <input type="text" class="email" name="email" placeholder="example@email.com" required>
+    <input type="text" class="email" name="email" placeholder="example@email.com -> required" required>
     <p class="m-0">What role?</p>
     <select name="type" class="type mt-1" required>
         <option value="false">Member</option>

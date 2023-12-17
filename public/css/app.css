@@ -19,6 +19,7 @@
   }
   h4, p {
     @apply text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words text-white text-opacity-75;
+    
   }
 }
 
@@ -65,4 +66,5 @@
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;
     }
+    
 }

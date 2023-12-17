@@ -57,7 +57,7 @@
                         {{-- @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator') --}}
                         {{--    <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a> --}}
                         @endif
-                        <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a>
+                        <a id="logout" class="link desktop:flex hidden text-red" href="{{ url('/logout') }}"> Logout </a>
                 </ul>                     
                 @else
                     <ul id="navbar-right" class="items-center flex mx-5">

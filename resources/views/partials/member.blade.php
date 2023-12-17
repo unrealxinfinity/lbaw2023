@@ -46,8 +46,10 @@
     @else
     <header class="h-fit flex justify-start">
         <img src="{{$member->getProfileImage()}}" class="h-5 aspect-square mr-3 object-cover">
-        @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
-        @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
+        @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked')
+            <h4 class="self-center" style="text-shadow: 0 0 10px green"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
+        @elseif ($member->persistentUser->type_ == 'Deleted')
+            <h4 class="self-center">deleted</h4>
         @endif
         @can('request', $member)
             <a class="friend-button justify-self-end" href="/api/request/{{ $member->persistentUser->user->username }}">&#10010;</a>

@@ -9,7 +9,7 @@
     <input type="hidden" name="member" value="on">
 
     <h3 class="my-0 mt-3"><label for="username">Username</label></h3>
-    <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
+    <input id="username" type="text" name="username" placeholder="Username" value="{{ old('username') }}" required autofocus>
     @if ($errors->has('username'))
       <span class="error">
           {{ $errors->first('username') }}
@@ -17,7 +17,7 @@
     @endif
 
     <h3 class="my-0 mt-1"><label for="email">E-Mail Address</label></h3>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
+    <input id="email" type="email" name="email" placeholder="example@email.com" value="{{ old('email') }}" required>
     @if ($errors->has('email'))
       <span class="error">
           {{ $errors->first('email') }}
@@ -25,7 +25,7 @@
     @endif
 
     <h3 class="my-0 mt-1"><label for="password">Password</label></h3>
-    <input id="password" type="password" name="password" required>
+    <input id="password" type="password" name="password" placeholder="Password"  required>
     @if ($errors->has('password'))
       <span class="error">
           {{ $errors->first('password') }}
@@ -33,7 +33,7 @@
     @endif
 
     <h3 class="my-0 mt-1"><label for="password-confirm">Confirm Password</label></h3>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
+    <input id="password-confirm" type="password" name="password_confirmation" placeholder="Repeat password" required>
     <button class="button" type="submit"> Register </button>
 </form>
 @endsection

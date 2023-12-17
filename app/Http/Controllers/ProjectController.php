@@ -112,9 +112,9 @@ class ProjectController extends Controller
         $this->authorize('edit', $project);
 
         $project->status = 'Archived';
-
+        $member = Member::where('user_id', auth()->user()->id)->first();
         $project->save();
-
+        NotificationController::ProjectNotification($project,$project->world->id,$member->name .' archived');
         return redirect()->route('projects.show', $id);
     }
 

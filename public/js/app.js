@@ -295,6 +295,12 @@ function addEventListeners() {
       form.addEventListener('submit', leaveWorldAlert);
     });
   }
+  let archive_project = document.getElementsByClassName('archive-project');
+  if(archive_project != null){
+    [].forEach.call(archive_project, function(form) {
+      form.addEventListener('submit', archiveProjectAlert);
+    });
+  }
 }
 function leaveProjectAlert(ev) {
   ev.preventDefault();
@@ -308,6 +314,11 @@ function leaveWorldAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", this.submit.bind(this),1000);
 }
+function archiveProjectAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to archive this project?","This action can't be reverted!", "Archived the project successfully!","", "Archive", this.submit.bind(this),1000);
+}
+  
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
   const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
