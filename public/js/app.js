@@ -142,11 +142,15 @@ function addEventListeners() {
       if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
+      document.querySelector('#session-message').classList.remove('translate-y-0');
+      document.querySelector('#session-message').classList.add('-translate-y-16');
       }
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
+      document.querySelector('#session-message').classList.remove('-translate-y-16');
+      document.querySelector('#session-message').classList.add('translate-y-0');
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
@@ -188,6 +192,11 @@ function addEventListeners() {
   let clearNotificationsButton = document.getElementById('clearNotifications');
   if(clearNotificationsButton != null){
     clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+  }
+
+  let sessionClose = document.getElementById('session-close');
+  if (sessionClose != null) {
+    sessionClose.addEventListener('click', closeSessionHandler);
   }
 
 
@@ -296,6 +305,11 @@ function addEventListeners() {
     });
   }
 }
+
+function closeSessionHandler() {
+  this.parentElement.remove();
+}
+
 function leaveProjectAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this project?","This action can't be reverted!", "Left the project successfully!","", "Leave", this.submit.bind(this),1000);

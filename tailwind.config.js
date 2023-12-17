@@ -18,6 +18,7 @@ export default {
       grey: '#5E716A',
       dark: '#222222',
       green: '#008000',
+      darkGreen: '#14532D',
       red: '#FF0000',
       darkRed: '#8b0000',
       orange: '#ba610b',
@@ -57,7 +58,8 @@ export default {
         'ease': 'ease',
       },
       backgroundImage: {
-        'mine': "url('/resources/img/dark.png')"
+        'mine': "url('/resources/img/dark.png')",
+        'mine-lime': "url('/resources/img/lime.png')",
       },
       maxWidth: {
         '1/2': '50%',
@@ -67,7 +69,9 @@ export default {
         '1/2': '50%',
         '1/4': '25%',
       },
-      
+      minHeight: {
+        '128': '16rem',
+      },
     }
   },
   plugins: [
