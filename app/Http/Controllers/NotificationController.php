@@ -238,7 +238,6 @@ class NotificationController extends Controller
             
             foreach($world->members as $member){
                 $member->notifications()->attach($notification->id);
-                error_log($member->notifications);
              }
              event(new CreateWorldNotification($message,$world->id));
             DB::commit();

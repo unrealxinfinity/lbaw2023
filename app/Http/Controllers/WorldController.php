@@ -72,14 +72,20 @@ class WorldController extends Controller
         ]);
         
         $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
-        NotificationController::WorldNotification($world,'You created the ');
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
     {
         $request->validated();
         $world = World::findOrFail($id);
-        NotificationController::WorldNotification($world,'Deleted the ');
+        $is_admin = Auth::user()->persistentUser->type_ === 'Administrator';
+        if($is_admin) {
+            NotificationController::WorldNotification($world, 'A website administrator has deleted ');
+        } else{
+            $member_name = Auth::user()->persistentUser->member->name;
+
+            NotificationController::WorldNotification($world, $member_name . ' has deleted ');
+        }
         $world->delete();
         return redirect()->route('home')->withSuccess('World deleted!');
     }
@@ -88,7 +94,13 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
-        NotificationController::WorldNotification($world,'Deleted the ');
+        $is_admin = Auth::user()->persistentUser->type_ === 'Administrator';
+        if($is_admin) {
+            NotificationController::WorldNotification($world, 'A website administrator has deleted ');
+        } else{
+            $member_name = Auth::user()->persistentUser->member->name;
+            NotificationController::WorldNotification($world, $member_name . ' has deleted ');
+        }
         $world->delete();
         return response()->json([
             'error' => false,
