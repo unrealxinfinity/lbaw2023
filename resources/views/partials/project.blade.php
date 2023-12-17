@@ -60,7 +60,7 @@
     <h2 class="mt-10"> TASKS </h2>
     <div class="panel w-full">
         @foreach (['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'] as $state)
-            <div class="big-box flex flex-col justify-start m-1 px-1 py-2 h-128 bg-black bg-opacity-50 outline outline-1 outline-white/20 rounded min-w-[12rem] w-48">
+            <div class="big-box flex flex-col justify-start m-1 px-1 py-2 min-h-128 bg-black bg-opacity-50 outline outline-1 outline-white/20 rounded min-w-[12rem] w-48">
                 <h3 class="text-center inline-block mb-3"> {{$state}} </h3>
                 @foreach ($project->tasks()->where('status', '=', $state)->get() as $task)
                 <article class="task bg-white child:text-black p-2 m-1 rounded" @can('edit', $task) draggable="true" id="task-{{ $task->id }}" @endcan>

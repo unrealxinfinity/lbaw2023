@@ -68,7 +68,9 @@ export default {
         '1/2': '50%',
         '1/4': '25%',
       },
-      
+      minHeight: {
+        '128': '16rem',
+      },
     }
   },
   plugins: [
