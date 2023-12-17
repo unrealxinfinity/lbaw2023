@@ -218,7 +218,7 @@ class NotificationController extends Controller
 
     static function WorldNotification(World $world, string $action){
         error_log($action);
-        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')){
+        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')) {
             $level='High';
         }
         else{

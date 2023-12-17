@@ -277,9 +277,27 @@ function addEventListeners() {
   if (inviteOutsideMember != null){
     inviteOutsideMember.addEventListener('submit', sendInviteNewMember);
   }
-
+  let leave_project = document.getElementsByClassName('leave-project');
+  if(leave_project != null){
+    [].forEach.call(leave_project, function(form) {
+      form.addEventListener('submit', leaveProjectAlert);
+    });
+  }
+  let delete_project = document.getElementsByClassName('delete-project');
+  if(delete_project != null){
+    [].forEach.call(delete_project, function(form) {
+      form.addEventListener('submit', deleteProjectAlert);
+    });
+  }
 }
-  
+function leaveProjectAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to leave this project?","This action can't be reverted!", "Left the project successfully!","", "Leave", this.submit.bind(this),1000);
+}
+function deleteProjectAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to delete this project?","This action can't be reverted!", "Deleted the project successfully!","", "Delete", this.submit.bind(this),1000);
+}
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
   const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
@@ -327,48 +345,77 @@ function changeToInviteOutsideMember(ev) {
   }
 
   
-  function deleteAccountButton() {
-    const text = prompt("Are you sure you want to delete your account? Type \"delete\" to confirm:");
+  async function deleteAccountButton() {
+    let confirm = "";
+    const { value: confirmation } = await Swal.fire({
+      title: "Are you sure you want to delete your account?",
+      imageUrl: "/images/dog.png",
+      imageWidth: 200,
+      imageHeight: 200,
+      inputLabel: "Type 'Delete' to confirm:",
+      input: "text",
+      confirm,
+      showCancelButton: true,
+      customClass:{
+        popup: 'pop-up-class',
+        confirmButton: 'pop-up-button cancel-button',
+        cancelButton: 'pop-up-button',
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return "You need to write something!";
+        }
+        else if(value !== "Delete"){
+          return "Input isn't 'Delete'!";
+        }
+      }
+    });
+    if (confirmation === "Delete") {
+      
+        setInterval(() => {
+          window.location.href = window.location.href + '/delete'
 
-    if (text != "delete") return;
-
-    window.location.href = window.location.href + '/delete'
+        }, 2000);
+        Swal.fire({
+          title:`Account Successfully deleted!`,
+          icon: "success",
+          showConfirmButton: false,
+        });
+      
+    }
   }
-  function deleteWorldButton(ev) {
+  async function deleteWorldButton(ev) {
     ev.preventDefault();
-    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
-    if(text == "delete"){
-      this.submit();
-    };
+    confirmationAlert("Are you sure you want to delete this world?", "This action can't be reverted!","World Successfully deleted!","", "Delete", this.submit.bind(this),3000);
   }
   
 
   async function deleteWorldAjaxButton(ev) {
     ev.preventDefault();
-    const text = prompt("Are you sure you want to delete your world? Type \"delete\" to confirm:");
-    if(text=="delete"){
+    async function request(){
       const csrf = this.querySelector('input:first-child').value;
-      const id = this.querySelector('input.id').value;
-      const response = await fetch('/api/worlds/' + id, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-TOKEN': csrf,
-          'Content-Type': "application/json",
-          'Accept': 'application/json',
-          "X-Requested-With": "XMLHttpRequest"
-        }
-      }).then(response => {
-        if(response.ok){
-          return response.json();
-        }
-        else{
-          throw new Error('Response status not OK');
-        }
-      }).then(data => {
-        removeWorldFromListHandler(data);
-      }).catch(error => console.error('Error fetching data:', error.message));
+          const id = this.querySelector('input.id').value;
+          const response = await fetch('/api/worlds/' + id, {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-TOKEN': csrf,
+              'Content-Type': "application/json",
+              'Accept': 'application/json',
+              "X-Requested-With": "XMLHttpRequest"
+            }
+          }).then(response => {
+            if(response.ok){
+              return response.json();
+            }
+            else{
+              throw new Error('Response status not OK');
+            }
+          }).then(data => {
+            removeWorldFromListHandler(data);
+          }).catch(error => console.error('Error fetching data:', error.message));    
+    }
+    confirmationAlert("Are you sure you want to delete this world?","This action can't be reverted", "World Successfully deleted!","", "Delete", request.bind(this),0);
 
-    };
   }
 
   function removeWorldFromListHandler(data) {
@@ -380,28 +427,34 @@ function changeToInviteOutsideMember(ev) {
 
   async function sendLeaveWorldRequest(ev) {
     ev.preventDefault();
-    const csrf = this.querySelector('input:first-child').value;
-    const id = this.querySelector('input.id').value;
-    const username = this.querySelector('input.username').value;
-    const response = await fetch('/api/worlds/' + id, {
-      method: 'DELETE',
-      headers: {
-        'X-CSRF-TOKEN': csrf,
-        'Content-Type': "application/json",
-        'Accept': 'application/json',
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      body: JSON.stringify({username: username})
-    }).then(response => {
-      if(response.ok){
-        return response.json();
-      }
-      else{
-        throw new Error('Response status not OK');
-      }
-    }).then(data => {
-      removeWorldFromListHandler(data);
-    }).catch(error => console.error('Error fetching data:', error.message));
+    async function request(){
+      const csrf = this.querySelector('input:first-child').value;
+      const id = this.querySelector('input.id').value;
+      const username = this.querySelector('input.username').value;
+      const response = await fetch('/api/worlds/' + id + '/leave', {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({username: username})
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        removeWorldFromListHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+    }
+    confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", request.bind(this),2000);
+
+
+   
   }
 
   function showEditComment(ev) {
@@ -1017,57 +1070,64 @@ async function deleteTagHandler(json){
 }
 async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-
-
-  url = `/api/worlds/${id}/${username}`;
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    }
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    removeMemberFromThingHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    url = `/api/worlds/${id}/${username}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      removeMemberFromThingHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  
+  confirmationAlert("Are you sure you want to remove this member from this world?","", "Member removed from this world!", "Bye bye!", "Remove them", request.bind(this),0);
+  
 }
 
 async function sendRemoveMemberFromProjectRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-
-  url = `/api/projects/${id}/${username}`;
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    }
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    removeMemberFromThingHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+      let id = this.querySelector('input.id').value;
+      let username = this.querySelector('input.username').value;
+    
+      url = `/api/projects/${id}/${username}`;
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        removeMemberFromThingHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  confirmationAlert("Are you sure you want to remove this member from this project?","", "Member removed from this project!", "Bye bye!", "Remove them", request.bind(this),0);
+  
 }
 
 function removeMemberFromThingHandler(data) {
@@ -1217,30 +1277,33 @@ function ShowNotificationsHandler(json,ev){
 
 async function sendAssignAdminToWorldRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-  let url = '/api/worlds/' + id + '/assign';
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify({username: username})
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    assignAdminToWorldHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
-
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    let url = '/api/worlds/' + id + '/assign';  
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({username: username})
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      assignAdminToWorldHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  confirmationAlert("Are you sure you want to promote this member to World Admin?","", "Member promoted to World Admin!", "", "Promote them", request.bind(this),1000);
+  
 
 }
 
@@ -1251,30 +1314,33 @@ function assignAdminToWorldHandler(data) {
 
 async function sendDemoteAdminFromWorldRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-  let url = '/api/worlds/' + id + '/demote';
-  console.log(username);
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify({username: username})
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    demoteAdminToWorldHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    let url = '/api/worlds/' + id + '/demote';
+    console.log(username);
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({username: username})
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      demoteAdminToWorldHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  confirmationAlert("Are you sure you want to demote this member from World Admin?","", "Member demoted from World Admin!", "They became a peasant again.", "Demote them", request.bind(this),1000);
 
 }
 
@@ -1285,32 +1351,36 @@ function demoteAdminToWorldHandler(data) {
 
 async function sendAssignProjectLeaderRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-  let url = '/api/projects/' + id + '/assign';
-  console.log(username);
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify({username: username})
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    assignProjectLeaderHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
-
-
+  
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    let url = '/api/projects/' + id + '/assign';
+    console.log(username);
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({username: username})
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      assignProjectLeaderHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  
+  confirmationAlert("Are you sure you want to promote this member to Project Leader?","", "Member promoted to Project Leader!", "", "Promote them", request.bind(this),1000);
+  
 }
 
 function assignProjectLeaderHandler(data) {  
@@ -1319,30 +1389,36 @@ function assignProjectLeaderHandler(data) {
 
 async function sendDemoteProjectLeaderRequest(ev) {
   ev.preventDefault();
-  let csrf = this.querySelector('input:first-child').value;
-  let id = this.querySelector('input.id').value;
-  let username = this.querySelector('input.username').value;
-  let url = '/api/projects/' + id + '/demote';
-  console.log(username);
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'X-CSRF-TOKEN': csrf,
-      'Content-Type': "application/json",
-      'Accept': 'application/json',
-      "X-Requested-With": "XMLHttpRequest"
-    },
-    body: JSON.stringify({username: username})
-  }).then(response => {
-    if(response.ok){
-      return response.json();
-    }
-    else{
-      throw new Error('Response status not OK');
-    }
-  }).then(data => {
-    demoteProjectLeaderHandler(data);
-  }).catch(error => console.error('Error fetching data:', error.message));
+  async function request(){
+    let csrf = this.querySelector('input:first-child').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    let url = '/api/projects/' + id + '/demote';
+    console.log(username);
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({username: username})
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      demoteProjectLeaderHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  confirmationAlert("Are you sure you want to demote this member from Project Leader?","", "Member demoted from Project Leader!", "They became a peasant again.", "Demote them", request.bind(this),1000);
+  
+
+  
 }
 
 
@@ -1663,6 +1739,46 @@ function pusherNotifications(projectContainer, worldContainer){
   }
 }
 
+
+async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButtonText, callback,callbackTimer){
+  await Swal.fire({
+    title: text,
+    showConfirmButton: true,
+    icon: "warning",
+    showCancelButton: true,
+    text: subtext,
+    confirmButtonText: yesButtonText,
+    showCancelButton: true,
+    customClass:{
+      popup: 'pop-up-class',
+      confirmButton: 'pop-up-button confirm-button',
+      cancelButton: 'pop-up-button cancel-button',
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title:secondText,
+        text:secondSubtext,
+        showConfirmButton:true,
+        confirmButtonText: "OK",
+        icon: "success",
+        customClass:{
+          popup: 'pop-up-class',
+          confirmButton: 'pop-up-button confirm-button-grey',
+        },
+      });
+      if(callbackTimer != 0 && callbackTimer != null){
+        setTimeout(() => {
+          callback();
+        }, callbackTimer);
+      }
+      else{
+       callback();
+      }
+      
+    }
+  });
+}
 addEventListeners();
 showRedDot();
 function openSidebar() {

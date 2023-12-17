@@ -12,7 +12,8 @@ class LeaveWorldRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {
+    {   
+       
         return Auth::user()->can('leave', World::find($this->route()->id));	
     }
 

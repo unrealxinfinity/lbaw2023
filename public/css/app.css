@@ -65,4 +65,23 @@
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;
     }
+    .pop-up-class {
+      border-radius: 25px !important;
+    }
+    .pop-up-button{
+      border-radius: 20px !important; 
+    }
+    .cancel-button{
+      background-color: #ff0000 !important;
+    }
+    .confirm-button{
+      background-color: rgb(4, 224, 4) !important;
+      outline: 2px solid orangered !important;
+    }
+    .confirm-button-normal{
+      background-color: rgb(4, 224, 4) !important;
+    }
+    .confirm-button-grey{
+      background-color: grey !important;
+    }
 }
