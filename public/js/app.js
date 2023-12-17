@@ -362,6 +362,7 @@ function changeToInviteOutsideMember(ev) {
       imageUrl: "/images/dog.png",
       imageWidth: 200,
       imageHeight: 200,
+      ImageAlt: "A cute dog looking at you.",
       inputLabel: "Type 'Delete' to confirm:",
       input: "text",
       confirm,
