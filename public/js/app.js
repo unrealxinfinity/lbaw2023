@@ -388,7 +388,7 @@ function changeToInviteOutsideMember(ev) {
     const csrf = this.querySelector('input:first-child').value;
     const id = this.querySelector('input.id').value;
     const username = this.querySelector('input.username').value;
-    const response = await fetch('/api/worlds/' + id, {
+    const response = await fetch('/api/worlds/' + id + '/' + username, {
       method: 'DELETE',
       headers: {
         'X-CSRF-TOKEN': csrf,
@@ -396,7 +396,7 @@ function changeToInviteOutsideMember(ev) {
         'Accept': 'application/json',
         "X-Requested-With": "XMLHttpRequest"
       },
-      body: JSON.stringify({username: username})
+      body: JSON.stringify({id: id, username: username})
     }).then(response => {
       if(response.ok){
         return response.json();
