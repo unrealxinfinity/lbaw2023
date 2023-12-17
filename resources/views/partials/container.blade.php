@@ -1,5 +1,5 @@
 <div class="container">
-    <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src="{{ $img }}">
+    <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src="{{ $img }}" alt ="{{$alt}}">
     @php
         $translateXValue = (strlen($title)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
     @endphp

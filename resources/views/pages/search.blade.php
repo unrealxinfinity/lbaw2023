@@ -52,7 +52,7 @@
                 <h1 class="mt-5"> Members </h1>
                 @foreach($members as $otherMember)
                 <header class="myworld flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">
-                    <img src= {{$otherMember->getProfileImage()}} class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
+                    <img src= {{$otherMember->getProfileImage()}} alt="{{$otherMember->persistentUser->user->username}} profile picture" class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
                     <div class="flex flex-col self-center ml-3 w-11/12">
                     <h2 class="break-words"><a href="/members/{{ $otherMember->persistentUser->user->username }}">{{ $otherMember->name }}</a></h2>
                     <h3 class="break-words"> @ {{ $otherMember->persistentUser->user->username }}</h3>

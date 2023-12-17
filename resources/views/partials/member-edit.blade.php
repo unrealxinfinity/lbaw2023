@@ -15,7 +15,8 @@
                     </h1>
                     <img id="preview-img object-cover"
                         class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square hover:opacity-50"
-                        src={{$member->getProfileImage()}}>
+                        src={{$member->getProfileImage()}}
+                        alt="{{$member->persistentUser->user->username}} profile picture">
                 </label>
                 <input id="edit-img" class="hidden" name="file" type="file" required>
                 <input name="type" type="hidden" value="profile">

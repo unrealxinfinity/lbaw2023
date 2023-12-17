@@ -10,7 +10,7 @@
             <h2 class="text-center">Here you can manage your Worlds and Projects.</h2>
             <h2 class="text-center">Log in or Register to get started!</h2>
             <div class="w-full flex justify-center mt-5">
-                <img src="{{ URL('/images/steve-alex-fly.png') }}" alt="Two minecraft player models, Steve, a man, on the left and Alex, a women, on the right, flying using the minecraft item 'elytra' that looks like wings on their back, both holding diamond swords">
+                <img src="{{ URL('/images/steve-alex-fly.png') }}" alt="">
             </div>
         </section>
     @endunless

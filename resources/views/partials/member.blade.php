@@ -2,7 +2,7 @@
     @if($main)
     <p><a href="/">Home</a> > <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a></p>
     <header class="flex justify-start mobile:h-28 tablet:h-32 desktop:h-40 h-20 tablet:my-5 my-2 ml-1">
-        <img src="{{ $member->getProfileImage() }}" class="h-full aspect-square object-cover">
+        <img src="{{ $member->getProfileImage() }}" alt="{{$member->persistentUser->user->username}} profile picture" class="h-full aspect-square object-cover">
         <div class="flex flex-col tablet:ml-5 mobile:ml-2 ml-1 pt-1">
             <h1>{{ $member->name }}</h1>
             <h2> @ {{ $member->persistentUser->user->username }}</h2>
@@ -45,7 +45,7 @@
     @endif
     @else
     <header class="h-fit flex justify-start">
-        <img src="{{$member->getProfileImage()}}" class="h-5 aspect-square mr-3 object-cover">
+        <img src="{{$member->getProfileImage()}}" alt="{{$member->persistentUser->user->username}} profile picture" class="h-5 aspect-square mr-3 object-cover">
         @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif

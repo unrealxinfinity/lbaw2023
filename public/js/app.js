@@ -635,6 +635,7 @@ function changeToInviteOutsideMember(ev) {
       a.href = '/members/' + json.username;
       a.textContent = json.username;
       img.src = json.picture;
+      img.alt = json.username + ' image';
       
       h4.appendChild(a);
       header.appendChild(img);
@@ -974,6 +975,7 @@ function searchProjectHandler(json){
 
     link.setAttribute('href', '/projects/' + project.id);
     img.src = project.picture;
+    img.alt = project.name + ' image';
     link.textContent = project.name;
     desc.textContent = project.description;
     title.appendChild(link);
