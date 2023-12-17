@@ -36,7 +36,7 @@
                     @include('form.delete-world', ['world' => $world])
                     @endcan
                     @can('leave', $world)
-                    <form method="POST" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
+                    <form method="POST" class="leave-world" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
                         @CSRF
                         @method('DELETE')
                         <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>

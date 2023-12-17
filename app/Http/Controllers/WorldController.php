@@ -324,9 +324,7 @@ class WorldController extends Controller
 
     public function leaveFromList(LeaveWorldRequest $request, string $world_id): JsonResponse
     {
-        error_log("in controller");
         try {
-            error_log("in controller");
             $request->validated();
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;

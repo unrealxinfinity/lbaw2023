@@ -289,6 +289,12 @@ function addEventListeners() {
       form.addEventListener('submit', deleteProjectAlert);
     });
   }
+  let leave_world = document.getElementsByClassName('leave-world');
+  if(leave_world != null){
+    [].forEach.call(leave_world, function(form) {
+      form.addEventListener('submit', leaveWorldAlert);
+    });
+  }
 }
 function leaveProjectAlert(ev) {
   ev.preventDefault();
@@ -297,6 +303,10 @@ function leaveProjectAlert(ev) {
 function deleteProjectAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to delete this project?","This action can't be reverted!", "Deleted the project successfully!","", "Delete", this.submit.bind(this),1000);
+}
+function leaveWorldAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", this.submit.bind(this),1000);
 }
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
@@ -425,13 +435,35 @@ function changeToInviteOutsideMember(ev) {
     });
   }
 
+  function leaveWorldFromListHandler(data) {
+    if (window.location.pathname === '/myworlds') {
+        console.log("You're in /myworlds");
+        let element = document.querySelectorAll('.myworld[data-id="' + data.id + '"]');
+        [].forEach.call(element, function(world) {
+          world.remove();
+        });
+    } else if (window.location.pathname === '/worlds') {
+        console.log("You're in /worlds");
+        let checkbox = document.querySelector('#more-options-' + data.id);
+        if (checkbox) {
+            checkbox.checked = false;
+        }
+
+        let element = document.querySelector('#h1-'+ data.id);
+        if (element) {
+            element.remove();
+        }
+
+    }
+}
+
   async function sendLeaveWorldRequest(ev) {
     ev.preventDefault();
     async function request(){
       const csrf = this.querySelector('input:first-child').value;
       const id = this.querySelector('input.id').value;
       const username = this.querySelector('input.username').value;
-      const response = await fetch('/api/worlds/' + id + '/leave', {
+      const response = await fetch('/api/worlds/' + id + '/' + username, {
         method: 'DELETE',
         headers: {
           'X-CSRF-TOKEN': csrf,
@@ -439,7 +471,7 @@ function changeToInviteOutsideMember(ev) {
           'Accept': 'application/json',
           "X-Requested-With": "XMLHttpRequest"
         },
-        body: JSON.stringify({username: username})
+        body: JSON.stringify({id: id, username: username})
       }).then(response => {
         if(response.ok){
           return response.json();
@@ -448,12 +480,10 @@ function changeToInviteOutsideMember(ev) {
           throw new Error('Response status not OK');
         }
       }).then(data => {
-        removeWorldFromListHandler(data);
+        leaveWorldFromListHandler(data);
       }).catch(error => console.error('Error fetching data:', error.message));
     }
     confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", request.bind(this),2000);
-
-
    
   }
 
