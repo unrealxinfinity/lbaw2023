@@ -321,6 +321,7 @@ class WorldController extends Controller
 
     public function leaveFromList(LeaveWorldRequest $request, string $world_id): JsonResponse
     {
+        error_log("leaveFromList");
         try {
             $request->validated();
 

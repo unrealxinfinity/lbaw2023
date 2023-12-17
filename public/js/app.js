@@ -383,12 +383,34 @@ function changeToInviteOutsideMember(ev) {
     });
   }
 
+  function leaveWorldFromListHandler(data) {
+    if (window.location.pathname === '/myworlds') {
+        console.log("You're in /myworlds");
+        let element = document.querySelectorAll('.myworld[data-id="' + data.id + '"]');
+        [].forEach.call(element, function(world) {
+          world.remove();
+        });
+    } else if (window.location.pathname === '/worlds') {
+        console.log("You're in /worlds");
+        let checkbox = document.querySelector('#more-options-' + data.id);
+        if (checkbox) {
+            checkbox.checked = false;
+        }
+
+        let element = document.querySelector('#h1-'+ data.id);
+        if (element) {
+            element.remove();
+        }
+
+    }
+}
+
   async function sendLeaveWorldRequest(ev) {
     ev.preventDefault();
     const csrf = this.querySelector('input:first-child').value;
     const id = this.querySelector('input.id').value;
     const username = this.querySelector('input.username').value;
-    const response = await fetch('/api/worlds/' + id, {
+    const response = await fetch('/api/worlds/' + id + '/' + username, {
       method: 'DELETE',
       headers: {
         'X-CSRF-TOKEN': csrf,
@@ -396,7 +418,7 @@ function changeToInviteOutsideMember(ev) {
         'Accept': 'application/json',
         "X-Requested-With": "XMLHttpRequest"
       },
-      body: JSON.stringify({username: username})
+      body: JSON.stringify({id: id, username: username})
     }).then(response => {
       if(response.ok){
         return response.json();
@@ -405,7 +427,7 @@ function changeToInviteOutsideMember(ev) {
         throw new Error('Response status not OK');
       }
     }).then(data => {
-      removeWorldFromListHandler(data);
+      leaveWorldFromListHandler(data);
     }).catch(error => console.error('Error fetching data:', error.message));
   }
 
