@@ -87,8 +87,8 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
-        $world->delete();
         NotificationController::WorldNotification($world,'You deleted the ');
+        $world->delete();
         return response()->json([
             'error' => false,
             'id' => $id,

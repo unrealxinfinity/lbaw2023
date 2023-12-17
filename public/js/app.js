@@ -403,7 +403,7 @@ function changeToInviteOutsideMember(ev) {
   async function deleteWorldAjaxButton(ev) {
     ev.preventDefault();
     async function request(){
-      const csrf = this.querySelector('input:first-child').value;
+          const csrf = this.querySelector('input:first-child').value;
           const id = this.querySelector('input.id').value;
           const response = await fetch('/api/worlds/' + id, {
             method: 'DELETE',
