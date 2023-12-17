@@ -66,6 +66,7 @@
             @endif
         </nav>
         <input id="show-menu" type="checkbox" class="hidden peer"/>
+        @if(Auth::check())
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
             <li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>
             <li class="menu-item"><a href="/">Home Page</a></li>
@@ -81,6 +82,7 @@
                 <li class="button visible desktop:hidden w-fit"><a href="{{ url('/logout') }}"> Logout </a></li>
             @endif
         </ul>
+        @endif
         <div id="notificationArea" class="fixed hidden z-10 bg-dark right-36 top-16 p-1">
             <div class="flex justify-between">
                 <h2 class="text-white py-1 mx-5">Notifications</h2>
