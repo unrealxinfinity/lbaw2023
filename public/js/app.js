@@ -367,9 +367,9 @@ function changeToInviteOutsideMember(ev) {
       confirm,
       showCancelButton: true,
       customClass:{
-        popup: 'pop-up-class',
-        confirmButton: 'pop-up-button cancel-button',
-        cancelButton: 'pop-up-button',
+        popup: 'rounded-3xl',
+        confirmButton: 'rounded-2xl bg-red',
+        cancelButton: 'rounded-2xl',
       },
       inputValidator: (value) => {
         if (!value) {
@@ -1780,9 +1780,9 @@ async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButton
     confirmButtonText: yesButtonText,
     showCancelButton: true,
     customClass:{
-      popup: 'pop-up-class',
-      confirmButton: 'pop-up-button confirm-button',
-      cancelButton: 'pop-up-button cancel-button',
+      popup: 'rounded-3xl',
+      confirmButton: 'rounded-2xl bg-red',
+      cancelButton: 'rounded-2xl',
     },
   }).then((result) => {
     if (result.isConfirmed) {
@@ -1793,8 +1793,8 @@ async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButton
         confirmButtonText: "OK",
         icon: "success",
         customClass:{
-          popup: 'pop-up-class',
-          confirmButton: 'pop-up-button confirm-button-grey',
+          popup: 'rounded-3xl',
+          confirmButton: 'rounded-2xl',
         },
       });
       if(callbackTimer != 0 && callbackTimer != null){

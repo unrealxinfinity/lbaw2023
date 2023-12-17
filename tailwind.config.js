@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  important: true,
   content: [
     "./resources/views/**/*.blade.php",
     "./public/js/*.js",
@@ -57,6 +58,14 @@ export default {
       },
       backgroundImage: {
         'mine': "url('/resources/img/dark.png')"
+      },
+      maxWidth: {
+        '1/2': '50%',
+        '1/4': '25%',
+      },
+      minWidth: {
+        '1/2': '50%',
+        '1/4': '25%',
       },
       
     }

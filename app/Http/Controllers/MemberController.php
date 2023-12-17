@@ -188,7 +188,7 @@ class MemberController extends Controller
 
         $appeals = Appeal::join('members', 'appeals.member_id', '=', 'members.id')->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')
         //$appeals = Appeal::whereRaw("exists (select * from members m where m.id = member_id and (name like %$search% or email like %$search%))")
-            ->cursorPaginate(4)->withQueryString()->withPath(route('appeals'));
+            ->cursorPaginate(4)->withQueryString()->withPath(route('admin-appeals'));
 
         return view('pages.admin-appeals', ['appeals' => $appeals]);
     }
