@@ -362,6 +362,7 @@ function changeToInviteOutsideMember(ev) {
       imageUrl: "/images/dog.png",
       imageWidth: 200,
       imageHeight: 200,
+      ImageAlt: "",
       inputLabel: "Type 'Delete' to confirm:",
       input: "text",
       confirm,
@@ -988,49 +989,47 @@ function searchProjectHandler(json){
   document.getElementById('popupContainer').classList.remove('hidden');
 }
 
-  async function addTagRequest() {
-    
-    const tagForms = document.getElementsByClassName('new-tag');
-    const id = tagForms[0].getAttribute('data-id');
-    const type = tagForms[0].getAttribute('data-type');
-    let tagElem = tagForms[0].children;
-    let tagName= tagElem[2].value;
-    const csrf = tagElem[0].value;
-    let url= "";
-    if(type == "project"){
-       url = '/api/projects/' + id + '/' +'tags/create';
-    }
-    else if(type == "world"){
-       url = '/api/worlds/' + id + '/' +'tags/create';
-    }
-    else if(type == "member"){
-      url = '/api/members/' + id + '/' +'tags/create';
-    }
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': csrf,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({ tagName: tagName})
-      })
-      .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          addTagHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-      tagElem[2].value = "";
-    
-
+async function addTagRequest() {
+  const tagForms = document.getElementsByClassName('new-tag');
+  const id = tagForms[0].getAttribute('data-id');
+  const type = tagForms[0].getAttribute('data-type');
+  let tagElem = tagForms[0].children;
+  let tagNameInput = tagForms[0].querySelector('.tagName');
+  let tagName = tagNameInput.value;
+  const csrf = tagElem[0].value;
+  let url= "";
+  if(type == "project"){
+     url = '/api/projects/' + id + '/' +'tags/create';
+  }
+  else if(type == "world"){
+     url = '/api/worlds/' + id + '/' +'tags/create';
+  }
+  else if(type == "member"){
+    url = '/api/members/' + id + '/' +'tags/create';
+  }
+  const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ tagName: tagName})
+    })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
+    })
+    .then(data => {
+        addTagHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+    tagNameInput.value = "";
 }
 
 function addTagHandler(json){
