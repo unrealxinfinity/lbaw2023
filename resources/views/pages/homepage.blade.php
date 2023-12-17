@@ -17,10 +17,15 @@
     
     @php
         $member = Auth::user() ? Auth::user()->persistentUser->member : null;
+        $user = Auth::user();
     @endphp
     
     @if ($member)
         @include('partials.homepage', ['member' => $member, 'tasks' => $member->tasks()->orderBy('id')->get(), 'projects' => $member->projects()->where('status', '=', 'Active')->orderBy('id')->get(), 'worlds' => $member->worlds()->orderBy('id')->get()])
+    @endif
+
+    @if (isset($user) && $user->persistentUser->type_ == 'Administrator')
+        @include('partials.adminhome')
     @endif
         
     

@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\NotificationController;
+use App\Models\Appeal;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,15 @@ use App\Http\Controllers\NotificationController;
 
 // Home
 Route::get('/', function () {
-    return view('pages.homepage');
+    $params = [];
+    if (Auth::check() && Auth::user()->persistentUser->type_ == 'Administrator') {
+        $params = [
+            'nMembers' => PersistentUser::where('type_', 'Member')->count(),
+            'nAppeals' => Appeal::all()->count()
+        ];
+    }
+
+    return view('pages.homepage', $params);
 })->name('home');
 
 Route::get('/about', function () {
@@ -163,14 +172,14 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/mytasks', 'showMemberTasks');
     Route::get('/myfavorites', 'showMemberFavorites');
     Route::put('/api/members/{username}', 'update')->name('update-member');
-    Route::get('/admin', 'list')->name('list-members');
+    Route::get('/admin/members', 'list')->name('list-members');
     Route::get('/members/{username}/edit', 'showEditProfile')->name('edit-member');
     Route::get('/create-world', 'showCreateWorld')->name('world-create');
     Route::get('/api/allBelongings','getAllBelongings')->name('all-belongings');
     Route::post('/members/{username}/block', 'block')->name('block-member');
     Route::post('/members/{username}/unblock', 'unblock')->name('unblock-member');
     Route::post('/appeals/{id}', 'denyAppeal')->name('deny-appeal');
-    Route::get('/appeals', 'allAppeals')->name('appeals');
+    Route::get('/admin/appeals', 'allAppeals')->name('admin-appeals');
     Route::get('/invites', 'showInvites')->name('show-invites');
     Route::get('/appeal', 'showAppeal')->name('show-appeal');
     Route::post('/appeal/{id}', 'appeal')->name('appeal');
