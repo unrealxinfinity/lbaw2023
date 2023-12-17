@@ -1671,13 +1671,6 @@ async function sendClearNotificationsRequest(ev){
 function clearNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
   popup.innerHTML = "";
-  let notificationContainer = document.createElement('div');
-  notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-2', 'rounded-lg', 'bg-white');
-  let notificationText = document.createElement('p');
-  notificationText.classList.add('text-black');
-  notificationText.textContent = json.message;
-  notificationContainer.appendChild(notificationText);
-  popup.appendChild(notificationContainer);
 
 }
  // Get member belongings in ajax on every page load for pusher notifications
