@@ -224,18 +224,21 @@ class NotificationController extends Controller
         else{
             $level='Medium';
         }
+        
         DB::beginTransaction();
         try {
             $message = $action.' World '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
-                'world_id' => $world->id,
+                'world_id' => str_contains($action, 'deleted')? null: $world->id,
                 'project_id' => null,
                 'task_id' => null,
             ]);
+            
             foreach($world->members as $member){
                 $member->notifications()->attach($notification->id);
+                error_log($member->notifications);
              }
              event(new CreateWorldNotification($message,$world->id));
             DB::commit();

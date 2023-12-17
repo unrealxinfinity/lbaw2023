@@ -1794,7 +1794,7 @@ async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButton
         icon: "success",
         customClass:{
           popup: 'rounded-3xl',
-          confirmButton: 'rounded-2xl',
+          confirmButton: 'rounded-2xl bg-grey',
         },
       });
       if(callbackTimer != 0 && callbackTimer != null){

@@ -79,6 +79,7 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
+        NotificationController::WorldNotification($world,'Deleted the ');
         $world->delete();
         return redirect()->route('home')->withSuccess('World deleted!');
     }
@@ -87,7 +88,7 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
-        NotificationController::WorldNotification($world,'You deleted the ');
+        NotificationController::WorldNotification($world,'Deleted the ');
         $world->delete();
         return response()->json([
             'error' => false,
