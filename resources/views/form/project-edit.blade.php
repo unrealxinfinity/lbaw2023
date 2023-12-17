@@ -17,13 +17,17 @@
     @method('PUT')
 
     <input type="hidden" class="project-id" name="id" value="{{ $project->id }}">
-    <input type="text" class="project-name" name="name" value="{{ $project->name }}" placeholder="Name" required>
-    <select name="status" class="status">
+    
+    <h3 class="my-0 mt-3"> <label for="project-name">Project name</label> </h3>
+    <input type="text" id="project-name" class="project-name" name="name" value="{{ $project->name }}" placeholder="Name" required>
+    <h3 class="my-0 mt-3"> <label for="project-status">Project status</label> </h3>
+    <select name="status" id="project-status" class="status">
         <option value="{{$project->status}}" selected="selected" >{{$project->status}}</option>
         @if($project->status!="Active")<option value="Active">Active</option>@endif
         @if($project->status!="Archived")<option value="Archived">Archived</option>@endif
     </select>
-    <textarea type="text" class="project-description text-black max-h-36" rows="3" name="description"  placeholder="Description" required> {{ $project->description }} </textarea>
+    <h3 class="my-0 mt-3"> <label for="project-description">Project description</label> </h3>
+    <textarea type="text" id="project-description" class="project-description text-black max-h-36" rows="3" name="description"  placeholder="Description" required> {{ $project->description }} </textarea>
 
     <input class="button" type="submit" id="submit-{{ $project->id }}" value="Edit Project">
 </form>

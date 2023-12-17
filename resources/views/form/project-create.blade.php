@@ -4,13 +4,17 @@
       @method('POST')
 
       <input type="hidden" name="world_id" value="{{ $world->id }}">
-      <input type="text" name="name" placeholder="New Project Name">
+
+      <h3 class="my-0 mt-3"> <label for="new-project-name">Name</label></h3>
+      <input type="text" name="name" id="new-project-name" placeholder="New Project Name">
       @if ($errors->has('name'))
       <span class="error">
         {{ $errors->first('name') }}
       </span>
       @endif
-      <input type="text" name="description" placeholder="Description">
+
+      <h3 class="my-0 mt-3"> <label for="new-project-description">Description</label></h3>
+      <textarea type="text" name="description" placeholder="Description" id="new-project-description"> </textarea>
       @if ($errors->has('description'))
       <span class="error">
         {{ $errors->first('description') }}

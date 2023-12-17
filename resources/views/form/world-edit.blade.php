@@ -17,8 +17,12 @@
     @method('PUT')
 
     <input type="hidden" class="world-id" name="id" value="{{ $world->id }}">
-    <input type="text" class="world-name" name="name" value="{{ $world->name }}" placeholder="Name" required>
-    <textarea type="text" class="world-description text-black max-h-40" rows="4" name="description"  placeholder="Description" required> {{ $world->description }} </textarea>
+
+    <label for="world-name">Name</label>
+    <input type="text" class="world-name" id="world-name" name="name" value="{{ $world->name }}" placeholder="Name" required>
+
+    <label for="world-description">Description</label>
+    <textarea type="text" class="world-description text-black max-h-40" id="world-description" rows="4" name="description"  placeholder="Description" required> {{ $world->description }} </textarea>
 
     <input class="button" type="submit" id="submit-{{ $world->id }}" value="Edit World">
 </form>
