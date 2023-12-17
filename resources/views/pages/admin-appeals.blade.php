@@ -3,8 +3,8 @@
 @section('title', 'Appeal Management')
 
 @section('content')
-    <p><a href="/">Home</a> > <a href="/appeals">Admin</a></p>
-    <h1 class="my-2">Manage members</h1>
+    <p><a href="/">Home</a> > <a href="{{ route('admin-appeals') }}">Admin</a></p>
+    <h1 class="my-2">Manage appeals</h1>
     <form method="GET" action="/appeals">
         <input type="text" name="search" placeholder="Search by email/username" required>
         <input class="button" type="submit" value="Search">

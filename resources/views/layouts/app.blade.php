@@ -54,8 +54,8 @@
                             <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
                                 <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
                             </a>
-                        @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator')
-                            <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a>
+                        {{-- @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator') --}}
+                        {{--    <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a> --}}
                         @endif
                         <a id="logout" class="link desktop:flex hidden" href="{{ url('/logout') }}"> Logout </a>
                 </ul>                     
