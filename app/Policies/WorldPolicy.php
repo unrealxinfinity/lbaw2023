@@ -37,7 +37,7 @@ class WorldPolicy
     {
         if ($user == null) return false;
         if ($user->persistentUser->type_ === 'Administrator') return true;
-        return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        return ($user->persistentUser->member->worlds->contains('id', $world->id) && $world->owner_id === $user->persistentUser->member->id);
     }
     
     public function addMember(User $user, World $world): bool
