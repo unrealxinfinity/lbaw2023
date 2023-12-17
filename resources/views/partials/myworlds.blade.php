@@ -8,7 +8,7 @@
     </div>
     @canany(['delete', 'leave'], $world)
         <input type="checkbox" id="more-options-{{$world->id}}" class="hidden peer"/>
-        <h1><label for="more-options-{{$world->id}}" class="font-bold cursor-pointer">&#8942;</label></h1>
+        <h1 id="h1-{{$world->id}}"><label for="more-options-{{$world->id}}" class="font-bold cursor-pointer">&#8942;</label></h1>
         <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
             @can('delete', $world)
                 @include('form.delete-world-in-list', ['world' => $world])
