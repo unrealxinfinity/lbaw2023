@@ -65,6 +65,12 @@
                     </ul>
             @endif
         </nav>
+        @if (session('success'))
+            <div id="session-message" class="z-20 fixed w-full py-2 h-8 flex justify-between transition-transform duration-300 transform translate-y-0 top-18">
+                <h2>{{ session('success') }}</h2>
+                <span>X</span>
+            </div>
+        @endif
         <input id="show-menu" type="checkbox" class="hidden peer"/>
         @if(Auth::check())
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
