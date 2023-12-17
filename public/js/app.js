@@ -321,7 +321,7 @@ function archiveProjectAlert(ev) {
   
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
-  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
+  const img = await fetch('https://mc-heads.net/avatar/${username}.png');
   const blob = await img.blob();
   const myFile = new File([blob], 'profile.png');
 
@@ -399,7 +399,7 @@ function changeToInviteOutsideMember(ev) {
 
         }, 2000);
         Swal.fire({
-          title:`Account Successfully deleted!`,
+          title:'Account Successfully deleted!',
           icon: "success",
           showConfirmButton: false,
         });
