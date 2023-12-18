@@ -1660,7 +1660,9 @@ async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButton
   });
 }
 addEventListeners();
+
 showRedDot();
+
 function openSidebar() {
   console.log('hello');
   document.querySelector('#sidebar-text').click();

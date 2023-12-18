@@ -1,7 +1,8 @@
 <article class="desktop:w-1/3 desktop:mt-8 mt-20 desktop:ml-5">
     <label for="show-details" class="desktop:hidden cursor-pointer m-2">&times;</label>
     @can('edit', $task)
-        <form class = "edit-details grid grid-cols-3 gap-3" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
+
+        <form id="edit-task-details" class = "edit-details grid grid-cols-3 gap-3" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
             <fieldset>
                 <legend>Edit Task Details</legend>
                 @csrf
@@ -58,7 +59,7 @@
             </fieldset>
         </form>
         <h2 class="mt-7 mb-2">Assigned to</h2>
-        <ul class="members">
+        <ul id="members-assigned" class="members">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
                 <li>
                     @include('partials.member', ['member' => $member, 'main' => false])
@@ -66,10 +67,11 @@
             @endforeach
         </ul>
         @if ($task->status != 'Done')
+            <span id="assign-new-member"></span>
             @include('form.assignmember', ['task' => $task])
         @endif
     @else
-        <div class = "edit-details grid grid-cols-3 gap-3">
+        <div id="task-see-details" class = "edit-details grid grid-cols-3 gap-3">
                 <p class="col-span-1">Due At</p>
                 <p class="col-span-2">{{$task->due_at}}</p>
                 <p class="col-span-1">Priority</p>

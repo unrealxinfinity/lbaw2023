@@ -1,10 +1,16 @@
 @can('edit', $member)
 <article class="member" data-id="{{ $member->id }}" id="{{ $member->persistentUser->user->username }}">
+    @if (Auth::user()->persistentUser->type_=='Member')
+        <a href="#member-edit-picture" class="sr-only sr-only-focusable">Change Picture</a>
+        <a href="#change-picture-mc-username" class="sr-only sr-only-focusable">Change Picture with Minecraft Username</a>
+        <a href="#member-edit-details">Edit Details</a>
+    @endif
+
     <p><a href="/">Home</a> > <a
             href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a>
         > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
-        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data" class="grid grid-cols-2">
+        <form id="member-edit-picture" method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data" class="grid grid-cols-2">
             <fieldset>
                 <legend>Upload New Profile Picture</legend>
                 @csrf
@@ -24,7 +30,7 @@
                     <input class="button my-2" type="submit" value="Upload profile picture">
                 </div>
                 @if ($self ?? false)
-                <div class="form-post">
+                <div id="change-picture-mc-username" class="form-post">
                     <label for="mc-username">...Or use your Minecraft face!</label>
                     <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
                     <input id="mc-img-submit" class="button" type="submit" value="Confirm">
@@ -34,7 +40,7 @@
         </form>
     </header>
     <div class="form-post m-0 p-0 mb-5">
-        <form class="edit-member form-post outline-none mb-0 pb-0" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
+        <form id="member-edit-details" class="edit-member form-post outline-none mb-0 pb-0" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
             <fieldset>
                 <legend>Edit Details</legend>
                 @csrf

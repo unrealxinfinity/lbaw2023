@@ -1,6 +1,16 @@
+@if(count($tasks) > 0)
+    <a href="#my-assigned-tasks-home" class="sr-only sr-only-focusable">Tasks</a>
+@endif
+@if(count($projects) > 0)
+    <a href="#my-current-projects-home" class="sr-only sr-only-focusable">Projects</a>
+@endif
+@if(count($worlds) > 0)
+    <a href="#my-current-worlds-home" class="sr-only sr-only-focusable">Worlds</a>
+@endif
+
 <article class="homepage" data-id="{{ $member->id }}">
     @if(count($tasks) > 0)
-    <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY ASSIGNED TASKS </h2>
+    <h2 class="decoration-green underline underline-offset-4 decoration-2" id="my-assigned-tasks-home"> MY ASSIGNED TASKS </h2>
     <div class="panel">
     @foreach($tasks as $task)
     <div class="flex flex-col justify-end m-1 min-w-[11rem] w-44 h-32 tablet:min-w-[13rem] tablet:w-52 tablet:h-44 bg-black rounded outline outline-1 outline-white/10"> 
@@ -19,7 +29,7 @@
     </div>
     @endif
     @if(count($projects) > 0)
-    <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY CURRENT PROJECTS </h2>
+    <h2 class="decoration-green underline underline-offset-4 decoration-2" id="my-current-projects-home"> MY CURRENT PROJECTS </h2>
     <div class="panel">
     @foreach($projects as $project)
    
@@ -36,7 +46,7 @@
     @endif
     @if(count($worlds) > 0)
         <div class="flex">
-            <h2 class="decoration-green underline underline-offset-4 decoration-2"> MY CURRENT WORLDS</h2>
+            <h2 class="decoration-green underline underline-offset-4 decoration-2" id="my-current-worlds-home"> MY CURRENT WORLDS</h2>
             @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world">+</a></h2> @endif  
         </div>
         <div class="panel">

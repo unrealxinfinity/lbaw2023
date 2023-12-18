@@ -1,5 +1,26 @@
 <article class="project desktop:w-2/3 desktop:mr-5" data-id="{{ $project->id }}">
-    <div class="flex justify-between">
+    @can('edit', $project)
+        <a href="#edit-project" class="sr-only sr-only-focusable">Edit Project</a>
+    @endcan
+    @can('favorite', $project)
+        <a href="#favorite" class="sr-only sr-only-focusable">Set Project as Favorite</a>
+    @endcan
+    @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
+        <a href="#more-options" class="sr-only sr-only-focusable">More Options</a>
+    @endif
+    <a href="#project-tasks" class="sr-only sr-only-focusable">Tasks</a>
+    @can('projectTagCreate', $project)
+        <a href="#create-tag" class="sr-only sr-only-focusable">Create Tag</a>
+    @endcan
+    @can('addMember', $project)
+        <a href="#add-member" class="sr-only sr-only-focusable">Add Member</a>
+    @endcan
+    @can('createTask', $project)
+        <a href="#create-task" class="sr-only sr-only-focusable">Create Task</a>
+    @endcan
+    <a href="#see-members" class="sr-only sr-only-focusable">See project members</a>
+
+    <div class="flex justify-between">        
         <p><a href="/">Home</a> > <a href="/worlds/{{ $project->world->id }}"> {{ $project->world->name }}</a> > <a href="/projects/{{ $project->id }}">{{ $project->name }}</a></p>
         <h4><label for="show-details" class="desktop:hidden cursor-pointer text-opacity-50 outline outline-1 p-1 tablet:uppercase"> see details </label></h4>
     </div>
@@ -10,7 +31,7 @@
             <div class="flex">
             <h1>{{ $project->name }}</h1>
             @can('edit', $project)
-                <h1><a class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a></h1>
+                <h1><a id="edit-project" class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/projects/{{ $project->id }}/edit">&#9998;</a></h1>
             @endcan
             </div>
             @include('partials.tag', ['tags' => $tags,'type' => 'project'])
@@ -69,7 +90,7 @@
         </div>
     </header>
     @include('form.search-task', ['project' => $project])
-    <h2 class="mt-10"> TASKS </h2>
+    <h2 class="mt-10" id="project-tasks"> TASKS </h2>
     <div class="panel w-full">
         @foreach (['BackLog', 'Upcoming', 'In Progress', 'Finalizing', 'Done'] as $state)
             <div class="big-box flex flex-col justify-start m-1 px-1 py-2 h-128 bg-black bg-opacity-50 outline outline-1 outline-white/20 rounded min-w-[12rem] w-48">

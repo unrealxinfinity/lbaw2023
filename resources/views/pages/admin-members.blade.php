@@ -3,8 +3,11 @@
 @section('title', 'Member Management')
 
 @section('content')
+    <a href="#admin-create-account" class="sr-only sr-only-focusable">Create an Account</a>
+    <a href="#admin-manage-members" class="sr-only sr-only-focusable">Manage Members</a>
+
     <p><a href="/">Home</a> > <a href="/admin/members">Member Management</a></p>
-    <h1 class="my-2">Manage members</h1>
+    <h1 class="my-2" id="admin-manage-members">Manage members</h1>
     <form method="GET" action="/admin">
         <fieldset>
             <legend>Search Members</legend>
@@ -19,7 +22,7 @@
             @each('partials.member-edit', $members, 'member')
             <div class="my-5">{{ $members->links() }}</div>
         </div>
-        <h2 class="my-2"> Create an account </h2>
+        <h2 class="my-2" id="admin-create-account"> Create an account </h2>
         @include('form.createaccount')
     </section>
 @endsection

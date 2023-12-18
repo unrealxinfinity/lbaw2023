@@ -3,7 +3,6 @@
 @section('title', 'Home')
 
 @section('content')
-    
     @unless (Auth::check())
         <section id="homepage" class="h-screen mt-10 mx-5">
             <h1 class="text-center">Welcome to MineMax!</h1>
@@ -25,6 +24,9 @@
     @endif
 
     @if (isset($user) && $user->persistentUser->type_ == 'Administrator')
+        <a href="manage-members-home" class="sr-only sr-only-focusable">Manage Members</a>
+        <a href="manage-appeals-home" class="sr-only sr-only-focusable">Manage Appeals</a>
+
         @include('partials.adminhome')
     @endif
         

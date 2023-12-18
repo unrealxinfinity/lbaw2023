@@ -16,6 +16,7 @@
             @endforeach
         </ul>
         @can('edit', $task)
+        <span id="make-comment-task"></span>
         @include('form.comment', ['route' => 'task-comment', 'id' => $task->id, 'type' => 'task'])
         @endcan
     </section>
