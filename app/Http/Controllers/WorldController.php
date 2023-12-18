@@ -28,6 +28,7 @@ use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
 use App\Models\Tag;
+use App\Models\UserType;
 
 class WorldController extends Controller
 {
@@ -41,7 +42,7 @@ class WorldController extends Controller
             'world' => $world,
             'subform' => false,
             'members' => $world->members()->get()->reject(function ($member) {
-                return $member->persistentUser->type_ != "Member";
+                return $member->persistentUser->type_ != UserType::Member->value;
             }),
             'tags' => $world->tags
         ]);
@@ -78,7 +79,7 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
-        $is_admin = Auth::user()->persistentUser->type_ === 'Administrator';
+        $is_admin = Auth::user()->persistentUser->type_ === UserType::Administrator->value;
         if($is_admin) {
             NotificationController::WorldNotification($world, 'A website administrator has deleted ');
         } else{
@@ -94,7 +95,7 @@ class WorldController extends Controller
     {
         $request->validated();
         $world = World::findOrFail($id);
-        $is_admin = Auth::user()->persistentUser->type_ === 'Administrator';
+        $is_admin = Auth::user()->persistentUser->type_ === UserType::Administrator->value;
         if($is_admin) {
             NotificationController::WorldNotification($world, 'A website administrator has deleted ');
         } else{
@@ -483,7 +484,7 @@ class WorldController extends Controller
             'formTitle' => 'Transfer Ownership',
             'formName' => 'form.transferownership',
             'members' => $world->members()->get()->reject(function ($member) {
-                return $member->persistentUser->type_ != "Member";
+                return $member->persistentUser->type_ != UserType::Member->value;
             })
         ]);
     }
@@ -495,7 +496,7 @@ class WorldController extends Controller
         $member = Member::findOrFail($fields['owner']);
         $world = World::findOrFail($id);
 
-        if (!$member->worlds->contains('id', $id) || $member->persistentUser->type_ != 'Member') {
+        if (!$member->worlds->contains('id', $id) || $member->persistentUser->type_ != UserType::Member->value) {
             return redirect()->back()->withError("This member isn't a valid choice!");
         }
 
