@@ -438,7 +438,7 @@ class WorldController extends Controller
             'formTitle' => 'Edit World',
             'formName' => 'form.world-edit',
             'members' => $world->members()->get()->reject(function ($member) {
-                return $member->persistentUser->type_ != "Member";
+                return $member->persistentUser->type_ != UserType::Member->value;
             })
         ]);
     }

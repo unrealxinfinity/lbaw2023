@@ -18,6 +18,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\NotificationController;
+use App\Models\ProjectPermission;
+use App\Policies\ProjectPolicy;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -48,7 +50,7 @@ class ProjectController extends Controller
             'world_id' => $fields['world_id']
         ]);
         
-        $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => 'Project Leader']);
+        $project->members()->attach(Member::where('user_id', auth()->user()->id)->first()->id, ['permission_level' => ProjectPermission::Leader->value]);
 
         NotificationController::ProjectNotification($project,$fields['world_id'],'Created');
 
@@ -82,7 +84,7 @@ class ProjectController extends Controller
             $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
-            $can_remove = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == 'Project Leader';
+            $can_remove = Auth::user()->persistentUser->member->projects->where('id', $project->id)->first()->pivot->permission_level == ProjectPermission::Leader->value;
             $can_move = $can_remove || Auth::user()->persistentUser->member->worlds->where('id', $project->world_id)->first()->pivot->is_admin;
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
             return response()->json([
@@ -91,7 +93,7 @@ class ProjectController extends Controller
                 'username' => $username,
                 'project_id' => $project->id,
                 'picture' => $member->picture,
-                'is_leader' => $fields['type']=='Project Leader',
+                'is_leader' => $fields['type']== ProjectPermission::Leader->value,
                 'can_remove' => $can_remove,
                 'can_move' => $can_move
             ]);
@@ -153,7 +155,7 @@ class ProjectController extends Controller
         try{
             if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t promote yourself');
-            $member->projects()->updateExistingPivot($id ,['permission_level' => 'Project Leader']);
+            $member->projects()->updateExistingPivot($id ,['permission_level' => ProjectPermission::Leader->value]);
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was promoted in the ');
             return response()->json([
                 'error' => false,
@@ -178,7 +180,7 @@ class ProjectController extends Controller
         try{
             if($fields['username'] == Auth::user()->persistentUser->username)
                 throw new \Exception('You can\'t demote yourself');
-            $member->projects()->updateExistingPivot($id, ['permission_level' => 'Member']);
+            $member->projects()->updateExistingPivot($id, ['permission_level' => ProjectPermission::Member->value]);
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' was demoted in the ');
             return response()->json([
                 'error' => false,

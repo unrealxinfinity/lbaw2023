@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\ProjectPermission;
 use App\Models\User;
 use App\Models\Task;
 use App\Models\UserType;
@@ -45,7 +46,7 @@ class TaskPolicy
         $is_admin = $type === UserType::Administrator->value;
         $is_disabled = $type === UserType::Blocked->value || $type === UserType::Deleted->value;
         $project_permission = ($type === UserType::Member->value) ? $user->persistentUser->member->projects->where('id', $task->project_id)->first()->pivot->permission_level : 'None';
-        return $is_admin || (!$is_disabled && ($project_permission === 'Project Leader' || $project_permission === 'Member'));
+        return $is_admin || (!$is_disabled && ($project_permission === ProjectPermission::Leader->value || $project_permission === ProjectPermission::Member->value));
     }
 }
 
