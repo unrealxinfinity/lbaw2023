@@ -3,6 +3,7 @@
 namespace App\Policies;
 use App\Models\User;
 use App\Models\Project;
+use App\Models\UserType;
 use App\Models\World;
 class TagPolicy
 {   
@@ -16,8 +17,8 @@ class TagPolicy
     public function projectTagCreate(User $user,Project $project): bool
     {   
         $type = $user->persistentUser->type_;
-        $is_disabled = $type === 'Blocked' || $type === 'Deleted';
-        $is_member = $type === 'Member' && $user->persistentUser->member->projects->contains('id', $project->id);
+        $is_disabled = $type === UserType::Deleted->value || $type === UserType::Blocked->value;
+        $is_member = $type === UserType::Member->value && $user->persistentUser->member->projects->contains('id', $project->id);
         return (!$is_disabled && $is_member);
     }
     

@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+enum TaskStatus: string
+{
+    case BackLog = "BackLog";
+    case Upcoming = "Upcoming";
+    case InProgress = "In Progress";
+    case Finalizing = "Finalizing";
+    case Done = "Done";
+}
+
 class Task extends Model
 {
     use HasFactory;

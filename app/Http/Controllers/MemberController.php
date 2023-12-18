@@ -9,6 +9,7 @@ use App\Models\Appeal;
 use App\Models\Member;
 use App\Models\PersistentUser;
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,7 +26,7 @@ class MemberController extends Controller
     public function show(string $username): View
     {
         $user = User::where('username', $username)->firstOrFail();
-        if($user->persistentUser->type_ == "Administrator"){
+        if($user->persistentUser->type_ == UserType::Administrator->value){
             abort(404);
         }
         $member = $user->persistentUser->member;
@@ -82,7 +83,7 @@ class MemberController extends Controller
     public function showEditProfile(string $username): View
     {
         $user = User::where('username', $username)->firstOrFail();
-        if($user->persistentUser->type_ == "Administrator"){
+        if($user->persistentUser->type_ == UserType::Administrator->value){
             abort(404);
         }
         $member = $user->persistentUser->member;
@@ -139,7 +140,7 @@ class MemberController extends Controller
 
         $member = User::where('username', $username)->firstOrFail()->persistentUser->member;
 
-        if($member->persistentUser->user->has_password && !Hash::check($fields['old_password'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != "Administrator"){
+        if($member->persistentUser->user->has_password && !Hash::check($fields['old_password'], $member->persistentUser->user->password) && Auth::user()->persistentUser->type_ != UserType::Administrator->value){
             return back()->with('error','Password confirmation is incorrect!');
         }
 
@@ -174,7 +175,7 @@ class MemberController extends Controller
             $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%');
         })->where(function ($query) {
-                $query->whereRaw("(select type_ from users where users.id = members.user_id) != 'Deleted'");
+                $query->whereRaw("(select type_ from users where users.id = members.user_id) != " . UserType::Deleted->value);
             })->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);
@@ -212,7 +213,7 @@ class MemberController extends Controller
 
         $user = User::where('username', $username)->firstOrFail();
 
-        $user->persistentUser->type_ = 'Blocked';
+        $user->persistentUser->type_ = UserType::Blocked->value;
         $user->persistentUser->save();
 
         return redirect()->back()->withSuccess('User blocked')->withFragment($username);
@@ -224,8 +225,8 @@ class MemberController extends Controller
 
         $user = User::where('username', $username)->firstOrFail();
 
-        if ($user->persistentUser->type_ == 'Blocked') {
-            $user->persistentUser->type_ = 'Member';
+        if ($user->persistentUser->type_ == UserType::Blocked->value) {
+            $user->persistentUser->type_ = UserType::Member->value;
             $user->persistentUser->save();
 
             if (isset($user->persistentUser->member->appeal)) {
