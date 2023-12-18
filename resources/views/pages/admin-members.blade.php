@@ -6,7 +6,8 @@
     <p><a href="/">Home</a> > <a href="/admin">Admin</a></p>
     <h1 class="my-2">Manage members</h1>
     <form method="GET" action="/admin">
-        <input type="text" name="search" placeholder="Search by email/username" required>
+        <h3 class="my-0 mt-3"> <label for="search-members">Search</label> </h3>
+        <input type="text" name="search" id="search-members" placeholder="Search by email/username" required>
         <input class="button" type="submit" value="Search">
     </form>
     <section id="members">

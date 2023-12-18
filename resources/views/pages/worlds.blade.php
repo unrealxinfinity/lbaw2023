@@ -5,8 +5,11 @@
 @section('content')
     <p><a href="/">Home</a> > <a href="/worlds"> Worlds</a></p>
     <form action="/worlds" METHOD="GET">
-        <input type="text" name="search" placeholder="Search by name">
-        <input class="button" type="submit" value="Search">
+        <h3 class="my-0 mt-3"> <label for="search">Search:</label> </h3>
+        <input type="text" name="search" id="search" placeholder="Search by name">
+
+        <label for="submit-search" hidden>Search</label>
+        <input class="button" type="submit" id="submit-search" value="Search">
     </form>
     <section id="worlds">
         {{ $worlds->links() }}

@@ -9,13 +9,16 @@
         @csrf
         @method('POST')
         
-        <input type="text" name="name" placeholder="New World Name">
+        <h3 class="my-0 mt-3"> <label for="name">Name:</label> </h3>
+        <input type="text" name="name" id="name" placeholder="New World Name">
         @if ($errors->has('name'))
         <span class="error">
           {{ $errors->first('name') }}
         </span>
         @endif
-        <input type="text" name="description" placeholder="Description">
+
+        <h3 class="my-0 mt-3"> <label for="description">Description:</label> </h3>
+        <textarea type="text" name="description"  id="description" placeholder="Description"> </textarea>
         @if ($errors->has('description'))
         <span class="error">
           {{ $errors->first('description') }}
