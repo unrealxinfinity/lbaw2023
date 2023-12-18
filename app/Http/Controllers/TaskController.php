@@ -96,7 +96,6 @@ class TaskController extends Controller
 
         try {
             $member->tasks()->attach($task_id);
-            dd("assigning");
             NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);
             return response()->json([
                 'error' => false,
