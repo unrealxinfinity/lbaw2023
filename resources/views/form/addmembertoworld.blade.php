@@ -1,6 +1,6 @@
-<form class="form-post" id="invite-member">
-    <fieldset>
-        <h2> <legend>Invite Member</legend> </h2>
+<form class="form-outline" id="invite-member">
+    <fieldset class="form-post">
+        <legend>Invite Member</legend>
         @csrf
         <h3>Do you want to invite someone outside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
         <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
@@ -17,9 +17,9 @@
         <input class="button" type="submit" value="Invite">
     </fieldset>
 </form>
-<form class="form-post hidden" id="invite-new-member">
-    <fieldset>
-        <h2> <legend>Invite outside member</legend> </h2>
+<form class="form-outline hidden" id="invite-new-member">
+    <fieldset class="form-post">
+        <legend>Invite outside member</legend>
         @csrf
         <h3>Do you want to invite someone inside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
         <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">

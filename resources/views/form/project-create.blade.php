@@ -1,6 +1,6 @@
-<form action="{{ route('create-project') }}" id="new-project" class="form-post" method="POST">
-  <fieldset>
-    <h2> <legend>Create a New Project</legend> </h2>
+<form action="{{ route('create-project') }}" id="new-project" class="form-outline" method="POST">
+  <fieldset class="form-post">
+    <legend>Create a New Project</legend>
     @csrf
     @method('POST')
 

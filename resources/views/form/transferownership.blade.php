@@ -1,4 +1,4 @@
-<form class="form-post outline-none" id="transfer-ownership" method="POST" action="{{ route('transfer-world', ['id' => $world->id]) }}">
+<form class="form-outline outline-none" id="transfer-ownership" method="POST" action="{{ route('transfer-world', ['id' => $world->id]) }}">
     <fieldset class="form-post">
         <legend>Transfer Ownership</legend>
         @csrf

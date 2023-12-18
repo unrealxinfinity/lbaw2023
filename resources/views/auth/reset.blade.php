@@ -3,7 +3,7 @@
 @section('title', 'Reset Password')
 
 @section('content')
-<form method="POST" class="form-post" action="{{ route('reset-password') }}">
+<form method="POST" class="form-outline" action="{{ route('reset-password') }}">
   <fieldset class="form-post">
     <legend>Reset Password</legend>
     @csrf

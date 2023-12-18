@@ -4,8 +4,8 @@
             href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a>
         > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
-        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data" class="grid grid-cols-2">
-            <fieldset>
+        <form method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
+            <fieldset class="grid grid-cols-2">
                 <legend>Upload New Profile Picture</legend>
                 @csrf
                 @method('POST')
@@ -33,9 +33,9 @@
             </fieldset>
         </form>
     </header>
-    <div class="form-post m-0 p-0 mb-5">
-        <form class="edit-member form-post outline-none mb-0 pb-0" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
-            <fieldset>
+    <div class="form-outline m-0 mb-5">
+        <form class="edit-member" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
+            <fieldset class="form-post">
                 <legend>Edit Details</legend>
                 @csrf
                 @method('PUT')

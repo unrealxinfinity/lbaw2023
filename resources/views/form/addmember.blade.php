@@ -1,6 +1,6 @@
-<form id="add-member" class="add-member form-post">
-    <fieldset>
-        <h2><legend>Add Member</legend></h2>
+<form id="add-member" class="add-member form-outline">
+    <fieldset class="form-post">
+        <legend>Add Member</legend>
         @csrf
         <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     

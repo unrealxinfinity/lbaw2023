@@ -1,5 +1,5 @@
-<form id="add-content" method="POST" action={{ route($route, ['id' => $id]) }} class="form-post">
-  <fieldset>
+<form id="add-content" method="POST" action={{ route($route, ['id' => $id]) }} class="form-outline">
+  <fieldset class="form-post">
     <legend>Leave a Comment!</legend>
     @csrf
 

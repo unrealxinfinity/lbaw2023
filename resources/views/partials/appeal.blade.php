@@ -1,5 +1,5 @@
-<form class="form-post grid grid-lines-4 grid-cols-2 gap-4">
-    <fieldset>
+<form class="form-outline">
+    <fieldset class="grid grid-lines-4 grid-cols-2 gap-4">
         <legend>Manage User Appeal Status</legend>
         @include('partials.member', ['member' => $appeal->member, 'main' => false, 'appeal' => false])
         <h2 class="row-start-2 col-span-2">Reason for appeal</h2>

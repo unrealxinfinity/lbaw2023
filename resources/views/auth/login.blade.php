@@ -3,8 +3,8 @@
 @section('title', 'Login')
 
 @section('content')
-<form method="POST" class="form-post first-letter" action="{{ route('login') }}">
-    <fieldset>
+<form method="POST" class="form-outline first-letter" action="{{ route('login') }}">
+    <fieldset class="form-post">
         <legend>Login</legend>
         {{ csrf_field() }}
 

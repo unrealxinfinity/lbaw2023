@@ -1,8 +1,8 @@
 <article class="desktop:w-1/3 desktop:mt-8 mt-20 desktop:ml-5">
     <label for="show-details" class="desktop:hidden cursor-pointer m-2">&times;</label>
     @can('edit', $task)
-        <form class = "edit-details grid grid-cols-3 gap-3" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
-            <fieldset>
+        <form class = "edit-details" method="POST" action="{{ route('edit-details', ['id' => $task->id]) }}">
+            <fieldset class="grid grid-cols-3 gap-3">
                 <legend>Edit Task Details</legend>
                 @csrf
                 @method('PUT')

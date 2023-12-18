@@ -18,7 +18,7 @@
     
    
 <form class="edit-world form-post outline-none" method="POST" action="{{ route('update-world', ['id' => $world->id]) }}">
-    <fieldset class="edit-world form-post outline-none">
+    <fieldset class="form-post">
         <legend>Edit world details</legend>
         @csrf
         @method('PUT')

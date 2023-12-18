@@ -3,8 +3,8 @@
 @section('title', 'Recover password')
 
 @section('content')
-<form method="POST" class="form-post first-letter" action="{{ route('send-recover') }}">
-  <fieldset>
+<form method="POST" class="form-outline first-letter" action="{{ route('send-recover') }}">
+  <fieldset class="form-post">
     <legend>Recover your password</legend>
     @csrf
 
@@ -18,6 +18,5 @@
     <br> <br>
     <button class="button w-1/4" type="submit"> Recover Password </button>
   </fieldset>
-    
 </form>
 @endsection
