@@ -1,4 +1,6 @@
 <form method="POST" class="form-post" action="{{ route('register') }}">
+  <fieldset>
+    <legend>Create an Account</legend>
     @csrf
 
     <input type="hidden" name="login" value="0">
@@ -46,4 +48,5 @@
     <button class="button" type="submit">
         Register
     </button>
+  </fieldset>
 </form>
