@@ -3,7 +3,7 @@
 @section('title', 'Appeal Management')
 
 @section('content')
-    <p><a href="/">Home</a> > <a href="{{ route('admin-appeals') }}">Admin</a></p>
+    <p><a href="/">Home</a> > <a href="{{ route('admin-appeals') }}">Appeal Management</a></p>
     <h1 class="my-2">Manage appeals</h1>
     <form method="GET" action="/appeals">
         <fieldset>

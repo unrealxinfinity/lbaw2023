@@ -3,7 +3,7 @@
 @section('title', 'Member Management')
 
 @section('content')
-    <p><a href="/">Home</a> > <a href="/admin">Admin</a></p>
+    <p><a href="/">Home</a> > <a href="/admin/members">Member Management</a></p>
     <h1 class="my-2">Manage members</h1>
     <form method="GET" action="/admin">
         <fieldset>
