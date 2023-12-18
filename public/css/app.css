@@ -9,7 +9,7 @@
     @apply text-bMobile tablet:text-bTablet desktop:text-bDesktop;
   }
   h2 {
-      @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop text-white text-opacity-90;
+    @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop text-white text-opacity-90;
   }
   h3 {
     @apply text-msMobile tablet:text-msTablet desktop:text-msDesktop text-white text-opacity-80;
@@ -19,6 +19,9 @@
   }
   h4, p {
     @apply text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words text-white text-opacity-75;
+  }
+  legend {
+    @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop text-white text-opacity-90 pt-4 pb-1 my-0;
   }
 }
 
@@ -59,8 +62,11 @@
     .tag {
       @apply bg-grey rounded-full h-fit items-center w-fit p-1 m-0.5;
     }
+    .form-outline {
+      @apply m-1 my-4 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
+    }
     .form-post {
-      @apply flex flex-col py-2 px-3 m-1 my-4 child:my-2 outline outline-1 outline-white/20 bg-black bg-opacity-80 rounded;
+      @apply flex flex-col py-2 px-3 child:my-2;
     }
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;

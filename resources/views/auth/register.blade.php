@@ -3,7 +3,7 @@
 @section('title', 'Register')
 
 @section('content')
-  <form method="POST" class="form-post" action="{{ route('register') }}"> 
+  <form method="POST" class="form-outline" action="{{ route('register') }}"> 
     <fieldset class ="form-post">
         <legend>Register</legend>
         {{ csrf_field() }}

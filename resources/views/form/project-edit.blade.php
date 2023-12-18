@@ -15,8 +15,8 @@
         <input class="button tablet:ml-5 ml-2" type="submit" value="Upload project picture">
     </fieldset>
 </form>
-<form class="edit-project form-post outline-none" method="POST" action="{{ route('update-project', ['id' => $project->id]) }}">
-    <fieldset>
+<form class="edit-project form-outline outline-none" method="POST" action="{{ route('update-project', ['id' => $project->id]) }}">
+    <fieldset class="form-post">
         <legend>Edit Project Details</legend>
         @csrf
         @method('PUT')

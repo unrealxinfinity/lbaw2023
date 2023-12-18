@@ -6,8 +6,8 @@
 
     <h1 class="my-0 mt-3">Register to join MineMax and <a href="/worlds/{{ $world_id }}">{{ $world_name }}</a></h1>
 
-    <form method="POST" class="form-post" action="{{ route('register') }}">
-        <fieldset>
+    <form method="POST" class="form-outline" action="{{ route('register') }}">
+        <fieldset class="form-post">
             <legend>Register</legend>
             {{ csrf_field() }}
 

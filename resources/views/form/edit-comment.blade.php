@@ -1,5 +1,5 @@
-<form method="POST" class="flex flex-col" action="{{ route('edit-comment', ['id' => $comment->id]) }}">
-    <fieldset>
+<form method="POST" action="{{ route('edit-comment', ['id' => $comment->id]) }}">
+    <fieldset class="flex flex-col">
         <legend>Edit Your Comment</legend>
         @csrf
         @method('PUT')

@@ -2,8 +2,8 @@
     <h1>You have been invited to join <a href="/worlds/{{$world_id}}" class="underline">{{$world_name}}</a></h1>
     <h3 class="text-white">Do you wish to join?</h2>
     <div class="flex justify-around w-full max-w-4xl">
-        <form class="form-post w-1/2 px-4" action={{ route ('join-world', ['id' => $world_id]) }} method="POST">
-            <fieldset>
+        <form class="form-outline w-1/2" action={{ route ('join-world', ['id' => $world_id]) }} method="POST">
+            <fieldset class="form-post">
                 <legend class="sr-only">Accept Invite to Join the World</legend>
                 @csrf
                 @method('POST')
@@ -12,8 +12,8 @@
                 <input class="button" type="submit" value="Yes">
             </fieldset>
         </form>
-        <form class="form-post w-1/2 px-4" action={{ route ('join-world', ['id' => $world_id]) }} method="POST">
-            <fieldset>
+        <form class="form-outline w-1/2" action={{ route ('join-world', ['id' => $world_id]) }} method="POST">
+            <fieldset class="form-post">
                 <legend class="sr-only">Reject Invite to Join the World</legend>
                 @csrf
                 @method('POST')

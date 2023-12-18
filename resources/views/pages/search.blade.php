@@ -8,8 +8,8 @@
         $member = Auth::user() ? Auth::user()->persistentUser->member : null;
     @endphp
     @if ($member)
-        <form method="GET" class="mobile:flex mobile:justify-end grid grid-flow-row mobile:child:mx-2 child:my-0.5 mb-2 mobile:mx-0 mx-3" data-id="{{ $member->id }}" action="{{ route('search') }}">
-            <fieldset>
+        <form method="GET" data-id="{{ $member->id }}" action="{{ route('search') }}">
+            <fieldset class="mobile:flex mobile:justify-end grid grid-flow-row mobile:child:mx-2 child:my-0.5 mb-2 mobile:mx-0 mx-3">
                 <legend class="sr-only">Search</legend>
                 @csrf
     

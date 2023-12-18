@@ -1,6 +1,6 @@
-<form class = "new-task form-post" method="POST" action="{{ route('create-task') }}">
-    <fieldset>
-        <h2><legend>Create a Task</legend></h2>
+<form class = "new-task form-outline" method="POST" action="{{ route('create-task') }}">
+    <fieldset class="form-post">
+        <legend>Create a Task</legend>
         @csrf
         @method('POST')
         <h3 class="my-0 mt-3"><label for="title"> Title </label></h3>

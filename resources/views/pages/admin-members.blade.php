@@ -10,7 +10,7 @@
     <h1 class="my-2" id="admin-manage-members">Manage members</h1>
     <form method="GET" action="/admin">
         <fieldset>
-            <legend>Search Members</legend>
+            <h2><legend>Search Members</legend></h2>
             <h3 class="my-0 mt-3"> <label for="search-members">Search</label> </h3>
             <input type="text" name="search" id="search-members" placeholder="Search by email/username" required>
             <input class="button" type="submit" value="Search">

@@ -1,5 +1,5 @@
-<form method="POST" class="form-post" action="{{ route('register') }}">
-  <fieldset>
+<form method="POST" class="form-outline" action="{{ route('register') }}">
+  <fieldset class="form-post">
     <legend>Create an Account</legend>
     @csrf
 

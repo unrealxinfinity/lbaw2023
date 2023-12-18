@@ -1,5 +1,5 @@
-<form class="edit-world form-post outline-none" method="POST" action="{{ route('appeal', ['id' => $member]) }}">
-    <fieldset>
+<form class="edit-world form-outline outline-none" method="POST" action="{{ route('appeal', ['id' => $member]) }}">
+    <fieldset class="form-post">
         <legend>Submit an Unblock Appeal</legend>
         @csrf
         @method('POST')
