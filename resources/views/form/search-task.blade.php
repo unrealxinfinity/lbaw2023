@@ -1,5 +1,5 @@
-<form class="search-task child:mx-0.5 flex items-end" data-id="{{ $project->id }}">
-    <fieldset>
+<form class="search-task" data-id="{{ $project->id }}">
+    <fieldset class="flex mobile:flex-row flex-col mobile:items-end child:mx-0.5">
         <legend>Search Task</legend>
         @csrf
         <div class="flex flex-col mr-3">
@@ -20,7 +20,7 @@
                 <option value="EffortDescendent">Effort Descendent</option>
             </select>
         </div>
-        <input id="searchTaskButton" class="button ml-3 h-8 py-1" type="submit" value="Search Tasks">
+        <input id="searchTaskButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Tasks">
     </fieldset>
 </form>
 
