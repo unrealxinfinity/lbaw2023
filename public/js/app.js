@@ -636,10 +636,13 @@ function changeToInviteOutsideMember(ev) {
           moveForm.id= 'demote-project-leader';
 
           moveForm.innerHTML = `
-            <input type="hidden" name="_token" value="${csrfToken_}">
-            <input type="hidden" class="id" name="id" value="${json.project_id}">
-            <input type="text" class="username" name="username" value="${json.username}" hidden>
-            <input class="button bg-grey p-0 px-2" type="submit" value="Demote">
+            <fieldset>
+              <legend class="sr-only">Demote to Project Member</legend>
+              <input type="hidden" name="_token" value="${csrfToken_}">
+              <input type="hidden" class="id" name="id" value="${json.project_id}">
+              <input type="text" class="username" name="username" value="${json.username}" hidden>
+              <input class="button bg-grey p-0 px-2" type="submit" value="Demote">
+            </fieldset>
           `;
 
             options_div.appendChild(moveForm);
@@ -648,10 +651,13 @@ function changeToInviteOutsideMember(ev) {
           moveForm.id= 'assign-project-leader';
 
           moveForm.innerHTML = `
-            <input type="hidden" name="_token" value="${csrfToken_}">
-            <input type="hidden" class="id" name="id" value="${json.project_id}">
-            <input type="text" class="username" name="username" value="${json.username}" hidden>
-            <input class="button bg-grey p-0 px-2" type="submit" value="Promote">
+            <fieldset>
+              <legend class="sr-only">Promote to Project Leader </legend>
+              <input type="hidden" name="_token" value="${csrfToken_}">
+              <input type="hidden" class="id" name="id" value="${json.project_id}">
+              <input type="text" class="username" name="username" value="${json.username}" hidden>
+              <input class="button bg-grey p-0 px-2" type="submit" value="Promote">
+            </fieldset>
           `;
           options_div.appendChild(moveForm);
           moveForm.addEventListener('submit', sendAssignProjectLeaderRequest);
@@ -664,10 +670,13 @@ function changeToInviteOutsideMember(ev) {
         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   
         removeForm.innerHTML = `
-          <input type="hidden" name="_token" value="${csrfToken}">
-          <input type="hidden" class="id" name="id" value="${json.project_id}">
-          <input type="hidden" class="username" name="username" value="${json.username}">
-          <button type="submit"> &times; </button>
+          <fieldset>
+            <legend class="sr-only">Remove Member</legend>
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" class="id" name="id" value="${json.project_id}">
+            <input type="hidden" class="username" name="username" value="${json.username}">
+            <button type="submit"> &times; </button>
+          </fieldset>
         `;
 
         options_div.appendChild(removeForm);
