@@ -682,9 +682,14 @@ function changeToInviteOutsideMember(ev) {
         options_div.appendChild(removeForm);
         removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       }
-      div.append(options_div);
-      let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
-      section.appendChild(div);
+      if (json.task){
+        list.appendChild(div);
+      } else{
+        div.append(options_div);
+        let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
+        section.appendChild(div);
+      }
+      
     });
   }
 

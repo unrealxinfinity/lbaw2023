@@ -5,10 +5,10 @@
     <h2>Members</h2>
     <ul class="members mr-5 ml-2 mt-2">
         @if ($type == 'project')
-        <div id="project-leaders">
+        <ul id="project-leaders">
             <h3 class="text-green mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
-                <div class="h-5 flex items-center justify-between">
+                <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @cannot('assignOwn',$member)
                         <div class="flex items-center child:mx-1">
@@ -20,13 +20,13 @@
                             @endcan
                         </div>
                     @endcannot
-                </div>
+                </li>
             @endforeach
-        </div>
-        <div id="members">
+        </ul>
+        <ul id="members">
             <h3 class="text-green mb-1"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
-                <div class="h-5 flex items-center justify-between">
+                <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn', $member)
                         <div class="flex items-center child:mx-1">
@@ -37,9 +37,9 @@
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                             @endcan
                         @endcannot
-                </div>
+                </li>
             @endforeach
-        </div>
+        </ul>
         @endif
         @if ($type == 'world')
             <div class="flex mb-1 items-center">
@@ -49,11 +49,11 @@
                 @endcan
             </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
-            <div id="world-admins">
+            <ul id="world-admins">
                 <h3 class="text-green mb-1 mt-4"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
                     @if ($member->id != $thing->owner()->get()->first()->id)
-                        <div class="h-5 flex items-center justify-between">
+                        <li class="h-5 flex items-center justify-between">
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @cannot('assignOwn',$member)
                                 <div class="flex items-center child:mx-1">
@@ -65,14 +65,14 @@
                                     @endcan
                                 </div>
                             @endcannot
-                        </div>
+                        </li>
                     @endif
                 @endforeach
-            </div>
-            <div id="members">
+            </ul>
+            <ul id="members">
                 <h3 class="text-green mb-1 mt-4"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
-                    <div class="h-5 flex items-center justify-between">
+                    <li class="h-5 flex items-center justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn',$member)
                             <div class="flex items-center child:mx-1">
@@ -84,9 +84,9 @@
                                 @endcan
                             </div>
                         @endcannot
-                    </div>
+                    </li>
                 @endforeach
-            </div>
+            </ul>
         @endif
     </ul>
 </article>

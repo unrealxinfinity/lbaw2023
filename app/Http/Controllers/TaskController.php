@@ -102,7 +102,11 @@ class TaskController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
-                'picture' => $member->picture
+                'picture' => $member->picture,
+                'is_leader' => false,
+                'can_remove' => false,
+                'can_move' => false,
+                'task' => true
             ]);
         } catch (\Exception $e) {
             return response()->json([
