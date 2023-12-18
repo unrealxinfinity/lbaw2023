@@ -620,11 +620,11 @@ function changeToInviteOutsideMember(ev) {
   
       member.appendChild(header);
 
-      const div = document.createElement('div');
+      const li = document.createElement('li');
       const options_div = document.createElement('div');
-      div.classList.add('h-5', 'flex', 'items-center', 'justify-between');
+      li.classList.add('h-5', 'flex', 'items-center', 'justify-between');
       options_div.classList.add('flex', 'items-center', 'child:mx-1');
-      div.appendChild(member);
+      li.appendChild(member);
 
       if (json.can_move) {
 
@@ -683,11 +683,11 @@ function changeToInviteOutsideMember(ev) {
         removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       }
       if (json.task){
-        list.appendChild(div);
+        ul.appendChild(li);
       } else{
-        div.append(options_div);
+        li.append(options_div);
         let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
-        section.appendChild(div);
+        section.appendChild(li);
       }
       
     });
