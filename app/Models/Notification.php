@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+enum NotificationLevel: string 
+{
+    case Low = 'Low';
+    case Medium = 'Medium';
+    case High = 'High';
+}
+
 class Notification extends Model
 {
     use HasFactory;

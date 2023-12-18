@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 use App\Models\User;
+use App\Models\UserType;
 
 class RegisterController extends Controller
 {
@@ -48,7 +49,7 @@ class RegisterController extends Controller
 
         $name = $request->name ?? 'New Member';
         $persistentUser = PersistentUser::create([
-            'type_' => $member ? 'Member' : 'Administrator'
+            'type_' => $member ? UserType::Member->value : UserType::Administrator->value
         ]);
 
         User::create([

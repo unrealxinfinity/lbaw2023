@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use App\Http\Controllers\NotificationController;
+use App\Models\TaskStatus;
 
 class TaskController extends Controller
 {  
@@ -119,7 +120,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $this->authorize('edit', $task);
 
-        $task->status = 'Done';
+        $task->status = TaskStatus::Done->value;
 
         $task->save();
         NotificationController::TaskNotification($task,$task->project_id,'Completed');

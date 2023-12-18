@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+enum UserType: string 
+{
+    case Member = 'Member';
+    case Administrator = 'Administrator';
+    case Deleted = 'Deleted';
+    case Blocked = 'Blocked';
+}
+
 class PersistentUser extends Model
 {
     use HasFactory;

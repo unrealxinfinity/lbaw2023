@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\UserType;
 
 class NotificationPolicy
 {
@@ -18,7 +19,7 @@ class NotificationPolicy
     {
 
         $type = $user->persistentUser->type_;
-        $is_member = $type === 'Member';
+        $is_member = $type === UserType::Member->value;
 
         return !empty($world_id) && !empty($project_id) && !empty($task_id) && $is_member;
 
