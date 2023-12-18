@@ -10,7 +10,7 @@
                 <div class="flex">
                 <h1>{{ $world->name }}</h1>
                 @can('edit', $world)
-                    <h1><a class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a></h1>
+                    <h1><a id="edit-world" class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a></h1>
                 @endcan
                 </div>
                 @include('partials.tag', ['tags' => $world->tags,'type'=>'world'])
@@ -55,7 +55,7 @@
     <section id="search-project">@include('form.search-project', ['world' => $world])</section>
     <section id="projects">
     @if ($world->projects()->whereStatus('Active')->exists())
-        <h2 class="mt-10"> ONGOING PROJECTS </h2>
+        <h2 class="mt-10" id="Ongoing-projects"> ONGOING PROJECTS </h2>
         <ul class="panel">
             @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
                 <nav class="container">
@@ -70,7 +70,7 @@
         </ul>
         @endif
         @if ($world->projects()->whereStatus('Archived')->exists())
-        <h2 class="mt-10"> ARCHIVED PROJECTS </h2>
+        <h2 class="mt-10" id="Archived-projects"> ARCHIVED PROJECTS </h2>
         <ul class="flex justify-start h-40 m-5">
             @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
             <nav class="container">
@@ -86,10 +86,13 @@
         @endif
     </section>
     @can('edit', $world)
+        <span id="invite-member-to-world"></span>
         @include('form.addmembertoworld', ['world' => $world])
+        <span id="create-new-project"></span>
         @include('form.project-create', ['world'=>$world])
     @endcan
     @can('worldTagCreate', $world)
+        <span id="create-world-tag"></span>
         @include('form.tag-create',['world'=> $world,'type' => 'world'])
     @endcan
     <section id="comments">
@@ -100,6 +103,7 @@
             @endforeach
         </ul>
         @if (Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->worlds->contains('id', $world->id))
+        <span id="make-world-comment"></span>
         @include('form.comment', ['route' => 'world-comment', 'id' => $world->id, 'type' => 'world'])
         @endif
     </section>

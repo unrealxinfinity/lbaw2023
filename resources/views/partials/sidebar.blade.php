@@ -2,7 +2,7 @@
     <label for="show-details" class="desktop:hidden cursor-pointer m-2">&times;</label>
     <h2> Description </h2>
     <p class="mt-3 mb-5 desktop:w-11/12">{{ $thing->description }}</p>
-    <h2>Members</h2>
+    <h2 id="see-members">Members</h2>
     <ul class="members mr-5 ml-2 mt-2">
         @if ($type == 'project')
         <ul id="project-leaders">
