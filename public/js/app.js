@@ -380,7 +380,7 @@ function changeToInviteOutsideMember(ev) {
   async function deleteWorldAjaxButton(ev) {
     ev.preventDefault();
     async function request(){
-          const csrf = this.querySelector('input:first-child').value;
+          const csrf = this.querySelector('input[name="_token"]').value;
           const id = this.querySelector('input.id').value;
           const response = await fetch('/api/worlds/' + id, {
             method: 'DELETE',
@@ -437,7 +437,7 @@ function changeToInviteOutsideMember(ev) {
   async function sendLeaveWorldRequest(ev) {
     ev.preventDefault();
     async function request(){
-      const csrf = this.querySelector('input:first-child').value;
+      const csrf = this.querySelector('input[name="_token"]').value;
       const id = this.querySelector('input.id').value;
       const username = this.querySelector('input.username').value;
       const response = await fetch('/api/worlds/' + id + '/' + username, {
@@ -557,7 +557,7 @@ function changeToInviteOutsideMember(ev) {
 
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     const type = this.querySelector('select.type').value;
 
     const response = await fetch('/api/projects/' + id + '/' + username, {
@@ -729,7 +729,7 @@ function changeToInviteOutsideMember(ev) {
 
       const username= this.querySelector('input.username').value;
       const id = this.querySelector('input.world_id').value;
-      const csrf = this.querySelector('input:first-child').value;
+      const csrf = this.querySelector('input[name="_token"]').value;
       const type = this.querySelector('select.type').value;
 
       const response = await fetch('/api/worlds/' + id + '/invite', {
@@ -753,7 +753,7 @@ function changeToInviteOutsideMember(ev) {
 
     const email= this.querySelector('input.email').value;
     const id = this.querySelector('input.world_id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     const type = this.querySelector('select.type').value;
 
     const response = await fetch('/api/worlds/' + id + '/invite', {
@@ -810,7 +810,7 @@ function inviteNewMemberHandler(json) {
     event.preventDefault();
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     
     const response = await fetch('/api/tasks/' + id + '/' + username, {
       method: 'POST',
@@ -853,12 +853,11 @@ function inviteNewMemberHandler(json) {
 
   async function searchTaskRequest(event) {
     event.preventDefault();
-    const searchTaskForms = document.getElementsByClassName('search-task');
-    const id = searchTaskForms[0].getAttribute('data-id');
-    let searchTaskElems = searchTaskForms[0];
-    let searchedTask = searchTaskElems[1].value;
-    const csrf = searchTaskElems[0].value;
-    let order = searchTaskElems[3].value;
+    const searchTaskForm = event.target;
+    const id = searchTaskForm.getAttribute('data-id');
+    let searchedTask = searchTaskForm.querySelector('input[name="taskName"]').value;
+    const csrf = searchTaskForm.querySelector('input[name="_token"]').value;
+    let order = searchTaskForm.querySelector('select[name="order"]').value;
 
     const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
 
@@ -910,34 +909,34 @@ function inviteNewMemberHandler(json) {
 
   async function searchProjectRequest(event) {
     event.preventDefault();
-    const searchProjectForms = document.getElementsByClassName('search-project');
-    const id = searchProjectForms[0].getAttribute('data-id');
-    let searchProjectElems = searchProjectForms[0];
-    let searchedProject = searchProjectElems[1].value;
-    const csrf = searchProjectElems[0].value;
-    let tags= searchProjectElems[3].value;
-    let order = searchProjectElems[4].value;
+    const searchProjectForm = event.target;
+    const id = searchProjectForm.getAttribute('data-id');
+    let searchedProject = searchProjectForm.querySelector('input[name="projectName"]').value;
+    const csrf = searchProjectForm.querySelector('input[name="_token"]').value;
+    let tags = searchProjectForm.querySelector('input[name="tags"]').value;
+    let order = searchProjectForm.querySelector('select[name="order"]').value;
+
     let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order + '&tags=' + tags;
+
     const response = await fetch(url, {
-      method: 'GET', 
-      headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrf, 
-      },
-  })
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf, 
+        },
+    })
     .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          searchProjectHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-      
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            throw new Error('Response status not OK');
+        }
+    })
+    .then(data => {
+        searchProjectHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 }
 
 function searchProjectHandler(json){
@@ -975,13 +974,12 @@ function searchProjectHandler(json){
 }
 
 async function addTagRequest() {
-  const tagForms = document.getElementsByClassName('new-tag');
-  const id = tagForms[0].getAttribute('data-id');
-  const type = tagForms[0].getAttribute('data-type');
-  let tagElem = tagForms[0].children;
-  let tagNameInput = tagForms[0].querySelector('.tagName');
+  const tagForm = document.querySelector('.new-tag')
+  const id = tagForm.getAttribute('data-id');
+  const type = tagForm.getAttribute('data-type');
+  let tagNameInput = tagForm.querySelector('.tagName');
   let tagName = tagNameInput.value;
-  const csrf = tagElem[0].value;
+  const csrf = tagForm.querySelector('input[name="_token"]').value;
   let url= "";
   if(type == "project"){
      url = '/api/projects/' + id + '/' +'tags/create';
@@ -1038,15 +1036,15 @@ function addTagHandler(json){
   }
 }
 async function sendDeleteTagRequest(ev) {
-
   ev.preventDefault();
-  const tagForms = ev.target.parentElement.parentElement;
-    const id = tagForms.getAttribute('data-id');
-    const type = tagForms.getAttribute('data-type');
-    let tagElem = tagForms.children;
-    let tagName= tagElem[1].value;
-    let tagId= tagElem[2].value;
-    const csrf = tagElem[0].value;
+
+  const tagForm = ev.target.closest('.delete-tag');
+  const id = tagForm.getAttribute('data-id');
+  const type = tagForm.getAttribute('data-type');
+  let tagName = tagForm.querySelector('input[name="tagName"]').value;
+  let tagId = tagForm.querySelector('input[name="tag_id"]').value;
+  const csrf = tagForm.querySelector('input[name="_token"]').value;
+
   let url = "";
   if(type == "project"){
     url = '/api/projects/' + id + '/' +'tags/' + 'delete/'+ tagId;
@@ -1087,7 +1085,7 @@ async function deleteTagHandler(json){
 async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     url = `/api/worlds/${id}/${username}`;
@@ -1118,7 +1116,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
 async function sendRemoveMemberFromProjectRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
       let id = this.querySelector('input.id').value;
       let username = this.querySelector('input.username').value;
     
@@ -1294,7 +1292,7 @@ function ShowNotificationsHandler(json,ev){
 async function sendAssignAdminToWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/worlds/' + id + '/assign';  
@@ -1331,7 +1329,7 @@ function assignAdminToWorldHandler(data) {
 async function sendDemoteAdminFromWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/worlds/' + id + '/demote';
@@ -1369,11 +1367,10 @@ async function sendAssignProjectLeaderRequest(ev) {
   ev.preventDefault();
   
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/projects/' + id + '/assign';
-    console.log(username);
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -1406,7 +1403,7 @@ function assignProjectLeaderHandler(data) {
 async function sendDemoteProjectLeaderRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/projects/' + id + '/demote';
@@ -1442,7 +1439,7 @@ async function sendDemoteProjectLeaderRequest(ev) {
     event.preventDefault();
 
     const id = this.querySelector('form#favorite input.id').value;
-    const csrf = this.querySelector('form#favorite input:first-child').value;
+    const csrf = this.querySelector('form#favorite input[name="_token"]').value;
     const type = this.querySelector('form#favorite input.type').value;
 
     const response = await fetch('/api/' + type + '/' + id + '/favorite', {
