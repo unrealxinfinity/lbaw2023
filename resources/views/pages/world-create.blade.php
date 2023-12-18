@@ -5,7 +5,9 @@
 @section('content')
 <article class = "world">
     <p><a href="/">Home</a> > <a href="/create-world">New World</a></p>
-    <form action="{{ route('create-world') }}" id="new-world" method="POST" class="form-post">Create a New World!!
+    <form action="{{ route('create-world') }}" id="new-world" method="POST" class="form-post">
+      <fieldset>
+        <legend>Create a New World!</legend>
         @csrf
         @method('POST')
         
@@ -26,7 +28,7 @@
         @endif
 
         <button class="button" type="submit">Create</button>
-
+      </fieldset>
     </form>
 </article>
 @endsection

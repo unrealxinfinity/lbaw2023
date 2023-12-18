@@ -20,12 +20,15 @@
         <div class="relative flex text-left pt-1">
             @can('favorite', $world)
                 <form id="favorite">
-                    @csrf
-                    <input type="hidden" class="id" name="id" value="{{ $world->id }}">
-                    <input type="hidden" class="type" name="type" value="worlds">
-                    <h1><button class="pr-2" type="submit">
-                        @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
-                        @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
+                    <fieldset>
+                        <legend class="sr-only">Set World as Favorite</legend>
+                        @csrf
+                        <input type="hidden" class="id" name="id" value="{{ $world->id }}">
+                        <input type="hidden" class="type" name="type" value="worlds">
+                        <h1><button class="pr-2" type="submit">
+                            @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
+                            @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
+                    </fieldset>
                 </form>
             @endcan
             @canany(['leave','delete'], $world)
@@ -37,9 +40,12 @@
                     @endcan
                     @can('leave', $world)
                     <form method="POST" class="leave-world" action={{ route('leave-world', ['id' => $world->id, 'username' => Auth::user()->username]) }}>
-                        @CSRF
-                        @method('DELETE')
-                        <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                        <fieldset>
+                            <legend class="sr-only">Leave World</legend>
+                            @CSRF
+                            @method('DELETE')
+                            <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                        </fieldset>
                     </form>
                     @endcan
                 </div>

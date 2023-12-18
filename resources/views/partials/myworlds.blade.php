@@ -15,10 +15,13 @@
             @endcan
             @can('leave', $world)
                 <form class="leave-world-list">
-                    @CSRF
-                    <input type="hidden" class="id" name="id" value={{$world->id}}>
-                    <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
-                    <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                    <fieldset>
+                        <legend class="sr-only">Leave World</legend>
+                        @CSRF
+                        <input type="hidden" class="id" name="id" value={{$world->id}}>
+                        <input type="hidden" class="username" name="username" value={{Auth::user()->username}}>
+                        <h3><button class="px-3 py-1 w-full" type="submit">Leave World</button></h3>
+                    </fieldset>
                 </form>
             @endcan
         </div>

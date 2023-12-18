@@ -19,12 +19,15 @@
         <div class="relative flex text-left pt-1">
             @can('favorite', $project)
                 <form id="favorite">
-                    @csrf
-                    <input type="hidden" class="id" name="id" value="{{ $project->id }}">
-                    <input type="hidden" class="type" name="type" value="projects">
-                    <h1><button class="pr-2" type="submit">
-                        @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteProject->contains('id', $project->id)) &#9733; 
-                        @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
+                    <fieldset>
+                        <legend class="sr-only">Set Project as Favorite</legend>
+                        @csrf
+                        <input type="hidden" class="id" name="id" value="{{ $project->id }}">
+                        <input type="hidden" class="type" name="type" value="projects">
+                        <h1><button class="pr-2" type="submit">
+                            @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteProject->contains('id', $project->id)) &#9733; 
+                            @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
+                    </fieldset>
                 </form>
             @endcan
             @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
@@ -33,24 +36,33 @@
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
                     @can('delete', $project)
                     <form method="POST" class= "delete-project" action="{{ route('delete-project', ['id' => $project->id]) }}">
-                        @csrf
-                        @method('DELETE')
-                        <h3><button class="px-3 py-1 w-full" type="submit">Delete Project</button></h3>
+                        <fieldset>
+                            <legend class="sr-only">Delete Project</legend>
+                            @csrf
+                            @method('DELETE')
+                            <h3><button class="px-3 py-1 w-full" type="submit">Delete Project</button></h3>
+                        </fieldset>
                     </form>
                     @endcan
                     @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
                     <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
-                        @csrf
-                        @method('POST')
-                        <h3><button class="px-3 py-1 w-full" type="submit">Archive Project</button></h3>
+                        <fieldset>
+                            <legend class="sr-only">Archive Project</legend>
+                            @csrf
+                            @method('POST')
+                            <h3><button class="px-3 py-1 w-full" type="submit">Archive Project</button></h3>
+                        </fieldset>
                     </form>
                     @endif
                     @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->projects->contains('id', $project->id))
-                        <form method="POST" class="leave-project" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
-                            @CSRF
-                            @method('DELETE')
-                            <h3><button class="px-3 py-1 w-full" type="submit">Leave Project</button></h3>
-                        </form>
+                        <fieldset>
+                            <legend class="sr-only">Leave Project</legend>
+                            <form method="POST" class="leave-project" action={{ route('leave-project', ['id' => $project->id, 'username' => Auth::user()->username]) }}>
+                                @CSRF
+                                @method('DELETE')
+                                <h3><button class="px-3 py-1 w-full" type="submit">Leave Project</button></h3>
+                            </form>
+                        </fieldset>
                     @endif
                 </div>
             @endif
