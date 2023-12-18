@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+enum ProjectStatus: string
+{
+    case Active = 'Active';
+    case Archived = 'Archived';
+}
+
+enum ProjectPermission: string 
+{
+    case Leader = 'Project Leader';
+    case Member = 'Member';
+}
+
 class Project extends Model
 {
     use HasFactory;
