@@ -683,7 +683,7 @@ function changeToInviteOutsideMember(ev) {
         removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       }
       if (json.task){
-        list.appendChild(li);
+        ul.appendChild(li);
       } else{
         li.append(options_div);
         let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');

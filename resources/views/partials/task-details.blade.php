@@ -60,7 +60,9 @@
         <h2 class="mt-7 mb-2">Assigned to</h2>
         <ul class="members">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
-                @include('partials.member', ['member' => $member, 'main' => false])
+                <li>
+                    @include('partials.member', ['member' => $member, 'main' => false])
+                </li>
             @endforeach
         </ul>
         @if ($task->status != 'Done')

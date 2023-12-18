@@ -101,7 +101,7 @@ class TaskController extends Controller
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
-                'picture' => $member->picture,
+                'picture' => $member->getProfileImage(),
                 'is_leader' => false,
                 'can_remove' => false,
                 'can_move' => false,
