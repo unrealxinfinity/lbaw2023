@@ -1,5 +1,5 @@
-<form class="search-project child:mx-0.5 flex items-end" data-id="{{ $world->id }}">
-    <fieldset>
+<form class="search-project" data-id="{{ $world->id }}">
+    <fieldset class="flex mobile:flex-row flex-col mobile:items-end child:mx-0.5">
         <legend>Search a Project</legend>
         @csrf
         <div class="flex flex-col mr-3">
@@ -19,7 +19,7 @@
                 <option value="Z-A">Z-A</option>
             </select>
         </div>
-        <input id="searchProjectButton" class="button h-8 py-1" type="submit" value="Search Projects">
+        <input id="searchProjectButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Projects">
     </fieldset>
 </form>
 
