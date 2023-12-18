@@ -90,7 +90,7 @@ class ProjectController extends Controller
                 'id' => $member->id,
                 'username' => $username,
                 'project_id' => $project->id,
-                'picture' => $member->picture,
+                'picture' => $member->getProfileImage(),
                 'is_leader' => $fields['type']=='Project Leader',
                 'can_remove' => $can_remove,
                 'can_move' => $can_move,
