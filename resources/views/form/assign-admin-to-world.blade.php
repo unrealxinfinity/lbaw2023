@@ -18,7 +18,6 @@
             <input type="hidden" class="id" name="id" value="{{ $world->id }}">
             <input type="text" class="username" name="username"  value="{{$member->persistentUser->user->username}}" hidden>
     
-            <label for="submit-promote" class="sr-only">Submit promote admin</label>
             <input id="submit-promote" class="button bg-grey p-0 px-2" type="submit" value="Promote">
         </fieldset>
     </form>
