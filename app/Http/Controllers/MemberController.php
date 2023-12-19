@@ -175,7 +175,7 @@ class MemberController extends Controller
             $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%');
         })->where(function ($query) {
-                $query->whereRaw("(select type_ from users where users.id = members.user_id) != " . UserType::Deleted->value);
+                $query->whereRaw("(select type_ from users where users.id = members.user_id) != '" . UserType::Deleted->value . "'");
             })->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);

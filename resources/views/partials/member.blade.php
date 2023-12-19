@@ -22,6 +22,8 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
         @elseif ($member->persistentUser->type_ == 'Blocked')
+        <h2 class="decoration-green underline underline-offset-4 decoration-2"> YOU HAVE BEEN BLOCKED </h2>
+        <p class="my-4">Reason for block: {{ $member->persistentUser->block_reason }}</p>
             @can('appeal', $member)
                 <a class="button" href="/appeal">Appeal Block</a>
             @else
