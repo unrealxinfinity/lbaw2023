@@ -11,7 +11,7 @@
         > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
         <form id="member-edit-picture" method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
-            <fieldset class="grid grid-cols-2">
+            <fieldset class="grid mobile:grid-cols-2 mobile:grid-rows-none grid-rows-2">
                 <legend>Upload New Profile Picture</legend>
                 @csrf
                 @method('POST')
@@ -31,7 +31,7 @@
                 </div>
                 @if ($self ?? false)
                 <div id="change-picture-mc-username" class="form-post">
-                    <label for="mc-username">...Or use your Minecraft face!</label>
+                    <h2><label for="mc-username">...Or use your Minecraft face!</label></h2>
                     <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
                     <input id="mc-img-submit" class="button" type="submit" value="Confirm">
                 </div>
