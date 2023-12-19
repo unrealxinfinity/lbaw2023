@@ -4,13 +4,13 @@
       @method('POST')
 
       <input type="hidden" name="world_id" value="{{ $world->id }}">
-      <input type="text" name="name" placeholder="New Project Name -> required" required>
+      <input type="text" name="name" placeholder="New Project Name" required>
       @if ($errors->has('name'))
       <span class="error">
         {{ $errors->first('name') }}
       </span>
       @endif
-      <input type="text" name="description" placeholder="Description -> required" required>
+      <input type="text" name="description" placeholder="Description" required>
       @if ($errors->has('description'))
       <span class="error">
         {{ $errors->first('description') }}

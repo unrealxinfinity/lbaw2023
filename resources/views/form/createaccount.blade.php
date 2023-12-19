@@ -12,7 +12,7 @@
     @endif
 
     <h3 class="my-0"><label for="name">Display name</label></h3>
-    <input id="name" type="text" name="name" placeholder="Display name -> optional" value="{{ old('name') }}">
+    <input id="name" type="text" name="name" placeholder="Display name" value="{{ old('name') }}">
     @if ($errors->has('name'))
         <span class="error">
           {{ $errors->first('name') }}

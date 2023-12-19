@@ -2,14 +2,14 @@
     @csrf
     @method('POST')
     <h2>Create a task</h2>
-    <input type="text" name="title" placeholder="Title -> required">
+    <input type="text" name="title" placeholder="Title">
     @if ($errors->has('title'))
         <span class="error">
             {{ $errors->first('title') }}
         </span>
     @endif
     
-    <input type="text" name="description" placeholder="Description -> required" required>
+    <input type="text" name="description" placeholder="Description" required>
     @if ($errors->has('description'))
         <span class="error">
             {{ $errors->first('description') }}
