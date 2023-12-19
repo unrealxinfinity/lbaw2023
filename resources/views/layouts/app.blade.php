@@ -73,9 +73,8 @@
             @endif
         </nav>
         <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" type="checkbox" class="sr-only peer"/>
-        @if(Auth::check())
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
-            <li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>
+            @if(Auth::check())<li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>@endif
             <li class="menu-item"><a href="/">Home Page</a></li>
             <li class="menu-item"><a href="/worlds">All Worlds</a></li>
             @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
@@ -89,7 +88,6 @@
                 <li class="button visible desktop:hidden w-fit"><a href="{{ url('/logout') }}"> Logout </a></li>
             @endif
         </ul>
-        @endif
         <main class="bg-black bg-opacity-40 pb-10 pt-24 tablet:px-10 px-2 z-0">
             <section id="content">
                 @yield('content')
