@@ -6,7 +6,7 @@
     <ul class="members mr-5 ml-2 mt-2">
         @if ($type == 'project')
         <ul id="project-leaders">
-            <h3 class="text-green mb-1"> Project Leaders </h3>
+            <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
@@ -24,7 +24,7 @@
             @endforeach
         </ul>
         <ul id="members">
-            <h3 class="text-green mb-1"> Members </h3>
+            <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
@@ -43,14 +43,14 @@
         @endif
         @if ($type == 'world')
             <div class="flex mb-1 items-center">
-                <h3 class="text-green"> World Owner </h3>
+                <h3 class="decoration-green underline underline-offset-4 decoration-2"> World Owner </h3>
                 @can('transfer', $thing)
-                    <h2 class="ml-2 font-extrabold"><a href="/worlds/{{ $world->id }}/transfer" style="text-shadow: 0px 0px 6px red;">&#x2942;</a></h2>
+                    <h2 class="ml-2 font-bold"><a href="/worlds/{{ $world->id }}/transfer" style="text-shadow: 0px 0px 10px green;">&#x2942;</a></h2>
                 @endcan
             </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
             <ul id="world-admins">
-                <h3 class="text-green mb-1 mt-4"> World Admins </h3>
+                <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
                     @if ($member->id != $thing->owner()->get()->first()->id)
                         <li class="h-5 flex items-center justify-between">
@@ -70,7 +70,7 @@
                 @endforeach
             </ul>
             <ul id="members">
-                <h3 class="text-green mb-1 mt-4"> Members </h3>
+                <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
                     <li class="h-5 flex items-center justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])

@@ -4,7 +4,7 @@
             @include('partials.member', ['member' => $comment->member, 'main' => false])
         </div>
         @if (Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->id == $comment->member_id)
-            <h3><button class="show-edit mobile:mr-3 mr-1 py-0.5 px-1.5 rounded-full outline outline-1 outline-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">Edit</button></h3>
+            <h3><button class="show-edit mobile:mr-3 mr-1 py-0.5 px-1.5 rounded-full outline outline-1 outline-white/20 focus:outline-none">Edit</button></h3>
         @endif
         <p class="pt-1"> {{ $comment->date_ }} </p>
     </header>
