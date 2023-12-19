@@ -11,8 +11,8 @@
             </span>
         @endif
         
-        <h3 class="my-0 mt-3"><label for="description"> Description <b class="text-red">*</b></h3>
-        <textarea type="text" name="description" id="description" placeholder="Some non-blank text"></textarea>
+        <h3 class="my-0 mt-3"><label for="description"> Description <b class="text-red">*</b></label> </h3>
+        <textarea type="text" name="description" id="description"placeholder="Some non-blank text"> </textarea>
         @if ($errors->has('description'))
             <span class="error">
                 {{ $errors->first('description') }}
@@ -28,8 +28,8 @@
             <option value="Done">Done</option>
         </select>
 
-        <h3 class="my-0 mt-3"> <label for="due_at"> Due At <b class="text-red">*</b></label></h3>
-        <input type="date" name="due_at" id="due_at" placeholder="Due Date" required>
+        <h3 class="my-0 mt-3"> <label for="due_at"> Due At <b class="text-red">*</b></label> </h3>
+        <input type="date" name="due_at" id="due_at" required>
         @if ($errors->has('due_at'))
             <span class="error">
                 {{ $errors->first('due_at') }}
