@@ -129,14 +129,16 @@ function addEventListeners() {
   }, false);
 
   let main = document.querySelector('main');
-  main.addEventListener('click', function() {
-    let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-    if (showMenu.checked) {
-      document.querySelector('#show-menu').checked = false;
-    }
-    if (!showNotif) {
-      document.querySelector('#notificationArea').classList.toggle('hidden');
+  main.addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) {
+      let showMenu = document.querySelector('#show-menu');
+      let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+      if (showMenu.checked) {
+        showMenu.checked = false;
+      }
+      if (!showNotif) {
+        document.querySelector('#notificationArea').classList.toggle('hidden');
+      }
     }
   });
   
@@ -1162,6 +1164,9 @@ async function sendShowNotificationsRequest(ev) {
   if(ev != null){
     ev.preventDefault();
     }
+  var expanded = ev.target.getAttribute('aria-expanded') === 'true';
+  ev.target.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+
   const url = '/api/notifications';
   const response = await fetch(url, {
       method: 'GET', 
