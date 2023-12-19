@@ -27,7 +27,7 @@
             @can('appeal', $member)
                 <a class="button" href="/appeal">Appeal Block</a>
             @else
-                <a class="button">Appeal Sent</a>
+                <a class="button" href="/appeal">View Appeal</a>
             @endcan
         @endif
         @can('memberTagCreate', $member)
@@ -41,7 +41,11 @@
             <h1 class="mt-3 ml-5"> Appeal Block </h1>
             <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
             </div>
-            @include('form.appeal', ['member' => $member])
+            @if (isset($member->appeal))
+                @include('partials.appeal-readonly', ['member' => $member])
+            @else    
+                @include('form.appeal', ['member' => $member])
+            @endif    
         </div>
     </div>
     @endif

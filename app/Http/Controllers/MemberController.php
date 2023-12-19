@@ -55,7 +55,8 @@ class MemberController extends Controller
         $this->authorize('create', Member::class);
 
         $appeal = Appeal::findOrFail($id);
-        $appeal->delete();
+        $appeal->denied = true;
+        $appeal->save();
 
         return redirect()->back()->withResponse('Appeal denied.');
     }
