@@ -3,7 +3,7 @@
         <legend>Create a Task</legend>
         @csrf
         @method('POST')
-        <h3 class="my-0 mt-3"><label for="title"> Title </label></h3>
+        <h3 class="my-0 mt-3"><label for="title"> Title <b class="text-red">*</b></label></h3>
         <input type="text" name="title" id="title" placeholder="Title">
         @if ($errors->has('title'))
             <span class="error">
@@ -11,8 +11,8 @@
             </span>
         @endif
         
-        <h3 class="my-0 mt-3"><label for="description"> Description </label> </h3>
-        <textarea type="text" name="description" id="description"placeholder="Description"> </textarea>
+        <h3 class="my-0 mt-3"><label for="description"> Description <b class="text-red">*</b></label> </h3>
+        <textarea type="text" name="description" id="description"placeholder="Some non-blank text"> </textarea>
         @if ($errors->has('description'))
             <span class="error">
                 {{ $errors->first('description') }}
@@ -28,24 +28,24 @@
             <option value="Done">Done</option>
         </select>
 
-        <h3 class="my-0 mt-3"> <label for="due_at"> Due At </label> </h3>
-        <input type="date" name="due_at" id="due_at">
+        <h3 class="my-0 mt-3"> <label for="due_at"> Due At <b class="text-red">*</b></label> </h3>
+        <input type="date" name="due_at" id="due_at" required>
         @if ($errors->has('due_at'))
             <span class="error">
                 {{ $errors->first('due_at') }}
             </span>
         @endif
         
-        <h3 class="my-0 mt-3"> <label for="effort"> Effort </label> </h3>
-        <input type="number" name="effort" id="effort" placeholder="Effort">
+        <h3 class="my-0 mt-3"> <label for="effort"> Effort <b class="text-red">*</b></label> </h3>
+        <input type="number" name="effort" id="effort" placeholder="Effort" required>
         @if ($errors->has('effort'))
             <span class="error">
                 {{ $errors->first('effort') }}
             </span>
         @endif
         
-        <h3 class="my-0 mt-3"> <label for="priority"> Priority </label> </h3>
-        <input type="text" name="priority" id="priority" placeholder="Priority">
+        <h3 class="my-0 mt-3"> <label for="priority"> Priority  <b class="text-red">*</b></label> </h3>
+        <input type="text" name="priority" id="priority" placeholder="Priority" required>
         @if ($errors->has('priority'))
             <span class="error">
                 {{ $errors->first('priority') }}

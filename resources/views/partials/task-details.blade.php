@@ -10,7 +10,7 @@
                 <input type="hidden" class="title" name="title" value="{{ $task->title }}">
                 <input type="hidden" class="description" name="description" value="{{ $task->description }}">
                 
-                <p class="col-span-1 self-center"> <label for="task_due_at"> Due At </label> </p>
+                <p class="col-span-1 self-center"> <label for="task_due_at"> Due At <b class="text-red">*</b></label> </p>
                 <input type="date" class="due_at col-span-2" id="task_due_at" name="due_at" value={{$task->due_at}}>
                 @if ($errors->has('due_at'))
                     <span class="error col-span-3">
@@ -18,14 +18,14 @@
                     </span>
                 @endif
                 
-                <p class="col-span-1 self-center"> <label for="task-details-priority"> Priority </label></p>
+                <p class="col-span-1 self-center"> <label for="task-details-priority"> Priority <b class="text-red">*</b></label></p>
                 <input type="text" class="priority col-span-2" id="task-details-priority" name="priority" value="{{$task->priority}}">
                 @if ($errors->has('priority'))
                     <span class="error col-span-3">
                         {{ $errors->first('priority') }}
                     </span>
                 @endif
-                <p class="col-span-1 self-center"> <label for="task-details-effort">Effort </label> </p>
+                <p class="col-span-1 self-center"> <label for="task-details-effort">Effort <b class="text-red">*</b></label> </p>
                 <input type="number" class="effort col-span-2" id="task-details-effort" name="effort" value="{{$task->effort}}">
                 @if ($errors->has('effort'))
                     <span class="error col-span-3">
@@ -33,7 +33,7 @@
                     </span>
                 @endif
     
-                <p class="col-span-1 self-center"> <label for="task-details-status">Status</label></p>
+                <p class="col-span-1 self-center"> <label for="task-details-status">Status <b class="text-red">*</b></label></p>
                 <select name="status" class="status col-span-2" id="task-details-status">
                     <option value="{{$task->status}}" selected="selected" >{{$task->status}}</option>
                     @if($task->status!="BackLog")<option value="BackLog">BackLog</option>@endif

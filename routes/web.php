@@ -167,9 +167,9 @@ Route::controller(TagController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{username}', 'show')->name('members.show');
-    Route::get('/myworlds', 'showMemberWorlds');
-    Route::get('/myprojects', 'showMemberProjects');
-    Route::get('/mytasks', 'showMemberTasks');
+    Route::get('/myworlds', 'showMemberWorlds')->name('show-worlds-list');
+    Route::get('/myprojects', 'showMemberProjects')->name('show-projects-list');
+    Route::get('/mytasks', 'showMemberTasks')->name('show-tasks-list');
     Route::get('/myfavorites', 'showMemberFavorites');
     Route::put('/api/members/{username}', 'update')->name('update-member');
     Route::get('/admin/members', 'list')->name('list-members');

@@ -4,7 +4,7 @@
         @csrf
         <input type="hidden" class="id" name="id" value="{{ $project->id }}">
     
-        <h3 class="my-0 mt-3"> <label for="username">Username</label> </h3>
+        <h3 class="my-0 mt-3"> <label for="username">Username <b class="text-red">*</b></label> </h3>
         <input type="text" class="username" name="username" id="username" placeholder="Username" required>
     
         <h3 class="my-0 mt-3"> <label for="type">Role</label> </h3>

@@ -118,6 +118,7 @@ function addEventListeners() {
       if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
+
       }
     } else {
       // Scroll up
@@ -166,6 +167,11 @@ function addEventListeners() {
   let clearNotificationsButton = document.getElementById('clearNotifications');
   if(clearNotificationsButton != null){
     clearNotificationsButton.addEventListener('click', sendClearNotificationsRequest);
+  }
+
+  let sessionClose = document.getElementById('session-close');
+  if (sessionClose != null) {
+    sessionClose.addEventListener('click', closeSessionHandler);
   }
 
 
@@ -273,7 +279,19 @@ function addEventListeners() {
       form.addEventListener('submit', leaveWorldAlert);
     });
   }
+  let archive_project = document.getElementsByClassName('archive-project');
+  if(archive_project != null){
+    [].forEach.call(archive_project, function(form) {
+      form.addEventListener('submit', archiveProjectAlert);
+    });
+  }
+
 }
+
+function closeSessionHandler() {
+  this.parentElement.remove();
+}
+
 function leaveProjectAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this project?","This action can't be reverted!", "Left the project successfully!","", "Leave", this.submit.bind(this),1000);
@@ -286,9 +304,15 @@ function leaveWorldAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", this.submit.bind(this),1000);
 }
+function archiveProjectAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to archive this project?","This action can't be reverted!", "Archived the project successfully!","", "Archive", this.submit.bind(this),1000);
+}
+
+  
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
-  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
+  const img = await fetch('https://mc-heads.net/avatar/${username}.png');
   const blob = await img.blob();
   const myFile = new File([blob], 'profile.png');
 
@@ -366,7 +390,7 @@ function changeToInviteOutsideMember(ev) {
 
         }, 2000);
         Swal.fire({
-          title:`Account Successfully deleted!`,
+          title:'Account Successfully deleted!',
           icon: "success",
           showConfirmButton: false,
         });
@@ -1514,13 +1538,6 @@ async function sendClearNotificationsRequest(ev){
 function clearNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
   popup.innerHTML = "";
-  let notificationContainer = document.createElement('div');
-  notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-2', 'rounded-lg', 'bg-white');
-  let notificationText = document.createElement('p');
-  notificationText.classList.add('text-black');
-  notificationText.textContent = json.message;
-  notificationContainer.appendChild(notificationText);
-  popup.appendChild(notificationContainer);
 
 }
  // Get member belongings in ajax on every page load for pusher notifications

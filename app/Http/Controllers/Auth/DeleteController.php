@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteMemberRequest;
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,14 +15,14 @@ class DeleteController extends Controller
     public function delete(DeleteMemberRequest $request, string $username): RedirectResponse
     {
         $request->validated();
-        if (Auth::user()->persistentUser->type_ == 'Administrator') $route = 'list-members';
+        if (Auth::user()->persistentUser->type_ == UserType::Administrator->value) $route = 'list-members';
         else $route = 'home';
 
         $member = User::where('username', $username)->first()->persistentUser->member;
         $persistentUser = $member->persistentUser;
         $user = $member->persistentUser->user;
 
-        $persistentUser->type_ = 'Deleted';
+        $persistentUser->type_ = UserType::Deleted->value;
 
         $member->name = 'deleted';
         $member->birthday = null;

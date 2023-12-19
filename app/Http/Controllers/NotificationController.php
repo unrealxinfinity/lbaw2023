@@ -92,7 +92,7 @@ class NotificationController extends Controller
             else{
                 $level='Medium';
             }
-            $message = $action.' Project '."'".$project->name."'".'!';
+            $message = $action.' project '."'".$project->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -116,16 +116,14 @@ class NotificationController extends Controller
         $project = Project::find($project_id);
         DB::beginTransaction();
         try {
-            if($action == 'Created'){
-                $level='Low';
-            }
-            elseif($action == 'Completed'){
+            
+            if($action == 'Completed' || $action == 'Created'){
                 $level='High';
             }
             else{
                 $level='Medium';
             }
-            $message = $action.' Task '."'".$task->title."'".'!';
+            $message = $action.' task '."'".$task->title."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -148,7 +146,7 @@ class NotificationController extends Controller
     static function TagNotification(Tag $tag,string $idOrUname,string $type, string $action){
         if($type == 'Project'){
             $thing = Project::find($idOrUname);
-            $message = $action.' Tag '."'".$tag->name."'"." on Project ".$thing->name.' !';
+            $message = $action.' tag '."'".$tag->name."'"." on Project ".$thing->name.' !';
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -172,7 +170,7 @@ class NotificationController extends Controller
         }
         else if($type == 'World'){
             $thing = World::find($idOrUname);
-            $message = $action.' Tag '."'".$tag->name."'"." on World ".$thing->name.' !';
+            $message = $action.' tag '."'".$tag->name."'"." on World ".$thing->name.' !';
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -196,7 +194,7 @@ class NotificationController extends Controller
         }
         else if($type == 'Member'){
             $thing = Member::where('name',$idOrUname)->first();
-            $message = $action.' Tag '."'".$tag->name."'"." on ".$thing->name."'s profile!";
+            $message = $action.' tag '."'".$tag->name."'"." on ".$thing->name."'s profile!";
             DB::beginTransaction();
             try {
                 $notification = Notification::create([
@@ -217,9 +215,11 @@ class NotificationController extends Controller
     }
 
     static function WorldNotification(World $world, string $action){
-        error_log($action);
-        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')) {
+        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in') || str_contains($action,'deleted')) {
             $level='High';
+        }
+        elseif(str_contains($action, 'created')){
+            $level='Low';
         }
         else{
             $level='Medium';
@@ -227,7 +227,7 @@ class NotificationController extends Controller
         
         DB::beginTransaction();
         try {
-            $message = $action.' World '."'".$world->name."'".'!';
+            $message = $action.' world '."'".$world->name."'".'!';
             $notification = Notification::create([
                 'text' => $message,
                 'level' => $level,
@@ -253,7 +253,6 @@ class NotificationController extends Controller
         $message = "$user->username wants to be your friend!";
 
         $recipient = User::where('username', $username)->firstOrFail()->persistentUser->member;
-        error_log($recipient->id);
 
         $notification = Notification::create([
             'text' => $message,

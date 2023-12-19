@@ -13,7 +13,7 @@
         </span>
     @endif
 
-    <textarea type="text" id="comment-text-area" name="text" class="max-h-52 min-h-[5em]" required></textarea>
+    <textarea type="text" id="comment-text-area" name="text" class="max-h-52 min-h-[5em]" placeholder="Some non-blank text" required></textarea>
 
     <label for="submit-comment" hidden>Submit Comment</label>
     <input id="submit-comment" class="button" type="submit" value="Comment">

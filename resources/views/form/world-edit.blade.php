@@ -25,11 +25,11 @@
 
         <input type="hidden" class="world-id" name="id" value="{{ $world->id }}">
 
-        <h3><label for="world-name">Name</label></h3>
-        <input type="text" class="world-name" id="world-name" name="name" value="{{ $world->name }}" placeholder="Name" required>
+        <h3><label for="world-name">Name <b class="text-red">*</b></label></h3>
+        <input type="text" class="world-name" id="world-name" name="name" value="{{ $world->name }}" placeholder="Edited Name" required>
 
-        <h3><label for="world-description">Description</label></h3>
-        <textarea type="text" class="world-description text-black max-h-40" id="world-description" rows="3" name="description"  placeholder="Description" required> {{ $world->description }} </textarea>
+        <h3><label for="world-description">Description <b class="text-red">*</b></label></h3>
+        <textarea type="text" class="world-description text-black max-h-40" id="world-description" rows="3" name="description"  placeholder="Some non-blank text" required> {{ $world->description }} </textarea>
 
         <input class="button" type="submit" id="submit-{{ $world->id }}" value="Edit World">
     </fieldset>

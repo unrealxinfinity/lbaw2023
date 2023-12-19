@@ -3,7 +3,7 @@
         <legend>Search Task</legend>
         @csrf
         <div class="flex flex-col mr-3">
-            <h3 class="my-0 mt-3"> <label for="taskName">Task Name</label> </h3>
+            <h3 class="my-0 mt-3"> <label for="taskName">Task Name  <b class="text-red">*</b></label> </h3>
             <input type="text" id="taskName" name="taskName" placeholder="Task Name" required>
         </div>
         <input type="hidden" name="project_id" value="{{ $project->id }}">

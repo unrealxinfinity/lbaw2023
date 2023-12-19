@@ -19,6 +19,7 @@
   }
   h4, p {
     @apply text-sMobile tablet:text-sTablet desktop:text-sDesktop break-words text-white text-opacity-75;
+    
   }
   legend {
     @apply text-mMobile tablet:text-mTablet desktop:text-mDesktop text-white text-opacity-90 pt-4 pb-1 my-0;
@@ -71,4 +72,5 @@
     .error {
       @apply text-red text-msMobile tablet:text-msTablet desktop:text-msDesktop;
     }
+    
 }

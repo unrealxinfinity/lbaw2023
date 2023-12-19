@@ -45,7 +45,7 @@
             <div class="flex mb-1 items-center">
                 <h3 class="text-green"> World Owner </h3>
                 @can('transfer', $thing)
-                    <h2 class="ml-2 font-extrabold"><a href="/worlds/{{ $world->id }}/transfer">&#x2942;</a></h2>
+                    <h2 class="ml-2 font-extrabold"><a href="/worlds/{{ $world->id }}/transfer" style="text-shadow: 0px 0px 6px red;">&#x2942;</a></h2>
                 @endcan
             </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
