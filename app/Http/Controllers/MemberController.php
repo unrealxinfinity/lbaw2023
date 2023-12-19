@@ -209,11 +209,12 @@ class MemberController extends Controller
 
     public function block(BlockRequest $request, string $username): RedirectResponse
     {
-        $request->validated();
+        $fields = $request->validated();
 
         $user = User::where('username', $username)->firstOrFail();
 
         $user->persistentUser->type_ = UserType::Blocked->value;
+        $user->persistentUser->block_reason = $fields['block_reason'] ?? "No reason given";
         $user->persistentUser->save();
 
         return redirect()->back()->withSuccess('User blocked')->withFragment($username);
@@ -227,6 +228,7 @@ class MemberController extends Controller
 
         if ($user->persistentUser->type_ == UserType::Blocked->value) {
             $user->persistentUser->type_ = UserType::Member->value;
+            $user->persistentUser->block_reason = null;
             $user->persistentUser->save();
 
             if (isset($user->persistentUser->member->appeal)) {

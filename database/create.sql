@@ -19,6 +19,7 @@ CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE,
   type_ user_type NOT NULL,
+  block_reason VARCHAR,
   CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE)
 );
 
