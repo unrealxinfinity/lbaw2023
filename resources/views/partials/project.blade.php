@@ -52,8 +52,8 @@
                 </form>
             @endcan
             @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
-                <input type="checkbox" id="more-options" class="hidden peer"/>
-                <h1><label for="more-options" class="font-bold cursor-pointer">&#8942;</label></h1>
+                <input type="checkbox" id="more-options" class="sr-only sr-only-focusable peer"/>
+                <h1><label for="more-options" class="font-bold cursor-pointer sr-only-focusable">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
                     @can('delete', $project)
                     <form method="POST" class= "delete-project" action="{{ route('delete-project', ['id' => $project->id]) }}">
