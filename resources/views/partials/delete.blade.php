@@ -3,7 +3,10 @@
 <a class="button basis-auto" href="/members/{{ $member->persistentUser->user->username }}">Cancel</a>
 
 <form class="hidden" method="POST" id="confirm-deletion" action="/members/{{ $member->persistentUser->user->username }}">
-    @csrf
-    @method('DELETE')
-    <input type="submit" value="Delete account">
+    <fieldset>
+        <legend>Delete Account</legend>
+        @csrf
+        @method('DELETE')
+        <input type="submit" value="Delete account">
+    </fieldset>
 </form>

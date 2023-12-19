@@ -71,8 +71,10 @@ class WorldController extends Controller
            'picture' => null,
            'owner_id' => Auth::user()->persistentUser->member->id
         ]);
-        
-        $world->members()->attach(Auth::user()->persistentUser->member->id, ['is_admin' => true]);
+        $member = Auth::user()->persistentUser->member;
+        $world->members()->attach($member->id, ['is_admin' => true]);
+
+        NotificationController::WorldNotification($world,$member->name.' has created the ');
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse

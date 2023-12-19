@@ -3,7 +3,9 @@
 @section('title', 'Reset Password')
 
 @section('content')
-<form method="POST" class="form-post" action="{{ route('reset-password') }}">
+<form method="POST" class="form-outline" action="{{ route('reset-password') }}">
+  <fieldset class="form-post">
+    <legend>Reset Password</legend>
     @csrf
 
     <input type="hidden" name="token" value={{ $token }}>
@@ -20,5 +22,6 @@
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
     <button class="button" type="submit"> Reset Password </button>
+  </fieldset>
 </form>
 @endsection

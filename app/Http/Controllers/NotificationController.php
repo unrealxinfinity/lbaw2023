@@ -116,10 +116,8 @@ class NotificationController extends Controller
         $project = Project::find($project_id);
         DB::beginTransaction();
         try {
-            if($action == 'Created'){
-                $level='Low';
-            }
-            elseif($action == 'Completed'){
+            
+            if($action == 'Completed' || $action == 'Created'){
                 $level='High';
             }
             else{
@@ -217,9 +215,11 @@ class NotificationController extends Controller
     }
 
     static function WorldNotification(World $world, string $action){
-        error_log($action);
-        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in')) {
+        if(str_contains($action, 'promoted in') || str_contains($action, 'demoted in') || str_contains($action,'deleted')) {
             $level='High';
+        }
+        elseif(str_contains($action, 'created')){
+            $level='Low';
         }
         else{
             $level='Medium';
@@ -253,7 +253,6 @@ class NotificationController extends Controller
         $message = "$user->username wants to be your friend!";
 
         $recipient = User::where('username', $username)->firstOrFail()->persistentUser->member;
-        error_log($recipient->id);
 
         $notification = Notification::create([
             'text' => $message,

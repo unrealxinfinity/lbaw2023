@@ -18,13 +18,15 @@
     <script>
         document.body.style.overflow = 'hidden';
     </script>
-    <div id="edit-project" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
-        <div class="bg-black tablet:w-3/4 tablet:h-fit h-full tablet:rounded drop-shadow tablet:mx-auto">
-            <div class="flex my-3">
-                <h1 class="mt-3 ml-5"> Edit Project </h1>
-                <h1><a id="go-back" class="cursor-pointer fixed right-5 mt-1">&times;</a></h1>
+    <div id="edit-project" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-around">
+        <div class="bg-black tablet:w-3/4 tablet:min-h-fit tablet:max-h-[90%] h-full w-full tablet:rounded tablet:mx-auto">
+            <div class="flex justify-between mx-5 pt-3">
+                <h1> Edit Project </h1>
+                <h1><a id="go-back" class="cursor-pointer">&times;</a></h1>
                 </div>
-                @include('form.project-edit', ['project'=>$project])
+                <div class="overflow-auto tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
+                    @include('form.project-edit', ['project'=>$project])
+                </div>
             </div>
         </div>
     </div>

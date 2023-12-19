@@ -1,33 +1,9 @@
 function addEventListeners() {
-  let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
-  [].forEach.call(itemCheckers, function(checker) {
-    checker.addEventListener('change', sendItemUpdateRequest);
-  });
-
-  let itemCreators = document.querySelectorAll('article.card form.new_item');
-  [].forEach.call(itemCreators, function(creator) {
-    creator.addEventListener('submit', sendCreateItemRequest);
-  });
-
-  let itemDeleters = document.querySelectorAll('article.card li a.delete');
-  [].forEach.call(itemDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteItemRequest);
-  });
-
-  let cardDeleters = document.querySelectorAll('article.card header a.delete');
-  [].forEach.call(cardDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteCardRequest);
-  });
 
   let friendButtons = document.querySelectorAll('.friend-button');
     [].forEach.call(friendButtons, function(friendButton) {
       friendButton.addEventListener('click', sendFriendRequest);
     });
-
-
-  let cardCreator = document.querySelector('article.card form.new_card');
-  if (cardCreator != null)
-    cardCreator.addEventListener('submit', sendCreateCardRequest);
 
   let memberEditors =document.querySelectorAll('form.edit-member');
   [].forEach.call(memberEditors, function(editor) {
@@ -141,30 +117,29 @@ function addEventListeners() {
       // Scroll down
       if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
-      document.querySelector('#navbar').classList.add('-translate-y-full');
-      document.querySelector('#session-message').classList.remove('translate-y-0');
-      document.querySelector('#session-message').classList.add('-translate-y-16');
+      document.querySelector('#navbar').classList.add('translate-y-full');
+
       }
     } else {
       // Scroll up
-      document.querySelector('#navbar').classList.remove('-translate-y-full');
+      document.querySelector('#navbar').classList.remove('translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-      document.querySelector('#session-message').classList.remove('-translate-y-16');
-      document.querySelector('#session-message').classList.add('translate-y-0');
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   }, false);
 
   let main = document.querySelector('main');
-  main.addEventListener('click', function() {
-    let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-    if (showMenu.checked) {
-      document.querySelector('#show-menu').checked = false;
-    }
-    if (!showNotif) {
-      document.querySelector('#notificationArea').classList.toggle('hidden');
+  main.addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) {
+      let showMenu = document.querySelector('#show-menu');
+      let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+      if (showMenu.checked) {
+        showMenu.checked = false;
+      }
+      if (!showNotif) {
+        document.querySelector('#notificationArea').classList.toggle('hidden');
+      }
     }
   });
   
@@ -310,6 +285,7 @@ function addEventListeners() {
       form.addEventListener('submit', archiveProjectAlert);
     });
   }
+
 }
 
 function closeSessionHandler() {
@@ -332,6 +308,7 @@ function archiveProjectAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to archive this project?","This action can't be reverted!", "Archived the project successfully!","", "Archive", this.submit.bind(this),1000);
 }
+
   
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
@@ -387,7 +364,7 @@ function changeToInviteOutsideMember(ev) {
       imageUrl: "/images/dog.png",
       imageWidth: 200,
       imageHeight: 200,
-      ImageAlt: "A cute dog looking at you.",
+      ImageAlt: "",
       inputLabel: "Type 'Delete' to confirm:",
       input: "text",
       confirm,
@@ -429,7 +406,7 @@ function changeToInviteOutsideMember(ev) {
   async function deleteWorldAjaxButton(ev) {
     ev.preventDefault();
     async function request(){
-          const csrf = this.querySelector('input:first-child').value;
+          const csrf = this.querySelector('input[name="_token"]').value;
           const id = this.querySelector('input.id').value;
           const response = await fetch('/api/worlds/' + id, {
             method: 'DELETE',
@@ -486,7 +463,7 @@ function changeToInviteOutsideMember(ev) {
   async function sendLeaveWorldRequest(ev) {
     ev.preventDefault();
     async function request(){
-      const csrf = this.querySelector('input:first-child').value;
+      const csrf = this.querySelector('input[name="_token"]').value;
       const id = this.querySelector('input.id').value;
       const username = this.querySelector('input.username').value;
       const response = await fetch('/api/worlds/' + id + '/' + username, {
@@ -606,7 +583,7 @@ function changeToInviteOutsideMember(ev) {
 
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     const type = this.querySelector('select.type').value;
 
     const response = await fetch('/api/projects/' + id + '/' + username, {
@@ -661,6 +638,7 @@ function changeToInviteOutsideMember(ev) {
       a.href = '/members/' + json.username;
       a.textContent = json.username;
       img.src = json.picture;
+      img.alt = json.username + ' image';
       
       h4.appendChild(a);
       header.appendChild(img);
@@ -668,11 +646,11 @@ function changeToInviteOutsideMember(ev) {
   
       member.appendChild(header);
 
-      const div = document.createElement('div');
+      const li = document.createElement('li');
       const options_div = document.createElement('div');
-      div.classList.add('h-5', 'flex', 'items-center', 'justify-between');
+      li.classList.add('h-5', 'flex', 'items-center', 'justify-between');
       options_div.classList.add('flex', 'items-center', 'child:mx-1');
-      div.appendChild(member);
+      li.appendChild(member);
 
       if (json.can_move) {
 
@@ -684,10 +662,13 @@ function changeToInviteOutsideMember(ev) {
           moveForm.id= 'demote-project-leader';
 
           moveForm.innerHTML = `
-            <input type="hidden" name="_token" value="${csrfToken_}">
-            <input type="hidden" class="id" name="id" value="${json.project_id}">
-            <input type="text" class="username" name="username" value="${json.username}" hidden>
-            <input class="button bg-grey p-0 px-2" type="submit" value="Demote">
+            <fieldset>
+              <legend class="sr-only">Demote to Project Member</legend>
+              <input type="hidden" name="_token" value="${csrfToken_}">
+              <input type="hidden" class="id" name="id" value="${json.project_id}">
+              <input type="text" class="username" name="username" value="${json.username}" hidden>
+              <input class="button bg-grey p-0 px-2" type="submit" value="Demote">
+            </fieldset>
           `;
 
             options_div.appendChild(moveForm);
@@ -696,10 +677,13 @@ function changeToInviteOutsideMember(ev) {
           moveForm.id= 'assign-project-leader';
 
           moveForm.innerHTML = `
-            <input type="hidden" name="_token" value="${csrfToken_}">
-            <input type="hidden" class="id" name="id" value="${json.project_id}">
-            <input type="text" class="username" name="username" value="${json.username}" hidden>
-            <input class="button bg-grey p-0 px-2" type="submit" value="Promote">
+            <fieldset>
+              <legend class="sr-only">Promote to Project Leader </legend>
+              <input type="hidden" name="_token" value="${csrfToken_}">
+              <input type="hidden" class="id" name="id" value="${json.project_id}">
+              <input type="text" class="username" name="username" value="${json.username}" hidden>
+              <input class="button bg-grey p-0 px-2" type="submit" value="Promote">
+            </fieldset>
           `;
           options_div.appendChild(moveForm);
           moveForm.addEventListener('submit', sendAssignProjectLeaderRequest);
@@ -712,18 +696,26 @@ function changeToInviteOutsideMember(ev) {
         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   
         removeForm.innerHTML = `
-          <input type="hidden" name="_token" value="${csrfToken}">
-          <input type="hidden" class="id" name="id" value="${json.project_id}">
-          <input type="hidden" class="username" name="username" value="${json.username}">
-          <button type="submit"> &times; </button>
+          <fieldset>
+            <legend class="sr-only">Remove Member</legend>
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" class="id" name="id" value="${json.project_id}">
+            <input type="hidden" class="username" name="username" value="${json.username}">
+            <button type="submit"> &times; </button>
+          </fieldset>
         `;
 
         options_div.appendChild(removeForm);
         removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       }
-      div.append(options_div);
-      let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
-      section.appendChild(div);
+      if (json.task){
+        ul.appendChild(li);
+      } else{
+        li.append(options_div);
+        let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
+        section.appendChild(li);
+      }
+      
     });
   }
 
@@ -768,7 +760,7 @@ function changeToInviteOutsideMember(ev) {
 
       const username= this.querySelector('input.username').value;
       const id = this.querySelector('input.world_id').value;
-      const csrf = this.querySelector('input:first-child').value;
+      const csrf = this.querySelector('input[name="_token"]').value;
       const type = this.querySelector('select.type').value;
 
       const response = await fetch('/api/worlds/' + id + '/invite', {
@@ -792,7 +784,7 @@ function changeToInviteOutsideMember(ev) {
 
     const email= this.querySelector('input.email').value;
     const id = this.querySelector('input.world_id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     const type = this.querySelector('select.type').value;
 
     const response = await fetch('/api/worlds/' + id + '/invite', {
@@ -849,7 +841,7 @@ function inviteNewMemberHandler(json) {
     event.preventDefault();
     const username = this.querySelector('input.username').value;
     const id = this.querySelector('input.id').value;
-    const csrf = this.querySelector('input:first-child').value;
+    const csrf = this.querySelector('input[name="_token"]').value;
     
     const response = await fetch('/api/tasks/' + id + '/' + username, {
       method: 'POST',
@@ -892,12 +884,11 @@ function inviteNewMemberHandler(json) {
 
   async function searchTaskRequest(event) {
     event.preventDefault();
-    const searchTaskForms = document.getElementsByClassName('search-task');
-    const id = searchTaskForms[0].getAttribute('data-id');
-    let searchTaskElems = searchTaskForms[0];
-    let searchedTask = searchTaskElems[1].value;
-    const csrf = searchTaskElems[0].value;
-    let order = searchTaskElems[3].value;
+    const searchTaskForm = event.target;
+    const id = searchTaskForm.getAttribute('data-id');
+    let searchedTask = searchTaskForm.querySelector('input[name="taskName"]').value;
+    const csrf = searchTaskForm.querySelector('input[name="_token"]').value;
+    let order = searchTaskForm.querySelector('select[name="order"]').value;
 
     const url = '/api/projects/' + id + '/tasks?search=' + searchedTask + '&order=' + order;
 
@@ -949,34 +940,34 @@ function inviteNewMemberHandler(json) {
 
   async function searchProjectRequest(event) {
     event.preventDefault();
-    const searchProjectForms = document.getElementsByClassName('search-project');
-    const id = searchProjectForms[0].getAttribute('data-id');
-    let searchProjectElems = searchProjectForms[0];
-    let searchedProject = searchProjectElems[1].value;
-    const csrf = searchProjectElems[0].value;
-    let tags= searchProjectElems[3].value;
-    let order = searchProjectElems[4].value;
+    const searchProjectForm = event.target;
+    const id = searchProjectForm.getAttribute('data-id');
+    let searchedProject = searchProjectForm.querySelector('input[name="projectName"]').value;
+    const csrf = searchProjectForm.querySelector('input[name="_token"]').value;
+    let tags = searchProjectForm.querySelector('input[name="tags"]').value;
+    let order = searchProjectForm.querySelector('select[name="order"]').value;
+
     let url = '/api/worlds/'+ id +'/projects?search=' + searchedProject + '&order=' + order + '&tags=' + tags;
+
     const response = await fetch(url, {
-      method: 'GET', 
-      headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrf, 
-      },
-  })
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf, 
+        },
+    })
     .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          searchProjectHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-      
+        if(response.ok){
+            return response.json();
+        }
+        else{
+            throw new Error('Response status not OK');
+        }
+    })
+    .then(data => {
+        searchProjectHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 }
 
 function searchProjectHandler(json){
@@ -1000,6 +991,7 @@ function searchProjectHandler(json){
 
     link.setAttribute('href', '/projects/' + project.id);
     img.src = project.picture;
+    img.alt = project.name + ' image';
     link.textContent = project.name;
     desc.textContent = project.description;
     title.appendChild(link);
@@ -1012,49 +1004,46 @@ function searchProjectHandler(json){
   document.getElementById('popupContainer').classList.remove('hidden');
 }
 
-  async function addTagRequest() {
-    
-    const tagForms = document.getElementsByClassName('new-tag');
-    const id = tagForms[0].getAttribute('data-id');
-    const type = tagForms[0].getAttribute('data-type');
-    let tagElem = tagForms[0].children;
-    let tagName= tagElem[2].value;
-    const csrf = tagElem[0].value;
-    let url= "";
-    if(type == "project"){
-       url = '/api/projects/' + id + '/' +'tags/create';
-    }
-    else if(type == "world"){
-       url = '/api/worlds/' + id + '/' +'tags/create';
-    }
-    else if(type == "member"){
-      url = '/api/members/' + id + '/' +'tags/create';
-    }
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': csrf,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({ tagName: tagName})
-      })
-      .then(response =>{
-            if(response.ok){
-              return response.json();
-            }
-            else{
-              throw new Error('Response status not OK');
-            }
-      })
-      .then(data => {
-          addTagHandler(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-      tagElem[2].value = "";
-    
-
+async function addTagRequest() {
+  const tagForm = document.querySelector('.new-tag')
+  const id = tagForm.getAttribute('data-id');
+  const type = tagForm.getAttribute('data-type');
+  let tagNameInput = tagForm.querySelector('.tagName');
+  let tagName = tagNameInput.value;
+  const csrf = tagForm.querySelector('input[name="_token"]').value;
+  let url= "";
+  if(type == "project"){
+     url = '/api/projects/' + id + '/' +'tags/create';
+  }
+  else if(type == "world"){
+     url = '/api/worlds/' + id + '/' +'tags/create';
+  }
+  else if(type == "member"){
+    url = '/api/members/' + id + '/' +'tags/create';
+  }
+  const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ tagName: tagName})
+    })
+    .then(response =>{
+          if(response.ok){
+            return response.json();
+          }
+          else{
+            throw new Error('Response status not OK');
+          }
+    })
+    .then(data => {
+        addTagHandler(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+    tagNameInput.value = "";
 }
 
 function addTagHandler(json){
@@ -1078,15 +1067,15 @@ function addTagHandler(json){
   }
 }
 async function sendDeleteTagRequest(ev) {
-
   ev.preventDefault();
-  const tagForms = ev.target.parentElement.parentElement;
-    const id = tagForms.getAttribute('data-id');
-    const type = tagForms.getAttribute('data-type');
-    let tagElem = tagForms.children;
-    let tagName= tagElem[1].value;
-    let tagId= tagElem[2].value;
-    const csrf = tagElem[0].value;
+
+  const tagForm = ev.target.closest('.delete-tag');
+  const id = tagForm.getAttribute('data-id');
+  const type = tagForm.getAttribute('data-type');
+  let tagName = tagForm.querySelector('input[name="tagName"]').value;
+  let tagId = tagForm.querySelector('input[name="tag_id"]').value;
+  const csrf = tagForm.querySelector('input[name="_token"]').value;
+
   let url = "";
   if(type == "project"){
     url = '/api/projects/' + id + '/' +'tags/' + 'delete/'+ tagId;
@@ -1127,7 +1116,7 @@ async function deleteTagHandler(json){
 async function sendRemoveMemberFromWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     url = `/api/worlds/${id}/${username}`;
@@ -1158,7 +1147,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
 async function sendRemoveMemberFromProjectRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
       let id = this.querySelector('input.id').value;
       let username = this.querySelector('input.username').value;
     
@@ -1199,6 +1188,9 @@ async function sendShowNotificationsRequest(ev) {
   if(ev != null){
     ev.preventDefault();
     }
+  var expanded = ev.target.getAttribute('aria-expanded') === 'true';
+  ev.target.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+
   const url = '/api/notifications';
   const response = await fetch(url, {
       method: 'GET', 
@@ -1334,7 +1326,7 @@ function ShowNotificationsHandler(json,ev){
 async function sendAssignAdminToWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/worlds/' + id + '/assign';  
@@ -1371,7 +1363,7 @@ function assignAdminToWorldHandler(data) {
 async function sendDemoteAdminFromWorldRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/worlds/' + id + '/demote';
@@ -1409,11 +1401,10 @@ async function sendAssignProjectLeaderRequest(ev) {
   ev.preventDefault();
   
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/projects/' + id + '/assign';
-    console.log(username);
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -1446,7 +1437,7 @@ function assignProjectLeaderHandler(data) {
 async function sendDemoteProjectLeaderRequest(ev) {
   ev.preventDefault();
   async function request(){
-    let csrf = this.querySelector('input:first-child').value;
+    let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
     let url = '/api/projects/' + id + '/demote';
@@ -1482,7 +1473,7 @@ async function sendDemoteProjectLeaderRequest(ev) {
     event.preventDefault();
 
     const id = this.querySelector('form#favorite input.id').value;
-    const csrf = this.querySelector('form#favorite input:first-child').value;
+    const csrf = this.querySelector('form#favorite input[name="_token"]').value;
     const type = this.querySelector('form#favorite input.type').value;
 
     const response = await fetch('/api/' + type + '/' + id + '/favorite', {
@@ -1514,144 +1505,6 @@ function demoteProjectLeaderHandler(data) {
       button.innerHTML = "&#9734";
     }
   }
-
-  function sendItemUpdateRequest() {
-    let item = this.closest('li.item');
-    let id = item.getAttribute('data-id');
-    let checked = item.querySelector('input[type=checkbox]').checked;
-  
-    sendAjaxRequest('post', '/api/item/' + id, {done: checked}, itemUpdatedHandler);
-  }
-  
-  function sendDeleteItemRequest() {
-    let id = this.closest('li.item').getAttribute('data-id');
-  
-    sendAjaxRequest('delete', '/api/item/' + id, null, itemDeletedHandler);
-  }
-  
-  function sendCreateItemRequest(event) {
-    let id = this.closest('article').getAttribute('data-id');
-    let description = this.querySelector('input[name=description]').value;
-  
-    if (description != '')
-      sendAjaxRequest('put', '/api/cards/' + id, {description: description}, itemAddedHandler);
-  
-    event.preventDefault();
-  }
-  
-  function sendDeleteCardRequest(event) {
-    let id = this.closest('article').getAttribute('data-id');
-  
-    sendAjaxRequest('delete', '/api/cards/' + id, null, cardDeletedHandler);
-  }
-  
-  function sendCreateCardRequest(event) {
-    let name = this.querySelector('input[name=name]').value;
-  
-    if (name != '')
-      sendAjaxRequest('put', '/api/cards/', {name: name}, cardAddedHandler);
-  
-    event.preventDefault();
-  }
-  
-  function itemUpdatedHandler() {
-    let item = JSON.parse(this.responseText);
-    let element = document.querySelector('li.item[data-id="' + item.id + '"]');
-    let input = element.querySelector('input[type=checkbox]');
-    element.checked = item.done == "true";
-  }
-  
-  function itemAddedHandler() {
-    if (this.status != 200) window.location = '/';
-    let item = JSON.parse(this.responseText);
-  
-    // Create the new item
-    let new_item = createItem(item);
-  
-    // Insert the new item
-    let card = document.querySelector('article.card[data-id="' + item.card_id + '"]');
-    let form = card.querySelector('form.new_item');
-    form.previousElementSibling.append(new_item);
-  
-    // Reset the new item form
-    form.querySelector('[type=text]').value="";
-  }
-  
-  function itemDeletedHandler() {
-    if (this.status != 200) window.location = '/';
-    let item = JSON.parse(this.responseText);
-    let element = document.querySelector('li.item[data-id="' + item.id + '"]');
-    element.remove();
-  }
-  
-  function cardDeletedHandler() {
-    if (this.status != 200) window.location = '/';
-    let card = JSON.parse(this.responseText);
-    let article = document.querySelector('article.card[data-id="'+ card.id + '"]');
-    article.remove();
-  }
-  
-  function cardAddedHandler() {
-    if (this.status != 200) window.location = '/';
-    let card = JSON.parse(this.responseText);
-  
-    // Create the new card
-    let new_card = createCard(card);
-  
-    // Reset the new card input
-    let form = document.querySelector('article.card form.new_card');
-    form.querySelector('[type=text]').value="";
-  
-    // Insert the new card
-    let article = form.parentElement;
-    let section = article.parentElement;
-    section.insertBefore(new_card, article);
-  
-    // Focus on adding an item to the new card
-    new_card.querySelector('[type=text]').focus();
-  }
-  
-  function createCard(card) {
-    let new_card = document.createElement('article');
-    new_card.classList.add('card');
-    new_card.setAttribute('data-id', card.id);
-    new_card.innerHTML = `
-  
-    <header>
-      <h2><a href="cards/${card.id}">${card.name}</a></h2>
-      <a href="#" class="delete">&#10761;</a>
-    </header>
-    <ul></ul>
-    <form class="new_item">
-      <input name="description" type="text">
-    </form>`;
-  
-    let creator = new_card.querySelector('form.new_item');
-    creator.addEventListener('submit', sendCreateItemRequest);
-  
-    let deleter = new_card.querySelector('header a.delete');
-    deleter.addEventListener('click', sendDeleteCardRequest);
-  
-    return new_card;
-  }
-  
-  function createItem(item) {
-    let new_item = document.createElement('li');
-    new_item.classList.add('item');
-    new_item.setAttribute('data-id', item.id);
-    new_item.innerHTML = `
-    <label>
-      <input type="checkbox"> <span>${item.description}</span><a href="#" class="delete">&#10761;</a>
-    </label>
-    `;
-  
-    new_item.querySelector('input').addEventListener('change', sendItemUpdateRequest);
-    new_item.querySelector('a.delete').addEventListener('click', sendDeleteItemRequest);
-  
-    return new_item;
-  }
-  
-
   
   // Close the pop-up
   function closeSearchedTaskPopup() {
@@ -1829,7 +1682,9 @@ async function confirmationAlert(text,subtext,secondText,secondSubtext,yesButton
   });
 }
 addEventListeners();
+
 showRedDot();
+
 function openSidebar() {
   console.log('hello');
   document.querySelector('#sidebar-text').click();
