@@ -166,6 +166,7 @@ CREATE TABLE tasks(
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   due_at DATE CHECK(due_at >= created_at),
   status task_status NOT NULL,
+  is_notified BOOLEAN NOT NULL DEFAULT FALSE,
   effort INT CHECK(effort >= 0),
   priority VARCHAR,
   project_id INT,
