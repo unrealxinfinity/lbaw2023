@@ -1,4 +1,5 @@
 <form class="form-post grid grid-lines-4 grid-cols-2 gap-4">
+    @csrf
     @include('partials.member', ['member' => $appeal->member, 'main' => false, 'appeal' => false])
     <h2 class="row-start-2 col-span-2">Reason for appeal</h2>
     <p class="row-start-3 col-span-2">{{ $appeal->text }}</p>
