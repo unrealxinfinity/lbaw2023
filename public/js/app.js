@@ -1294,8 +1294,8 @@ function ShowNotificationsHandler(json,ev){
     if (notification.is_request) {
       const requestAccepter = document.createElement('a');
       const requestDenier = document.createElement('a');
-      requestAccepter.classList.add('button');
-      requestDenier.classList.add('button');
+      requestAccepter.classList.add('button', 'mx-1');
+      requestDenier.classList.add('button', 'mx-1');
       requestAccepter.href = `/api/accept/${notification.id}`;
       requestDenier.href = `/api/notifications/${notification.id}`;
       requestAccepter.innerHTML = "&#10003;";
