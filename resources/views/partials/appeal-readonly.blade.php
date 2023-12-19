@@ -1,4 +1,4 @@
-@include('partials.member', ['member' => $appeal->member, 'main' => false, 'appeal' => false])
+@include('partials.member', ['member' => $member, 'main' => false, 'appeal' => false])
 <h2>Reason for appeal</h2>
 <p>{{ $member->appeal->text }}</p>
 @if ($member->appeal->denied)

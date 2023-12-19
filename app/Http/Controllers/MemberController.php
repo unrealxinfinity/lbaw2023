@@ -40,7 +40,7 @@ class MemberController extends Controller
 
     public function showAppeal(): View
     {
-        $this->authorize('appeal', Member::class);
+        if (!isset(Auth::user()->persistentUser->member->appeal)) $this->authorize('appeal', Member::class);
 
         $member = Auth::user()->persistentUser->member;
 
@@ -52,7 +52,7 @@ class MemberController extends Controller
 
     public function denyAppeal(int $id): RedirectResponse
     {
-        $this->authorize('create', Member::class);
+        $this->authorize('list', Member::class);
 
         $appeal = Appeal::findOrFail($id);
         $appeal->denied = true;
