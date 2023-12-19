@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FaqController;
 use App\Models\Appeal;
 
 /*
@@ -236,4 +237,9 @@ Route::controller(RecoverController::class)->group(function () {
     Route::post('/recover', 'send')->name('send-recover');
     Route::get('/reset', 'showResetForm');
     Route::post('/reset', 'reset')->name('reset-password');
+});
+Route::controller(FaqController::class)->group(function () {
+    Route::get('/faq', 'show')->name('show-faqs');
+    Route::post('/faq', 'add')->name('add-faq');
+    Route::delete('/faq', 'delete')->name('delete-faq');
 });

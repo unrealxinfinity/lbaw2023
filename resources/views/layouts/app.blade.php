@@ -106,6 +106,8 @@
             <p> <a href="/about">About </a></p>
             <p> | </p>
             <p> <a href="/contacts">Contact Us </a></p>
+            <p> | </p>
+            <p> <a href="{{route('show-faqs')}}">FAQs</a></p>
             </div>
         </nav>
     </body>
