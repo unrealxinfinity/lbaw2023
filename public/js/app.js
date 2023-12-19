@@ -117,12 +117,12 @@ function addEventListeners() {
       // Scroll down
       if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
-      document.querySelector('#navbar').classList.add('translate-y-full');
+      document.querySelector('#navbar').classList.add('-translate-y-full');
 
       }
     } else {
       // Scroll up
-      document.querySelector('#navbar').classList.remove('translate-y-full');
+      document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
     }
   
