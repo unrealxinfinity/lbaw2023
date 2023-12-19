@@ -53,7 +53,7 @@
             <h1><a id="go-back" class="cursor-pointer">&times;</a></h1>
             </div>
             <div class="overflow-auto tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
-            @include($formName, ['world'=>$world])
+                @include($formName, ['world'=>$world])
             </div>
         </div>
     </div>

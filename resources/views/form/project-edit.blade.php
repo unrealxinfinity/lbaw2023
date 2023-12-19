@@ -1,18 +1,18 @@
 <form method="POST" action="/projects/upload/{{ $project->id }}" enctype="multipart/form-data">
-    <fieldset>
+    <fieldset class="m-1 my-4 py-2 px-3 w-fit">
         <legend>Upload Project Picture</legend>
         @csrf
         @method('POST')
     
-        <div class="mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square tablet:mx-5 mx-2 my-1">
+        <div class="relative mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square tablet:mx-5 mx-2 my-1">
             <label for="edit-img">
-                <h1 class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-20 aspect-square text-center flex flex-col justify-around pointer-events-none"><label>&#9998;</label></h1>
-                <img id='preview-img' class="h-full aspect-square hover:opacity-50 object-cover" src={{ $project->getImage() }} alt="{{ $project->name }} image">
+                <img id='preview-img' class="absolute h-full aspect-square object-cover hover:opacity-50 cursor-pointer" src={{ $project->getImage() }} alt="{{ $project->name }} image">
+                <h1 class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none"><label>&#9998;</label></h1>
             </label>
         </div>
         <input id="edit-img" class="hidden" name="file" type="file" required>
         <input name="type" type="hidden" value="project">
-        <input class="button tablet:ml-5 ml-2" type="submit" value="Upload project picture">
+        <input class="button px-1 tablet:ml-5 ml-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload project picture">
     </fieldset>
 </form>
 <form class="edit-project form-outline outline-none" method="POST" action="{{ route('update-project', ['id' => $project->id]) }}">
