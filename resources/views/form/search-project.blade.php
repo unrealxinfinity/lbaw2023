@@ -3,7 +3,7 @@
         <legend>Search a Project</legend>
         @csrf
         <div class="flex flex-col mr-3">
-            <h3 class="my-0 mt-3"> <label for="projectName">Project Name</label></h3>
+            <h3 class="my-0 mt-3"> <label for="projectName">Project Name  <b class="text-red">*</b></label></h3>
             <input type="text" id="projectName" name="projectName" placeholder="Project Name" required>
         </div>
         <input type="hidden" name="world_id" value="{{ $world->id }}">
