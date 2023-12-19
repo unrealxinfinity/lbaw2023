@@ -9,15 +9,15 @@
     @endphp
     @if ($member)
         <form method="GET" data-id="{{ $member->id }}" action="{{ route('search') }}">
-            <fieldset class="mobile:flex mobile:justify-end grid grid-flow-row mobile:child:mx-2 child:my-0.5 mb-2 mobile:mx-0 mx-3">
+            <fieldset class="mobile:flex mobile:justify-end mobile:items-center grid grid-flow-row mobile:child:mx-1 child:my-0.5 mb-2 mobile:mx-0 mx-3">
                 <legend class="sr-only">Search</legend>
                 @csrf
     
-                <label for="anything" class="sr-only">Search</label>
+                <h3 class="mobile:hidden my-0 mt-3"> <label for="anything">Search</label> </h3>
                 <input type="text" class="mobile:hidden" id="anything" name="anything" value="{{$search}}" required>
                 <input type="hidden" name="member_id" value="{{ $member->id }}">
     
-                <h3 class="my-0 mt-3"> <label for="typeFilters">Type</label> </h3>
+                <h3 class="m-0 mt-3"> <label for="typeFilters">Type</label> </h3>
                 <select id="typeFilters" name="typeFilter">
                     <option value="{{ $type }}" selected>{{ $type }}</option>
                     @if($type!="All")<option value="All">All</option>@endif
@@ -27,10 +27,10 @@
                     @if($type!="Member")<option value="Member">Member</option>@endif
                 </select>
     
-                <h3 class="my-0 mt-3"> <label for="Tags">Tags</label> </h3>
+                <h3 class="m-0 mt-3"> <label for="Tags">Tags</label> </h3>
                 <input type="text" id="Tags" name="tags" placeholder="tag1,tag2">
                 
-                <h3 class="my-0 mt-3"> <label for="orders">Order</label> </h3>
+                <h3 class="m-0 mt-3"> <label for="orders">Order</label> </h3>
                 <select id="orders" name="order">
                     <option value= "{{ $order }}" selected>{{ $order }}</option>
                     @if($order!="Relevance")<option value= "Relevance">Relevance</option>@endif
