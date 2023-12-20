@@ -58,15 +58,12 @@ class RecoverController extends Controller
     {
         $fields = $request->validated();
 
-        error_log("first");
         $member = Member::where('token', $fields['token'])->firstOrFail();
-        error_log("test");
         $member->token = null;
         $member->save();
 
         $user = $member->persistentUser->user;
 
-        error_log("sup");
         $user->password = $fields['password'];
         $user->save();
 
