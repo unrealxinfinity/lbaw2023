@@ -23,6 +23,7 @@ export default {
       darkRed: '#8b0000',
       orange: '#ba610b',
       lime: '#70b919',
+      lightlime: '#bfff00',
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
