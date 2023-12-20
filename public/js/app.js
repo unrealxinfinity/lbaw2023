@@ -135,22 +135,23 @@ function addEventListeners() {
   window.addEventListener('scroll', function() {
     let currentScroll = document.documentElement.scrollTop;
     let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-  
+    let notificationArea= document.querySelector('#notificationArea');
+    let showNotif;
+    if(notificationArea != null){
+      showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+    }
     if (currentScroll > lastScrollTop) {
       // Scroll down
       if (!showMenu.checked && showNotif) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
-      document.querySelector('#session-message').classList.remove('translate-y-0');
-      document.querySelector('#session-message').classList.add('-translate-y-16');
+
       }
     } else {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-      document.querySelector('#session-message').classList.remove('-translate-y-16');
-      document.querySelector('#session-message').classList.add('translate-y-0');
+
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
@@ -159,12 +160,16 @@ function addEventListeners() {
   let main = document.querySelector('main');
   main.addEventListener('click', function() {
     let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-    if (showMenu.checked) {
-      document.querySelector('#show-menu').checked = false;
-    }
-    if (!showNotif) {
-      document.querySelector('#notificationArea').classList.toggle('hidden');
+    let notificationArea = document.querySelector('#notificationArea');
+    if(notificationArea != null){
+       let showNotif = notificationArea.classList.contains('hidden');
+      
+      if (showMenu.checked) {
+        document.querySelector('#show-menu').checked = false;
+      }
+      if (!showNotif) {
+        notificationArea.classList.toggle('hidden');
+      }
     }
   });
   
@@ -304,7 +309,15 @@ function addEventListeners() {
       form.addEventListener('submit', leaveWorldAlert);
     });
   }
+  let archive_project = document.getElementsByClassName('archive-project');
+  if(archive_project != null){
+    [].forEach.call(archive_project, function(form) {
+      form.addEventListener('submit', archiveProjectAlert);
+    });
+  }
+  
 }
+
 
 function closeSessionHandler() {
   this.parentElement.remove();
@@ -322,9 +335,14 @@ function leaveWorldAlert(ev) {
   ev.preventDefault();
   confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", this.submit.bind(this),1000);
 }
+function archiveProjectAlert(ev) {
+  ev.preventDefault();
+  confirmationAlert("Are you sure you want to archive this project?","This action can't be reverted!", "Archived the project successfully!","", "Archive", this.submit.bind(this),1000);
+}
+  
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
-  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`);
+  const img = await fetch('https://mc-heads.net/avatar/${username}.png');
   const blob = await img.blob();
   const myFile = new File([blob], 'profile.png');
 
@@ -402,7 +420,7 @@ function changeToInviteOutsideMember(ev) {
 
         }, 2000);
         Swal.fire({
-          title:`Account Successfully deleted!`,
+          title:'Account Successfully deleted!',
           icon: "success",
           showConfirmButton: false,
         });
@@ -1674,13 +1692,6 @@ async function sendClearNotificationsRequest(ev){
 function clearNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
   popup.innerHTML = "";
-  let notificationContainer = document.createElement('div');
-  notificationContainer.classList.add('flex', 'flex-col', 'py-2','px-10', 'm-2', 'rounded-lg', 'bg-white');
-  let notificationText = document.createElement('p');
-  notificationText.classList.add('text-black');
-  notificationText.textContent = json.message;
-  notificationContainer.appendChild(notificationText);
-  popup.appendChild(notificationContainer);
 
 }
  // Get member belongings in ajax on every page load for pusher notifications
@@ -1720,12 +1731,16 @@ function getIdsHandler(json){
 function showRedDot(){
   let showDot= sessionStorage.getItem('showDot') == 'true';
   if(showDot){
-    document.getElementById('redDot').classList.remove('hidden');
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.remove('hidden');
   }
   else{
-    document.getElementById('redDot').classList.add('hidden');
+    
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.classList.add('hidden');
   }
 }
+
 
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
@@ -1740,7 +1755,7 @@ function pusherNotifications(projectContainer, worldContainer){
   function bindEvent(channel, eventName, callback) {
     channel.bind(eventName, callback);
   } 
-
+  
   for (let i = 0; i < worldContainer.length; i++) { 
     const world_id = worldContainer[i];
     const channelWorld = pusher.subscribe('World' + world_id);

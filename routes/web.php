@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RecoverController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FaqController;
 use App\Models\Appeal;
 
 /*
@@ -167,9 +168,9 @@ Route::controller(TagController::class)->group(function () {
 
 Route::controller(MemberController::class)->group(function () {
     Route::get('members/{username}', 'show')->name('members.show');
-    Route::get('/myworlds', 'showMemberWorlds');
-    Route::get('/myprojects', 'showMemberProjects');
-    Route::get('/mytasks', 'showMemberTasks');
+    Route::get('/myworlds', 'showMemberWorlds')->name('show-worlds-list');
+    Route::get('/myprojects', 'showMemberProjects')->name('show-projects-list');
+    Route::get('/mytasks', 'showMemberTasks')->name('show-tasks-list');
     Route::get('/myfavorites', 'showMemberFavorites');
     Route::put('/api/members/{username}', 'update')->name('update-member');
     Route::get('/admin/members', 'list')->name('list-members');
@@ -236,4 +237,9 @@ Route::controller(RecoverController::class)->group(function () {
     Route::post('/recover', 'send')->name('send-recover');
     Route::get('/reset', 'showResetForm');
     Route::post('/reset', 'reset')->name('reset-password');
+});
+Route::controller(FaqController::class)->group(function () {
+    Route::get('/faq', 'show')->name('show-faqs');
+    Route::post('/faq', 'add')->name('add-faq');
+    Route::delete('/faq', 'delete')->name('delete-faq');
 });

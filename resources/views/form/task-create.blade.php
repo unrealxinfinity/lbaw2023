@@ -9,7 +9,7 @@
         </span>
     @endif
     
-    <input type="text" name="description" placeholder="Description">
+    <input type="text" name="description" placeholder="Description" required>
     @if ($errors->has('description'))
         <span class="error">
             {{ $errors->first('description') }}
@@ -23,8 +23,9 @@
         <option value="Finalizing">Finalizing</option>
         <option value="Done">Done</option>
     </select>
-
-    <input type="date" name="due_at" placeholder="Due Date">
+    
+    <input type="date" name="due_at" placeholder="Due Date" class="">
+    <p >*Due Date is required*</p>
     @if ($errors->has('due_at'))
         <span class="error">
             {{ $errors->first('due_at') }}
@@ -32,7 +33,7 @@
     @endif
     
 
-    <input type="number" name="effort" placeholder="Effort">
+    <input type="number" name="effort" placeholder="Effort -> required" required>
     @if ($errors->has('effort'))
         <span class="error">
             {{ $errors->first('effort') }}
@@ -40,7 +41,7 @@
     @endif
     
 
-    <input type="text" name="priority" placeholder="Priority">
+    <input type="text" name="priority" placeholder="Priority -> required" required>
     @if ($errors->has('priority'))
         <span class="error">
             {{ $errors->first('priority') }}
