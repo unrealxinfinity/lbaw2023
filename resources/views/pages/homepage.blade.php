@@ -26,7 +26,7 @@
     @if (isset($user) && $user->persistentUser->type_ == 'Administrator')
         <a href="manage-members-home" class="sr-only sr-only-focusable">Manage Members</a>
         <a href="manage-appeals-home" class="sr-only sr-only-focusable">Manage Appeals</a>
-
+        <a href="manage-faqs-home" class="sr-only sr-only-focusable">Manage FAQs</a>
         @include('partials.adminhome')
     @endif
         
