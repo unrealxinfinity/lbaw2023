@@ -167,6 +167,22 @@ class MemberController extends Controller
         return back()->with('success','Member updated successfully!');
     }
 
+    public function showFriends(): View
+    {
+        if (!Auth::check()) {
+            abort(403);
+        }
+
+        $member = Auth::user()->persistentUser->member;
+        $friends = $member->friends->reject(function ($friend) {
+            return $friend->persistentUser->type_ != UserType::Member->value;
+        });
+
+        return view('pages.myfriends', [
+            'friends' => $friends
+        ]);
+    }
+
     public function list(Request $request): View
     {
         $this->authorize('list', Member::class);   
