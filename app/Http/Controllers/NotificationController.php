@@ -104,8 +104,8 @@ class NotificationController extends Controller
              foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              } 
-                event(new CreateProjectNotification($message,$world_id));
             DB::commit();
+            event(new CreateProjectNotification($message,$world_id));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
@@ -161,8 +161,8 @@ class NotificationController extends Controller
                     $member->notifications()->attach($notification->id);
                     error_log($member->notifications()->get());
                  }
-                 event(new CreateTagNotification($message,$idOrUname,$type));
                 DB::commit();
+                event(new CreateTagNotification($message,$idOrUname,$type));
             } catch (\Exception $e) {
                 DB::rollback();
                 throw $e;
@@ -184,9 +184,8 @@ class NotificationController extends Controller
                 foreach($thing->members as $member){
                     $member->notifications()->attach($notification->id);
                  }
-
-                 event(new CreateTagNotification($message,$idOrUname,$type));
                 DB::commit();
+                event(new CreateTagNotification($message,$idOrUname,$type));
             } catch (\Exception $e) {
                 DB::rollback();
                 throw $e;
@@ -239,8 +238,8 @@ class NotificationController extends Controller
             foreach($world->members as $member){
                 $member->notifications()->attach($notification->id);
              }
-             event(new CreateWorldNotification($message,$world->id));
             DB::commit();
+            event(new CreateWorldNotification($message,$world->id));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
