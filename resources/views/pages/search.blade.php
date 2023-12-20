@@ -19,7 +19,7 @@
                 @if($type!="World")<option value="World">World</option>@endif
                 @if($type!="Project")<option value="Project" >Project</option>@endif
                 @if($type!="Task" && Auth::check())<option value="Task">Task</option>@endif
-                @if($type!="Member" && Auth::check())<option value="Member">Member</option>@endif
+                @if($type!="Member")<option value="Member">Member</option>@endif
             </select>
 
             <h3 class="m-0 mt-3"> <label for="Tags">Tags</label> </h3>
@@ -55,7 +55,7 @@
                 @include('partials.myworlds', ['world' => $world])
             @endforeach
         @endif
-        @if(count($members) > 0 && Auth::check())
+        @if(count($members) > 0)
             <h1 class="mt-5"> Members </h1>
             @foreach($members as $otherMember)
             <header class="myworld flex h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">

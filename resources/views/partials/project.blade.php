@@ -5,7 +5,7 @@
     @can('favorite', $project)
         <a href="#favorite" class="sr-only sr-only-focusable">Set Project as Favorite</a>
     @endcan
-    @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
+    @if (Auth::check() && (Auth::user()->can('delete', $project) || Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
         <a href="#more-options" class="sr-only sr-only-focusable">More Options</a>
     @endif
     <a href="#project-tasks" class="sr-only sr-only-focusable">Tasks</a>
@@ -51,7 +51,7 @@
                     </fieldset>
                 </form>
             @endcan
-            @if (Auth::user()->can('delete', $project) || (Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
+            @if (Auth::check() && (Auth::user()->can('delete', $project) || Auth::user()->persistentUser->member->projects->contains('id', $project->id)))
                 <input type="checkbox" id="more-options" class="sr-only sr-only-focusable peer"/>
                 <h1><label for="more-options" class="font-bold cursor-pointer sr-only-focusable">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
@@ -65,7 +65,7 @@
                         </fieldset>
                     </form>
                     @endcan
-                    @if (Auth::user()->can('edit', $project) && $project->status == 'Active')
+                    @if (Auth::check() && Auth::user()->can('edit', $project) && $project->status == 'Active')
                     <form class = "archive-project" method="POST" action="{{ route('archive-project', ['id' => $project->id]) }}">
                         <fieldset>
                             <legend class="sr-only">Archive Project</legend>
@@ -97,7 +97,8 @@
                 <h3 class="text-center inline-block mb-3"> {{$state}} </h3>
                 @foreach ($project->tasks()->where('status', '=', $state)->get() as $task)
                 <article class="task bg-white child:text-black p-2 m-1 rounded" @can('edit', $task) draggable="true" id="task-{{ $task->id }}" @endcan>
-                    <h2 class="text-green font-semibold"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
+                    @can('show', $task)<h2 class="font-semibold"><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a></h2>
+                    @else <h2 class="font-semibold">{{ $task->title }}</h2> @endcan
                     <p>{{ $task->description }}</p>
                 </article>
                 @endforeach

@@ -37,11 +37,11 @@ class SearchController extends Controller
             ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        $members = ($notvisitor)?Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
+        $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
             ->join('user_info', 'members.user_id', '=', 'user_info.id')
             ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
             ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
-            ->get():[];
+            ->get();
         $worlds = World::select('id', 'picture','name', 'description')
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
