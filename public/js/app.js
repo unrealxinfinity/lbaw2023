@@ -127,39 +127,25 @@ function addEventListeners() {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
-<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
-=======
-
->>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   }, false);
 
   let main = document.querySelector('main');
-<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
-  main.addEventListener('click', function(e) {
-    if (e.target === e.currentTarget) {
-      let showMenu = document.querySelector('#show-menu');
-      let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-      if (showMenu.checked) {
-        showMenu.checked = false;
-      }
-      if (!showNotif) {
-        document.querySelector('#notificationArea').classList.toggle('hidden');
-=======
   main.addEventListener('click', function() {
-    let showMenu = document.querySelector('#show-menu');
-    let notificationArea = document.querySelector('#notificationArea');
-    if(notificationArea != null){
-       let showNotif = notificationArea.classList.contains('hidden');
-      
-      if (showMenu.checked) {
-        document.querySelector('#show-menu').checked = false;
-      }
-      if (!showNotif) {
-        notificationArea.classList.toggle('hidden');
->>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
+    if(e.target === e.currentTarget){
+      let showMenu = document.querySelector('#show-menu');
+      let notificationArea = document.querySelector('#notificationArea');
+      if(notificationArea != null){
+        let showNotif = notificationArea.classList.contains('hidden');
+        
+        if (showMenu.checked) {
+          document.querySelector('#show-menu').checked = false;
+        }
+        if (!showNotif) {
+          notificationArea.classList.toggle('hidden');
+        }
       }
     }
   });
@@ -306,11 +292,7 @@ function addEventListeners() {
       form.addEventListener('submit', archiveProjectAlert);
     });
   }
-<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
-
-=======
   
->>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
 }
 
 
