@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block divide-y divide-white divide-opacity-25">
-        <form method="POST" action={{ route('api-remove-friend', ['id' => $friend->id])}}>
+        <form method="POST" class="remove-friend-form" action={{ route('api-remove-friend', ['id' => $friend->id])}}>
             <fieldset>
                 <legend class="sr-only">Remove Friend</legend>
                 @csrf

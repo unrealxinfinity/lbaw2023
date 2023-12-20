@@ -190,7 +190,7 @@ class MemberController extends Controller
 
         $member = Auth::user()->persistentUser->member;
 
-        $member->friends->detach($id);
+        $member->friends()->detach($id);
 
         return response()->json([
             'msg' => 'Friend removed!'
