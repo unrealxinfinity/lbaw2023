@@ -1,4 +1,4 @@
-<section class="main-search items-center grid">
+<section id="main-search-section" class="main-search items-center grid">
     <form class = "main-search" method="GET" action="{{ route('search') }}">
         <fieldset>
             <legend class="sr-only">Search</legend>
