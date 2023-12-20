@@ -96,6 +96,20 @@ function addEventListeners() {
       form.addEventListener('submit', sendAssignMemberRequest);
     });
   }
+
+  let removeMemberFromTasks = document.querySelectorAll('form#remove-member-task');
+  if(removeMemberFromTasks != null){
+    removeMemberFromTasks.forEach(removeMemberFromTask => {
+      removeMemberFromTask.addEventListener('submit', sendRemoveMemberFromTaskRequest);
+    });
+  }
+
+  let removeMemberFromTasksMobile = document.querySelectorAll('form#mobile-remove-member-task');
+  if(removeMemberFromTasksMobile != null){
+    removeMemberFromTasksMobile.forEach(removeMemberFromTaskMobile => {
+      removeMemberFromTaskMobile.addEventListener('submit', sendRemoveMemberFromTaskRequest);
+    });
+  }
   
   let closePopup = document.getElementById('closePopUp');
   if(closePopup != null)
@@ -108,7 +122,7 @@ function addEventListeners() {
     });
   }
 
-  let removeMemberFromWorldsMobile = document.querySelectorAll('form#mobileremove-member-world');
+  let removeMemberFromWorldsMobile = document.querySelectorAll('form#mobile-remove-member-world');
   if(removeMemberFromWorldsMobile != null){
     removeMemberFromWorldsMobile.forEach(removeMemberFromWorldMobile => {
       removeMemberFromWorldMobile.addEventListener('submit', sendRemoveMemberFromWorldRequest);
@@ -205,7 +219,7 @@ function addEventListeners() {
     });
   }
 
-  let removeMemberFromProjectsMobile = document.querySelectorAll('form#mobileremove-member-project');
+  let removeMemberFromProjectsMobile = document.querySelectorAll('form#mobile-remove-member-project');
   if(removeMemberFromProjectsMobile != null){
     removeMemberFromProjectsMobile.forEach(removeMemberFromProjectMobile => {
       removeMemberFromProjectMobile.addEventListener('submit', sendRemoveMemberFromProjectRequest);
@@ -702,6 +716,7 @@ function changeToInviteOutsideMember(ev) {
   }
 
   async function sendAddMemberRequest(event) {
+    console.log('here');
     event.preventDefault();
 
     const username = this.querySelector('input.username').value;
@@ -727,7 +742,8 @@ function changeToInviteOutsideMember(ev) {
   function addMemberHandler(json) {
     const list = document.querySelectorAll('ul.membersof');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.add-member fieldset');
+      let form = ul.parentElement.querySelector('form.add-member fieldset');
+      if (form==null) form = document.querySelector('form.add-member fieldset');
       const error = form.querySelector('span.error');
       if (error !== null)
       {
@@ -737,7 +753,7 @@ function changeToInviteOutsideMember(ev) {
       if (json.error)
       {
         const span = document.createElement('span');
-        span.classList.add('error');
+        span.classList.add('error', 'col-span-2');
         const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
         const index = members.find(x => x === json.username);
         if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
@@ -813,7 +829,11 @@ function changeToInviteOutsideMember(ev) {
       }
       if (json.can_remove) {
         const removeForm = document.createElement('form');
-        removeForm.id= 'remove-member-project';
+        if (json.task) {
+          removeForm.id= 'remove-member-task';
+        } else {
+          removeForm.id= 'remove-member-project';
+        }
         removeForm.setAttribute('data-id', json.id);
         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   
@@ -821,19 +841,25 @@ function changeToInviteOutsideMember(ev) {
           <fieldset>
             <legend class="sr-only">Remove Member</legend>
             <input type="hidden" name="_token" value="${csrfToken}">
-            <input type="hidden" class="id" name="id" value="${json.project_id}">
+            <input type="hidden" class="id" name="id" value="${(json.task)?json.task_id:json.project_id}">
             <input type="hidden" class="username" name="username" value="${json.username}">
             <button type="submit" class ="text-red"> &times; </button>
           </fieldset>
         `;
 
-        options_div.appendChild(removeForm);
-        removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+        if ((json.task)) {
+          li.appendChild(removeForm);
+          removeForm.addEventListener('submit', sendRemoveMemberFromTaskRequest);
+        } else {
+          options_div.appendChild(removeForm);
+          removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+        }
       }
+      
       if (json.task){
-        ul.appendChild(member);
+        ul.appendChild(li);
       } else{
-        li.append(options_div);
+        li.appendChild(options_div);
         let section = json.is_leader? ul.querySelector('.project-leaders'):ul.querySelector('.members');
         section.appendChild(li);
       }
@@ -1297,10 +1323,41 @@ async function sendRemoveMemberFromProjectRequest(ev) {
   
 }
 
+async function sendRemoveMemberFromTaskRequest(ev) {
+  ev.preventDefault();
+  async function request(){
+    let csrf = this.querySelector('input[name="_token"]').value;
+    let id = this.querySelector('input.id').value;
+    let username = this.querySelector('input.username').value;
+    
+      url = `/api/tasks/${id}/${username}`;
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        removeMemberFromThingHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+  }
+  confirmationAlert("Are you sure you want to remove this member from this task?","", "Member removed from this task!", "Bye bye!", "Remove them", request.bind(this),0);
+  
+}
+
 function removeMemberFromThingHandler(data) {
-  let element = document.querySelectorAll('ul.members [data-id="' + data.member_id + '"]');
+  let element = document.querySelectorAll('ul.membersof [data-id="' + data.member_id + '"]');
   [].forEach.call(element, function(member) {
-    member.remove();
+    member.parentElement.remove();
   });
 }
 

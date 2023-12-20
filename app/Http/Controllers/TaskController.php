@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignMemberRequest;
+use App\Http\Requests\RemoveMemberFromTaskRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\MoveTaskRequest;
@@ -92,20 +93,19 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($task_id);
         $member = User::where('username', $username)->first()->persistentUser->member;
-        
-        
-        $this->authorize('assignMember', $task);
 
         try {
             $member->tasks()->attach($task_id);
+            $can_remove = $this->authorize('assignMember', $task);
             NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
+                'task_id' => $task->id,
                 'picture' => $member->getProfileImage(),
                 'is_leader' => false,
-                'can_remove' => false,
+                'can_remove' => $can_remove,
                 'can_move' => false,
                 'task' => true
             ]);
@@ -115,6 +115,32 @@ class TaskController extends Controller
                 'username' => $username,
                 'parent' => 'project',
                 'child' => 'task'
+            ]);
+        }
+    }
+
+    public function removeMember(RemoveMemberFromTaskRequest $request, string $task_id, string $username): JsonResponse
+    {
+        $request->validated();
+
+        $task = Task::findOrFail($task_id);
+        $member = User::where('username', $username)->first()->persistentUser->member;
+        error_log($username);
+
+        try
+        {
+            $member->tasks()->detach($task_id);
+
+            return response()->json([
+                'error' => false,
+                'id' => $task->id,
+                'member_id' => $member->id,
+            ]);
+        } catch (\Exception $e)
+        {
+            return response()->json([
+                'error' => true,
+                'id' => $task->id,
             ]);
         }
     }
