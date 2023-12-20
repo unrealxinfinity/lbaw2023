@@ -43,18 +43,21 @@
                 <div class="hidden mobile:flex items-center">@include('form.main-search', ['member' => Auth::user()->persistentUser->member])</div>
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
-                    <div id="notification-button" class="link relative" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-                            <title>Notification Icon</title>
-                            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
-                        </svg>
-                        <span id="redDot" class="bg-red rounded-full w-2 h-2 absolute top-0 right-0 hidden"></span>
-                        <div id="notificationArea" class="absolute hidden z-10 bg-dark right-0 top-10 p-1 rounded-lg">
-                            <div class="flex justify-between">
-                                <h2 class="text-white py-1 mx-5">Notifications</h2>
-                                <button id="clearNotifications" class="link">Clear Notifications</button>
+                    @if(Auth::user()->persistentUser->type_ === 'Member')
+                        <div id="notification-button" class="link relative" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                                <title>Notification Icon</title>
+                                <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
+                            </svg>
+                            <span id="redDot" class="bg-red rounded-full w-2 h-2 absolute top-0 right-0 hidden"></span>
+                            <div id="notificationArea" class="absolute hidden z-10 bg-dark right-0 top-10 p-1 rounded-lg">
+                                <div class="flex justify-between">
+                                    <h2 class="text-white py-1 mx-5">Notifications</h2>
+                                    <button id="clearNotifications" class="link">Clear Notifications</button>
+                                </div>
                             </div>
-                        @endif
+                        </div>
+                    @endif
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
                                 <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
@@ -70,6 +73,17 @@
                     </ul>
             @endif
         </nav>
+        @if (Auth::check() && Auth::user()->persistentUser->type_ == "Blocked")
+            <div id="session-message" class="z-20 fixed items-center w-full bg-mine-red py-2 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
+                <h2 class="mx-3">You are blocked, check your profile for details</h2>
+                <h1 class="cursor-pointer mx-3" id="session-close">&times;</h1>
+            </div>
+        @elseif (session('success'))
+            <div id="session-message" class="z-20 fixed items-center w-full bg-mine-lime py-2 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
+                <h2 class="text-darkGreen mx-3">{{ session('success') }}</h2>
+                <h1 class="text-darkGreen cursor-pointer mx-3" id="session-close">&times;</h1>
+            </div>
+        @endif
         <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" type="checkbox" class="sr-only peer"/>
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
             @if(Auth::check())<li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>@endif
