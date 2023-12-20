@@ -45,7 +45,8 @@ class NotificationController extends Controller
         $member = auth()->user()->persistentUser->member;
         $member->notifications()->detach($id);
         return response()->json([
-            'message'=>'Nothing Here'
+            'message'=>'Nothing Here',
+            'id' => $id
         ]);
     }
 
