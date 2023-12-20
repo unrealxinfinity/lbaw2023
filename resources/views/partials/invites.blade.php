@@ -13,7 +13,7 @@
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
                     <input type="hidden" class="acceptance" name="acceptance" value=1>
-                    <button class="button">&#10003;</button>
+                    <button class="button" type="button">&#10003;</button>
                 </fieldset>
             </form>
             <form class="self-center" action={{ route ('join-world', ['id' => $invite->world_id]) }} method="POST">
@@ -23,7 +23,7 @@
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
                     <input type="hidden" class="acceptance" name="acceptance" value=0>
-                    <button class="button">&#10005;</button>
+                    <button class="button" type="button">&#10005;</button>
                 </fieldset>
             </form>
         </div>
@@ -41,7 +41,7 @@
                     <legend class="sr-only">Accept Friend Request</legend>
                     @csrf
                     <input type="hidden" id="accept-friend-request-id" value="{{$request->id}}">
-                    <button class="button">&#10003;</button>
+                    <button class="button" type="button">&#10003;</button>
                 </fieldset>
             </form>
             <form class="self-center" id="reject-fr-form">
@@ -49,7 +49,7 @@
                     <legend class="sr-only">Reject Friend Request</legend>
                     @csrf
                     <input type="hidden" id="reject-friend-request-id" value="{{$request->id}}">
-                    <button class="button">&#10005;</button>
+                    <button class="button" type="button">&#10005;</button>
                 </fieldset>
             </form>
         </div>
