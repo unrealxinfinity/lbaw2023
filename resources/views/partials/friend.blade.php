@@ -6,11 +6,12 @@
             <h4 class="break-words"> {{ $friend->description }} </h4>
         </div>
     </div>
-    <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
+    <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block divide-y divide-white divide-opacity-25">
         <form method="POST" action={{ route('api-remove-friend', ['id' => $friend->id])}}>
             <fieldset>
                 <legend class="sr-only">Remove Friend</legend>
                 @csrf
+                @method('DELETE')
                 <input type="hidden" class="id" name="id" value={{$friend->id}}>
                 <h3><button class="px-3 py-1 w-full" type="submit">Remove Friend</button></h3>
             </fieldset>

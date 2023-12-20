@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AppealRequest;
 use App\Http\Requests\BlockRequest;
+use App\Http\Requests\DeleteFriendRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Appeal;
 use App\Models\Member;
@@ -180,6 +181,19 @@ class MemberController extends Controller
 
         return view('pages.myfriends', [
             'friends' => $friends
+        ]);
+    }
+
+    public function deleteFriend(DeleteFriendRequest $request, int $id): JsonResponse
+    {
+        $request->validated();
+
+        $member = Auth::user()->persistentUser->member;
+
+        $member->friends->detach($id);
+
+        return response()->json([
+            'msg' => 'Friend removed!'
         ]);
     }
 
