@@ -195,6 +195,7 @@ Route::controller(TaskController::class)->group(function () {
     Route::put('/tasks/{id}', 'edit')->name('edit-details');
     Route::put('/api/tasks/{id}', 'move');
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
+    Route::delete('/api/tasks/{id}/{username}', 'removeMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
 });
 

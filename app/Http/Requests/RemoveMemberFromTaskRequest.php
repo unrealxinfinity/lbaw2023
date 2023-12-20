@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Models\Task;
 
-class AssignMemberRequest extends FormRequest
+class RemoveMemberFromTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,6 @@ class AssignMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [Rule::in('Member', 'Project Leader')],
             'id' => ['exists:App\Models\Task,id'],
             'username' => ['exists:App\Models\User,username']
         ];

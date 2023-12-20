@@ -60,14 +60,19 @@
         <h2 class="mt-7 mb-2">Assigned to</h2>
         <ul id="{{$prefix . 'members-assigned'}}" class="membersof">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
-                <li>
-                    @include('partials.member', ['member' => $member, 'main' => false])
-                </li>
+            <li class="h-5 flex items-center justify-between">
+                @include('partials.member', ['member' => $member, 'main' => false])
+                @can('assignMember', $task)
+                    @include('form.remove-member', ['thing' => $task, 'member' => $member])
+                @endcan
+            </li>
             @endforeach
         </ul>
         @if ($task->status != 'Done')
-            <span id="{{$prefix . 'assign-new-member'}}"></span>
-            @include('form.assignmember', ['task' => $task])
+            @can('assignMember', $task)
+                <span id="{{$prefix . 'assign-new-member'}}"></span>
+                @include('form.assignmember', ['task' => $task])
+            @endcan
         @endif
     @else
         <div id="{{$prefix . 'task-see-details'}}" class = "edit-details grid grid-cols-3 gap-3">
