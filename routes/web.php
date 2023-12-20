@@ -184,6 +184,8 @@ Route::controller(MemberController::class)->group(function () {
     Route::get('/invites', 'showInvites')->name('show-invites');
     Route::get('/appeal', 'showAppeal')->name('show-appeal');
     Route::post('/appeal/{id}', 'appeal')->name('appeal');
+    Route::get('/myfriends', 'showFriends')->name('friends');
+    Route::delete('/friends/{id}', 'deleteFriend')->name('api-remove-friend');
 });
 
 Route::controller(TaskController::class)->group(function () {

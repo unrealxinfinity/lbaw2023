@@ -84,6 +84,11 @@ function addEventListeners() {
   let ProjectSearcher = document.querySelector('form.search-project');
   if (ProjectSearcher != null)
     ProjectSearcher.addEventListener('submit', searchProjectRequest);
+
+  let removeFriends = document.querySelectorAll('form.remove-friend-form');
+  [].forEach.call(removeFriends, function (removeFriend) {
+    removeFriend.addEventListener('submit', sendRemoveFriendRequest);
+  });
   
   let MemberAssigner = document.querySelectorAll('form#assign-member');
   if (MemberAssigner != null){
@@ -384,6 +389,22 @@ function changeToInviteOutsideMember(ev) {
     });
 
     if (response.ok) this.remove();
+  }
+
+  async function sendRemoveFriendRequest(ev) {
+    ev.preventDefault();
+    const url = this.getAttribute('action');
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+      }
+    });
+
+    if (response.ok) this.closest('article').remove();
   }
 
   
