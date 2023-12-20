@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Member;
 class SearchRequest extends FormRequest
 {
     /**
@@ -29,7 +28,7 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'anything' => ['required', 'string']
         ];
     }
 }

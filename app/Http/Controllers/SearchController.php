@@ -21,7 +21,6 @@ class SearchController extends Controller
         $inputTags = $request->input('tags');
         $inputTags= strip_tags($inputTags);
         $order = $request->input('order','Relevance');
-
         $inputTags = explode(',',$inputTags);
         $arr = explode(' ', $searchedText);
         for ($i = 0; $i < count($arr); $i++) {
@@ -47,11 +46,10 @@ class SearchController extends Controller
             ->get();
         
         $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
-        ->join('user_info', 'members.user_id', '=', 'user_info.id')
-        ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
-        ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
-        ->get();
-        
+            ->join('user_info', 'members.user_id', '=', 'user_info.id')
+            ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
+            ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
+            ->get();
         $worlds = World::select('id', 'picture','name', 'description')
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])

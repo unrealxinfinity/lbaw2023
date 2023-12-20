@@ -13,9 +13,9 @@
         </span>
     @endif
 
-    <textarea type="text" id="comment-text-area" name="text" class="max-h-52 min-h-[5em]" placeholder="Some non-blank text" required></textarea>
+    <textarea type="text" id="comment-text-area" name="text" class="max-h-52 min-h-[5em]" placeholder="Some non-blank text" required tabindex="0"></textarea>
 
     <label for="submit-comment" hidden>Submit Comment</label>
-    <input id="submit-comment" class="button" type="submit" value="Comment">
+    <input id="submit-comment" class="button" type="submit" value="Comment" tabindex="0">
   </fieldset>
 </form>

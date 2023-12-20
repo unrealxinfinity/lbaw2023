@@ -12,7 +12,7 @@
         </div>
         <input id="edit-img" class="hidden" name="file" type="file" required>
         <input name="type" type="hidden" value="world">
-        <input class="button px-1 tablet:ml-5 ml-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload world picture">
+        <input tabindex="0" class="button px-1 tablet:ml-5 ml-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload world picture">
     </fieldset>
 </form>
     
@@ -26,11 +26,11 @@
         <input type="hidden" class="world-id" name="id" value="{{ $world->id }}">
 
         <h3><label for="world-name">Name <b class="text-red">*</b></label></h3>
-        <input type="text" class="world-name" id="world-name" name="name" value="{{ $world->name }}" placeholder="Edited Name" required>
+        <input type="text" class="world-name" id="world-name" name="name" value="{{ $world->name }}" placeholder="Edited Name" required tabindex="0">
 
         <h3><label for="world-description">Description <b class="text-red">*</b></label></h3>
-        <textarea type="text" class="world-description text-black max-h-40" id="world-description" rows="3" name="description"  placeholder="Some non-blank text" required> {{ $world->description }} </textarea>
+        <textarea tabindex="0" type="text" class="world-description text-black max-h-40" id="world-description" rows="3" name="description"  placeholder="Some non-blank text" required> {{ $world->description }} </textarea>
 
-        <input class="button" type="submit" id="submit-{{ $world->id }}" value="Edit World">
+        <input tabindex="0" class="button" type="submit" id="submit-{{ $world->id }}" value="Edit World">
     </fieldset>
 </form>

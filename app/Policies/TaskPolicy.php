@@ -17,8 +17,9 @@ class TaskPolicy
         //
     }
 
-    public function show(User $user, Task $task): bool
+    public function show(?User $user, Task $task): bool
     {
+        if ($user == null) return false;
         $type = $user->persistentUser->type_;
         $is_admin = $type === UserType::Administrator->value;
         $is_disabled = $type === UserType::Blocked->value || $type === UserType::Deleted->value;

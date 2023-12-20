@@ -19,8 +19,9 @@ class ProjectPolicy
     }
     
 
-    public function show(User $user, Project $project): bool
-    {   
+    public function show(?User $user, Project $project): bool
+    {
+        if($user == null) return true;
         $type = $user->persistentUser->type_;
         $is_admin = $type === UserType::Administrator->value;
         $is_disabled = $type === UserType::Blocked->value || $type === UserType::Deleted->value;

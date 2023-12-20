@@ -6,7 +6,7 @@
     <input type="hidden" name="login" value="0">
 
     <h3 class="my-0"><label for="username"> <b class="text-red">*</b></label></h3>
-    <input id="username" type="text" name="username" placeholder="New Username" value="{{ old('username') }}" required>
+    <input id="username" type="text" name="username" placeholder="New Username" value="{{ old('username') }}" required tabindex="0">
     @if ($errors->has('username'))
         <span class="error">
           {{ $errors->first('username') }}
@@ -14,7 +14,7 @@
     @endif
 
     <h3 class="my-0"><label for="name">Display name</label></h3>
-    <input id="name" type="text" name="name" placeholder="Display Name" value="{{ old('name') }}">
+    <input id="name" type="text" name="name" placeholder="Display Name" value="{{ old('name') }}" tabindex="0">
     @if ($errors->has('name'))
         <span class="error">
           {{ $errors->first('name') }}
@@ -22,7 +22,7 @@
     @endif
 
     <h3 class="my-0"><label for="email">E-Mail Address <b class="text-red">*</b></label></h3>
-    <input id="email" type="email" name="email" placeholder="example@email.com" value="{{ old('email') }}" required>
+    <input id="email" type="email" name="email" placeholder="example@email.com" value="{{ old('email') }}" required tabindex="0">
     @if ($errors->has('email'))
         <span class="error">
           {{ $errors->first('email') }}
@@ -30,7 +30,7 @@
     @endif
 
     <h3 class="my-0"><label for="password">Password <b class="text-red">*</b></label></h3>
-    <input id="password" type="password" placeholder="New Password" name="password" required>
+    <input id="password" type="password" placeholder="New Password" name="password" required tabindex="0">
     @if ($errors->has('password'))
         <span class="error">
           {{ $errors->first('password') }}
@@ -38,13 +38,13 @@
     @endif
 
     <h3 class="my-0"><label for="password-confirm">Confirm Password <b class="text-red">*</b></label></h3>
-    <input id="password-confirm" type="password" placeholder="Repeat Password" name="password_confirmation" required>
+    <input id="password-confirm" type="password" placeholder="Repeat Password" name="password_confirmation" required tabindex="0">
 
     <div class="flex">
-    <input type="checkbox" id="member-box" name="member">
+    <input type="checkbox" id="member-box" name="member" tabindex="0">
     <h3 class="my-0"><label for="member-box">Create as member?</label></h3>
     </div>
-    <button class="button" type="submit">
+    <button class="button" type="submit" tabindex="0">
         Register
     </button>
   </fieldset>

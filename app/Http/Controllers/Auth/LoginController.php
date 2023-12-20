@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserType;
 use Illuminate\Http\Request;
 
 use Illuminate\Http\RedirectResponse;
@@ -35,6 +36,11 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
+            if (Auth::user()->persistentUser->type_ == UserType::Member->value) {
+                $member = Auth::user()->persistentUser->member;
+                $member->token = null;
+                $member->save();
+            }
  
             return redirect()->intended('');
         }

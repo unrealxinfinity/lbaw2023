@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
                     $assignee->notifications()->attach($notification->id);
                 }
             }
-        })->everyMinute();
+        })->hourly();
     }
 
     /**
