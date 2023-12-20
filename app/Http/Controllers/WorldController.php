@@ -288,7 +288,7 @@ class WorldController extends Controller
         $world = World::findOrFail($invitation->world_id);
         $member = $invitation->member;
 
-        NotificationController::WorldNotification($world,$member->name . ' added to ');
+        NotificationController::WorldNotification($world,$member->name . ' joined the ');
 
         $world->members()->attach($member->id, ['is_admin' => $invitation->is_admin]);
 
