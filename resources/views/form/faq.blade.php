@@ -9,7 +9,7 @@
         </fieldset>
     </form>
 @elseif($operation == 'add')
-    <form action="{{ route('delete-faq', ['id' => $faq->id]) }}" method="POST">
+    <form action="{{ route('add-faq')}}" method="POST">
         <fieldset class="relative flex flex-col items-end justify-center bg-lime rounded-lg w-full mt-8 mb-4">
         <legend class="absolute -top-6 left-2 text-lg font-semibold text-green mb-2">Create a FAQ</legend>
             <div class="w-auto m-1 flex flex-row">

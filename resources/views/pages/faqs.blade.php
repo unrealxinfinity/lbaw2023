@@ -23,7 +23,7 @@
                 </details>
                 @endforeach
                 @if(Auth::check() && Auth::user()->persistentUser->type_ == 'Administrator')
-                            @include('form.faq', ['faq' => $faq , 'operation'=>'add'])
+                            @include('form.faq', ['operation'=>'add'])
                 @endif
             </div>
             
