@@ -5,7 +5,7 @@
 @section('content')
 
 <section id="faqs" class="flex mobile:flex-row flex-col items-center px-3 py-2 mobile:mt-5">
-        <img class="mb-5 mobile:w-1/4 w-1/2" src="{{ URL('/images/confused-steve.png') }}" alt="Minecraft player model with a 'Steve' skin, holding a picaxe in his right hand and confused">
+        <img class="mb-5 mobile:w-1/4 w-1/2" src="{{ URL('/images/confused-steve.png') }}" alt="">
         <div class=" bg-white rounded-lg p-2 w-full">
             <h1 class="font-bold text-black m-2">FAQs</h1>
             @foreach($faqs as $faq)
