@@ -1,14 +1,11 @@
-@if (Auth::user()->persistentUser->type_ === 'Member')
     <section class="main-search items-center grid">
-        <form class = "main-search" method="GET" data-id="{{ $member->id }}" action="{{ route('search') }}">
+        <form class = "main-search" method="GET" action="{{ route('search') }}">
             <fieldset>
                 <legend class="sr-only">Search</legend>
                 @csrf
 
                 <label class="sr-only" for="anything">Search for anything!</label>
                 <input type="text" id="anything" name="anything" placeholder="Search anything" required>
-
-                <input type="hidden" name="member_id" value="{{ $member->id }}">
 
                 <label hidden for="typeFilter">Filter by type</label>
                 <select id="typeFilter" name="typeFilter" hidden>
@@ -24,4 +21,3 @@
             </fieldset>
         </form>
     </section>
-@endif

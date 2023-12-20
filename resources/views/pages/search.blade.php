@@ -4,18 +4,15 @@
 @section('title', 'Search')
 
 @section('content')
-    @php
-        $member = Auth::user() ? Auth::user()->persistentUser->member : null;
-    @endphp
-    @if ($member)
-        <form method="GET" data-id="{{ $member->id }}" action="{{ route('search') }}">
+    
+    
+        <form method="GET" " action="{{ route('search') }}">
             <fieldset class="mobile:flex mobile:justify-end mobile:items-center grid grid-flow-row mobile:child:mx-1 child:my-0.5 mb-2 mobile:mx-0 mx-3">
                 <legend class="sr-only">Search</legend>
                 @csrf
     
                 <h3 class="mobile:hidden my-0 mt-3"> <label for="anything">Search</label> </h3>
                 <input type="text" class="mobile:hidden" id="anything" name="anything" value="{{$search}}" required>
-                <input type="hidden" name="member_id" value="{{ $member->id }}">
     
                 <h3 class="m-0 mt-3"> <label for="typeFilters">Type</label> </h3>
                 <select id="typeFilters" name="typeFilter">
@@ -79,6 +76,5 @@
         @else
             <h1 class="mobile:m-10 m-5"> No results for "{{$search}}" <br> Try searching for something else </h1>
         @endif
-    @endif
 @endsection
 

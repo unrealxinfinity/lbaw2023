@@ -9,6 +9,7 @@ use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
     public function show(SearchRequest $request): View
@@ -20,23 +21,31 @@ class SearchController extends Controller
         $inputTags = $request->input('tags');
         $inputTags= strip_tags($inputTags);
         $order = $request->input('order','Relevance');
-        $member = Member::where('user_id', auth()->user()->id)->first(); 
-        $id = $member->user_id;
+
         $inputTags = explode(',',$inputTags);
         $arr = explode(' ', $searchedText);
         for ($i = 0; $i < count($arr); $i++) {
             $arr[$i] = $arr[$i] . ':*';
         }
         $searchedText = implode(' | ', $arr);
-
-        $tasks = Task::select('id','title','description','due_at','status','effort','priority')
+        $tasks= collect();
+        if(Auth::check()){
+            $member = Member::where('user_id', auth()->user()->id)->first(); 
+            $memberProjects = $member->projects;
+            foreach($memberProjects as $project){
+                $id = $project->id;
+                $tasks = Task::select('id','title','description','due_at','status','effort','priority')
                 ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
                 ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
                 ->get();
+                $tasks = $tasks->merge($tasks);
+            }
+        }
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
+        
         $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
         ->join('user_info', 'members.user_id', '=', 'user_info.id')
         ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
@@ -47,7 +56,6 @@ class SearchController extends Controller
             ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        
         if($inputTags[0] != ""){
             $membersAux=collect();
             $tasks=collect();
@@ -101,7 +109,6 @@ class SearchController extends Controller
             }
             $worlds=$worldsAux;
         }
-        
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
             $projects = $projects->sortBy('name');
@@ -182,6 +189,8 @@ class SearchController extends Controller
                 'order' => $order
             ]);
         }
+       
+        
        
     }
 }

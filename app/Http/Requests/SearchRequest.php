@@ -12,7 +12,13 @@ class SearchRequest extends FormRequest
      */
     public function authorize(): bool
     {   
-        return Auth::user()->can('showSearchResults',Member::where('user_id','=',Auth::user()->user_id)->first());
+        if(Auth::check()){
+            return Auth::user()->can('showSearchResults',Member::where('user_id','=',Auth::user()->user_id)->first());
+        }
+        else{
+            return true;
+        }
+        
     }
 
     /**

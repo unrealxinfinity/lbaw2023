@@ -40,7 +40,7 @@
                 <a href="{{ url('') }}"><img class="tablet:h-8 h-4 object-cover" src="{{asset('minemax/MineMax.png')}}" alt="MineMax logo. Reads MINEMAX in minecraft font"></a>
             </div>
             @if (Auth::check())
-                <div class="hidden mobile:flex items-center">@include('form.main-search', ['member' => Auth::user()->persistentUser->member])</div>
+                <div class="hidden mobile:flex items-center">@include('form.main-search')</div>
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     @if(Auth::user()->persistentUser->type_ === 'Member')
@@ -55,6 +55,7 @@
                                     <h2 class="text-white py-1 mx-5">Notifications</h2>
                                     <button id="clearNotifications" class="link">Clear Notifications</button>
                                 </div>
+                                <li id="notificationList"></li>
                             </div>
                         </div>
                     @endif
@@ -69,6 +70,7 @@
                 </ul>                     
                 @else
                     <ul id="navbar-right" class="items-center flex mx-5">
+                        <div class="hidden mobile:flex items-center">@include('form.main-search')</div>
                         <a id="login" class="button" href="{{ url('/login') }}"> Login </a>
                     </ul>
             @endif
@@ -86,7 +88,7 @@
         @endif
         <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" type="checkbox" class="sr-only peer"/>
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
-            @if(Auth::check())<li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>@endif
+            <li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search')<hr class="underline text-white/60 w-2/3 my-3"> </li>
             <li class="menu-item"><a href="/">Home Page</a></li>
             <li class="menu-item"><a href="/worlds">All Worlds</a></li>
             @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')
