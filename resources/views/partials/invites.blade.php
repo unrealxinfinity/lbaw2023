@@ -28,6 +28,27 @@
             </form>
         </div>
     @elseif($type === 'request')
-        <img src="" alt="">
+        <img class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square" src="{{$request->member->getProfileImage()}}" alt="{{$request->member->persistentUser->user->username}} profile picture">
+        <div class="flex flex-col self-center ml-3 w-11/12">
+            <h2 class="text-white"><a href="/members/{{$request->member->persistentUser->user->username}}">{{$request->member->persistentUser->user->username}}</a> has sent you a friend request.</h2>
+            <h4 class="text-white">Do you wish to accept?</h4>
+        </div>
+        <div class="flex mobile:flex-row flex-col">
+            <form class="self-center">
+                <fieldset class="mobile:p-2 py-1">
+                    <legend class="sr-only">Accept Friend Request</legend>
+                    @csrf
+                    <input type="hidden" class="acceptance" name="acceptance" value=1>
+                    <button class="button">&#10003;</button>
+                </fieldset>
+            </form>
+            <form class="self-center">
+                <fieldset class="mobile:p-2 py-1">
+                    <legend class="sr-only">Reject Friend Request</legend>
+                    @csrf
+                    <input type="hidden" class="acceptance" name="acceptance" value=0>
+                    <button class="button">&#10005;</button>
+                </fieldset>
+        </div>
     @endif
 </article>
