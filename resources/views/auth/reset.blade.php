@@ -12,7 +12,7 @@
     <input type="hidden" name="id" value={{ $id }}>
 
     <label for="password">New Password</label>
-    <input id="password" type="password" name="password" required>
+    <input id="password" type="password" name="password" required tabindex="0">
     @if ($errors->has('password'))
       <span class="error">
           {{ $errors->first('password') }}
@@ -20,8 +20,8 @@
     @endif
 
     <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
-    <button class="button" type="submit"> Reset Password </button>
+    <input id="password-confirm" type="password" name="password_confirmation" required tabindex="0">
+    <button class="button" type="submit" tabindex="0"> Reset Password </button>
   </fieldset>
 </form>
 @endsection

@@ -4,22 +4,22 @@
         @csrf
         <div class="flex flex-col mr-3">
             <h3 class="my-0 mt-3"> <label for="projectName">Project Name  <b class="text-red">*</b></label></h3>
-            <input type="text" id="projectName" name="projectName" placeholder="Project Name" required>
+            <input type="text" id="projectName" name="projectName" placeholder="Project Name" required tabindex="0">
         </div>
         <input type="hidden" name="world_id" value="{{ $world->id }}">
         <div class="flex flex-col mr-3">
             <h3 class="my-0 mt-3"> <label for="Tags">Tags</label></h3>
-            <input type="text" id="Tags" name="tags" placeholder="tag1,tag2">
+            <input type="text" id="Tags" name="tags" placeholder="tag1,tag2" tabindex="0">
         </div>
         <div class="flex flex-col mr-3">
             <h3 class="my-0 mt-3"> <label for="project_order">Order</label></h3>
-            <select id="project_order" name="order">
+            <select id="project_order" name="order" tabindex="0">
                 <option value= "Relevance" selected>Relevance</option>
                 <option value="A-Z">A-Z</option>
                 <option value="Z-A">Z-A</option>
             </select>
         </div>
-        <input id="searchProjectButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Projects">
+        <input id="searchProjectButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Projects" tabindex="0">
     </fieldset>
 </form>
 

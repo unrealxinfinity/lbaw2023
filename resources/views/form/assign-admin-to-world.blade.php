@@ -7,7 +7,7 @@
             <input type="text" class="username" name="username" value="{{$member->persistentUser->user->username}}" hidden>
     
             <label for="submit-demote" class="sr-only">Submit demote admin</label>
-            <input id="submit-demote" class="button bg-grey p-0 px-2" type="submit" value="Demote">
+            <input id="submit-demote" class="button bg-grey p-0 px-2" type="submit" value="Demote" tabindex="0">
         </fieldset>
     </form>
 @else
@@ -18,7 +18,7 @@
             <input type="hidden" class="id" name="id" value="{{ $world->id }}">
             <input type="text" class="username" name="username"  value="{{$member->persistentUser->user->username}}" hidden>
     
-            <input id="submit-promote" class="button bg-grey p-0 px-2" type="submit" value="Promote">
+            <input id="submit-promote" class="button bg-grey p-0 px-2" type="submit" value="Promote" tabindex="0">
         </fieldset>
     </form>
 @endif
