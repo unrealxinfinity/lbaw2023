@@ -132,7 +132,8 @@ class MemberController extends Controller
         $this->authorize('showInvites', Member::class);
         $id = Auth::user()->persistentUser->member->id;
         $invites = Member::findOrFail($id)->invitations;
-        return view('pages.invites', ['invites' => $invites]);
+        $friend_requests = Member::findOrFail($id)->Notifications->where('is_request', true);
+        return view('pages.invites', ['invites' => $invites, 'friend_requests' => $friend_requests]);
     }
 
     public function update(EditMemberRequest $request, string $username): RedirectResponse

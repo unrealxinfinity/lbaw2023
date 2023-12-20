@@ -1,4 +1,5 @@
 <article class="flex justify-between h-fit p-3 mx-1 my-4 bg-black outline outline-1 outline-white/20 rounded">
+    @if($type === 'invite')
         <img src={{$invite->world->getImage()}} alt="{{$invite->world->name}} image" class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
         <div class="flex flex-col self-center ml-3 w-11/12">
             <h2 class="text-white">You have been invited to join <a href="worlds/{{$invite->world_id}}">"{{$invite->world->name}}"</a></h2>
@@ -26,4 +27,7 @@
                 </fieldset>
             </form>
         </div>
+    @elseif($type === 'request')
+        <img src="" alt="">
+    @endif
 </article>
