@@ -103,6 +103,13 @@ function addEventListeners() {
     });
   }
 
+  let removeMemberFromWorldsMobile = document.querySelectorAll('form#mobileremove-member-world');
+  if(removeMemberFromWorldsMobile != null){
+    removeMemberFromWorldsMobile.forEach(removeMemberFromWorldMobile => {
+      removeMemberFromWorldMobile.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+    });
+  }
+
   let createTask = document.getElementById("createTaskButton");
   if(createTask != null)
     createTask.addEventListener("click", sendCreateTaskRequest);
@@ -190,6 +197,13 @@ function addEventListeners() {
   if(removeMemberFromProjects != null){
     removeMemberFromProjects.forEach(removeMemberFromProject => {
       removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+    });
+  }
+
+  let removeMemberFromProjectsMobile = document.querySelectorAll('form#mobileremove-member-project');
+  if(removeMemberFromProjectsMobile != null){
+    removeMemberFromProjectsMobile.forEach(removeMemberFromProjectMobile => {
+      removeMemberFromProjectMobile.addEventListener('submit', sendRemoveMemberFromProjectRequest);
     });
   }
   
@@ -679,7 +693,7 @@ function changeToInviteOutsideMember(ev) {
   function addMemberHandler(json) {
     const list = document.querySelectorAll('ul.members');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.add-member');
+      const form = document.querySelector('form.add-member fieldset');
       const error = form.querySelector('span.error');
       if (error !== null)
       {
