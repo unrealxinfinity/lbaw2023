@@ -686,12 +686,11 @@ function changeToInviteOutsideMember(ev) {
     });
 
     const json = await response.json();
-    
     if (response.status !== 500) addMemberHandler(json);
   }
 
   function addMemberHandler(json) {
-    const list = document.querySelectorAll('ul.members');
+    const list = document.querySelectorAll('ul.membersof');
     [].forEach.call(list, function(ul) {
       const form = document.querySelector('form.add-member fieldset');
       const error = form.querySelector('span.error');
@@ -789,7 +788,7 @@ function changeToInviteOutsideMember(ev) {
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" class="id" name="id" value="${json.project_id}">
             <input type="hidden" class="username" name="username" value="${json.username}">
-            <button type="submit"> &times; </button>
+            <button type="submit" class ="text-red"> &times; </button>
           </fieldset>
         `;
 
@@ -800,7 +799,7 @@ function changeToInviteOutsideMember(ev) {
         ul.appendChild(li);
       } else{
         li.append(options_div);
-        let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
+        let section = json.is_leader? ul.querySelector('.project-leaders'):ul.querySelector('.members');
         section.appendChild(li);
       }
       

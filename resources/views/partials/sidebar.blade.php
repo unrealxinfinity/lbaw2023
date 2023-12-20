@@ -3,9 +3,9 @@
     <h2> Description </h2>
     <p class="mt-3 mb-5 desktop:w-11/12">{{ $thing->description }}</p>
     <h2 id="{{$prefix . 'see-members'}}">Members</h2>
-    <ul class="members mr-5 ml-2 mt-2">
+    <ul class="membersof mr-5 ml-2 mt-2">
         @if ($type == 'project')
-        <ul id="{{$prefix . 'project-leaders'}}">
+        <ul id="{{$prefix . 'project-leaders'}}" class="project-leaders">
             <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
@@ -23,8 +23,8 @@
                 </li>
             @endforeach
         </ul>
-        <ul id="{{$prefix . 'members'}}">
-            <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Members </h3>
+        <ul id="{{$prefix . 'members'}}" class="members">
+            <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
