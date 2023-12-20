@@ -84,6 +84,11 @@ function addEventListeners() {
   let ProjectSearcher = document.querySelector('form.search-project');
   if (ProjectSearcher != null)
     ProjectSearcher.addEventListener('submit', searchProjectRequest);
+
+  let removeFriends = document.querySelectorAll('form.remove-friend-form');
+  [].forEach.call(removeFriends, function (removeFriend) {
+    removeFriend.addEventListener('submit', sendRemoveFriendRequest);
+  });
   
   let MemberAssigner = document.querySelectorAll('form#assign-member');
   if (MemberAssigner != null){
@@ -100,6 +105,13 @@ function addEventListeners() {
   if(removeMemberFromWorlds != null){
     removeMemberFromWorlds.forEach(removeMemberFromWorld => {
       removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
+    });
+  }
+
+  let removeMemberFromWorldsMobile = document.querySelectorAll('form#mobileremove-member-world');
+  if(removeMemberFromWorldsMobile != null){
+    removeMemberFromWorldsMobile.forEach(removeMemberFromWorldMobile => {
+      removeMemberFromWorldMobile.addEventListener('submit', sendRemoveMemberFromWorldRequest);
     });
   }
 
@@ -190,6 +202,13 @@ function addEventListeners() {
   if(removeMemberFromProjects != null){
     removeMemberFromProjects.forEach(removeMemberFromProject => {
       removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+    });
+  }
+
+  let removeMemberFromProjectsMobile = document.querySelectorAll('form#mobileremove-member-project');
+  if(removeMemberFromProjectsMobile != null){
+    removeMemberFromProjectsMobile.forEach(removeMemberFromProjectMobile => {
+      removeMemberFromProjectMobile.addEventListener('submit', sendRemoveMemberFromProjectRequest);
     });
   }
   
@@ -384,6 +403,22 @@ function changeToInviteOutsideMember(ev) {
     });
 
     if (response.ok) this.remove();
+  }
+
+  async function sendRemoveFriendRequest(ev) {
+    ev.preventDefault();
+    const url = this.getAttribute('action');
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+      }
+    });
+
+    if (response.ok) this.closest('article').remove();
   }
 
   
@@ -686,14 +721,13 @@ function changeToInviteOutsideMember(ev) {
     });
 
     const json = await response.json();
-    
     if (response.status !== 500) addMemberHandler(json);
   }
 
   function addMemberHandler(json) {
-    const list = document.querySelectorAll('ul.members');
+    const list = document.querySelectorAll('ul.membersof');
     [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form.add-member');
+      const form = document.querySelector('form.add-member fieldset');
       const error = form.querySelector('span.error');
       if (error !== null)
       {
@@ -789,7 +823,7 @@ function changeToInviteOutsideMember(ev) {
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" class="id" name="id" value="${json.project_id}">
             <input type="hidden" class="username" name="username" value="${json.username}">
-            <button type="submit"> &times; </button>
+            <button type="submit" class ="text-red"> &times; </button>
           </fieldset>
         `;
 
@@ -797,10 +831,10 @@ function changeToInviteOutsideMember(ev) {
         removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
       }
       if (json.task){
-        ul.appendChild(li);
+        ul.appendChild(member);
       } else{
         li.append(options_div);
-        let section = json.is_leader? ul.querySelector('#project-leaders'):ul.querySelector('#members');
+        let section = json.is_leader? ul.querySelector('.project-leaders'):ul.querySelector('.members');
         section.appendChild(li);
       }
       
