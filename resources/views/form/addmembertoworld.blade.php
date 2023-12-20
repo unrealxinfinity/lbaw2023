@@ -1,28 +1,37 @@
-<form class="form-post" id="invite-member">
-    @csrf
-    <h2>Invite member. </h2> 
-    <h3>Do you want to invite someone outside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
-    <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
-    <input type="text" class="username" name="username" placeholder="Username" required>
-    <p class="m-0">What role?</p>
-    <select name="type" class="type mt-1" required>
-        <option value="false">Member</option>
-        <option value="true">World Administrator</option>
-    </select>
+<form class="form-outline" id="invite-member">
+    <fieldset class="form-post">
+        <legend>Invite Member</legend>
+        @csrf
+        <h3>Do you want to invite someone outside MineMax? <button tabindex=0 id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</button></h3>
+        <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
     
-    <input class="button" type="submit" value="Invite">
+        <h3 class="my-0 mt-3"> <label for="username">Username <b class="text-red">*</b></label> </h3>
+        <input type="text" class="username" name="username" id="username" placeholder="Username" required>
+        
+        <h3 class="my-0 mt-3"> <label for="choose-role">Role</label> </h3>
+        <select id="choose-role" name="type" class="type mt-1" required>
+            <option value="false">Member</option>
+            <option value="true">World Administrator</option>
+        </select>
+        
+        <input class="button" type="submit" value="Invite">
+    </fieldset>
 </form>
-<form class="form-post hidden" id="invite-new-member">
-    @csrf
-    <h2>Invite outside member. </h2> 
-    <h3>Do you want to invite someone inside MineMax? <span id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</span></h3>
-    <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
-    <input type="text" class="email" name="email" placeholder="example@email.com" required>
-    <p class="m-0">What role?</p>
-    <select name="type" class="type mt-1" required>
-        <option value="false">Member</option>
-        <option value="true">World Administrator</option>
-    </select>
+<form class="form-outline hidden" id="invite-new-member">
+    <fieldset class="form-post">
+        <legend>Invite outside member</legend>
+        @csrf
+        <h3>Do you want to invite someone inside MineMax? <button tabindex=0 id="invite-outside-member" class="cursor-pointer text-green underline">Change Here</button></h3>
+        <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}">
     
-    <input class="button" type="submit" value="Invite">
+        <h3 class="my-0 mt-3"> <label for="email">Email <b class="text-red">*</b></label> </h3>
+        <input type="text" class="email" name="email" id="email" placeholder="example@email.com" required>
+        <h3 class="my-0 mt-3"> <label for="choose-role">Role</label> </h3>
+        <select id="choose-role" name="type" class="type mt-1" required>
+            <option value="false">Member</option>
+            <option value="true">World Administrator</option>
+        </select>
+        
+        <input class="button" type="submit" value="Invite">
+    </fieldset>
 </form>

@@ -1,54 +1,59 @@
-<form class = "new-task form-post" method="POST" action="{{ route('create-task') }}">
-    @csrf
-    @method('POST')
-    <h2>Create a task</h2>
-    <input type="text" name="title" placeholder="Title">
-    @if ($errors->has('title'))
-        <span class="error">
-            {{ $errors->first('title') }}
-        </span>
-    @endif
-    
-    <input type="text" name="description" placeholder="Description" required>
-    @if ($errors->has('description'))
-        <span class="error">
-            {{ $errors->first('description') }}
-        </span>
-    @endif
-    
-    <select name="status">
-        <option value="BackLog">BackLog</option>
-        <option value="Upcoming">Upcoming</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Finalizing">Finalizing</option>
-        <option value="Done">Done</option>
-    </select>
-    
-    <input type="date" name="due_at" placeholder="Due Date" class="">
-    <p >*Due Date is required*</p>
-    @if ($errors->has('due_at'))
-        <span class="error">
-            {{ $errors->first('due_at') }}
-        </span>
-    @endif
-    
+<form class = "new-task form-outline" method="POST" action="{{ route('create-task') }}">
+    <fieldset class="form-post">
+        <legend>Create a Task</legend>
+        @csrf
+        @method('POST')
+        <h3 class="my-0 mt-3"><label for="title"> Title <b class="text-red">*</b></label></h3>
+        <input type="text" name="title" id="title" placeholder="Title">
+        @if ($errors->has('title'))
+            <span class="error">
+                {{ $errors->first('title') }}
+            </span>
+        @endif
+        
+        <h3 class="my-0 mt-3"><label for="description"> Description <b class="text-red">*</b></label> </h3>
+        <textarea type="text" name="description" id="description"placeholder="Some non-blank text"> </textarea>
+        @if ($errors->has('description'))
+            <span class="error">
+                {{ $errors->first('description') }}
+            </span>
+        @endif
+        
+        <h3 class="my-0 mt-3"> <label for="status"> Status </label> </h3>
+        <select name="status" id="status">
+            <option value="BackLog">BackLog</option>
+            <option value="Upcoming">Upcoming</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Finalizing">Finalizing</option>
+            <option value="Done">Done</option>
+        </select>
 
-    <input type="number" name="effort" placeholder="Effort -> required" required>
-    @if ($errors->has('effort'))
-        <span class="error">
-            {{ $errors->first('effort') }}
-        </span>
-    @endif
-    
-
-    <input type="text" name="priority" placeholder="Priority -> required" required>
-    @if ($errors->has('priority'))
-        <span class="error">
-            {{ $errors->first('priority') }}
-        </span>
-    @endif
-    
-    <input type="hidden" name="project_id" value="{{ $project->id }}">
-
-    <button class="button" type="submit">Create Task</button>
+        <h3 class="my-0 mt-3"> <label for="due_at"> Due At <b class="text-red">*</b></label> </h3>
+        <input type="date" name="due_at" id="due_at" required>
+        @if ($errors->has('due_at'))
+            <span class="error">
+                {{ $errors->first('due_at') }}
+            </span>
+        @endif
+        
+        <h3 class="my-0 mt-3"> <label for="effort"> Effort <b class="text-red">*</b></label> </h3>
+        <input type="number" name="effort" id="effort" placeholder="Effort" required>
+        @if ($errors->has('effort'))
+            <span class="error">
+                {{ $errors->first('effort') }}
+            </span>
+        @endif
+        
+        <h3 class="my-0 mt-3"> <label for="priority"> Priority  <b class="text-red">*</b></label> </h3>
+        <input type="text" name="priority" id="priority" placeholder="Priority" required>
+        @if ($errors->has('priority'))
+            <span class="error">
+                {{ $errors->first('priority') }}
+            </span>
+        @endif
+        
+        <input type="hidden" name="project_id" value="{{ $project->id }}">
+        <br>
+        <button class="button" type="submit">Create Task</button>
+    </fieldset>
 </form>
