@@ -58,7 +58,10 @@ class WorldPolicy
 
     public function removeMember(User $user, World $world): bool
     {
-        return ($user->persistentUser->type_ !== UserType::Administrator->value && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
+        if ($user == null) return false;
+        else if ($user->persistentUser->type_ === UserType::Administrator->value) return false;
+
+        return ($user->persistentUser->member->worlds->contains('id', $world->id) && $user->persistentUser->member->worlds->where('id', $world->id)->first()->pivot->is_admin);
     }
     public function assignWorldAdmin(User $user, World $world): bool
     {   
