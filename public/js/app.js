@@ -134,18 +134,16 @@ function addEventListeners() {
 
   let main = document.querySelector('main');
   main.addEventListener('click', function() {
-    if(e.target === e.currentTarget){
-      let showMenu = document.querySelector('#show-menu');
-      let notificationArea = document.querySelector('#notificationArea');
-      if(notificationArea != null){
-        let showNotif = notificationArea.classList.contains('hidden');
-        
-        if (showMenu.checked) {
-          document.querySelector('#show-menu').checked = false;
-        }
-        if (!showNotif) {
-          notificationArea.classList.toggle('hidden');
-        }
+    let showMenu = document.querySelector('#show-menu');
+    let notificationArea = document.querySelector('#notificationArea');
+    if(notificationArea != null){
+      let showNotif = notificationArea.classList.contains('hidden');
+      
+      if (showMenu.checked) {
+        document.querySelector('#show-menu').checked = false;
+      }
+      if (!showNotif) {
+        notificationArea.classList.toggle('hidden');
       }
     }
   });
@@ -290,6 +288,13 @@ function addEventListeners() {
   if(archive_project != null){
     [].forEach.call(archive_project, function(form) {
       form.addEventListener('submit', archiveProjectAlert);
+    });
+  }
+
+  let acceptFriendRequest = document.querySelectorAll('form#accept-fr-form');
+  if(acceptFriendRequest != null){
+    [].forEach.call(acceptFriendRequest, function(form) {
+      form.addEventListener('submit', sendAcceptFriendRequest);
     });
   }
   
@@ -496,6 +501,39 @@ function changeToInviteOutsideMember(ev) {
     }
     confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", request.bind(this),2000);
    
+  }
+
+  async function sendAcceptFriendRequest(ev) {
+    ev.preventDefault();
+    async function request(){
+      const csrf = this.querySelector('input[name="_token"]').value;
+      const id = this.querySelector('input#accept-friend-request-id').value;
+      const response = await fetch('/api/accept/' + id, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'Content-Type': "application/json",
+          'Accept': 'application/json',
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      }).then(response => {
+        if(response.ok){
+          return response.json();
+        }
+        else{
+          throw new Error('Response status not OK');
+        }
+      }).then(data => {
+        acceptFriendRequestHandler(data);
+      }).catch(error => console.error('Error fetching data:', error.message));
+    }
+  }
+
+  function acceptFriendRequestHandler(data) {
+    let element = document.querySelectorAll('.friend-request[data-id="' + data.id + '"]');
+    [].forEach.call(element, function(friendRequest) {
+      friendRequest.remove();
+    });
   }
 
   function showEditComment(ev) {

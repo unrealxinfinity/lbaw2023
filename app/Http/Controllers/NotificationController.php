@@ -74,7 +74,8 @@ class NotificationController extends Controller
 
         return response()->json([
             'error' => 'false',
-            'message' => 'Friend request accepted!'
+            'message' => 'Friend request accepted!',
+            'id' => $id
         ]);
     }
 
