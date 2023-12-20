@@ -343,7 +343,7 @@ class WorldController extends Controller
             $request->validated();
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world,'You left the ');
+            NotificationController::WorldNotification($world, $member->name.' left the ');
             $member->worlds()->detach($world_id);
             return response()->json([
                 'error' => false,
