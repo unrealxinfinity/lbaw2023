@@ -13,7 +13,7 @@
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
                     <input type="hidden" class="acceptance" name="acceptance" value=1>
-                    <input class="button" type="submit" value="Yes">
+                    <button class="button">&#10003;</button>
                 </fieldset>
             </form>
             <form class="self-center" action={{ route ('join-world', ['id' => $invite->world_id]) }} method="POST">
@@ -23,7 +23,7 @@
                     @method('POST')
                     <input type="hidden" class="token" name="token" value="{{ $invite->token }}">
                     <input type="hidden" class="acceptance" name="acceptance" value=0>
-                    <input class="button" type="submit" value="No">
+                    <button class="button">&#10005;</button>
                 </fieldset>
             </form>
         </div>
