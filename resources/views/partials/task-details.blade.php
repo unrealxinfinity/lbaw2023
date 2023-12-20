@@ -58,7 +58,7 @@
             </fieldset>
         </form>
         <h2 class="mt-7 mb-2">Assigned to</h2>
-        <ul id="{{$prefix . 'members-assigned'}}" class="members">
+        <ul id="{{$prefix . 'members-assigned'}}" class="membersof">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
                 <li>
                     @include('partials.member', ['member' => $member, 'main' => false])
@@ -83,7 +83,7 @@
             <h3 class="col-span-2">{{$task->created_at}}</h3>
         </div>
         <h2 class="mt-7 mb-2">Assigned to</h2>
-        <ul class="members">
+        <ul id="{{$prefix . 'members-assigned'}}" class="membersof">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
                 @include('partials.member', ['member' => $member, 'main' => false])
             @endforeach
