@@ -217,6 +217,10 @@ class MemberController extends Controller
 
         $user = User::where('username', $username)->firstOrFail();
 
+        if ($user->persistentUser->type_ == UserType::Blocked->value) {
+            return redirect()->back()->withSuccess('User already blocked')->withFragment($username);
+        }
+
         $user->persistentUser->type_ = UserType::Blocked->value;
         $user->persistentUser->block_reason = $fields['block_reason'] ?? "No reason given";
         $user->persistentUser->save();
@@ -238,8 +242,10 @@ class MemberController extends Controller
             if (isset($user->persistentUser->member->appeal)) {
                 $user->persistentUser->member->appeal->delete();
             }
+
+            return redirect()->back()->withSuccess('User unblocked')->withFragment($username);
         }    
 
-        return redirect()->back()->withSuccess('User unblocked')->withFragment($username);
+        return redirect()->back()->withSuccess('User already unblocked')->withFragment($username);
     }
 }

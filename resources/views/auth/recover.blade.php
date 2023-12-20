@@ -9,7 +9,7 @@
     @csrf
 
     <label for="email">Email</label> <br> 
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="w-full">
+    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus class="w-full" tabindex="0">
     @if ($errors->has('email'))
         <span class="error">
           {{ $errors->first('email') }}

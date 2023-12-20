@@ -5,7 +5,7 @@
             @csrf
 
             <label class="sr-only" for="anything">Search for anything!</label>
-            <input type="text" id="anything" name="anything" placeholder="Search anything" required>
+            <input type="text" id="anything" name="anything" placeholder="Search anything" required tabindex="0">
 
             <label hidden for="typeFilter">Filter by type</label>
             <select id="typeFilter" name="typeFilter" hidden>
@@ -17,7 +17,7 @@
                 <option value= "Relevance" selected>Relevance</option>
             </select>
 
-            <input class="button" type="submit" id="mainSearchButton" value='Search'>
+            <input class="button" type="submit" id="mainSearchButton" value='Search' tabindex="0">
         </fieldset>
     </form>
 </section>

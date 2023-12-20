@@ -47,7 +47,7 @@ class RecoverController extends Controller
         $mailData = [
             'view' => 'emails.recover',
             'name' => $member->name,
-            'link' => env('APP_URL') . '/reset?id=' . $member->id . '&token=' . $recoverToken
+            'link' => env('APP_URL') . '/reset?token=' . $recoverToken
         ];
 
         Mail::to($member->email)->send(new MailModel($mailData));
@@ -58,16 +58,15 @@ class RecoverController extends Controller
     {
         $fields = $request->validated();
 
-        $member = Member::findOrFail($fields['id']);
+        $member = Member::where('token', $fields['token'])->firstOrFail();
         $member->token = null;
         $member->save();
 
         $user = $member->persistentUser->user;
 
-        error_log("sup");
         $user->password = $fields['password'];
         $user->save();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->withSuccess('Password recovered');
     }
 }

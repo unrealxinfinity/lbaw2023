@@ -4,6 +4,20 @@
 
 @import "tailwindcss/utilities";
 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: url('/fonts/Roboto-Thin.ttf');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/Roboto-Regular.ttf');
+}
+
 @layer base {
   h1 {
     @apply text-bMobile tablet:text-bTablet desktop:text-bDesktop;

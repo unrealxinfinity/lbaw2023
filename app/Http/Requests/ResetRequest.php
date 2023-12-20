@@ -25,9 +25,8 @@ class ResetRequest extends FormRequest
     {
         return [
             'password' => ['required', 'min:8', 'confirmed'],
-            'id' => ['required', 'exists:App\Models\Member,id'],
             'token' => ['required' ,Rule::exists('members')->where(function (Builder $query) {
-                return $query->where('id', request()->id);
+                return $query->where('token', request()->token);
             })]
         ];
     }
