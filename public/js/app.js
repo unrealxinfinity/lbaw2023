@@ -1193,7 +1193,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
     let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
-    url = `/api/worlds/${id}/${username}`;
+    url = `/api/worlds/${id}/${username}/remove`;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
