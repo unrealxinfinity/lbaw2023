@@ -1,6 +1,6 @@
-@if($thing instanceof App\Models\World)
+@if($thing instanceof App\Models\World)@includ
     @if(Auth::user()->persistentUser->member->id !== $member->id)
-        <form id="remove-member-world" data-id="{{ $member->id }}">
+        <form id="{{$prefix . 'remove-member-world'}}" data-id="{{ $member->id }}">
             <fieldset>
                 <legend class="sr-only">Remove Member</legend>
                 @CSRF
@@ -12,7 +12,7 @@
     @endif
 @elseif($thing instanceof App\Models\Project)
     @if (Auth::user()->persistentUser->member->id !== $member->id)
-        <form id="remove-member-project" data-id="{{ $member->id }}">
+        <form id="{{$prefix . 'remove-member-project'}}" data-id="{{ $member->id }}">
             <fieldset>
                 <legend class="sr-only">Remove Member</legend>
                 @CSRF

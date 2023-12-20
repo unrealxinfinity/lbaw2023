@@ -135,8 +135,8 @@ class NotificationController extends Controller
             foreach($project->members as $member){
                 $member->notifications()->attach($notification->id);
              } 
-            event(new CreateTaskNotification($message,$project_id));
             DB::commit();
+            event(new CreateTaskNotification($message,$project_id));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
