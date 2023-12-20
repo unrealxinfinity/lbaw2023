@@ -55,6 +55,7 @@
                                     <h2 class="text-white py-1 mx-5">Notifications</h2>
                                     <button id="clearNotifications" class="link">Clear Notifications</button>
                                 </div>
+                                <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
                             </div>
                         </div>
                     @endif
