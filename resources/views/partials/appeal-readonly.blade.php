@@ -5,6 +5,6 @@
     @if ($member->appeal->denied)
         <h2 class="bg-mine-red justify-self-center p-3">Your appeal has been denied</h2>
     @else
-        <h2 class="bg-mine-red justify-self-center p-3">Your appeal is under review</h2>
+        <h2 class="bg-mine-lime justify-self-center p-3">Your appeal is under review</h2>
     @endif
 </div>
