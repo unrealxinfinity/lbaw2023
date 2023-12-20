@@ -40,7 +40,7 @@
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     @if(Auth::user()->persistentUser->type_ === 'Member')
-                        <div id="notification-button" class="link relative" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications">
+                        <li id="notification-button" class="link relative" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
                                 <title>Notification Icon</title>
                                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
@@ -53,20 +53,20 @@
                                 </div>
                                 <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
                             </div>
-                        </div>
+                        </li>
                     @endif
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
-                            <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
+                            <li><a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
                                 <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
-                            </a>
+                            </a></li>
                         {{-- @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator') --}}
                         {{--    <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a> --}}
                         @endif
-                        <a id="logout" class="link desktop:flex hidden text-red" href="{{ url('/logout') }}"> Logout </a>
+                        <li><a id="logout" class="link desktop:flex hidden text-red" href="{{ url('/logout') }}"> Logout </a></li>
                 </ul>                     
                 @else
                     <ul id="navbar-right" class="items-center flex mx-5">
-                        <a id="login" class="button" href="{{ url('/login') }}"> Login </a>
+                        <li><a id="login" class="button" href="{{ url('/login') }}"> Login </a></li>
                     </ul>
             @endif
         </nav>
