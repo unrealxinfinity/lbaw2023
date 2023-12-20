@@ -17,12 +17,18 @@ class FaqController extends Controller
     }
     public function add(FaqRequest $request) : RedirectResponse
     {   
-        $request->validated();
-        $faq = new Faq();
-        $faq->question = $request['faq'];
-        $faq->answer = $request['answer'];
-        $faq->save();
-        return redirect()->route('show-faqs')->wihSuccess('FAQ added successfully!');
+        try{
+            $request->validated();
+            $faq = new Faq();
+            $faq->question = $request['faq'];
+            $faq->answer = $request['answer'];
+            $faq->save();
+            return redirect()->route('show-faqs')->wihSuccess('FAQ added successfully!');
+        }
+        catch(\Exception $e){
+            return redirect()->route('show-faqs')->withError('String too long!');
+        }
+       
     }
     public function delete(FaqRequest $request): RedirectResponse
     {   $request->validated();
