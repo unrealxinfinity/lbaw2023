@@ -24,7 +24,7 @@ class DeleteTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id' => 'required|exists:tasks,id'
         ];
     }
 }

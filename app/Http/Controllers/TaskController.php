@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AssignMemberRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\DeleteTaskRequest;
 use App\Http\Requests\MoveTaskRequest;
 use App\Http\Requests\EditTaskRequest;
 use App\Models\Task;
@@ -142,5 +143,14 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('tasks.show', ['id' => $id, '#comments'])->withSuccess('Comment added.');
+    }
+
+    public function delete(DeleteTaskRequest $deleteTaskRequest): RedirectResponse
+    {
+        $fields = $deleteTaskRequest->validated();
+        $task = Task::findOrFail($fields['id']);
+
+        $task->delete();
+        return redirect()->route('projects.show', ['id' => $task->project_id])->withSuccess('Task deleted.');
     }
 }
