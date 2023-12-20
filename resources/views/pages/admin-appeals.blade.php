@@ -20,4 +20,5 @@
             <div class="my-5">{{ $appeals->links() }}</div>
         </div>
     </section>
+    
 @endsection
