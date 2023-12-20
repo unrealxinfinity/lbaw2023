@@ -47,7 +47,7 @@ function addEventListeners() {
   let deleteTagForms = document.getElementsByClassName('delete-tag');
   if(deleteTagForms != null){
     for(let i = 0; i < deleteTagForms.length; i++){
-      deleteTagForms[i].querySelector('#deleteTagButton').addEventListener('click', sendDeleteTagRequest);
+      deleteTagForms[i].querySelector('.deleteTagButton').addEventListener('click', sendDeleteTagRequest);
     }
   }
 
