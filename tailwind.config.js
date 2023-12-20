@@ -22,6 +22,7 @@ export default {
       red: '#FF0000',
       darkRed: '#8b0000',
       orange: '#ba610b',
+      lime: '#70b919',
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
@@ -71,6 +72,13 @@ export default {
       },
       minHeight: {
         '128': '16rem',
+      },
+      maxHeight: {
+        '0': '0',
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        'full': '100%',
       },
     }
   },

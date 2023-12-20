@@ -135,8 +135,11 @@ function addEventListeners() {
   window.addEventListener('scroll', function() {
     let currentScroll = document.documentElement.scrollTop;
     let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-  
+    let notificationArea= document.querySelector('#notificationArea');
+    let showNotif;
+    if(notificationArea != null){
+      showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+    }
     if (currentScroll > lastScrollTop) {
       // Scroll down
       if (!showMenu.checked && showNotif) {
@@ -157,12 +160,16 @@ function addEventListeners() {
   let main = document.querySelector('main');
   main.addEventListener('click', function() {
     let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-    if (showMenu.checked) {
-      document.querySelector('#show-menu').checked = false;
-    }
-    if (!showNotif) {
-      document.querySelector('#notificationArea').classList.toggle('hidden');
+    let notificationArea = document.querySelector('#notificationArea');
+    if(notificationArea != null){
+       let showNotif = notificationArea.classList.contains('hidden');
+      
+      if (showMenu.checked) {
+        document.querySelector('#show-menu').checked = false;
+      }
+      if (!showNotif) {
+        notificationArea.classList.toggle('hidden');
+      }
     }
   });
   
@@ -308,7 +315,9 @@ function addEventListeners() {
       form.addEventListener('submit', archiveProjectAlert);
     });
   }
+  
 }
+
 
 function closeSessionHandler() {
   this.parentElement.remove();
@@ -1722,12 +1731,16 @@ function getIdsHandler(json){
 function showRedDot(){
   let showDot= sessionStorage.getItem('showDot') == 'true';
   if(showDot){
-    document.getElementById('redDot').classList.remove('hidden');
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.remove('hidden');
   }
   else{
-    document.getElementById('redDot').classList.add('hidden');
+    
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.classList.add('hidden');
   }
 }
+
 
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
@@ -1742,7 +1755,7 @@ function pusherNotifications(projectContainer, worldContainer){
   function bindEvent(channel, eventName, callback) {
     channel.bind(eventName, callback);
   } 
-
+  
   for (let i = 0; i < worldContainer.length; i++) { 
     const world_id = worldContainer[i];
     const channelWorld = pusher.subscribe('World' + world_id);

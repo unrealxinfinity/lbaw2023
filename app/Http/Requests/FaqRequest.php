@@ -10,8 +10,9 @@ class FaqRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {
-        return Auth::user()->persistentUser->type_ == 'Admin';
+    {   
+        error_log($this->id);
+        return Auth::user()->persistentUser->type_ == 'Administrator';
     }
 
     /**
@@ -22,8 +23,8 @@ class FaqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string|max:255',
+            'question' => 'string|max:255',
+            'answer' => 'string|max:255',
         ];
     }
 }
