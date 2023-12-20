@@ -291,11 +291,9 @@ function addEventListeners() {
     });
   }
 
-  let acceptFriendRequest = document.querySelectorAll('form#accept-fr-form');
+  let acceptFriendRequest = document.querySelector('form#accept-fr-form');
   if(acceptFriendRequest != null){
-    [].forEach.call(acceptFriendRequest, function(form) {
-      form.addEventListener('submit', sendAcceptFriendRequest);
-    });
+    acceptFriendRequest.addEventListener('submit', sendAcceptFriendRequest);
   }
   
 }
@@ -505,28 +503,32 @@ function changeToInviteOutsideMember(ev) {
 
   async function sendAcceptFriendRequest(ev) {
     ev.preventDefault();
-    async function request(){
-      const csrf = this.querySelector('input[name="_token"]').value;
-      const id = this.querySelector('input#accept-friend-request-id').value;
-      const response = await fetch('/api/accept/' + id, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': csrf,
-          'Content-Type': "application/json",
-          'Accept': 'application/json',
-          "X-Requested-With": "XMLHttpRequest"
-        }
-      }).then(response => {
-        if(response.ok){
-          return response.json();
-        }
-        else{
-          throw new Error('Response status not OK');
-        }
-      }).then(data => {
-        acceptFriendRequestHandler(data);
-      }).catch(error => console.error('Error fetching data:', error.message));
-    }
+
+    const csrf = this.querySelector('input[name="_token"]').value;
+    const id = this.querySelector('input#accept-friend-request-id').value;
+
+    console.log(csrf);
+    console.log(id);
+
+    const response = await fetch('/api/accept/' + id, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      acceptFriendRequestHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  
   }
 
   function acceptFriendRequestHandler(data) {
