@@ -295,6 +295,11 @@ function addEventListeners() {
   if(acceptFriendRequest != null){
     acceptFriendRequest.addEventListener('submit', sendAcceptFriendRequest);
   }
+
+  let rejectFriendRequest = document.querySelector('form#reject-fr-form');
+  if(rejectFriendRequest != null){
+    rejectFriendRequest.addEventListener('submit', sendRejectFriendRequest);
+  }
   
 }
 
@@ -507,9 +512,6 @@ function changeToInviteOutsideMember(ev) {
     const csrf = this.querySelector('input[name="_token"]').value;
     const id = this.querySelector('input#accept-friend-request-id').value;
 
-    console.log(csrf);
-    console.log(id);
-
     const response = await fetch('/api/accept/' + id, {
       method: 'POST',
       headers: {
@@ -529,6 +531,30 @@ function changeToInviteOutsideMember(ev) {
       acceptFriendRequestHandler(data);
     }).catch(error => console.error('Error fetching data:', error.message));
   
+  }
+
+  async function sendRejectFriendRequest(ev) {
+    ev.preventDefault();
+    const csrf = this.querySelector('input[name="_token"]').value;
+    const id = this.querySelector('input#reject-friend-request-id').value;
+    const response = await fetch('/api/notifications/' + id, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      acceptFriendRequestHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
   }
 
   function acceptFriendRequestHandler(data) {
