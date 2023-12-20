@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
                 return ((new \DateTime($task->due_at)) != $tomorrow) || $task->is_notified;
             });
             foreach ($tasks as $task) {
-                error_log($task->title);
+                
                 $notification = Notification::create([
                     'text' => "Task '$task->title' due tomorrow!",
                     'level' => 'High',
@@ -28,12 +28,10 @@ class Kernel extends ConsoleKernel
                 ]);
                 $task->is_notified = true;
                 $task->save();
-                error_log($notification->id);
-
                 foreach ($task->assigned as $assignee) {
-                    error_log("hello7");
                     $assignee->notifications()->attach($notification->id);
                 }
+                event(new CreateTaskNotification("Task '$task->title' due tomorrow!",$task->project->id));
             }
         })->hourly();
     }
