@@ -290,6 +290,16 @@ function addEventListeners() {
       form.addEventListener('submit', archiveProjectAlert);
     });
   }
+
+  let acceptFriendRequest = document.querySelector('form#accept-fr-form');
+  if(acceptFriendRequest != null){
+    acceptFriendRequest.addEventListener('submit', sendAcceptFriendRequest);
+  }
+
+  let rejectFriendRequest = document.querySelector('form#reject-fr-form');
+  if(rejectFriendRequest != null){
+    rejectFriendRequest.addEventListener('submit', sendRejectFriendRequest);
+  }
   
 }
 
@@ -494,6 +504,64 @@ function changeToInviteOutsideMember(ev) {
     }
     confirmationAlert("Are you sure you want to leave this world?","This action can't be reverted!", "Left the world successfully!","", "Leave", request.bind(this),2000);
    
+  }
+
+  async function sendAcceptFriendRequest(ev) {
+    ev.preventDefault();
+
+    const csrf = this.querySelector('input[name="_token"]').value;
+    const id = this.querySelector('input#accept-friend-request-id').value;
+
+    const response = await fetch('/api/accept/' + id, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      acceptFriendRequestHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  
+  }
+
+  async function sendRejectFriendRequest(ev) {
+    ev.preventDefault();
+    const csrf = this.querySelector('input[name="_token"]').value;
+    const id = this.querySelector('input#reject-friend-request-id').value;
+    const response = await fetch('/api/notifications/' + id, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': csrf,
+        'Content-Type': "application/json",
+        'Accept': 'application/json',
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      if(response.ok){
+        return response.json();
+      }
+      else{
+        throw new Error('Response status not OK');
+      }
+    }).then(data => {
+      acceptFriendRequestHandler(data);
+    }).catch(error => console.error('Error fetching data:', error.message));
+  }
+
+  function acceptFriendRequestHandler(data) {
+    let element = document.querySelectorAll('.friend-request[data-id="' + data.id + '"]');
+    [].forEach.call(element, function(friendRequest) {
+      friendRequest.remove();
+    });
   }
 
   function showEditComment(ev) {
@@ -1125,7 +1193,7 @@ async function sendRemoveMemberFromWorldRequest(ev) {
     let csrf = this.querySelector('input[name="_token"]').value;
     let id = this.querySelector('input.id').value;
     let username = this.querySelector('input.username').value;
-    url = `/api/worlds/${id}/${username}`;
+    url = `/api/worlds/${id}/${username}/remove`;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {

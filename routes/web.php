@@ -122,7 +122,7 @@ Route::controller(WorldController::class)->group(function () {
     Route::post('/api/worlds/{id}/favorite', 'favorite');
     Route::post('/api/worlds/{id}/invite', 'invite')->name('invite-world');
     Route::post('/worlds/{id}', 'join')->name('join-world');
-    Route::delete('/api/worlds/{id}/{username}', 'removeMember');
+    Route::delete('/api/worlds/{id}/{username}/remove', 'removeMember');
     Route::delete('worlds/{id}/{username}', 'leave')->name('leave-world');
     Route::delete('/api/worlds/{id}/{username}', 'leaveFromList');
     Route::get('/worlds/{id}', 'show')->name('worlds.show');
