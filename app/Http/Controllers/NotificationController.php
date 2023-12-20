@@ -245,6 +245,30 @@ class NotificationController extends Controller
             throw $e;
         }
     }
+    static function InviteToWorldNotification($inviter,$member,$world){
+        $message = "$inviter->name invited you to join the world $world->name !";
+        $notification = Notification::create([
+            'text' => $message,
+            'level' => 'Medium',
+            'world_id' => null,
+            'project_id' => null,
+            'task_id' => null,
+            'member_id' => $member->id,
+        ]);
+        $member->notifications()->attach($notification->id);
+    }
+    static function InviteToProjectNotification($inviter,$member,$project){
+        $message = "$inviter->name invited you to join the project $project->name !";
+        $notification = Notification::create([
+            'text' => $message,
+            'level' => 'Medium',
+            'world_id' => null,
+            'project_id' => $project->id,
+            'task_id' => null,
+            'member_id' => $member->id,
+        ]);
+        $member->notifications()->attach($notification->id);
+    }
 
     function friendRequest(string $username): JsonResponse
     {

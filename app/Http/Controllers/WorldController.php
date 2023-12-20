@@ -73,8 +73,6 @@ class WorldController extends Controller
         ]);
         $member = Auth::user()->persistentUser->member;
         $world->members()->attach($member->id, ['is_admin' => true]);
-
-        NotificationController::WorldNotification($world,$member->name.' has created the ');
         return to_route('worlds.show', ['id' => $world->id])->withSuccess('New World created!');
     }
     public function delete(DeleteWorldRequest $request, string $id): RedirectResponse
@@ -153,9 +151,9 @@ class WorldController extends Controller
                         'world_name' => $world->name,
                         'link' => env('APP_URL') . '/invite?token=' . $inviteToken
                     ];
-
-                    Mail::to($fields['email'])->send(new MailModel($mailData));
                     
+                    Mail::to($fields['email'])->send(new MailModel($mailData));
+                   
                     return response()->json([
                         'error' => false,
                         'email' => $fields['email']
@@ -167,7 +165,7 @@ class WorldController extends Controller
             } else {
                 throw new \Exception('No username or email provided.');
             }
-           
+            
             if($member->worlds->contains('id', $world_id)) throw new \Exception('Member already in world.');
             
 
@@ -177,8 +175,8 @@ class WorldController extends Controller
                 'member_id' => $member->id,
                 'is_admin' => $fields['type']
             ]);
-        
-
+            $inviter= Auth::user()->persistentUser->member;
+            NotificationController::InviteToWorldNotification($inviter,$member,$world);
             $mailData = [
                 'view' => 'emails.invite',
                 'name' => $member->name,

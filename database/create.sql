@@ -846,7 +846,6 @@ INSERT INTO faqs (question, answer) VALUES
 INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id, is_request) VALUES
     ('You have been added to a world!', 'Low', 1, NULL, NULL, NULL, FALSE),
     ('A new task was created in this project!', 'Medium', NULL, 1, NULL, NULL, FALSE),
-    ('Some guy sent you a friend request!', 'Medium', NULL, NULL, NULL, 3, TRUE);
 
 -- Sample data for the 'member_notification' table (associating notifications with members)
 INSERT INTO member_notification (notification_id, member_id) VALUES
