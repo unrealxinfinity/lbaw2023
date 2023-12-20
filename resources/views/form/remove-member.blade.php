@@ -1,4 +1,4 @@
-@if($thing instanceof App\Models\World)@includ
+@if($thing instanceof App\Models\World)
     @if(Auth::user()->persistentUser->member->id !== $member->id)
         <form id="{{$prefix . 'remove-member-world'}}" data-id="{{ $member->id }}">
             <fieldset>
