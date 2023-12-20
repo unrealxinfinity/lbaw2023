@@ -12,7 +12,7 @@
         <h4> Comments: </h4>
         <ul>
             @foreach ($task->comments()->orderBy('id')->get() as $comment)
-                @include('partials.comment', ['comment' => $comment, 'type' => 'task'])
+                <li>@include('partials.comment', ['comment' => $comment, 'type' => 'task']) </li>
             @endforeach
         </ul>
         @can('edit', $task)

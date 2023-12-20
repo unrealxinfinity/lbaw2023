@@ -47,7 +47,7 @@ function addEventListeners() {
   let deleteTagForms = document.getElementsByClassName('delete-tag');
   if(deleteTagForms != null){
     for(let i = 0; i < deleteTagForms.length; i++){
-      deleteTagForms[i].querySelector('#deleteTagButton').addEventListener('click', sendDeleteTagRequest);
+      deleteTagForms[i].querySelector('.deleteTagButton').addEventListener('click', sendDeleteTagRequest);
     }
   }
 
@@ -319,9 +319,23 @@ function addEventListeners() {
   if(rejectFriendRequest != null){
     rejectFriendRequest.addEventListener('submit', sendRejectFriendRequest);
   }
+
+  window.addEventListener('resize', moveSearchForm);
+  document.addEventListener('DOMContentLoaded', moveSearchForm);
   
 }
 
+function moveSearchForm() {
+  const computer = document.querySelector('#computer-search');
+  const mobile = document.querySelector('#mobile-search');
+  const searchForm = document.querySelector('#main-search-section');
+
+  if (window.innerWidth <= 449) {
+    mobile.appendChild(searchForm);
+  } else {
+    computer.appendChild(searchForm);
+  }
+}
 
 function closeSessionHandler() {
   this.parentElement.remove();
