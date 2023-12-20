@@ -66,7 +66,6 @@
                 </ul>                     
                 @else
                     <ul id="navbar-right" class="items-center flex mx-5">
-                        <div class="hidden mobile:flex items-center">@include('form.main-search')</div>
                         <a id="login" class="button" href="{{ url('/login') }}"> Login </a>
                     </ul>
             @endif

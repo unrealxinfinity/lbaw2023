@@ -13,7 +13,7 @@
                 <details class="flex flex-col items-center justify-center w-full" id="faqContainer">
                     <summary class="flex flex-row md:flex-row text-lg font-semibold text-black bg-lime py-4 px-6 m-2 rounded-lg cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:shadow-outline">
                         <div class="mb-2 md:mb-0 md:mr-4">{{ $faq->question }}</div>
-                        @if(Auth::check() && Auth::user()->persistentUser->type_ == 'Administrator')
+                        @if($user_type == 'Administrator')
                             @include('form.faq', ['faq' => $faq , 'operation'=>'delete'])
                         @endif
                     </summary>
@@ -22,7 +22,7 @@
                     </h2>
                 </details>
             @endforeach
-            @if(Auth::check() && Auth::user()->persistentUser->type_ == 'Administrator')
+            @if($user_type == 'Administrator')
                 @include('form.faq', ['operation'=>'add'])
             @endif
         </div>
