@@ -45,7 +45,7 @@
             <div class="flex mb-1 items-center">
                 <h3 class="decoration-green underline underline-offset-4 decoration-2"> World Owner </h3>
                 @can('transfer', $thing)
-                    <h2 class="ml-2 font-bold cursor-pointer"><a href="/worlds/{{ $world->id }}/transfer"><a href="/worlds/{{ $world->id }}/transfer">&#x2942;</a></h2>
+                    <h2 class="ml-2 font-bold cursor-pointer"><a href="/worlds/{{ $world->id }}/transfer" title="Transfer Ownership" aria-label="Transfer Ownership">&#x2942;</a></h2>
                 @endcan
             </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
