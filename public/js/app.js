@@ -827,19 +827,25 @@ function changeToInviteOutsideMember(ev) {
           <fieldset>
             <legend class="sr-only">Remove Member</legend>
             <input type="hidden" name="_token" value="${csrfToken}">
-            <input type="hidden" class="id" name="id" value="${(json.task)?json.project_id:json.project_id}">
+            <input type="hidden" class="id" name="id" value="${(json.task)?json.task_id:json.project_id}">
             <input type="hidden" class="username" name="username" value="${json.username}">
             <button type="submit" class ="text-red"> &times; </button>
           </fieldset>
         `;
 
-        options_div.appendChild(removeForm);
-        (json.task)?removeForm.addEventListener('submit', sendRemoveMemberFromTaskRequest):removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+        if ((json.task)) {
+          li.appendChild(removeForm);
+          removeForm.addEventListener('submit', sendRemoveMemberFromTaskRequest);
+        } else {
+          options_div.appendChild(removeForm);
+          removeForm.addEventListener('submit', sendRemoveMemberFromProjectRequest);
+        }
       }
-      li.appendChild(options_div);
+      
       if (json.task){
         ul.appendChild(li);
       } else{
+        li.appendChild(options_div);
         let section = json.is_leader? ul.querySelector('.project-leaders'):ul.querySelector('.members');
         section.appendChild(li);
       }
@@ -1337,7 +1343,7 @@ async function sendRemoveMemberFromTaskRequest(ev) {
 function removeMemberFromThingHandler(data) {
   let element = document.querySelectorAll('ul.membersof [data-id="' + data.member_id + '"]');
   [].forEach.call(element, function(member) {
-    member.remove();
+    member.parentElement.remove();
   });
 }
 

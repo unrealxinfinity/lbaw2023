@@ -84,8 +84,8 @@ class ProjectController extends Controller
             $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
-            $can_remove = ($type=='Project Leader')? Auth::user()->can('removeLeader', $project) : Auth::user()->can('removeMember', $project);
-            $can_move = Auth::user()->can('AssignProjectLeader', $project);
+            $can_remove = ($type=='Project Leader')? $this->authorize('removeLeader', $project) : $this->authorize('removeMember', $project);
+            $can_move = $this->authorize('AssignProjectLeader', $project);
             NotificationController::ProjectNotification($project,$project->world_id,$member->name.' joined the');
             return response()->json([
                 'error' => false,
