@@ -11,12 +11,8 @@
         <title>@yield('title') - {{env('APP_NAME')}} </title>
 
         <!-- Styles -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
-        <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal/minimal.css" rel="stylesheet">
+        <link href="{{ url('css/sweetalert.minimal.css') }}" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -28,8 +24,8 @@
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
-        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src={{ url('js/pusher.js') }} defer></script>
+        <script src={{ url('js/sweetalert.js') }}></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
         
     </head>
@@ -39,8 +35,8 @@
                 <h1><label tabindex=0 for="show-menu" class="cursor-pointer" role="button" aria-controls="menu" aria-expanded="false">☰</label></h1>
                 <a href="{{ url('') }}"><img class="tablet:h-8 h-4 object-cover" src="{{asset('minemax/MineMax.png')}}" alt="MineMax logo. Reads MINEMAX in minecraft font"></a>
             </div>
+            <div class="hidden mobile:flex items-center">@include('form.main-search')</div>
             @if (Auth::check())
-                <div class="hidden mobile:flex items-center">@include('form.main-search', ['member' => Auth::user()->persistentUser->member])</div>
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     @if(Auth::user()->persistentUser->type_ === 'Member')
@@ -55,6 +51,7 @@
                                     <h2 class="text-white py-1 mx-5">Notifications</h2>
                                     <button id="clearNotifications" class="link">Clear Notifications</button>
                                 </div>
+                                <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
                             </div>
                         </div>
                     @endif
@@ -86,7 +83,7 @@
         @endif
         <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" type="checkbox" class="sr-only peer"/>
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
-            @if(Auth::check())<li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search', ['member' => Auth::user()->persistentUser->member])<hr class="underline text-white/60 w-2/3 my-3"> </li>@endif
+            <li class="mobile:hidden visible flex flex-col w-full items-center"> @include('form.main-search')<hr class="underline text-white/60 w-2/3 my-3"> </li>
             <li class="menu-item"><a href="/">Home Page</a></li>
             <li class="menu-item"><a href="/worlds">All Worlds</a></li>
             @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member')

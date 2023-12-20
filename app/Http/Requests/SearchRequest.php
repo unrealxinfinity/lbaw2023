@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Member;
 class SearchRequest extends FormRequest
 {
     /**
@@ -12,7 +10,7 @@ class SearchRequest extends FormRequest
      */
     public function authorize(): bool
     {   
-        return Auth::user()->can('showSearchResults',Member::where('user_id','=',Auth::user()->user_id)->first());
+        return true;
     }
 
     /**
@@ -23,7 +21,7 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'anything' => ['required', 'string']
         ];
     }
 }

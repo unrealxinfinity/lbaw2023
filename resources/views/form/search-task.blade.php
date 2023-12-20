@@ -4,13 +4,13 @@
         @csrf
         <div class="flex flex-col mr-3">
             <h3 class="my-0 mt-3"> <label for="taskName">Task Name  <b class="text-red">*</b></label> </h3>
-            <input type="text" id="taskName" name="taskName" placeholder="Task Name" required>
+            <input type="text" id="taskName" name="taskName" placeholder="Task Name" required tabindex="0">
         </div>
         <input type="hidden" name="project_id" value="{{ $project->id }}">
     
         <div class="flex flex-col mr-3">
             <h3 class="my-0 mt-3"> <label for="task_order"> Order </label> </h3>
-            <select id="task_order" name="order">
+            <select id="task_order" name="order" tabindex="0">
                 <option value="Relevance" selected>Relevance</option>
                 <option value="A-Z">A-Z</option>
                 <option value="Z-A">Z-A</option>
@@ -20,7 +20,7 @@
                 <option value="EffortDescendent">Effort Descendent</option>
             </select>
         </div>
-        <input id="searchTaskButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Tasks">
+        <input id="searchTaskButton" class="button ml-3 tablet:h-8 h-7 py-1 my-2 mobile:my-0" type="submit" value="Search Tasks" tabindex="0">
     </fieldset>
 </form>
 
