@@ -61,6 +61,7 @@ export default {
       backgroundImage: {
         'mine': "url('/resources/img/dark.png')",
         'mine-lime': "url('/resources/img/lime.png')",
+        'mine-red': "url('/resources/img/red.png')",
       },
       maxWidth: {
         '1/2': '50%',

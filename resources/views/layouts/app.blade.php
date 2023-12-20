@@ -73,7 +73,12 @@
                     </ul>
             @endif
         </nav>
-        @if (session('success'))
+        @if (Auth::check() && Auth::user()->persistentUser->type_ == "Blocked")
+            <div id="session-message" class="z-20 fixed items-center w-full bg-mine-red py-2 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
+                <h2 class="mx-3">You are blocked, check your profile for details</h2>
+                <h1 class="cursor-pointer mx-3" id="session-close">&times;</h1>
+            </div>
+        @elseif (session('success'))
             <div id="session-message" class="z-20 fixed items-center w-full bg-mine-lime py-2 flex justify-between transition-transform duration-300 transform translate-y-0 top-16 mx-auto">
                 <h2 class="text-darkGreen mx-3">{{ session('success') }}</h2>
                 <h1 class="text-darkGreen cursor-pointer mx-3" id="session-close">&times;</h1>

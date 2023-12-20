@@ -40,7 +40,7 @@ class MemberController extends Controller
 
     public function showAppeal(): View
     {
-        $this->authorize('appeal', Member::class);
+        if (!isset(Auth::user()->persistentUser->member->appeal)) $this->authorize('appeal', Member::class);
 
         $member = Auth::user()->persistentUser->member;
 
@@ -52,10 +52,11 @@ class MemberController extends Controller
 
     public function denyAppeal(int $id): RedirectResponse
     {
-        $this->authorize('create', Member::class);
+        $this->authorize('list', Member::class);
 
         $appeal = Appeal::findOrFail($id);
-        $appeal->delete();
+        $appeal->denied = true;
+        $appeal->save();
 
         return redirect()->back()->withResponse('Appeal denied.');
     }
@@ -175,7 +176,7 @@ class MemberController extends Controller
             $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%');
         })->where(function ($query) {
-                $query->whereRaw("(select type_ from users where users.id = members.user_id) != " . UserType::Deleted->value);
+                $query->whereRaw("(select type_ from users where users.id = members.user_id) != '" . UserType::Deleted->value . "'");
             })->cursorPaginate(2)->withQueryString()->withPath(route('list-members'));
 
         return view('pages.admin-members', ['members' => $members]);
@@ -187,7 +188,10 @@ class MemberController extends Controller
 
         $search = $request['search'] ?? "";
 
-        $appeals = Appeal::join('members', 'appeals.member_id', '=', 'members.id')->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')
+        $appeals = Appeal::join('members', 'appeals.member_id', '=', 'members.id')->where('denied', false)
+            ->where(function ($query) use($search) {
+                $query->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%');
+            })
         //$appeals = Appeal::whereRaw("exists (select * from members m where m.id = member_id and (name like %$search% or email like %$search%))")
             ->cursorPaginate(4)->withQueryString()->withPath(route('admin-appeals'));
 
@@ -209,11 +213,12 @@ class MemberController extends Controller
 
     public function block(BlockRequest $request, string $username): RedirectResponse
     {
-        $request->validated();
+        $fields = $request->validated();
 
         $user = User::where('username', $username)->firstOrFail();
 
         $user->persistentUser->type_ = UserType::Blocked->value;
+        $user->persistentUser->block_reason = $fields['block_reason'] ?? "No reason given";
         $user->persistentUser->save();
 
         return redirect()->back()->withSuccess('User blocked')->withFragment($username);
@@ -227,6 +232,7 @@ class MemberController extends Controller
 
         if ($user->persistentUser->type_ == UserType::Blocked->value) {
             $user->persistentUser->type_ = UserType::Member->value;
+            $user->persistentUser->block_reason = null;
             $user->persistentUser->save();
 
             if (isset($user->persistentUser->member->appeal)) {

@@ -22,10 +22,12 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a href="/invites">My Invites</a></h2>
         </div>
         @elseif ($member->persistentUser->type_ == 'Blocked')
+        <h2 class="decoration-green underline underline-offset-4 decoration-2"> YOU HAVE BEEN BLOCKED </h2>
+        <p class="my-4">Reason for block: {{ $member->persistentUser->block_reason }}</p>
             @can('appeal', $member)
                 <a class="button" href="/appeal">Appeal Block</a>
             @else
-                <a class="button">Appeal Sent</a>
+                <a class="button" href="/appeal">View Appeal</a>
             @endcan
         @endif
         @can('memberTagCreate', $member)
@@ -39,7 +41,11 @@
             <h1 class="mt-3 ml-5"> Appeal Block </h1>
             <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
             </div>
-            @include('form.appeal', ['member' => $member])
+            @if (isset($member->appeal))
+                @include('partials.appeal-readonly', ['member' => $member])
+            @else    
+                @include('form.appeal', ['member' => $member])
+            @endif    
         </div>
     </div>
     @endif

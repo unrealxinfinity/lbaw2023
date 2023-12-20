@@ -45,7 +45,7 @@ Route::get('/', function () {
     if (Auth::check() && Auth::user()->persistentUser->type_ == 'Administrator') {
         $params = [
             'nMembers' => PersistentUser::where('type_', 'Member')->count(),
-            'nAppeals' => Appeal::all()->count()
+            'nAppeals' => Appeal::where('denied', false)->count()
         ];
     }
 
