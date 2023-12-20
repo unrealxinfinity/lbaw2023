@@ -111,8 +111,11 @@ function addEventListeners() {
   window.addEventListener('scroll', function() {
     let currentScroll = document.documentElement.scrollTop;
     let showMenu = document.querySelector('#show-menu');
-    let showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
-  
+    let notificationArea= document.querySelector('#notificationArea');
+    let showNotif;
+    if(notificationArea != null){
+      showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
+    }
     if (currentScroll > lastScrollTop) {
       // Scroll down
       if (!showMenu.checked && showNotif) {
@@ -124,12 +127,17 @@ function addEventListeners() {
       // Scroll up
       document.querySelector('#navbar').classList.remove('-translate-y-full');
       document.querySelector('#navbar').classList.add('translate-y-0');
+<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
+=======
+
+>>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
     }
   
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
   }, false);
 
   let main = document.querySelector('main');
+<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
   main.addEventListener('click', function(e) {
     if (e.target === e.currentTarget) {
       let showMenu = document.querySelector('#show-menu');
@@ -139,6 +147,19 @@ function addEventListeners() {
       }
       if (!showNotif) {
         document.querySelector('#notificationArea').classList.toggle('hidden');
+=======
+  main.addEventListener('click', function() {
+    let showMenu = document.querySelector('#show-menu');
+    let notificationArea = document.querySelector('#notificationArea');
+    if(notificationArea != null){
+       let showNotif = notificationArea.classList.contains('hidden');
+      
+      if (showMenu.checked) {
+        document.querySelector('#show-menu').checked = false;
+      }
+      if (!showNotif) {
+        notificationArea.classList.toggle('hidden');
+>>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
       }
     }
   });
@@ -285,8 +306,13 @@ function addEventListeners() {
       form.addEventListener('submit', archiveProjectAlert);
     });
   }
+<<<<<<< bdf2bd39cf7d17ada9acfe9245afbec6eba796e1
 
+=======
+  
+>>>>>>> 0ab860e84601abde09e62b3dba484dad8462b737
 }
+
 
 function closeSessionHandler() {
   this.parentElement.remove();
@@ -1577,12 +1603,16 @@ function getIdsHandler(json){
 function showRedDot(){
   let showDot= sessionStorage.getItem('showDot') == 'true';
   if(showDot){
-    document.getElementById('redDot').classList.remove('hidden');
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.remove('hidden');
   }
   else{
-    document.getElementById('redDot').classList.add('hidden');
+    
+    let redDot=document.getElementById('redDot');
+    if(redDot != null) redDot.classList.add('hidden');
   }
 }
+
 
 // Pusher notifications
 function pusherNotifications(projectContainer, worldContainer){
@@ -1597,7 +1627,7 @@ function pusherNotifications(projectContainer, worldContainer){
   function bindEvent(channel, eventName, callback) {
     channel.bind(eventName, callback);
   } 
-
+  
   for (let i = 0; i < worldContainer.length; i++) { 
     const world_id = worldContainer[i];
     const channelWorld = pusher.subscribe('World' + world_id);

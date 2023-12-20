@@ -2,18 +2,17 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Member;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-
-class BlockRequest extends FormRequest
+class FaqRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {
-        return Auth::user()->can('block', Member::class);
+    {   
+        error_log($this->id);
+        return Auth::user()->persistentUser->type_ == 'Administrator';
     }
 
     /**
@@ -24,7 +23,8 @@ class BlockRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'block_reason' => ['nullable', 'string']
+            'question' => 'string|max:100',
+            'answer' => 'string|max:255',
         ];
     }
 }

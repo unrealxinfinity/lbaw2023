@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function() {
             $tasks = Task::all()->reject(function (Task $task) {
                 $tomorrow = date_add(date_time_set(new \DateTime(), 0, 0), new \DateInterval("P1D"));
-                return (new \DateTime($task->due_at)) != $tomorrow;
+                return ((new \DateTime($task->due_at)) != $tomorrow) || $task->is_notified;
             });
             foreach ($tasks as $task) {
                 error_log($task->title);
@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
                     'level' => 'High',
                     'task_id' => $task->id
                 ]);
+                $task->is_notified = true;
+                $task->save();
                 error_log($notification->id);
 
                 foreach ($task->assigned as $assignee) {
@@ -33,7 +35,7 @@ class Kernel extends ConsoleKernel
                     $assignee->notifications()->attach($notification->id);
                 }
             }
-        })->daily();
+        })->everyMinute();
     }
 
     /**

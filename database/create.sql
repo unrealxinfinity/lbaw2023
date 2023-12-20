@@ -19,6 +19,7 @@ CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE,
   type_ user_type NOT NULL,
+  block_reason VARCHAR,
   CONSTRAINT ck_creation_date CHECK(created_at <= CURRENT_DATE)
 );
 
@@ -58,6 +59,7 @@ CREATE TABLE appeals(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
   member_id INT NOT NULL,
+  denied BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -166,6 +168,7 @@ CREATE TABLE tasks(
   created_at DATE NOT NULL DEFAULT CURRENT_DATE CHECK(created_at <= CURRENT_DATE),
   due_at DATE CHECK(due_at >= created_at),
   status task_status NOT NULL,
+  is_notified BOOLEAN NOT NULL DEFAULT FALSE,
   effort INT CHECK(effort >= 0),
   priority VARCHAR,
   project_id INT,
@@ -237,8 +240,8 @@ CREATE TABLE world_comments(
   FOREIGN KEY(member_id) REFERENCES members(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS faq_item CASCADE;
-CREATE TABLE faq_item(
+DROP TABLE IF EXISTS faqs CASCADE;
+CREATE TABLE faqs(
   id SERIAL PRIMARY KEY,
   question VARCHAR NOT NULL,
   answer VARCHAR NOT NULL,
@@ -834,8 +837,8 @@ INSERT INTO world_comments (content, date_, world_id, member_id) VALUES
     ('Are you going to use the upcoming redstone features from the next update?', '2023-01-05', 1, 1),
     ('Can I build my own kingdom in this world?', '2023-02-20', 2, 3);
 
--- Sample data for the 'faq_item' table
-INSERT INTO faq_item (question, answer) VALUES
+-- Sample data for the 'faqs' table
+INSERT INTO faqs (question, answer) VALUES
     ('Do I need to use a specific Minecraft version?', 'We allow worlds from all versions. You can let others know what version you use in your worlds through tags.'),
     ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and cannot be changed, while your display name can be changed.');
 

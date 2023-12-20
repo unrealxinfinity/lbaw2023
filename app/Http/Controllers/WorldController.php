@@ -330,7 +330,7 @@ class WorldController extends Controller
 
             $world = World::findOrFail($world_id);
             $member = Auth::user()->persistentUser->member;
-            NotificationController::WorldNotification($world, 'You left the ');
+            NotificationController::WorldNotification($world, $member->name.' left the ');
             $member->worlds()->detach($world_id);
             return redirect()->route('home')->withSuccess('You left the world.');
         } catch (\Exception $e) {

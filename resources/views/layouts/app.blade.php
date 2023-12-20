@@ -33,7 +33,7 @@
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
         
     </head>
-    <body id="main-body" class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() ? 'true' : 'false' }}">
+    <body id="main-body" class="min-h-full min-w-full bg-mine text-white font-roboto" data-auth="{{ Auth::check() && (Auth::user()->persistentUser->type_ === 'Member') ? 'true' : 'false' }}">
         <nav id="navbar" class="z-20 fixed w-full py-2 h-16 bg-opacity-90 bg-black flex justify-between transition-transform duration-300 transform translate-y-0">
             <div id="navbar-left" class="items-center flex p-1 child:mx-2">
                 <h1><label tabindex=0 for="show-menu" class="cursor-pointer" role="button" aria-controls="menu" aria-expanded="false">☰</label></h1>
@@ -54,9 +54,7 @@
                                 <h2 class="text-white py-1 mx-5">Notifications</h2>
                                 <button id="clearNotifications" class="link">Clear Notifications</button>
                             </div>
-                            <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
-                        </div>
-                    </div>
+                        @endif
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <a id="profile" class="desktop:mx-0 mx-3" href="{{ url('members/' . Auth::user()->username) }}">
                                 <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
@@ -99,6 +97,8 @@
             <p> <a href="/about">About </a></p>
             <p> | </p>
             <p> <a href="/contacts">Contact Us </a></p>
+            <p> | </p>
+            <p> <a href="{{route('show-faqs')}}">FAQs</a></p>
             </div>
         </nav>
     </body>

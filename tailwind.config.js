@@ -22,6 +22,8 @@ export default {
       red: '#FF0000',
       darkRed: '#8b0000',
       orange: '#ba610b',
+      lime: '#70b919',
+      lightlime: '#bfff00',
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
@@ -60,6 +62,7 @@ export default {
       backgroundImage: {
         'mine': "url('/resources/img/dark.png')",
         'mine-lime': "url('/resources/img/lime.png')",
+        'mine-red': "url('/resources/img/red.png')",
       },
       maxWidth: {
         '1/2': '50%',
@@ -71,6 +74,13 @@ export default {
       },
       minHeight: {
         '128': '16rem',
+      },
+      maxHeight: {
+        '0': '0',
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        'full': '100%',
       },
     }
   },

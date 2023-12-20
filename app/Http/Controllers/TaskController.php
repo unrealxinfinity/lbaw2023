@@ -62,6 +62,7 @@ class TaskController extends Controller
         $task->title = $fields['title'];
         $task->description = $fields['description'];
         $task->status = $fields['status'];
+        if ($task->due_at != $fields['due_at']) $task->is_notified = false;
         $task->due_at = $fields['due_at'];
         $task->effort = $fields['effort'];
         $task->priority = $fields['priority'];
