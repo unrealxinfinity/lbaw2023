@@ -52,7 +52,7 @@
                         <div id="notificationArea" class="absolute hidden z-10 bg-dark right-0 top-10 p-1 rounded-lg">
                             <div class="flex justify-between">
                                 <h2 class="text-white py-1 mx-5">Notifications</h2>
-                                <a id="clearNotifications" class="link">Clear Notifications</a>
+                                <button id="clearNotifications" class="link">Clear Notifications</button>
                             </div>
                             <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
                         </div>

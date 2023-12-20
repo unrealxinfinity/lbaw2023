@@ -50,7 +50,7 @@
         <div class="bg-black tablet:w-3/4 tablet:min-h-fit tablet:max-h-[90%] h-full w-full tablet:rounded tablet:mx-auto">
             <div class="flex justify-between mx-5 pt-3">
             <h1> {{ $formTitle }} </h1>
-            <h1><a id="go-back" class="cursor-pointer">&times;</a></h1>
+            <h1><button id="go-back" class="sr-only-focusable cursor-pointer" aria-label="Close modal">&times;</button></h1>
             </div>
             <div class="overflow-auto tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
                 @include($formName, ['world'=>$world])

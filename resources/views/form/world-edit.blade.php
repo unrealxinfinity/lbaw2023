@@ -7,7 +7,7 @@
         <div class="relative mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square tablet:mx-5 mx-2 my-1">
             <label for="edit-img">
                 <img id='preview-img' class="absolute h-full aspect-square object-cover hover:opacity-50 cursor-pointer" src={{ $world->getImage() }} alt="{{$world->name}} image">
-                <h1 class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none"><label>&#9998;</label></h1>
+                <h1 class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none"><span>&#9998;</span></h1>
             </label>
         </div>
         <input id="edit-img" class="hidden" name="file" type="file" required>

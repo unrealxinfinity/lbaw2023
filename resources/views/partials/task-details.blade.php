@@ -10,8 +10,8 @@
                 <input type="hidden" class="title" name="title" value="{{ $task->title }}">
                 <input type="hidden" class="description" name="description" value="{{ $task->description }}">
                 
-                <p class="col-span-1 self-center"> <label for="task_due_at"> Due At <b class="text-red">*</b></label> </p>
-                <input type="date" class="due_at col-span-2" id="task_due_at" name="due_at" value={{$task->due_at}}>
+                <p class="col-span-1 self-center"> <label for="task-due-at"> Due At <b class="text-red">*</b></label> </p>
+                <input type="date" class="due_at col-span-2" id="task-due-at" name="due_at" value={{$task->due_at}}>
                 @if ($errors->has('due_at'))
                     <span class="error col-span-3">
                         {{ $errors->first('due_at') }}
