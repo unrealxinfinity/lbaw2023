@@ -5,7 +5,7 @@
             @csrf
             <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
             <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
-            <p class="ml-1"><button id="deleteTagButton" type="button">&times;</button></p>
+            <p class="ml-1"><button id="deleteTagButton" type="button" tabindex="0">&times;</button></p>
         </fieldset>
     </form>
 @endif
@@ -17,7 +17,7 @@
             <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
             <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
 
-            <p class="ml-1"><button id="deleteTagButton" type="button">&times;</button></p>
+            <p class="ml-1"><button id="deleteTagButton" type="button" tabindex="0">&times;</button></p>
         </fieldset>
     </form>
 @endif
@@ -29,7 +29,7 @@
             <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
             <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
 
-            <p class="ml-1"><button id="deleteTagButton" type="button">&times; </button></p>
+            <p class="ml-1"><button id="deleteTagButton" type="button" tabindex="0">&times; </button></p>
         </fieldset>
     </form>
 @endif

@@ -1,11 +1,11 @@
-<article id="sidebar" class="desktop:w-1/3 desktop:mt-8 mt-20 desktop:ml-5 mr-3">
+<article id="{{$prefix . 'sidebar'}}" class="desktop:w-1/3 desktop:mt-8 mt-20 desktop:ml-5 mr-3">
     <label for="show-details" class="desktop:hidden cursor-pointer m-2">&times;</label>
     <h2> Description </h2>
     <p class="mt-3 mb-5 desktop:w-11/12">{{ $thing->description }}</p>
-    <h2 id="see-members">Members</h2>
+    <h2 id="{{$prefix . 'see-members'}}">Members</h2>
     <ul class="members mr-5 ml-2 mt-2">
         @if ($type == 'project')
-        <ul id="project-leaders">
+        <ul id="{{$prefix . 'project-leaders'}}">
             <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Project Leaders </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
@@ -23,7 +23,7 @@
                 </li>
             @endforeach
         </ul>
-        <ul id="members">
+        <ul id="{{$prefix . 'members'}}">
             <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Members </h3>
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
                 <li class="h-5 flex items-center justify-between">
@@ -49,7 +49,7 @@
                 @endcan
             </div>
                 @include('partials.member', ['member' => $thing->owner()->get()->first(), 'main' => false])
-            <ul id="world-admins">
+            <ul id="{{$prefix . 'world-admins'}}">
                 <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> World Admins </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
                     @if ($member->id != $thing->owner()->get()->first()->id)
@@ -69,7 +69,7 @@
                     @endif
                 @endforeach
             </ul>
-            <ul id="members">
+            <ul id="{{$prefix . 'members'}}">
                 <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
                     <li class="h-5 flex items-center justify-between">

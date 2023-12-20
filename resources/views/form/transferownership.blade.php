@@ -3,13 +3,13 @@
         <legend>Transfer Ownership</legend>
         @csrf
         <label> Select a new owner:
-            <select name="owner" class="type" required>
+            <select name="owner" class="type" required tabindex="0">
                 @foreach ($members as $member)
                     <option value="{{ $member->id }}">{{ $member->persistentUser->user->username }}</option>
                 @endforeach
             </select>
         </label>
-        <input class="button" type="submit" value="Transfer">
+        <input class="button" type="submit" value="Transfer" tabindex="0">
     </fieldset>
     
 </form>

@@ -11,12 +11,8 @@
         <title>@yield('title') - {{env('APP_NAME')}} </title>
 
         <!-- Styles -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@100;400&display=swap" rel="stylesheet">
-        <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal/minimal.css" rel="stylesheet">
+        <link href="{{ url('css/sweetalert.minimal.css') }}" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -28,8 +24,8 @@
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
-        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src={{ url('js/pusher.js') }} defer></script>
+        <script src={{ url('js/sweetalert.js') }}></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
         
     </head>
