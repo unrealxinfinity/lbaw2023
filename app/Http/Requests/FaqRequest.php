@@ -23,7 +23,7 @@ class FaqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => 'string|max:255',
+            'question' => 'string|max:100',
             'answer' => 'string|max:255',
         ];
     }

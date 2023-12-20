@@ -17,6 +17,7 @@ class FaqController extends Controller
     }
     public function add(FaqRequest $request) : RedirectResponse
     {   
+        $request->validated();
         $faq = new Faq();
         $faq->question = $request['faq'];
         $faq->answer = $request['answer'];
@@ -24,7 +25,7 @@ class FaqController extends Controller
         return redirect()->route('show-faqs')->wihSuccess('FAQ added successfully!');
     }
     public function delete(FaqRequest $request): RedirectResponse
-    {   
+    {   $request->validated();
         $faq = Faq::find($request['id']);
         $faq->delete();
         return redirect()->route('show-faqs')->withSuccess('FAQ deleted successfully!');
