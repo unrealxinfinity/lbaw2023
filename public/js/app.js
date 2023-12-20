@@ -134,21 +134,19 @@ function addEventListeners() {
 
   let main = document.querySelector('main');
   main.addEventListener('click', function() {
-    if(e.target === e.currentTarget){
-      let showMenu = document.querySelector('#show-menu');
-      let notificationArea = document.querySelector('#notificationArea');
-      if(notificationArea != null){
-        let showNotif = notificationArea.classList.contains('hidden');
-        
-        if (showMenu.checked) {
-          document.querySelector('#show-menu').checked = false;
-        }
-        if (!showNotif) {
-          notificationArea.classList.toggle('hidden');
-        }
+    let showMenu = document.querySelector('#show-menu');
+    let notif = document.querySelector('#notificationArea');
+    if (showMenu.checked) {
+      document.querySelector('#show-menu').checked = false;
+    }
+    if (notif!=null) {
+      let showNotif = notif.classList.contains('hidden');
+      if (!showNotif) {
+        notif.classList.toggle('hidden');
       }
     }
   });
+
   
   let main_body = document.getElementById('main-body');
   if(main_body.getAttribute('data-auth') == 'true'){
