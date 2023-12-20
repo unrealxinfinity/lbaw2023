@@ -98,13 +98,16 @@ class TaskController extends Controller
 
         try {
             $member->tasks()->attach($task_id);
-            dd("assigning");
             NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);
             return response()->json([
                 'error' => false,
                 'id' => $member->id,
                 'username' => $username,
-                'picture' => $member->picture
+                'picture' => $member->getProfileImage(),
+                'is_leader' => false,
+                'can_remove' => false,
+                'can_move' => false,
+                'task' => true
             ]);
         } catch (\Exception $e) {
             return response()->json([

@@ -3,6 +3,19 @@
 @section('title', $task->title)
 
 @section('content')
+    <a href="#comments" class="sr-only sr-only-focusable">Comments</a>
+    <a href="#make-comment-task" class="sr-only sr-only-focusable">Make a Comment</a>
+    @can('edit', $task)
+        <a href="#edit-task-details" class="sr-only sr-only-focusable">Edit Task Details</a>
+        <a href="#members-assigned" class="sr-only sr-only-focusable">See assigned members to task</a>
+        @if ($task->status != 'Done')
+            <a href="#assign-new-member" class="sr-only sr-only-focusable">Assign Member to Task</a>
+        @endif
+    @else
+        <a href="#task-see-details" class="sr-only sr-only-focusable">See task details</a>
+
+    @endcan
+
     <section id="tags" class="desktop:flex">
         <input type="checkbox" id="show-details" class="hidden peer"/>
         @include('partials.task', ['task' => $task])
