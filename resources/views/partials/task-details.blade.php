@@ -45,7 +45,7 @@
                 <p class="col-span-2"> {{ $task->created_at }} </p>
                 <button class="button h-fit col-span-1" type="submit">Save</button>
                 @if ($task->status != 'Done')
-                    <label for="{{$prefix . 'complete-task'}}" class="button">Complete Task</label>
+                    <label for="{{$prefix . 'complete-task'}}" class="link h-fit col-span-2 ml-0 underline">Complete Task</label>
                 @endif
             </fieldset>
         </form>
