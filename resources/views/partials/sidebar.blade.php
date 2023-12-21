@@ -36,6 +36,7 @@
                             @can('removeMember', $thing)
                                 @include('form.remove-member', ['thing' => $thing, 'member' => $member])
                             @endcan
+                        </div>
                         @endcannot
                 </li>
             @endforeach
