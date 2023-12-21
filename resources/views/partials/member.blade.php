@@ -38,6 +38,7 @@
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a id="profile-my-projects" href="/myprojects">My Projects</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a id="profile-my-tasks" href="/mytasks">My Tasks</a></h2>
             <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a id="profile-my-invites" href="/invites">My Invites</a></h2>
+            <h2 class="text-center desktop:w-40 w-36 p-4 m-1 rounded outline outline-1 outline-white/20 bg-black/50 uppercase"> <a id="profile-my-friends" href="/myfriends">My Friends</a></h2>
         </div>
         @elseif ($member->persistentUser->type_ == 'Blocked')
         <h2 class="decoration-green underline underline-offset-4 decoration-2"> YOU HAVE BEEN BLOCKED </h2>
