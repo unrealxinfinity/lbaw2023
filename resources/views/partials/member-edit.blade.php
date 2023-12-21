@@ -20,13 +20,13 @@
                 @csrf
                 @method('POST')
                 <div class="flex flex-col">
-                    <label for="{{"edit-img-" . $member->id}}">
+                    <label @if (Auth::user()->persistentUser->type_ == 'Administrator') for="{{"edit-img-" . $member->id}}" @else for="edit-img" @endif>
                         <span class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none text-bMobile tablet:text-bTablet desktop:text-bDesktop">&#9998;</span>
                         <img class="mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square hover:opacity-50 object-cover"
                             src={{$member->getProfileImage()}}
                             alt="{{$member->persistentUser->user->username}} profile picture">
                     </label>
-                    <input id="{{"edit-img-" . $member->id}}" class="hidden" name="file" type="file" required>
+                    <input @if (Auth::user()->persistentUser->type_ == 'Administrator') id="{{"edit-img-" . $member->id}}" @else id="edit-img" @endif class="hidden" name="file" type="file" required>
                     <input name="type" type="hidden" value="profile">
                     <input class="button px-1 my-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload profile picture">
                     @if ($errors->has('file'))
