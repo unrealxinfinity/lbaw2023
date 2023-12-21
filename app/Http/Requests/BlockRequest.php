@@ -24,7 +24,7 @@ class BlockRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'block_reason' => ['nullable', 'string']
+            'block-reason' => ['nullable', 'string']
         ];
     }
 }

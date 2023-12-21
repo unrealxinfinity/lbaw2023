@@ -137,6 +137,7 @@
                 @if ($member->persistentUser->type_ != 'Blocked')
                 <button type="submit" class="button bg-dark text-red/80" formmethod="POST"
                     formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+                <input type="text" name="block-reason" placeholder="Why?">
                 @else
                 <button type="submit" class="button bg-dark text-red/80" formmethod="POST"
                     formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>
