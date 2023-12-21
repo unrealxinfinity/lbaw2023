@@ -108,7 +108,7 @@
         @endforeach
     </div>
     @can('addMember', $project)
-    <section id="add-member">
+    <section id="add-member-section">
         @include('form.addmember', ['project' => $project])
     </section>
     @endcan

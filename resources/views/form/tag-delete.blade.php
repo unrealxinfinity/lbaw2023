@@ -3,7 +3,7 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tagName" value="{{$tag->name}}">
             <input type="hidden" name="tag_id" value="{{ $tag->id }}">
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0" title="Remove Tag from this Project">&times;</button></p>
         </fieldset>
@@ -14,7 +14,7 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tagName" value="{{$tag->name}}">
             <input type="hidden" name="tag_id" value="{{ $tag->id }}">
 
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0" title="Remove Tag from this World">&times;</button></p>
@@ -26,7 +26,7 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tagName" value="{{$tag->name}}">
             <input type="hidden" name="tag_id" value="{{ $tag->id }}">
 
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0" title="Remove Tag from you're Profile">&times; </button></p>

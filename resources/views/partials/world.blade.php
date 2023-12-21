@@ -59,6 +59,24 @@
         <h2 class="mt-10" id="Ongoing-projects"> ONGOING PROJECTS </h2>
         <ul class="panel">
             @foreach ($world->projects()->where('status', '=', 'Active')->orderBy('id')->get() as $project)
+                <li>
+                    <nav class="container">
+                        <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src={{ $project->getImage() }} alt="{{$project->name}} image">
+                        @php
+                            $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
+                        @endphp
+                        <div class="title"><h2><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2></div>
+                        <div class="desc"><h4>{{ $project->description }}</h4></div>
+                    </nav>
+                </li>
+            @endforeach
+        </ul>
+        @endif
+        @if ($world->projects()->whereStatus('Archived')->exists())
+        <h2 class="mt-10" id="Archived-projects"> ARCHIVED PROJECTS </h2>
+        <ul class="flex justify-start h-40 m-5">
+            @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
+            <li>
                 <nav class="container">
                     <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src={{ $project->getImage() }} alt="{{$project->name}} image">
                     @php
@@ -67,21 +85,7 @@
                     <div class="title"><h2><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2></div>
                     <div class="desc"><h4>{{ $project->description }}</h4></div>
                 </nav>
-            @endforeach
-        </ul>
-        @endif
-        @if ($world->projects()->whereStatus('Archived')->exists())
-        <h2 class="mt-10" id="Archived-projects"> ARCHIVED PROJECTS </h2>
-        <ul class="flex justify-start h-40 m-5">
-            @foreach ($world->projects()->where('status', '=', 'Archived')->orderBy('id')->get() as $project)
-            <nav class="container">
-                <img class="h-1/2 overflow-hidden rounded-t-md object-cover" src={{ $project->getImage() }} alt="{{$project->name}} image">
-                @php
-                    $translateXValue = (strlen($project->name)>20)? 'hover:translate-x-[-40%]': 'hover:translate-x-[0%]';
-                @endphp
-                <div class="title"><h2><a class="{{$translateXValue}}" href="/projects/{{ $project->id }}">{{ $project->name }}</a></h2></div>
-                <div class="desc"><h4>{{ $project->description }}</h4></div>
-            </nav>
+            </li>
             @endforeach
         </ul>
         @endif

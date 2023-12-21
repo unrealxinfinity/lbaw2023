@@ -288,7 +288,7 @@ function addEventListeners() {
   if (favouriter != null)
   favouriter.addEventListener('submit', sendFavoriteRequest);
 
-  let changeInviteType = document.querySelectorAll('#invite-outside-member');
+  let changeInviteType = document.querySelectorAll('.invite-outside-member');
   if (changeInviteType != null){
     [].forEach.call(changeInviteType, function(button) {
       button.addEventListener('click', changeToInviteOutsideMember);
