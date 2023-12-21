@@ -55,13 +55,16 @@
         @endcan
     @endif
     @if ($appeal)
+    <script>
+        document.body.style.overflow = 'hidden';
+    </script>
     <div id="appeal-box" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-around">
         <div class="bg-black tablet:w-3/4 tablet:min-h-fit tablet:max-h-[90%] h-full w-full tablet:rounded tablet:mx-auto">
             <div class="flex justify-between mx-5 pt-3"> 
                 <h1> Appeal Block </h1>
                 <a id="go-back" class="cursor-pointer">&times;</a>
             </div>
-            <div class="tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
+            <div class="overflow-auto tablet:min-h-fit tablet:max-h-[70%] h-[90%]">
                 @if (isset($member->appeal))
                     @include('partials.appeal-readonly', ['member' => $member])
                 @else    
