@@ -15,7 +15,7 @@
                 <legend>Upload New Profile Picture</legend>
                 @csrf
                 @method('POST')
-                <div>
+                <div class="flex flex-col">
                     <label for="edit-img">
                         <h1><label class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</label></h1>
                         <img id="preview-img" class="mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square hover:opacity-50 object-cover"
@@ -25,6 +25,11 @@
                     <input id="edit-img" class="hidden" name="file" type="file" required>
                     <input name="type" type="hidden" value="profile">
                     <input class="button px-1 my-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload profile picture">
+                    @if ($errors->has('file'))
+                    <span class="error">
+                        {{ $errors->first('file') }}
+                    </span>
+                    @endif
                 </div>
                 @if ($self ?? false)
                 <div id="change-picture-mc-username" class="form-post">
