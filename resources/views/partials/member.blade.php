@@ -55,28 +55,30 @@
         @endcan
     @endif
     @if ($appeal)
-    <div id="appeal-box" class="fixed z-10 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-center">
-        <div class="bg-black tablet:w-3/4 tablet:h-4/5 h-full rounded drop-shadow tablet:mx-auto">
-            <div class="flex"> 
-            <h1 class="mt-3 ml-5"> Appeal Block </h1>
-            <a id="go-back" class="cursor-pointer sm:text-big text-bigPhone fixed right-5 mt-1">&times;</a>
+    <div id="appeal-box" class="fixed z-30 bg-white bg-opacity-30 top-0 left-0 w-full h-full flex flex-col justify-around">
+        <div class="bg-black tablet:w-3/4 tablet:min-h-fit tablet:max-h-[90%] h-full w-full tablet:rounded tablet:mx-auto">
+            <div class="flex justify-between mx-5 pt-3"> 
+                <h1> Appeal Block </h1>
+                <a id="go-back" class="cursor-pointer">&times;</a>
             </div>
-            @if (isset($member->appeal))
-                @include('partials.appeal-readonly', ['member' => $member])
-            @else    
-                @include('form.appeal', ['member' => $member])
-            @endif    
+            <div class="tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
+                @if (isset($member->appeal))
+                    @include('partials.appeal-readonly', ['member' => $member])
+                @else    
+                    @include('form.appeal', ['member' => $member])
+                @endif
+            </div>
         </div>
     </div>
     @endif
     @else
     <header class="h-fit flex justify-start">
         <img src="{{$member->getProfileImage()}}" alt="{{$member->persistentUser->user->username}} profile picture" class="h-5 aspect-square mr-3 object-cover">
-        @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
+        @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}" title="Visit Profile">{{ $member->persistentUser->user->username }}</a></h4>
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif
         @can('request', $member)
-            <a class="friend-button justify-self-end" href="/api/request/{{ $member->persistentUser->user->username }}">&#10010;</a>
+            <a class="friend-button justify-self-end h-fit" href="/api/request/{{ $member->persistentUser->user->username }}" title="Send Friend Request">&#10010;</a>
         @endcan        
     </header>
     @endif

@@ -47,7 +47,7 @@
     @if(count($worlds) > 0)
         <div class="flex">
             <h2 class="decoration-green underline underline-offset-4 decoration-2" id="my-current-worlds-home"><a href="{{route('show-worlds-list')}}"> MY CURRENT WORLDS</a></h2>
-            @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world">+</a></h2> @endif  
+            @if (Auth::user()->persistentUser->type_ == 'Member') <h2><a class="outline outline-1 tablet:px-1.5 px-1 ml-3" href="/create-world" title="Create a new world">+</a></h2> @endif  
         </div>
         <div class="panel">
             @foreach($worlds as $world)

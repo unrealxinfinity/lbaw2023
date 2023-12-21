@@ -17,7 +17,7 @@
                 <option value= "Relevance" selected>Relevance</option>
             </select>
 
-            <input class="button" type="submit" id="mainSearchButton" value='Search' tabindex="0">
+            <input class="button" type="submit" id="mainSearchButton" value='Search' tabindex="0" title="Search">
         </fieldset>
     </form>
 </section>

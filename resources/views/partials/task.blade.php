@@ -6,7 +6,7 @@
         @can('delete', $task)
             <div class="relative flex justify-end text-left pt-1">
                 <input type="checkbox" id="task-more-options" class="sr-only sr-only-focusable peer"/>
-                <h1><label for="task-more-options" class="font-bold cursor-pointer sr-only-focusable">&#8942;</label></h1>
+                <h1><label for="task-more-options" class="font-bold cursor-pointer sr-only-focusable" title="More Options">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
                     <form method="POST" class="delete-task" action={{ route('delete-task', ['id' => $task->id]) }}>
                         <fieldset>

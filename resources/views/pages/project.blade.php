@@ -23,10 +23,9 @@
             <div class="flex justify-between mx-5 pt-3">
                 <h1> Edit Project </h1>
                 <h1><a id="go-back" class="cursor-pointer">&times;</a></h1>
-                </div>
-                <div class="overflow-auto tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
-                    @include('form.project-edit', ['project'=>$project])
-                </div>
+            </div>
+            <div class="overflow-auto tablet:min-h-fit tablet:max-h-[90%] h-[90%]">
+                @include('form.project-edit', ['project'=>$project])
             </div>
         </div>
     </div>

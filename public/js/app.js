@@ -850,7 +850,7 @@ function changeToInviteOutsideMember(ev) {
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" class="id" name="id" value="${(json.task)?json.task_id:json.project_id}">
             <input type="hidden" class="username" name="username" value="${json.username}">
-            <button type="submit" class ="text-red"> &times; </button>
+            <button type="submit" class ="text-red" title="Remove Member"> &times; </button>
           </fieldset>
         `;
 
@@ -1687,8 +1687,10 @@ function demoteProjectLeaderHandler(data) {
     const button = document.querySelector('form#favorite button');
     if (json.favorite) {
       button.innerHTML = "&#9733";
+      button.title = "Remove from Favorites";
     } else {
       button.innerHTML = "&#9734";
+      button.title = "Add to Favorites";
     }
   }
   
