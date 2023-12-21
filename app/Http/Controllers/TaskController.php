@@ -145,12 +145,14 @@ class TaskController extends Controller
         return redirect()->route('tasks.show', ['id' => $id, '#comments'])->withSuccess('Comment added.');
     }
 
-    public function delete(DeleteTaskRequest $deleteTaskRequest): RedirectResponse
+    public function delete(string $id): RedirectResponse
     {
-        $fields = $deleteTaskRequest->validated();
-        $task = Task::findOrFail($fields['id']);
+        $task = Task::findOrFail($id);
+        $this->authorize('delete', $task);
+
+        $project_id = $task->project_id;
 
         $task->delete();
-        return redirect()->route('projects.show', ['id' => $task->project_id])->withSuccess('Task deleted.');
+        return redirect()->route('projects.show', ['id' => $project_id])->withSuccess('Task deleted.');
     }
 }
