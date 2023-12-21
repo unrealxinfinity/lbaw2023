@@ -20,7 +20,7 @@ class WorldPolicy
     public function show(?User $user, World $world): bool
     {
         if($user == null) return true;
-        return ($user->persistentUser->type_ !== UserType::Deleted->value && $user->persistentUser->type_ !== UserType::Deleted->value);
+        return ($user->persistentUser->type_ !== UserType::Deleted->value && $user->persistentUser->type_ !== UserType::Blocked->value);
     }
 
     public function create(User $user): bool
