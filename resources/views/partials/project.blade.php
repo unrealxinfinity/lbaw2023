@@ -105,14 +105,14 @@
             </div>
         @endforeach
     </div>
-    @can('projectTagCreate', $project)
-    <section id="create-tag">
-        @include('form.tag-create',['project'=> $project,'type' => 'project'])
-    </section>
-    @endcan
     @can('addMember', $project)
     <section id="add-member">
         @include('form.addmember', ['project' => $project])
+    </section>
+    @endcan
+    @can('projectTagCreate', $project)
+    <section id="create-tag">
+        @include('form.tag-create',['project'=> $project,'type' => 'project'])
     </section>
     @endcan
     @can('createTask', $project)

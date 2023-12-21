@@ -22,4 +22,14 @@
             </fieldset>
         </form>
     @endif
+@elseif($thing instanceof App\Models\Task)
+    <form id="{{$prefix . 'remove-member-task'}}" data-id="{{ $member->id }}">
+        <fieldset>
+            <legend class="sr-only">Remove Member</legend>
+            @CSRF
+            <input type="hidden" class="id" value={{ $thing->id}}>
+            <input type="hidden" class="username" value={{ $member->persistentUser->user->username }}>
+            <button type="submit" class ="text-red" tabindex="0"> &times; </button>
+        </fieldset>
+    </form>
 @endif
