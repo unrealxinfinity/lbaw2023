@@ -105,7 +105,7 @@ Route::get('/login/callback', function () {
            'name' => 'New Member',
            'email' => $socialite->getEmail(),
            'user_id' => $persistentUser->id,
-           'picture' => 'example.com'
+           'picture' => null
        ]);
 
        Auth::login($user);
