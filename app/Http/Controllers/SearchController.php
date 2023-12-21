@@ -53,14 +53,18 @@ class SearchController extends Controller
             foreach($members as $member){
                 $memberTags = $member->tags;
                 $containsAllTags=true;
+                $containsATag=false;
                 foreach($inputTags as $tagName){
                     if(!$memberTags->contains(function($value, $key) use ($tagName) {
                         return stripos($value->name, $tagName) !== false;
                     })){
                         $containsAllTags=false;
                     }
+                    else {
+                        $containsATag = true;
+                    }
                 }
-                if($containsAllTags){
+                if($containsATag){
                     $membersAux->push($member);
                 }
             }
@@ -69,14 +73,18 @@ class SearchController extends Controller
             foreach($projects as $project){
                 $projectTags = $project->tags;
                 $containsAllTags=true;
+                $containsATag=false;
                 foreach($inputTags as $tagName){
                     if(!$projectTags->contains(function($value, $key) use ($tagName) {
                         return stripos($value->name, $tagName) !== false;
                     })){
                         $containsAllTags=false;
                     }
+                    else {
+                        $containsATag = true;
+                    }
                 }
-                if($containsAllTags){
+                if($containsATag){
                     $projectsAux->push($project);
                 }
             }
@@ -85,14 +93,18 @@ class SearchController extends Controller
             foreach($worlds as $world){
                 $worldTags = $world->tags;
                 $containsAllTags=true;
+                $containsATag=false;
                 foreach($inputTags as $tagName){
                     if(!$worldTags->contains(function($value, $key) use ($tagName) {
                         return stripos($value->name, $tagName) !== false;
                     })){
                         $containsAllTags=false;
                     }
+                    else {
+                        $containsATag = true;
+                    }
                 }
-                if($containsAllTags){
+                if($containsATag){
                     $worldsAux->push($world);
                 }
             }
