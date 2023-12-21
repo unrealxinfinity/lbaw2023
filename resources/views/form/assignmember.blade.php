@@ -1,4 +1,4 @@
-<form id="assign-member" class="add-member mt-5">
+<form class="assign-member add-member mt-5">
     <fieldset class="grid grid-cols-2 gap-1">
         <legend>Assign a member</legend>
         @csrf

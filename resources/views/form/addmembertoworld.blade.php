@@ -1,4 +1,4 @@
-<form class="form-outline" id="invite-member">
+<form class="form-outline" class="invite-member">
     <fieldset class="form-post">
         <legend>Invite Member</legend>
         @csrf
@@ -18,7 +18,7 @@
         <input class="button" type="submit" value="Invite" tabindex="0">
     </fieldset>
 </form>
-<form class="form-outline hidden" id="invite-new-member">
+<form class="form-outline hidden" class="invite-new-member">
     <fieldset class="form-post">
         <legend>Invite outside member</legend>
         @csrf
