@@ -81,7 +81,7 @@
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif
         @can('request', $member)
-            <a class="friend-button justify-self-end h-fit" href="/api/request/{{ $member->persistentUser->user->username }}" title="Send Friend Request">&#10010;</a>
+            <a class="friend-button justify-self-end h-fit ml-2" href="/api/request/{{ $member->persistentUser->user->username }}" title="Send Friend Request">&#10010;</a>
         @endcan        
     </header>
     @endif
