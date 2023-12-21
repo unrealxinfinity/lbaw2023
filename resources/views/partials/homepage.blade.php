@@ -16,6 +16,7 @@
     <div class="flex flex-col justify-end m-1 min-w-[11rem] w-44 h-32 tablet:min-w-[13rem] tablet:w-52 tablet:h-44 bg-black rounded outline outline-1 outline-white/10"> 
         <div class="h-1/2 overflow-hidden px-5 flex flex-col justify-center">
             <h3><a href="/worlds/{{ $task->project->world->id }}">{{ $task->project->world->name }}</a>
+                >
             <a href="/projects/{{ $task->project->id }}">{{ $task->project->name }}</a></h3>
         </div>
         @php
