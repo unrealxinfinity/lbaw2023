@@ -66,7 +66,7 @@
                 <h4 class="pt-2 break-words">{{ $otherMember->description }}</h4>
                 </div>
                 @can('request', $otherMember)
-                    <a class="friend-button justify-self-end" href="/api/request/{{ $otherMember->persistentUser->user->username }}">&#10010;</a>
+                    <a class="friend-button justify-self-end h-fit" href="/api/request/{{ $otherMember->persistentUser->user->username }}" title="Send Friend Request">&#10010;</a>
                 @endcan
             </header>
             @endforeach

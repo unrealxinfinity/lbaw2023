@@ -14,11 +14,16 @@
         </fieldset>
     </form>
     <section id="appeals">
-        <div class="my-5 px-5 py-1 bg-black/50 outline outline-1 outline-white/10">
+        @if(count($appeals)>0)
+        <div class="my-5 mobile:px-5 px-1 py-1 bg-black/50 outline outline-1 outline-white/10">
             <div class="my-5">{{ $appeals->links() }}</div>
             @each('partials.appeal', $appeals, 'appeal')
             <div class="my-5">{{ $appeals->links() }}</div>
         </div>
+        @else
+        <h2 class="mt-10"> There are no appeals.</h2>
+        @endif
     </section>
+
     
 @endsection

@@ -43,12 +43,11 @@ class MemberPolicy
     {
         return $user->persistentUser->type_ === UserType::Administrator->value;
     }
-    public function showSearchResults(User $user,Member $member): bool
+    public function showSearchResults(User $user): bool
     {   
         $type = $user->persistentUser->type_; 
         $is_disabled = $type === UserType::Blocked->value || $type === UserType::Deleted->value;
-        $is_member = $member->user_id == $user->id;
-        return (!$is_disabled && $is_member);
+        return (!$is_disabled);
     }
 
     public function showCreateWorld(User $user): bool

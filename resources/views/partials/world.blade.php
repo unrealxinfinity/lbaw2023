@@ -10,7 +10,7 @@
                 <div class="flex">
                 <h1>{{ $world->name }}</h1>
                 @can('edit', $world)
-                    <h1><a id="edit-world" class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/worlds/{{ $world->id }}/edit">&#9998;</a></h1>
+                    <h1><a id="edit-world" class="mt-2 tablet:ml-2 ml-1 hover:text-green" href="/worlds/{{ $world->id }}/edit" title="Edit World">&#9998;</a></h1>
                 @endcan
                 </div>
                 @include('partials.tag', ['tags' => $world->tags,'type'=>'world'])
@@ -24,15 +24,17 @@
                         @csrf
                         <input type="hidden" class="id" name="id" value="{{ $world->id }}">
                         <input type="hidden" class="type" name="type" value="worlds">
-                        <h1><button class="pr-2" type="submit">
-                            @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id)) &#9733; 
-                            @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) &#9734; @endif</button></h1>
+                        @if(Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator') && Auth::user()->persistentUser->member->favoriteWorld->contains('id', $world->id))
+                            <h1><button class="pr-2" type="submit" title="Remove from Favorites"> &#9733; </button></h1>
+                        @elseif((Auth::check() && (Auth::user()->persistentUser->type_ !== 'Administrator'))) 
+                            <h1><button class="pr-2" type="submit" title="Add to Favorites"> &#9734; </button></h1> 
+                        @endif
                     </fieldset>
                 </form>
             @endcan
             @canany(['leave','delete'], $world)
                 <input type="checkbox" id="more-options" class="sr-only sr-only-focusable peer"/>
-                <h1><label for="more-options" class="font-bold cursor-pointer sr-only-focusable">&#8942;</label></h1>
+                <h1><label for="more-options" class="font-bold cursor-pointer sr-only-focusable" title="More Options">&#8942;</label></h1>
                 <div class="absolute right-0 px-1 z-10 mr-2 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
                     @can('delete', $world)
                     @include('form.delete-world', ['world' => $world])

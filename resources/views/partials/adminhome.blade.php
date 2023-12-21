@@ -1,4 +1,4 @@
-<article class="homepage flex">
+<article class="homepage panel">
     <span id="manage-members-home"></span>
     @include('partials.container', ['description' => "There are $nMembers members currently signed up for MineMax.", 'title' => 'Manage members', 'link' => route('list-members'), 'img' => URL('/images/members.png'), 'alt' => "Many Minecraft characters ready for action"])
     <span id="manage-appeals-home"></span>

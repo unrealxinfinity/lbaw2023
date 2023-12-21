@@ -2,13 +2,13 @@
     <div class="flex">
         <img src={{$world->getImage()}} alt="{{$world->name}} image" class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
         <div class="flex flex-col self-center ml-3 w-11/12">
-            <h2 class="break-words"><a href="/worlds/{{ $world->id }}">{{ $world->name }}</a></h2>
+            <h2 class="break-words"><a @if (Auth::user()->persistentUser->type_ != 'Blocked')href="/worlds/{{ $world->id }}"@endif>{{ $world->name }}</a></h2>
             <h4 class="break-words"> {{ $world->description }} </h4>
         </div>
     </div>
     @canany(['delete', 'leave'], $world)
         <input type="checkbox" id="more-options-{{$world->id}}" class="sr-only sr-only-focusable peer"/>
-        <h1 id="h1-{{$world->id}}"><label for="more-options-{{$world->id}}" class="font-bold sr-only-focusable cursor-pointer">&#8942;</label></h1>
+        <h1 id="h1-{{$world->id}}"><label for="more-options-{{$world->id}}" class="font-bold sr-only-focusable cursor-pointer" title="More Option">&#8942;</label></h1>
         <div class="absolute right-0 px-1 z-10 mr-6 tablet:mr-14 desktop:mt-7 tablet:mt-6 mt-5 min-w-max bg-black outline outline-1 outline-white/20 peer-checked:block hidden divide-y divide-white divide-opacity-25">
             @can('delete', $world)
                 @include('form.delete-world-in-list', ['world' => $world])

@@ -6,9 +6,13 @@
         <a href="#member-edit-details">Edit Details</a>
     @endif
 
-    <p><a href="/">Home</a> > <a
-            href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a>
+    <p><a href="/">Home</a> > 
+        <a href="/members/{{$member->persistentUser->user->username}}">{{$member->persistentUser->user->username}}</a>
         > <a href="/members/{{$member->persistentUser->user->username}}/edit">Edit Profile</a></p>
+    
+    @if (Auth::user()->persistentUser->type_=='Administrator')
+        <h2 class="text-center text-green"><a href="/members/{{ $member->persistentUser->user->username }}">@ {{ $member->persistentUser->user->username }}</a></h2>
+    @endif
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
         <form id="member-edit-picture" method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
             <fieldset class="grid mobile:grid-cols-2 mobile:grid-rows-none grid-rows-2">
