@@ -24,7 +24,7 @@ class RecoverController extends Controller
         }
     }
 
-    function showResetForm(Request $request): View
+    function showResetForm(Request $request)
     {
         if (Auth::check()) {
             return redirect('');
