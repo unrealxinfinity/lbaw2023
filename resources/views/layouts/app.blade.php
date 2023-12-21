@@ -108,14 +108,18 @@
         </main>
         <nav id="footer" class="fixed bottom-0 w-full bg-black flex justify-between px-3 py-1">
             <p> @ 2023 MineMax, Inc. </p>
-            <div class="flex space-x-3">
-            <p> <a href="/about">About </a></p>
-            <p> | </p>
-            <p> <a href="/contacts">Contact Us </a></p>
-            <p> | </p>
-            <p> <a href="{{route('show-faqs')}}">FAQs</a></p>
-            <p> | </p>
-            <p> <a href="/main-features">Main Features</a></p>
+            <div class="flex space-x-3 mobile:flex-row flex-col">
+                <div class="flex space-x-3 justify-end">
+                <p> <a href="/about">About </a></p>
+                <p> | </p>
+                <p> <a href="/contacts">Contact Us </a></p>
+                </div>
+                <div class="flex space-x-3 justify-end">
+                <p class="hidden mobile:flex"> | </p>
+                <p> <a href="{{route('show-faqs')}}">FAQs</a></p>
+                <p> | </p>
+                <p> <a href="/main-features">Main Features</a></p>
+                </div>
             </div>
         </nav>
     </body>
