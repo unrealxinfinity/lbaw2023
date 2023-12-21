@@ -840,7 +840,7 @@ INSERT INTO world_comments (content, date_, world_id, member_id) VALUES
 -- Sample data for the 'faqs' table
 INSERT INTO faqs (question, answer) VALUES
     ('Do I need to use a specific Minecraft version?', 'We allow worlds from all versions. You can let others know what version you use in your worlds through tags.'),
-    ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and can be changed, your display name can be changed aswell.');
+    ('Why do I have a username and a display name?', 'Your username is a unique identifier for your account and can be changed, your display name can be changed as well.');
 
 -- Sample data for the 'notifications' table
 INSERT INTO notifications (text, level, world_id, project_id, task_id, member_id, is_request) VALUES

@@ -115,8 +115,8 @@
                 @if (Auth::user()->has_password)
                 @if (Auth::user()->persistentUser->type_=='Administrator')
                 <label type="hidden" for="old_password-{{ $member->id }}"></label>
-                <input type="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password"
-                    name="old_password" value="{{ $member->persistentUser->user->password }}" required>
+                <input type="hidden" id="old_password-{{ $member->id }}" class="old_password"
+                    name="old_password" value="{{ $member->persistentUser->user->password }}">
                 @else
                 <h3 class="my-0"><label for="old_password-{{ $member->id }}">Old Password</label></h3>
                 <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password"
