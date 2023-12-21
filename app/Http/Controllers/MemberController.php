@@ -8,12 +8,8 @@ use App\Http\Requests\DeleteFriendRequest;
 use App\Http\Requests\EditMemberRequest;
 use App\Models\Appeal;
 use App\Models\Member;
-use App\Models\PersistentUser;
 use App\Models\User;
 use App\Models\UserType;
-use Illuminate\Contracts\Pagination\CursorPaginator;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -223,7 +219,6 @@ class MemberController extends Controller
             ->where(function ($query) use($search) {
                 $query->where('name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%');
             })
-        //$appeals = Appeal::whereRaw("exists (select * from members m where m.id = member_id and (name like %$search% or email like %$search%))")
             ->cursorPaginate(4)->withQueryString()->withPath(route('admin-appeals'));
 
         return view('pages.admin-appeals', ['appeals' => $appeals]);

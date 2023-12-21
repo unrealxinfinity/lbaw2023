@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Events\CreateTaskNotification;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Models\Task;
 use App\Models\Notification;

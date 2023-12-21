@@ -8,7 +8,6 @@ use App\Models\Member;
 use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\Tag;
 use App\Models\UserType;
 use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
@@ -29,6 +28,8 @@ class SearchController extends Controller
                 $arr[$i] = $arr[$i] . ':*';
             }
             $searchedText = implode(' | ', $arr);
+
+            //Use PostgreSQL's Full Text Search to match our query
             $tasks = (Auth::check())?Task::select('id','title','description','due_at','status','effort','priority')
                 ->whereRaw("searchedTasks @@ to_tsquery('english', ?)", [$searchedText])
                 ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
@@ -50,6 +51,7 @@ class SearchController extends Controller
                 ->get();
         }
         else {
+            //If no search string is given, return everything
             $tasks = Task::all();
             $projects = Project::all();
             $members = Member::all()->reject(function ($member) {
@@ -57,6 +59,8 @@ class SearchController extends Controller
             });
             $worlds = World::all();
         }
+
+        //Check if the returned elements match the tags given in the filter
         if($inputTags[0] != ""){
             $membersAux=collect();
             $tasks=collect();
@@ -122,6 +126,8 @@ class SearchController extends Controller
             }
             $worlds=$worldsAux;
         }
+
+        //Order and filter results
         if($order == 'A-Z'){
             $members = $members->sortBy('name');
             $projects = $projects->sortBy('name');

@@ -7,7 +7,6 @@ use App\Http\Requests\RecoverRequest;
 use App\Http\Requests\ResetRequest;
 use App\Mail\MailModel;
 use App\Models\Member;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 
 class RecoverController extends Controller
 {
-    function showRecoverForm(): View|RedirectResonse
+    function showRecoverForm()
     {
         if (Auth::check()) {
             return redirect('');
@@ -24,7 +23,7 @@ class RecoverController extends Controller
         }
     }
 
-    function showResetForm(Request $request): View
+    function showResetForm(Request $request)
     {
         if (Auth::check()) {
             return redirect('');

@@ -19,7 +19,7 @@ class CommentRequest extends FormRequest
             case 'world':
                 return Auth::user()->can('comment', World::find($this->route()->id));
             case 'task':
-                return Auth::user()->can('edit', Task::find($this->route()->id));
+                return Auth::user()->can('comment', Task::find($this->route()->id));
         }
 
         return false;

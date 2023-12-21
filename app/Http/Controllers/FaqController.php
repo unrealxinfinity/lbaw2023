@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Faq;
 use App\Http\Requests\FaqRequest;
 use Illuminate\Http\RedirectResponse;

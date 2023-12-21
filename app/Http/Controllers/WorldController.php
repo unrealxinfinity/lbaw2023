@@ -27,7 +27,6 @@ use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
-use App\Models\Tag;
 use App\Models\UserType;
 
 class WorldController extends Controller
@@ -194,8 +193,7 @@ class WorldController extends Controller
         {
             return response()->json([
                 'error' => true,
-                //'username' => $fields['username'],
-                'username' => 'test',
+                'username' => $fields['username'] ?? $fields['email'],
                 'message' => $e->getMessage()
             ]);
         }
@@ -242,7 +240,7 @@ class WorldController extends Controller
 
         $invitation = Invitation::where('token', $token)->firstOrFail();
 
-        if($invitation->username != null){
+        if($invitation->member_id != null){
             $username = $invitation->member->user->username;
             $world_id = $invitation->world_id;
             $world_name = World::findOrFail($world_id)->name;
@@ -253,7 +251,7 @@ class WorldController extends Controller
                 'username' => $username,
                 'token' => $token
             ]);
-        } else if ($invitation->email != null){
+        } else {
             if(Auth::check()) {
                 return redirect()->route('home');
             }
@@ -267,8 +265,6 @@ class WorldController extends Controller
                 'email' => $email,
                 'token' => $token
             ]);
-        } else {
-            return redirect()->route('home');
         }
         
     }

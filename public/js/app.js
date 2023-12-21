@@ -295,7 +295,7 @@ function addEventListeners() {
     });
   }
 
-  let inviteOutsideMember = document.querySelector('form#invite-new-member');
+  let inviteOutsideMember = document.querySelector('form.invite-new-member');
   if (inviteOutsideMember != null){
     inviteOutsideMember.addEventListener('submit', sendInviteNewMember);
   }
@@ -396,8 +396,8 @@ async function replaceImage(ev) {
 
 function changeToInviteOutsideMember(ev) {
   ev.preventDefault();
-  let outsideForm = document.querySelector('form#invite-new-member');
-  let insideForm = document.querySelector('form#invite-member');
+  let outsideForm = document.querySelector('form.invite-new-member');
+  let insideForm = document.querySelector('form.invite-member');
 
 
   if(outsideForm.classList.contains('hidden')){
@@ -875,39 +875,34 @@ function changeToInviteOutsideMember(ev) {
   }
 
   function inviteMemberHandler(json) {
-    const list = document.querySelectorAll('ul.members');
-    [].forEach.call(list, function(ul) {
-      const form = document.querySelector('form#invite-member');
-      const error = form.querySelector('span.error');
-      const invitation = form.querySelectorAll('span.success');
-      if (invitation.length !== 0)
-      {
-        invitation.forEach(element => {
-          element.remove();
-        });
-      }
-      if (error !== null)
-      {
-        error.remove();
-      }
-  
-      if (json.error)
-      {
-        const span = document.createElement('span');
-        span.classList.add('error');
-        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
-        const index = members.find(x => x === json.username);
-        if (index === undefined) span.textContent = 'Please check if ' + json.username + ' already belongs to this world.';
-        else span.textContent = json.username + ' is already a member of this world.';
-        form.appendChild(span);
-        return;
-      }
-  
+    const form = document.querySelector('form.invite-member');
+    const error = form.querySelector('span.error');
+    const invitation = form.querySelectorAll('span.success');
+    if (invitation.length !== 0)
+    {
+      invitation.forEach(element => {
+        element.remove();
+      });
+    }
+    if (error !== null)
+    {
+      error.remove();
+    }
+
+    if (json.error)
+    {
       const span = document.createElement('span');
-      span.classList.add('success');
-      span.textContent = json.username + ' has been invited to join this world.';
+      span.classList.add('error');
+      span.textContent = json.message;
       form.appendChild(span);
-    });
+      return;
+    }
+
+    const span = document.createElement('span');
+    span.classList.add('success');
+    if (json.username == null) span.textContent = 'An invite has been sent to ' + json.email;
+    else span.textContent = json.username + ' has been invited to join this world.';
+    form.appendChild(span);
   } 
 
   async function sendInviteMember(event){
@@ -961,7 +956,7 @@ function changeToInviteOutsideMember(ev) {
 function inviteNewMemberHandler(json) {
   const list = document.querySelectorAll('ul.members');
   [].forEach.call(list, function(ul) {
-    const form = document.querySelector('form#invite-new-member');
+    const form = document.querySelector('form.invite-new-member');
     const error = form.querySelector('span.error');
     const invitation = form.querySelectorAll('span.success');
     if (invitation.length !== 0)

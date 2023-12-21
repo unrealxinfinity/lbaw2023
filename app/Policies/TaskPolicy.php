@@ -36,6 +36,17 @@ class TaskPolicy
         return $is_admin || (!$is_disabled && $is_project_member);
     }
 
+    public function comment(?User $user, Task $task): bool
+    {
+        if($user == null) return false;
+        $type = $user->persistentUser->type_;
+        $is_admin = $type === UserType::Administrator->value;
+        $is_disabled = $type === UserType::Blocked->value || $type === UserType::Deleted->value;
+        if($is_admin || $is_disabled) return false;
+        $is_assigned = $user->persistentUser->member->tasks->contains($task->id);
+        return $is_assigned;
+    }
+
     public function delete(?User $user, Task $task): bool
     {
         if($user == null) return false;
