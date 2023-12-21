@@ -10,7 +10,7 @@
             @csrf
 
             <h3 class="mobile:hidden my-0 mt-3"> <label for="anything">Search</label> </h3>
-            <input type="text" class="mobile:hidden" id="anything" name="anything" value="{{$search}}" required>
+            <input type="text" class="mobile:hidden" id="anything" name="anything" value="{{$search}}">
 
             <h3 class="m-0 mt-3"> <label for="typeFilters">Type</label> </h3>
             <select id="typeFilters" name="typeFilter">

@@ -9,6 +9,7 @@ use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Tag;
+use App\Models\UserType;
 use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
@@ -22,29 +23,40 @@ class SearchController extends Controller
         $inputTags= strip_tags($inputTags);
         $order = $request->input('order','Relevance');
         $inputTags = explode(',',$inputTags);
-        $arr = explode(' ', $searchedText);
-        for ($i = 0; $i < count($arr); $i++) {
-            $arr[$i] = $arr[$i] . ':*';
+        if ($searchedText != "") {
+            $arr = explode(' ', $searchedText);
+            for ($i = 0; $i < count($arr); $i++) {
+                $arr[$i] = $arr[$i] . ':*';
+            }
+            $searchedText = implode(' | ', $arr);
+            $tasks = (Auth::check())?Task::select('id','title','description','due_at','status','effort','priority')
+                ->whereRaw("searchedTasks @@ to_tsquery('english', ?)", [$searchedText])
+                ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
+                ->get():[];
+            $projects = Project::select('id', 'name', 'description', 'status', 'picture')
+                ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
+                ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
+                ->get();
+            $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
+                ->join('user_info', 'members.user_id', '=', 'user_info.id')
+                ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
+                ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
+                ->get()->reject(function ($member) {
+                    return $member->persistentUser->type_ == UserType::Deleted->value;
+                });
+            $worlds = World::select('id', 'picture','name', 'description')
+                ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
+                ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
+                ->get();
         }
-        $searchedText = implode(' | ', $arr);
-        
-        $tasks = (Auth::check())?Task::select('id','title','description','due_at','status','effort','priority')
-            ->whereRaw("searchedTasks @@ to_tsquery('english', ?)", [$searchedText])
-            ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get():[];
-        $projects = Project::select('id', 'name', 'description', 'status', 'picture')
-            ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
-            ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get();
-        $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
-            ->join('user_info', 'members.user_id', '=', 'user_info.id')
-            ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
-            ->orderByRaw('ts_rank(searchMembers, to_tsquery(\'english\', ?)), ts_rank(searchUsername, to_tsquery(\'english\', ?)) DESC', [$searchedText,$searchedText])
-            ->get();
-        $worlds = World::select('id', 'picture','name', 'description')
-            ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$searchedText])
-            ->orderByRaw("ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$searchedText])
-            ->get();
+        else {
+            $tasks = Task::all();
+            $projects = Project::all();
+            $members = Member::all()->reject(function ($member) {
+                return $member->persistentUser->type_ == UserType::Deleted->value;
+            });
+            $worlds = World::all();
+        }
         if($inputTags[0] != ""){
             $membersAux=collect();
             $tasks=collect();
