@@ -6,10 +6,10 @@ use App\Http\Controllers\FileController;
 use App\Models\Member;
 use App\Models\Project;
 use App\Models\World;
-use Faker\Core\File;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class UploadRequest extends FormRequest
 {
@@ -37,7 +37,7 @@ class UploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'file', 'extensions:png,jpg,jpeg,gif'],
+            'file' => ['required', File::types(['png', 'jpg', 'jpeg', 'gif'])->max(12 * 1024)],
             'type' => ['required', Rule::in(['profile', 'project', 'world'])]
         ];
     }

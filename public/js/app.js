@@ -52,14 +52,14 @@ function addEventListeners() {
   }
 
   
-  let worldMemberAdder = document.querySelectorAll('form#invite-member');
+  let worldMemberAdder = document.querySelectorAll('form.invite-member');
   if (worldMemberAdder != null){
     [].forEach.call(worldMemberAdder, function(form) {
       form.addEventListener('submit', sendInviteMember);
     });
   }
 
-  let worldNewMemberAdder = document.querySelectorAll('form#invite-new-member');
+  let worldNewMemberAdder = document.querySelectorAll('form.invite-new-member');
   if (worldNewMemberAdder != null){
     [].forEach.call(worldMemberAdder, function(form) {
       form.addEventListener('submit', sendInviteNewMember);
@@ -90,21 +90,21 @@ function addEventListeners() {
     removeFriend.addEventListener('submit', sendRemoveFriendRequest);
   });
   
-  let MemberAssigner = document.querySelectorAll('form#assign-member');
+  let MemberAssigner = document.querySelectorAll('form.assign-member');
   if (MemberAssigner != null){
     [].forEach.call(MemberAssigner, function(form) {
       form.addEventListener('submit', sendAssignMemberRequest);
     });
   }
 
-  let removeMemberFromTasks = document.querySelectorAll('form#remove-member-task');
+  let removeMemberFromTasks = document.querySelectorAll('form.remove-member-task');
   if(removeMemberFromTasks != null){
     removeMemberFromTasks.forEach(removeMemberFromTask => {
       removeMemberFromTask.addEventListener('submit', sendRemoveMemberFromTaskRequest);
     });
   }
 
-  let removeMemberFromTasksMobile = document.querySelectorAll('form#mobile-remove-member-task');
+  let removeMemberFromTasksMobile = document.querySelectorAll('form.mobile-remove-member-task');
   if(removeMemberFromTasksMobile != null){
     removeMemberFromTasksMobile.forEach(removeMemberFromTaskMobile => {
       removeMemberFromTaskMobile.addEventListener('submit', sendRemoveMemberFromTaskRequest);
@@ -115,14 +115,14 @@ function addEventListeners() {
   if(closePopup != null)
     closePopup.addEventListener('click', closeSearchedTaskPopup);
   
-  let removeMemberFromWorlds = document.querySelectorAll('form#remove-member-world');
+  let removeMemberFromWorlds = document.querySelectorAll('form.remove-member-world');
   if(removeMemberFromWorlds != null){
     removeMemberFromWorlds.forEach(removeMemberFromWorld => {
       removeMemberFromWorld.addEventListener('submit', sendRemoveMemberFromWorldRequest);
     });
   }
 
-  let removeMemberFromWorldsMobile = document.querySelectorAll('form#mobile-remove-member-world');
+  let removeMemberFromWorldsMobile = document.querySelectorAll('form.mobile-remove-member-world');
   if(removeMemberFromWorldsMobile != null){
     removeMemberFromWorldsMobile.forEach(removeMemberFromWorldMobile => {
       removeMemberFromWorldMobile.addEventListener('submit', sendRemoveMemberFromWorldRequest);
@@ -212,14 +212,14 @@ function addEventListeners() {
       window.history.back();
     });
 
-  let removeMemberFromProjects = document.querySelectorAll('form#remove-member-project');
+  let removeMemberFromProjects = document.querySelectorAll('form.remove-member-project');
   if(removeMemberFromProjects != null){
     removeMemberFromProjects.forEach(removeMemberFromProject => {
       removeMemberFromProject.addEventListener('submit', sendRemoveMemberFromProjectRequest);
     });
   }
 
-  let removeMemberFromProjectsMobile = document.querySelectorAll('form#mobile-remove-member-project');
+  let removeMemberFromProjectsMobile = document.querySelectorAll('form.mobile-remove-member-project');
   if(removeMemberFromProjectsMobile != null){
     removeMemberFromProjectsMobile.forEach(removeMemberFromProjectMobile => {
       removeMemberFromProjectMobile.addEventListener('submit', sendRemoveMemberFromProjectRequest);
@@ -288,7 +288,7 @@ function addEventListeners() {
   if (favouriter != null)
   favouriter.addEventListener('submit', sendFavoriteRequest);
 
-  let changeInviteType = document.querySelectorAll('#invite-outside-member');
+  let changeInviteType = document.querySelectorAll('.invite-outside-member');
   if (changeInviteType != null){
     [].forEach.call(changeInviteType, function(button) {
       button.addEventListener('click', changeToInviteOutsideMember);
