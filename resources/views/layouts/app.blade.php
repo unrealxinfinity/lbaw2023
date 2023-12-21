@@ -39,7 +39,7 @@
                 <h1><label tabindex=0 for="show-menu" class="cursor-pointer" role="button" aria-controls="menu" aria-expanded="false" title="Main Menu">☰</label></h1>
                 <a href="{{ url('') }}"><img class="tablet:h-8 h-4 object-cover" src="{{asset('minemax/MineMax.png')}}" alt="MineMax logo. Reads MINEMAX in minecraft font" title="Main Page"></a>
             </div>
-            @if(!(Auth::check() && Auth::user()->persistentUser->type_ === 'Blocked'))
+            @if((Auth::check() && Auth::user()->persistentUser->type_ !== 'Blocked'))
                 <div class="hidden mobile:flex items-center" id="computer-search">@include('form.main-search')</div>
             @endif
             @if (Auth::check())
