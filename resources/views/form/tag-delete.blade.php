@@ -3,8 +3,8 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
-            <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
+            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tag_id" value="{{ $tag->id }}">
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0">&times;</button></p>
         </fieldset>
     </form>
@@ -14,8 +14,8 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
-            <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
+            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tag_id" value="{{ $tag->id }}">
 
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0">&times;</button></p>
         </fieldset>
@@ -26,8 +26,8 @@
         <fieldset>
             <legend class="sr-only">Delete Tag </legend>
             @csrf
-            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}" required>
-            <input type="hidden" name="tag_id" value="{{ $tag->id }}" required>
+            <input type="hidden" id="tagName" name="tagName" value="{{$tag->name}}">
+            <input type="hidden" name="tag_id" value="{{ $tag->id }}">
 
             <p class="ml-1"><button class="deleteTagButton" type="button" tabindex="0">&times; </button></p>
         </fieldset>

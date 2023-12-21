@@ -16,7 +16,6 @@
                 @include('partials.tag', ['tags' => $world->tags,'type'=>'world'])
             </div>
         </div>
-        </div>
         <div class="relative flex text-left pt-1">
             @can('favorite', $world)
                 <form id="favorite">

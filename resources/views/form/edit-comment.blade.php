@@ -8,7 +8,7 @@
         <input type="hidden" name="type" value="{{ $type }}">
     
         <h3 class="my-0 mt-3"><label for ="comment-text">Comment <b class="text-red">*</b></label> </h3>
-        <textarea type="text" id="comment-text" name="text" class="max-h-52 min-h-[5em]" required tabindex="0"> {{ $comment->content }} </textarea>
+        <textarea id="comment-text" name="text" class="max-h-52 min-h-[5em]" required tabindex="0"> {{ $comment->content }} </textarea>
     
         <div class="flex h-fit items-center mt-2">
             <label for="submit-edit" hidden>Submit Edit</label>

@@ -28,7 +28,7 @@
         <h4> Comments: </h4>
         <ul>
             @foreach ($task->comments()->orderBy('id')->get() as $comment)
-                <li>@include('partials.comment', ['comment' => $comment, 'type' => 'task']) </li>
+                @include('partials.comment', ['comment' => $comment, 'type' => 'task'])
             @endforeach
         </ul>
         @can('edit', $task)

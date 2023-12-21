@@ -28,8 +28,8 @@
                 </div>
                 @if ($self ?? false)
                 <div id="change-picture-mc-username" class="form-post">
-                    <h2><label for="mc-username">...Or use your Minecraft face!</label></h2>
-                    <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
+                    <h2><label for="mc-username-text">...Or use your Minecraft face!</label></h2>
+                    <input type="text" id="mc-username-text" placeholder="MC Username">
                     <input id="mc-img-submit" class="button" type="submit" value="Confirm">
                 </div>
                 @endif
@@ -115,8 +115,8 @@
                 @if (Auth::user()->has_password)
                 @if (Auth::user()->persistentUser->type_=='Administrator')
                 <label type="hidden" for="old_password-{{ $member->id }}"></label>
-                <input type="hidden" id="old_password-{{ $member->id }}" type="password" class="old_password"
-                    name="old_password" value="{{ $member->persistentUser->user->password }}" required>
+                <input type="hidden" id="old_password-{{ $member->id }}" class="old_password"
+                    name="old_password" value="{{ $member->persistentUser->user->password }}">
                 @else
                 <h3 class="my-0"><label for="old_password-{{ $member->id }}">Old Password</label></h3>
                 <input id="old_password-{{ $member->id }}" type="password" class="old_password" name="old_password"
@@ -137,6 +137,7 @@
                 @if ($member->persistentUser->type_ != 'Blocked')
                 <button type="submit" class="button bg-dark text-red/80" formmethod="POST"
                     formaction="/members/{{ $member->persistentUser->user->username }}/block">Block</button>
+                <input type="text" name="block-reason" placeholder="Why?">
                 @else
                 <button type="submit" class="button bg-dark text-red/80" formmethod="POST"
                     formaction="/members/{{ $member->persistentUser->user->username }}/unblock">Unblock</button>

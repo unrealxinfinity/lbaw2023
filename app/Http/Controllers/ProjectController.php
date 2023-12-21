@@ -77,10 +77,10 @@ class ProjectController extends Controller
         $fields = $request->validated();
 
         $project = Project::findOrFail($project_id);
-        $member = User::where('username', $username)->first()->persistentUser->member;
 
         try
         {
+            $member = User::where('username', $username)->first()->persistentUser->member;
             $type = $fields['type'];
 
             $member->projects()->attach($project_id, ['permission_level' => $type]);
