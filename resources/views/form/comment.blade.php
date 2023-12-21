@@ -3,7 +3,7 @@
     <legend>Leave a Comment!</legend>
     @csrf
 
-    <input type="hidden" name="member" @if (Auth::user()->persistentUser->type_ === 'Member') value="{{ Auth::user()->persistentUser->member->id }}" @endif>
+    <input type="hidden" name="member" @if (Auth::check() && Auth::user()->persistentUser->type_ === 'Member') value="{{ Auth::user()->persistentUser->member->id }}" @endif>
     <input type="hidden" name="type" value="{{ $type }}">
 
     <h2><label for="comment-text-area">Comment</label></h2>
