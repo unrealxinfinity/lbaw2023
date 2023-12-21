@@ -1453,6 +1453,9 @@ function ShowNotificationsHandler(json,ev){
     notificationText.classList.add('text-white', 'h-fit', 'break-words'); 
     let notificationDate= document.createElement('p');
     notificationDate.classList.add('text-white');
+    const notificationImportance = document.createElement('span');
+    notificationImportance.textContent = "Importance: " + notification.level; 
+    notificationImportance.classList.add('ml-2', 'text-sm', 'text-gray-400');
     const notificationCloser = document.createElement('a');
     notificationCloser.href = `/api/notifications/${notification.id}`;
     notificationCloser.innerHTML = '&times;';
@@ -1471,6 +1474,7 @@ function ShowNotificationsHandler(json,ev){
     notificationText.textContent = notification.text;
     notificationDate.textContent = notification.date_;
     notificationTop.appendChild(notificationDate);
+    notificationTop.appendChild(notificationImportance);
     notificationTop.appendChild(notificationCloser);
     notificationContainer.appendChild(notificationTop);
     notificationContainer.appendChild(notificationText);
