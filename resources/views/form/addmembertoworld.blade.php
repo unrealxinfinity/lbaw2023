@@ -8,7 +8,7 @@
         <h3 class="my-0 mt-3"> <label for="username">Username <b class="text-red">*</b></label> </h3>
         <input type="text" class="username" name="username" id="username" placeholder="Username" required tabindex="0">
         
-        <h3 class="my-0 mt-3"> <label for="choose-role">Role</label> </h3>
+        <h3 class="my-0 mt-3"> <label for="choose-role">Role <b class="text-red">*</b></label> </h3>
         <select id="choose-role" name="type" class="type mt-1" required tabindex="0">
             <option value="" disabled selected>Choose a role</option>
             <option value="false">Member</option>

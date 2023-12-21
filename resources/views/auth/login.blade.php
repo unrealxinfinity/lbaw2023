@@ -30,11 +30,6 @@
         <button class="button w-fit mx-3" type="submit" tabindex="0"> Login </button>
         <a class="link self-center" href="{{ route('register') }}" tabindex="0">Register</a>
         </div>
-        @if (session('success'))
-            <p class="success">
-                {{ session('success') }}
-            </p>
-        @endif
     </fieldset>
 </form>
 <form method="GET" action="{{ route('github-login') }}">
