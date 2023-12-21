@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta property='og:title' content='MineMax' />
+        <meta property='og:image' content='{{asset('minemax/MineMax.png')}}' />
+        <meta property='og:description' content='MineMax is a Minecraft web application that allows you to create your own worlds and projects.' />
+        <meta property='og:url' content='{{url('https://lbaw2314.lbaw.fe.up.pt')}}' />
+        <meta property='og:type' content='website' />
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
