@@ -53,7 +53,7 @@
             @endcanany
         </div>
     </header>
-    <section id="search-project">@include('form.search-project', ['world' => $world])</section>
+    @if (Auth::check()) <section id="search-project">@include('form.search-project', ['world' => $world])</section> @endif
     <section id="projects">
     @if ($world->projects()->whereStatus('Active')->exists())
         <h2 class="mt-10" id="Ongoing-projects"> ONGOING PROJECTS </h2>
