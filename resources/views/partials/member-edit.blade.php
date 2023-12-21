@@ -14,19 +14,19 @@
         <h2 class="text-center text-green"><a href="/members/{{ $member->persistentUser->user->username }}">@ {{ $member->persistentUser->user->username }}</a></h2>
     @endif
     <header class="flex justify-start tablet:my-5 my-2 ml-1">
-        <form id="member-edit-picture" method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
+        <form class="member-edit-picture" method="POST" action="/members/upload/{{ $member->id }}" enctype="multipart/form-data">
             <fieldset class="grid mobile:grid-cols-2 mobile:grid-rows-none grid-rows-2">
                 <legend>Upload New Profile Picture</legend>
                 @csrf
                 @method('POST')
                 <div class="flex flex-col">
-                    <label for="edit-img">
-                        <h1><label class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</label></h1>
-                        <img id="preview-img" class="mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square hover:opacity-50 object-cover"
+                    <label for="{{"edit-img-" . $member->id}}">
+                        <span class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</span>
+                        <img class="mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square hover:opacity-50 object-cover"
                             src={{$member->getProfileImage()}}
                             alt="{{$member->persistentUser->user->username}} profile picture">
                     </label>
-                    <input id="edit-img" class="hidden" name="file" type="file" required>
+                    <input id="{{"edit-img-" . $member->id}}" class="hidden" name="file" type="file" required>
                     <input name="type" type="hidden" value="profile">
                     <input class="button px-1 my-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload profile picture">
                     @if ($errors->has('file'))
@@ -46,7 +46,7 @@
         </form>
     </header>
     <div class="form-outline m-0 mb-5">
-        <form id="member-edit-details" class="edit-member" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
+        <form @if (Auth::user()->persistentUser->type_=='Member') id="member-edit-details" @endif class="edit-member" method="POST" action="{{ route('update-member', ['username' => $member->persistentUser->user->username]) }}">
             <fieldset class="form-post">
                 <legend>Edit Details</legend>
                 @csrf
@@ -123,7 +123,6 @@
                 @endif
                 @if (Auth::user()->has_password)
                 @if (Auth::user()->persistentUser->type_=='Administrator')
-                <label type="hidden" for="old_password-{{ $member->id }}"></label>
                 <input type="hidden" id="old_password-{{ $member->id }}" class="old_password"
                     name="old_password" value="{{ $member->persistentUser->user->password }}">
                 @else
