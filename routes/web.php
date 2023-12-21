@@ -60,6 +60,10 @@ Route::get('/contacts', function () {
     return view('pages.contacts');
 })->name('contacts');
 
+Route::get('/main-features', function () {
+    return view('pages.main-features');
+})->name('main-features');
+
 Route::get('/login/github', function () {
     return Socialite::driver('github')->redirect();
 })->name('github-login');
