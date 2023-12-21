@@ -1793,10 +1793,9 @@ function showRedDot(){
   let showDot= sessionStorage.getItem('showDot') == 'true';
   if(showDot){
     let redDot=document.getElementById('redDot');
-    if(redDot != null) redDot.remove('hidden');
+    if(redDot != null) redDot.classList.remove('hidden');
   }
   else{
-    
     let redDot=document.getElementById('redDot');
     if(redDot != null) redDot.classList.add('hidden');
   }
