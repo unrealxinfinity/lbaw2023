@@ -1,4 +1,4 @@
-<form class = "new-task form-outline" method="POST" action="{{ route('create-task') }}">
+<form class = "new-task form-outline" method="POST" action="{{ route('api-create-task') }}">
     <fieldset class="form-post">
         <legend>Create a Task</legend>
         @csrf
