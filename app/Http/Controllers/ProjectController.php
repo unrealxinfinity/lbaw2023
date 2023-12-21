@@ -16,10 +16,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\NotificationController;
 use App\Models\ProjectPermission;
-use App\Policies\ProjectPolicy;
 use Illuminate\Support\Facades\Auth;
 
 

@@ -7,7 +7,6 @@ use App\Models\Member;
 use App\Models\Project;
 use App\Models\World;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller

@@ -8,7 +8,6 @@ use App\Models\Project;
 use App\Http\Requests\CreateProjectTagRequest;
 use App\Http\Requests\CreateWorldTagRequest;
 use App\Http\Requests\CreateMemberTagRequest;
-use App\Events\CreateTag;
 use App\Models\World;
 use App\Models\Member;
 use App\Http\Controllers\NotificationController;

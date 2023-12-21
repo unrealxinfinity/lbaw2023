@@ -8,7 +8,6 @@ use App\Models\Member;
 use App\Models\World;
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\Tag;
 use App\Models\UserType;
 use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller

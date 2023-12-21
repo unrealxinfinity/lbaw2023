@@ -27,7 +27,6 @@ use App\Http\Requests\TransferOwnershipRequest;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\AssignWorldAdminRequest;
-use App\Models\Tag;
 use App\Models\UserType;
 
 class WorldController extends Controller
