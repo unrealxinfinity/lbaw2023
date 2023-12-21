@@ -27,24 +27,15 @@ class SearchController extends Controller
             $arr[$i] = $arr[$i] . ':*';
         }
         $searchedText = implode(' | ', $arr);
-        $tasks= collect();
-        if(Auth::check()){
-            $member = Member::where('user_id', auth()->user()->id)->first(); 
-            $memberProjects = $member->projects;
-            foreach($memberProjects as $project){
-                $id = $project->id;
-                $tasks = Task::select('id','title','description','due_at','status','effort','priority')
-                ->whereRaw("searchedTasks @@ to_tsquery('english', ?) AND project_id = ?", [$searchedText, $id])
-                ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
-                ->get();
-                $tasks = $tasks->merge($tasks);
-            }
-        }
+        
+        $tasks = (Auth::check())?Task::select('id','title','description','due_at','status','effort','priority')
+            ->whereRaw("searchedTasks @@ to_tsquery('english', ?)", [$searchedText])
+            ->orderByRaw("ts_rank(searchedTasks, to_tsquery('english', ?)) DESC", [$searchedText])
+            ->get():[];
         $projects = Project::select('id', 'name', 'description', 'status', 'picture')
             ->whereRaw("searchedProjects @@ to_tsquery('english', ?)", [$searchedText])
             ->orderByRaw("ts_rank(searchedProjects, to_tsquery('english', ?)) DESC", [$searchedText])
             ->get();
-        
         $members = Member::select('members.id', 'members.user_id', 'members.picture', 'user_info.username','members.name', 'members.email', 'members.birthday', 'members.description')
             ->join('user_info', 'members.user_id', '=', 'user_info.id')
             ->whereRaw('searchMembers @@ to_tsquery(\'english\', ?) OR searchUsername @@ to_tsquery(\'english\', ?)', [$searchedText,$searchedText])
