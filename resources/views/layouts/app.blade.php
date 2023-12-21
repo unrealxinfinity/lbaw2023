@@ -42,17 +42,17 @@
                 <ul id="navbar-right" class="items-center flex">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     @if(Auth::user()->persistentUser->type_ === 'Member')
-                        <li id="notification-button" class="link relative" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications" title="View Notifications">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                        <li class="py-2 mobile:mx-5 relative cursor-default" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications" title="View Notifications">
+                            <svg id="notification-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 cursor-pointer">
                                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
                             </svg>
                             <span id="redDot" class="bg-red rounded-full w-2 h-2 absolute top-0 right-0 hidden"></span>
-                            <div id="notificationArea" class="absolute hidden z-10 bg-dark right-0 top-10 p-1 rounded-lg">
-                                <div class="flex justify-between">
-                                    <h2 class="text-white py-1 mx-5">Notifications</h2>
-                                    <button id="clearNotifications" class="link">Clear Notifications</button>
+                            <div id="notificationArea" class="absolute hidden z-10 bg-dark right-0 top-10 p-1 rounded-lg mobile:w-60 desktop:w-72 w-48">
+                                <div class="flex justify-between items-center">
+                                    <h2 class="py-2 mobile:mx-3 mx-2">Notifications</h2>
+                                    <button id="clearNotifications" class="link mx-2">Clear Notifications</button>
                                 </div>
-                                <ul id="notificationList" class ="max-h-96 max-w-xs overflow-y-auto break-words"></ul>
+                                <ul id="notificationList" class ="max-h-96 overflow-y-auto break-words"></ul>
                             </div>
                         </li>
                     @endif

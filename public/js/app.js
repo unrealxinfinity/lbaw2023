@@ -1417,7 +1417,17 @@ async function closeNotification(ev) {
 
   const json = await response.json();
 
-  if (response.ok) container.remove();
+  if (response.ok) {
+    container.remove();
+    let list = document.getElementById('notificationList')
+    if (list.innerHTML=='') {
+      document.getElementById('clearNotifications').classList.add('hidden');
+      const h3 = document.createElement('h3');
+      h3.classList.add('p-2', 'ml-1')
+      h3.textContent = "You have no notification yet";
+      list.appendChild(h3);
+    }
+  }
 }
 
 async function sendRequestAccept(ev) {
@@ -1448,7 +1458,7 @@ function ShowNotificationsHandler(json,ev){
   const notificationPopup = document.getElementById('notificationArea');
   let notifications = json.notifications;
   popup.innerHTML = "";
-  for(let notification of notifications){    
+  for(let notification of notifications){
     let notificationText = document.createElement('h3');
     notificationText.classList.add('text-white', 'h-fit', 'break-words'); 
     let notificationDate= document.createElement('p');
@@ -1500,6 +1510,15 @@ function ShowNotificationsHandler(json,ev){
     } else {
       popup.insertBefore(notificationContainer, popup.firstChild);
     }
+  }
+  if (notifications.length==0) {
+    const h3 = document.createElement('h3');
+    h3.classList.add('p-2', 'ml-1')
+    h3.textContent = "You have no notification yet";
+    popup.appendChild(h3);
+    document.getElementById('clearNotifications').classList.add('hidden');
+  } else {
+    document.getElementById('clearNotifications').classList.remove('hidden');
   }
   if(ev != null){
     notificationPopup.classList.toggle('hidden'); 
@@ -1726,7 +1745,11 @@ async function sendClearNotificationsRequest(ev){
 function clearNotificationsHandler(json){
   let popup = document.getElementById("notificationList");
   popup.innerHTML = "";
-
+  document.getElementById('clearNotifications').classList.add('hidden');
+  const h3 = document.createElement('h3');
+  h3.classList.add('p-2', 'ml-1')
+  h3.textContent = "You have no notification yet";
+  popup.appendChild(h3);
 }
  // Get member belongings in ajax on every page load for pusher notifications
 async function getMemberBelongingsRequest(ev){
