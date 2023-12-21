@@ -361,7 +361,14 @@ function archiveProjectAlert(ev) {
   
 async function replaceImage(ev) {
   const username = document.getElementById('mc-username-text').value;
-  const img = await fetch('https://mc-heads.net/avatar/${username}.png');
+  const img = await fetch(`https://mc-heads.net/avatar/${username}.png`, {
+    mode: "cors",
+    headers: {
+      "Access-Control-Request-Method": "GET",
+      "Access-Control-Request-Headers": "Content-Type",
+      "sec-fetch-dest": "image",
+    },
+  });
   const blob = await img.blob();
   const myFile = new File([blob], 'profile.png');
 
