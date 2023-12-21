@@ -21,7 +21,7 @@
                 @method('POST')
                 <div class="flex flex-col">
                     <label for="{{"edit-img-" . $member->id}}">
-                        <span class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none">&#9998;</span>
+                        <span class="absolute mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square text-center flex flex-col justify-around pointer-events-none text-bMobile tablet:text-bTablet desktop:text-bDesktop">&#9998;</span>
                         <img class="mobile:h-28 tablet:h-32 desktop:h-40 h-24 aspect-square hover:opacity-50 object-cover"
                             src={{$member->getProfileImage()}}
                             alt="{{$member->persistentUser->user->username}} profile picture">
