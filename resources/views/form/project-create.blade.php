@@ -15,7 +15,7 @@
     @endif
 
     <h3 class="my-0 mt-3"> <label for="new-project-description">Description <b class="text-red">*</b></label></h3>
-    <textarea type="text" name="description" id="new-project-description" placeholder="Some non-blank text" required tabindex="0"> </textarea>
+    <textarea name="description" id="new-project-description" placeholder="Some non-blank text" required tabindex="0"> </textarea>
     @if ($errors->has('description'))
     <span class="error">
       {{ $errors->first('description') }}

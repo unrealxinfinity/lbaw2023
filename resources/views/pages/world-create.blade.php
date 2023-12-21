@@ -20,7 +20,7 @@
         @endif
 
         <h3 class="my-0 mt-3"> <label for="description">Description <b class="text-red">*</b></label> </h3>
-        <textarea type="text" name="description"  id="description" placeholder="Some non-blank text" required> </textarea>
+        <textarea name="description"  id="description" placeholder="Some non-blank text" required> </textarea>
         @if ($errors->has('description'))
         <span class="error">
           {{ $errors->first('description') }}

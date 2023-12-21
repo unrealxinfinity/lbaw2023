@@ -10,6 +10,7 @@
         
         <h3 class="my-0 mt-3"> <label for="choose-role">Role</label> </h3>
         <select id="choose-role" name="type" class="type mt-1" required tabindex="0">
+            <option value="" disabled selected>Choose a role</option>
             <option value="false">Member</option>
             <option value="true">World Administrator</option>
         </select>

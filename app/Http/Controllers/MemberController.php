@@ -253,7 +253,7 @@ class MemberController extends Controller
         }
 
         $user->persistentUser->type_ = UserType::Blocked->value;
-        $user->persistentUser->block_reason = $fields['block_reason'] ?? "No reason given";
+        $user->persistentUser->block_reason = $fields['block-reason'] ?? "No reason given";
         $user->persistentUser->save();
 
         return redirect()->back()->withSuccess('User blocked')->withFragment($username);

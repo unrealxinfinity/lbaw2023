@@ -1,4 +1,4 @@
-<article id="comment" class="outline outline-1 outline-white/20 bg-black bg-opacity-80 p-3 my-3 break-words overflow-hidden rounded" data-id = "{{ $comment->id }}">
+<li id="comment" class="outline outline-1 outline-white/20 bg-black bg-opacity-80 p-3 my-3 break-words overflow-hidden rounded" data-id = "{{ $comment->id }}">
     <header class="h-10 flex">
         <div class="grow-[1] pt-0.5">
             @include('partials.member', ['member' => $comment->member, 'main' => false])
@@ -12,4 +12,4 @@
     <div class="comment-edit hidden">
         @include('form.edit-comment', ['comment' => $comment, 'type' => $type])
     </div>
-</article>
+</li>

@@ -40,7 +40,6 @@
             @endif
             @if (Auth::check())
                 <ul id="navbar-right" class="items-center flex">
-                    <meta name="csrf-token" content="{{ csrf_token() }}">
                     @if(Auth::user()->persistentUser->type_ === 'Member')
                         <li class="py-2 mobile:mx-5 relative cursor-default" tabindex="0" role="button" aria-controls="notifications" aria-expanded="false" aria-label="Open notifications" title="View Notifications">
                             <svg id="notification-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 cursor-pointer">
@@ -59,7 +58,7 @@
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <li class="desktop:mx-0 mx-3"><a id="profile"  href="{{ url('members/' . Auth::user()->username) }}">
                                 <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture" title="{{Auth::user()->username}}">
-                            </li>
+                            </a></li>
                         {{-- @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator') --}}
                         {{--    <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a> --}}
                         @endif
@@ -82,7 +81,7 @@
                 <h1 class="text-darkGreen cursor-pointer mx-3" id="session-close">&times;</h1>
             </div>
         @endif
-        <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" type="checkbox" class="sr-only peer"/>
+        <input id="show-menu" tabindex=0 role="button" aria-controls="menu" aria-expanded="false" aria-pressed="true" type="checkbox" class="sr-only peer"/>
         <ul id="menu" class="fixed bg-black text-white list-none text-center items-center flex flex-col justify-start top-16 bottom-5 py-3 w-0 peer-checked:mobile:w-80 peer-checked:w-full transition-width duration-500 overflow-x-hidden overflow-y-auto z-10">
             <li class="mobile:hidden visible flex flex-col w-full items-center" id="mobile-search"><hr class="underline text-white/60 w-2/3 my-3"> </li>
             <li class="menu-item"><a href="/">Home Page</a></li>
