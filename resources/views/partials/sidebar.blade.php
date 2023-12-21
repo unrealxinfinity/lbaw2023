@@ -9,7 +9,7 @@
         <ul id="{{$prefix . 'project-leaders'}}" class="project-leaders">  
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
             @if ($member->persistentUser->type_ != 'Deleted')
-                <li class="h-5 flex items-center justify-between">
+                <li class="h-5 flex items-center justify-between my-0.5">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @cannot('assignOwn',$member)
                         <div class="flex items-center child:mx-1">
@@ -24,12 +24,12 @@
                 </li>
             @endif
             @endforeach
-        </div>
+        </ul>
         <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
         <ul id="{{$prefix . 'members'}}" class="members">
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
             @if ($member->persistentUser->type_ != 'Deleted')
-                <li class="h-5 flex items-center justify-between">
+                <li class="h-5 flex items-center justify-between my-0.5">
                     @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn', $member)
                         <div class="flex items-center child:mx-1">
@@ -59,7 +59,7 @@
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
                 @if ($member->persistentUser->type_ != 'Deleted')
                     @if ($member->id != $thing->owner()->get()->first()->id)
-                        <li class="h-5 flex items-center justify-between">
+                        <li class="h-5 flex items-center justify-between my-0.5">
                             @include('partials.member', ['member' => $member, 'main' => false])
                             @cannot('assignOwn',$member)
                                 <div class="flex items-center child:mx-1">
@@ -80,7 +80,7 @@
             <ul id="{{$prefix . 'members'}}">
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
                 @if ($member->persistentUser->type_ != 'Deleted')
-                    <li class="h-5 flex items-center justify-between">
+                    <li class="h-5 flex items-center justify-between my-0.5">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn',$member)
                             <div class="flex items-center child:mx-1">
@@ -97,5 +97,5 @@
                 @endforeach
             </ul>
         @endif
-    </ul>
+        </div>
 </article>

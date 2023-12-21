@@ -747,9 +747,9 @@ function changeToInviteOutsideMember(ev) {
   }
 
   function addMemberHandler(json) {
-    const list = document.querySelectorAll('ul.membersof');
-    [].forEach.call(list, function(ul) {
-      let form = ul.parentElement.querySelector('form.add-member fieldset');
+    const list = document.querySelectorAll('.membersof');
+    [].forEach.call(list, function(membersof) {
+      let form = membersof.parentElement.querySelector('form.add-member fieldset');
       if (form==null) form = document.querySelector('form.add-member fieldset');
       const error = form.querySelector('span.error');
       if (error !== null)
@@ -761,7 +761,7 @@ function changeToInviteOutsideMember(ev) {
       {
         const span = document.createElement('span');
         span.classList.add('error', 'col-span-2');
-        const members =  [... ul.querySelectorAll('article.member h4 a')].map(x => x.textContent);
+        const members =  [... membersof.querySelectorAll('article.member h4 a')].map(x => x.textContent);
         const index = members.find(x => x === json.username);
         if (index === undefined) span.textContent = 'Please check that ' + json.username + ' belongs to this ' + json.child + '\'s ' + json.parent + '.';
         else span.textContent = json.username + ' is already a member of this ' + json.child + '.';
@@ -864,10 +864,10 @@ function changeToInviteOutsideMember(ev) {
       }
       
       if (json.task){
-        ul.appendChild(li);
+        membersof.appendChild(li);
       } else{
         li.appendChild(options_div);
-        let section = json.is_leader? ul.querySelector('.project-leaders'):ul.querySelector('.members');
+        let section = json.is_leader? membersof.querySelector('.project-leaders'):membersof.querySelector('.members');
         section.appendChild(li);
       }
       
@@ -1362,7 +1362,7 @@ async function sendRemoveMemberFromTaskRequest(ev) {
 }
 
 function removeMemberFromThingHandler(data) {
-  let element = document.querySelectorAll('ul.membersof [data-id="' + data.member_id + '"]');
+  let element = document.querySelectorAll('.membersof [data-id="' + data.member_id + '"]');
   [].forEach.call(element, function(member) {
     member.parentElement.remove();
   });
