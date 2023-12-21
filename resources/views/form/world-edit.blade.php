@@ -13,6 +13,11 @@
         <input id="edit-img" class="hidden" name="file" type="file" required>
         <input name="type" type="hidden" value="world">
         <input tabindex="0" class="button px-1 tablet:ml-5 ml-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload world picture">
+        @if ($errors->has('file'))
+            <span class="error">
+                {{ $errors->first('file') }}
+            </span>
+        @endif
     </fieldset>
 </form>
     

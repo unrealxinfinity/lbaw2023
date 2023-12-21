@@ -13,6 +13,11 @@
         <input id="edit-img" class="hidden" name="file" type="file" required tabindex="0"> 
         <input name="type" type="hidden" value="project">
         <input class="button px-1 tablet:ml-5 ml-2 mobile:w-28 tablet:w-32 desktop:w-40 w-24" type="submit" value="Upload project picture" tabindex="0">
+        @if ($errors->has('file'))
+            <span class="error">
+                {{ $errors->first('file') }}
+            </span>
+        @endif
     </fieldset>
 </form>
 <form class="edit-project form-outline outline-none" method="POST" action="{{ route('update-project', ['id' => $project->id]) }}">
