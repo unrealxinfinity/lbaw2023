@@ -197,6 +197,7 @@ Route::controller(TaskController::class)->group(function () {
     Route::post('/api/tasks/{id}/{username}', 'assignMember');
     Route::delete('/api/tasks/{id}/{username}', 'removeMember');
     Route::post('/tasks/{id}/comment', 'comment')->name('task-comment');
+    Route::delete('/tasks/{id}', 'delete')->name('delete-task');
 });
 
 Route::controller(CommentController::class)->group(function () {
