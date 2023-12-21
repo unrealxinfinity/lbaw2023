@@ -2,7 +2,7 @@
     <div class="flex">
         <img src={{$world->getImage()}} alt="{{$world->name}} image" class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
         <div class="flex flex-col self-center ml-3 w-11/12">
-            <h2 class="break-words"><a @if (Auth::user()->persistentUser->type_ != 'Blocked')href="/worlds/{{ $world->id }}"@endif>{{ $world->name }}</a></h2>
+            <h2 class="break-words"><a @if (!Auth::check() || (Auth::check() && Auth::user()->persistentUser->type_ != 'Blocked'))href="/worlds/{{ $world->id }}"@endif>{{ $world->name }}</a></h2>
             <h4 class="break-words"> {{ $world->description }} </h4>
         </div>
     </div>

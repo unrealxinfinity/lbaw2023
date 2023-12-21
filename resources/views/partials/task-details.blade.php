@@ -75,18 +75,28 @@
             @endcan
         @endif
     @else
-        <div id="{{$prefix . 'task-see-details'}}" class = "edit-details grid grid-cols-3 gap-3">
-            <h3 class="col-span-1">Due At</h3>
-            <h3 class="col-span-2">{{$task->due_at}}</h3>
-            <h3 class="col-span-1">Priority</h3>
-            <h3 class="col-span-2">{{$task->priority}}</h3>
-            <h3 class="col-span-1">Effort</h3>
-            <h3 class="col-span-2">{{$task->effort}}</h3>
-            <h3 class="col-span-1">Status</h3>
-            <h3 class="col-span-2">{{$task->status}}</h3>
-            <h3 class="col-span-1">Created At</h3>
-            <h3 class="col-span-2">{{$task->created_at}}</h3>
-        </div>
+        <ul id="{{$prefix . 'task-see-details'}}" class = "edit-details grid grid-cols-3 gap-3">
+            <li>
+                <h3 class="col-span-1">Due At</h3>
+                <h3 class="col-span-2">{{$task->due_at}}</h3>
+            </li>
+            <li>
+                <h3 class="col-span-1">Priority</h3>
+                <h3 class="col-span-2">{{$task->priority}}</h3>
+            </li>
+            <li>
+                <h3 class="col-span-1">Effort</h3>
+                <h3 class="col-span-2">{{$task->effort}}</h3>
+            </li>
+            <li>
+                <h3 class="col-span-1">Status</h3>
+                <h3 class="col-span-2">{{$task->status}}</h3>
+            </li>
+            <li>
+                <h3 class="col-span-1">Created At</h3>
+                <h3 class="col-span-2">{{$task->created_at}}</h3>
+            </li>
+        </ul>
         <h2 class="mt-7 mb-2">Assigned to</h2>
         <ul id="{{$prefix . 'members-assigned'}}" class="membersof">
             @foreach($task->assigned()->orderBy('id')->get() as $member)
