@@ -15,9 +15,13 @@
         </fieldset>
     </form>
     <section id="worlds">
-        {{ $worlds->links() }}
-        @each('partials.myworlds', $worlds, 'world')
-        {{ $worlds->links() }}
+        @if (count($worlds)>0)
+            {{ $worlds->links() }}
+            @each('partials.myworlds', $worlds, 'world')
+            {{ $worlds->links() }}
+        @else
+            <h1 class="mobile:m-10 m-5"> No results found <br> Try searching for something else </h1>
+        @endif
     </section>
 
 @endsection
