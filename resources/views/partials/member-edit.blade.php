@@ -28,8 +28,8 @@
                 </div>
                 @if ($self ?? false)
                 <div id="change-picture-mc-username" class="form-post">
-                    <h2><label for="mc-username">...Or use your Minecraft face!</label></h2>
-                    <input type="text" id="mc-username-text" placeholder="MC Username" id="mc-username">
+                    <h2><label for="mc-username-text">...Or use your Minecraft face!</label></h2>
+                    <input type="text" id="mc-username-text" placeholder="MC Username">
                     <input id="mc-img-submit" class="button" type="submit" value="Confirm">
                 </div>
                 @endif
