@@ -34,7 +34,7 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => 'https://lbaw2314.fe.up.pt/login/callback'
+        'redirect' => 'https://lbaw2314.lbaw.fe.up.pt/login/callback'
     ]
 
 ];
