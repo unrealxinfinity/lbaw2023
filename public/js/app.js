@@ -138,16 +138,16 @@ function addEventListeners() {
     let currentScroll = document.documentElement.scrollTop;
     let showMenu = document.querySelector('#show-menu');
     let notificationArea= document.querySelector('#notificationArea');
-    let showNotif;
+    let showNotif = true;
+    let sessionMessage = document.querySelector('#session-message');
     if(notificationArea != null){
       showNotif = document.querySelector('#notificationArea').classList.contains('hidden');
     }
     if (currentScroll > lastScrollTop) {
       // Scroll down
-      if (!showMenu.checked && showNotif) {
+      if (!showMenu.checked && showNotif && sessionMessage==null) {
       document.querySelector('#navbar').classList.remove('translate-y-0');
       document.querySelector('#navbar').classList.add('-translate-y-full');
-
       }
     } else {
       // Scroll up
@@ -476,7 +476,7 @@ function changeToInviteOutsideMember(ev) {
 
         }, 2000);
         Swal.fire({
-          title:'Account Successfully deleted!',
+          title:'Account Successfully Deleted!',
           icon: "success",
           showConfirmButton: false,
         });
