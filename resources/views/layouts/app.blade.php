@@ -57,8 +57,8 @@
                     @endif
                         @if (Auth::user()->persistentUser->type_ === 'Member' || Auth::user()->persistentUser->type_ === 'Blocked') 
                             <li class="desktop:mx-0 mx-3"><a id="profile"  href="{{ url('members/' . Auth::user()->username) }}">
-                                <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture">
-                            </a></li>
+                                <img class="h-10 w-10" src="{{ Auth::user()->persistentUser->member->getProfileImage() }}" alt="{{ Auth::user()->username }} profile picture" title="{{Auth::user()->username}}">
+                            </li>
                         {{-- @elseif (Auth::check() && Auth::user()->persistentUser->type_=='Administrator') --}}
                         {{--    <a href="/admin" class="button mr-3 desktop:mr-0">Admin Page</a> --}}
                         @endif
