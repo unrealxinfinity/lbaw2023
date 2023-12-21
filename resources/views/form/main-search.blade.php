@@ -5,7 +5,7 @@
             @csrf
 
             <label class="sr-only" for="main-search-anything">Search for anything!</label>
-            <input type="text" id="main-search-anything" name="anything" placeholder="Search anything" required tabindex="0">
+            <input type="text" id="main-search-anything" name="anything" placeholder="Search anything" tabindex="0">
 
             <label hidden for="mainSearch-typeFilter">Filter by type</label>
             <select id="mainSearch-typeFilter" name="typeFilter" hidden>
