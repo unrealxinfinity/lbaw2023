@@ -2,7 +2,7 @@
     <div class="flex">
         <img src={{$friend->getProfileImage()}} alt="{{$friend->persistentUser->user->username}} image" class="mobile:h-14 tablet:h-16 desktop:h-20 h-12 aspect-square">
         <div class="flex flex-col self-center ml-3 w-11/12">
-            <h2 class="break-words"><a href="/members/{{ $friend->id }}">{{ $friend->persistentUser->user->username }}</a></h2>
+            <h2 class="break-words"><a href="/members/{{ $friend->persistentUser->user->username }}">{{ $friend->persistentUser->user->username }}</a></h2>
             <h4 class="break-words"> {{ $friend->description }} </h4>
         </div>
     </div>
