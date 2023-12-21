@@ -8,6 +8,7 @@
         <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1"> Project Leaders </h3>
         <ul id="{{$prefix . 'project-leaders'}}" class="project-leaders">  
             @foreach($thing->members()->where('permission_level', '=', 'Project Leader')->orderBy('id')->get() as $member)
+            @if ($member->persistentUser->type_ != 'Deleted')
                 <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                     @cannot('assignOwn',$member)
@@ -21,11 +22,13 @@
                         </div>
                     @endcannot
                 </li>
+            @endif
             @endforeach
         </ul>
         <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
         <ul id="{{$prefix . 'members'}}" class="members">
             @foreach($thing->members()->where('permission_level', '=', 'Member')->orderBy('id')->get() as $member)
+            @if ($member->persistentUser->type_ != 'Deleted')
                 <li class="h-5 flex items-center justify-between">
                     @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn', $member)
@@ -39,6 +42,7 @@
                         </div>
                         @endcannot
                 </li>
+            @endif
             @endforeach
         </ul>
         @endif
@@ -53,6 +57,7 @@
             <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> World Admins </h3>
             <ul id="{{$prefix . 'world-admins'}}">    
                 @foreach($thing->members()->where('is_admin', '=', 'true')->orderBy('id')->get() as $member)
+                @if ($member->persistentUser->type_ != 'Deleted')
                     @if ($member->id != $thing->owner()->get()->first()->id)
                         <li class="h-5 flex items-center justify-between">
                             @include('partials.member', ['member' => $member, 'main' => false])
@@ -68,11 +73,13 @@
                             @endcannot
                         </li>
                     @endif
+                @endif
                 @endforeach
             </ul>
             <h3 class="decoration-green underline underline-offset-4 decoration-2 mb-1 mt-4"> Members </h3>
             <ul id="{{$prefix . 'members'}}">
                 @foreach($thing->members()->where('is_admin', '=', 'false')->orderBy('id')->get() as $member)
+                @if ($member->persistentUser->type_ != 'Deleted')
                     <li class="h-5 flex items-center justify-between">
                         @include('partials.member', ['member' => $member, 'main' => false])
                         @cannot('assignOwn',$member)
@@ -86,6 +93,7 @@
                             </div>
                         @endcannot
                     </li>
+                @endif
                 @endforeach
             </ul>
         @endif

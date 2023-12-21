@@ -71,7 +71,7 @@
     @endif
     @else
     <header class="h-fit flex justify-start">
-        <img src="{{$member->getProfileImage()}}" alt="{{$member->persistentUser->user->username}} profile picture" class="h-5 aspect-square mr-3 object-cover">
+        <img src="{{$member->getProfileImage()}}" alt="{{$member->persistentUser->user->username ?? ''}} profile picture" class="h-5 aspect-square mr-3 object-cover">
         @if ($member->persistentUser->type_ == 'Member' || $member->persistentUser->type_ == 'Blocked') <h4 class="self-center"><a href="/members/{{ $member->persistentUser->user->username }}">{{ $member->persistentUser->user->username }}</a></h4>
         @elseif ($member->persistentUser->type_ == 'Deleted') <h4 class="self-center">deleted</h4>
         @endif

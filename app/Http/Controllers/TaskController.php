@@ -93,9 +93,9 @@ class TaskController extends Controller
         $request->validated();
 
         $task = Task::findOrFail($task_id);
-        $member = User::where('username', $username)->first()->persistentUser->member;
 
         try {
+            $member = User::where('username', $username)->first()->persistentUser->member;
             $member->tasks()->attach($task_id);
             $can_remove = $this->authorize('assignMember', $task);
             NotificationController::TaskNotification($task,$task->project_id,' assigned to member '.$username);

@@ -636,16 +636,16 @@ function changeToInviteOutsideMember(ev) {
 
   function showEditComment(ev) {
     ev.preventDefault();
-    this.closest('article').querySelector('h4.comment-content').classList.add('hidden');
-    this.closest('article').querySelector('div.comment-edit').classList.remove('hidden');
+    this.closest('li').querySelector('h4.comment-content').classList.add('hidden');
+    this.closest('li').querySelector('div.comment-edit').classList.remove('hidden');
     this.classList.add('hidden');
   }
 
   function hideEditComment(ev) {
     ev.preventDefault();
-    this.closest('article').querySelector('h4.comment-content').classList.remove('hidden');
+    this.closest('li').querySelector('h4.comment-content').classList.remove('hidden');
     this.closest('div.comment-edit').classList.add('hidden');
-    this.closest('article').querySelector('button.show-edit').classList.remove('hidden');
+    this.closest('li').querySelector('button.show-edit').classList.remove('hidden');
   }
 
   function bigBoxDragOverHandler(ev) {
