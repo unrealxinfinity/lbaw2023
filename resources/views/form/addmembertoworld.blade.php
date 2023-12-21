@@ -2,7 +2,7 @@
     <fieldset class="form-post">
         <legend>Invite Member</legend>
         @csrf
-        <h3>Do you want to invite someone outside MineMax? <button tabindex=0 id="invite-outside-member" type="button" class="cursor-pointer text-green underline">Change Here</button></h3>
+        <h3>Do you want to invite someone outside MineMax? <button tabindex=0 id="invite-outside-member" type="button" class="cursor-pointer text-green underline">Invite someone outside MineMax</button></h3>
         <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}" tabindex="0">
     
         <h3 class="my-0 mt-3"> <label for="username">Username <b class="text-red">*</b></label> </h3>
@@ -22,7 +22,7 @@
     <fieldset class="form-post">
         <legend>Invite outside member</legend>
         @csrf
-        <h3>Do you want to invite someone inside MineMax? <button tabindex=0 id="invite-outside-member" type="button" class="cursor-pointer text-green underline">Change Here</button></h3>
+        <h3>Do you want to invite someone inside MineMax? <button tabindex=0 id="invite-outside-member" type="button" class="cursor-pointer text-green underline">Invite someone inside MineMax</button></h3>
         <input type="hidden" class="world_id" name="world_id" value="{{ $world->id }}" tabindex="0">
     
         <h3 class="my-0 mt-3"> <label for="email">Email <b class="text-red">*</b></label> </h3>
