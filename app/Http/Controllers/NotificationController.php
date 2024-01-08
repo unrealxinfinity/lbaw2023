@@ -12,7 +12,7 @@ use App\Models\World;
 use App\Events\CreateProjectNotification;
 use App\Events\CreateTagNotification;
 use App\Events\CreateTaskNotification;
-use App\Events\CreateWorldNotification;
+use App\Events\ WorldNotification;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Tag;
