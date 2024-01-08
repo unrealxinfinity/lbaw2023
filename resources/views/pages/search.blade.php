@@ -33,7 +33,7 @@
                 @if($order!="Z-A")<option value="Z-A">Z-A</option>@endif
             </select>
 
-            <button class="button" id="mainSearchButton" >Filter</button>
+            <button class="button" id="FilterSearchButton" >Filter</button>
         </fieldset>
     </form>
     @if(count($tasks) > 0 || count($projects) > 0 || count($worlds) > 0 || count($members) > 0)
