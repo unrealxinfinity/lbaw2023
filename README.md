@@ -12,6 +12,7 @@ docker run -it -p 8000:80 --name=lbaw2314 -e DB_DATABASE="lbaw2314" -e DB_SCHEMA
 ### 2. Usage
 
 URL to the product: http://lbaw2314.lbaw.fe.up.pt  (site down due to the fact it was running on feup servers)
+
 URL to the showcase : https://github.com/unrealxinfinity/lbaw2023/blob/main/docs/lbaw2314.mp4
 #### 2.1. Administration Credentials
 
