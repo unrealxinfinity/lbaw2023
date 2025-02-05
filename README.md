@@ -1,8 +1,9 @@
 # lbaw2314
 
+## Further details are in the wiki section of this repo.
+
 ### 1. Installation
 
-Link to the repository: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2314
 
 Full Docker command to start the image available at our GitLab Container Registry using the production database:
 ```shell
